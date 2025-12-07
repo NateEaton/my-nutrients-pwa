@@ -1,0 +1,109 @@
+-rwxrwxrwx+ 1 Nathan users    0 Dec  7 16:11 FoodData_Central_files.txt
+-rwxrwxrwx+ 1 Nathan users 3.3M Dec  7 15:10 FoodData_Central_foundation_food_csv_2025-04-24.zip
+-rwxrwxrwx+ 1 Nathan users 6.3M Dec  7 15:52 FoodData_Central_foundation_food_json_2025-04-24.json
+-rwxrwxrwx+ 1 Nathan users 452K Dec  7 15:10 FoodData_Central_foundation_food_json_2025-04-24.zip
+-rwxrwxrwx+ 1 Nathan users 1.6M Dec  7 16:10 FoodData_Central_foundation_head.txt
+-rwxrwxrwx+ 1 Nathan users 5.8M Dec  7 15:10 FoodData_Central_sr_legacy_food_csv_2018-04.zip
+-rwxrwxrwx+ 1 Nathan users 201M Dec  7 15:53 FoodData_Central_sr_legacy_food_json_2018-04.json
+-rwxrwxrwx+ 1 Nathan users  13M Dec  7 15:10 FoodData_Central_sr_legacy_food_json_2018-04.zip
+-rwxrwxrwx+ 1 Nathan users 1.3M Dec  7 16:11 FoodData_Central_sr_legacy_head.txt
+
+FoodData_Central_foundation_food_csv_2025-04-24:
+total 28M
+-rwxrwxrwx+ 1 Nathan users 145K Dec  7 15:52 acquisition_samples.csv
+-rwxrwxrwx+ 1 Nathan users  38K Dec  7 15:52 agricultural_samples.csv
+-rwxrwxrwx+ 1 Nathan users  36K Dec  7 15:52 Download API Field Descriptions.xlsx
+drwxrwxrwx+ 1 root   users 1.7K Dec  7 15:52 @eaDir
+-rwxrwxrwx+ 1 Nathan users 540K Dec  7 15:52 food_attribute.csv
+-rwxrwxrwx+ 1 Nathan users  331 Dec  7 15:52 food_attribute_type.csv
+-rwxrwxrwx+ 1 Nathan users  11K Dec  7 15:52 food_calorie_conversion_factor.csv
+-rwxrwxrwx+ 1 Nathan users  997 Dec  7 15:52 food_category.csv
+-rwxrwxrwx+ 1 Nathan users 155K Dec  7 15:52 food_component.csv
+-rwxrwxrwx+ 1 Nathan users 5.9M Dec  7 15:52 food.csv
+-rwxrwxrwx+ 1 Nathan users 191K Dec  7 15:52 food_nutrient_conversion_factor.csv
+-rwxrwxrwx+ 1 Nathan users 8.8M Dec  7 15:52 food_nutrient.csv
+-rwxrwxrwx+ 1 Nathan users 685K Dec  7 15:52 food_portion.csv
+-rwxrwxrwx+ 1 Nathan users 5.1K Dec  7 15:52 food_protein_conversion_factor.csv
+-rwxrwxrwx+ 1 Nathan users 4.3M Dec  7 15:52 food_update_log_entry.csv
+-rwxrwxrwx+ 1 Nathan users  16K Dec  7 15:52 foundation_food.csv
+-rwxrwxrwx+ 1 Nathan users 300K Dec  7 15:52 input_food.csv
+-rwxrwxrwx+ 1 Nathan users 4.0K Dec  7 15:52 lab_method_code.csv
+-rwxrwxrwx+ 1 Nathan users  13K Dec  7 15:52 lab_method.csv
+-rwxrwxrwx+ 1 Nathan users 7.8K Dec  7 15:52 lab_method_nutrient.csv
+-rwxrwxrwx+ 1 Nathan users 768K Dec  7 15:52 market_acquisition.csv
+-rwxrwxrwx+ 1 Nathan users 2.0K Dec  7 15:52 measure_unit.csv
+-rwxrwxrwx+ 1 Nathan users  22K Dec  7 15:52 nutrient.csv
+-rwxrwxrwx+ 1 Nathan users  35K Dec  7 15:52 sample_food.csv
+-rwxrwxrwx+ 1 Nathan users 1.2M Dec  7 15:52 sub_sample_food.csv
+-rwxrwxrwx+ 1 Nathan users 4.6M Dec  7 15:52 sub_sample_result.csv
+
+FoodData_Central_foundation_food_csv_2025-04-24/@eaDir:
+total 100K
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 acquisition_samples.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 agricultural_samples.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 Download API Field Descriptions.xlsx@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food_attribute.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food_attribute_type.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food_calorie_conversion_factor.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food_category.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food_component.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food_nutrient_conversion_factor.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food_nutrient.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food_portion.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food_protein_conversion_factor.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food_update_log_entry.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 foundation_food.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 input_food.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 lab_method_code.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 lab_method.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 lab_method_nutrient.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 market_acquisition.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 measure_unit.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 nutrient.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 sample_food.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 sub_sample_food.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 sub_sample_result.csv@SynoEAStream
+
+FoodData_Central_sr_legacy_food_csv_2018-04:
+total 38M
+-rwxrwxrwx+ 1 Nathan users  291 Dec  7 15:52 all_downloaded_table_record_counts.csv
+-rwxrwxrwx+ 1 Nathan users 437K Dec  7 15:52 Download & API Field Descriptions-2019-10-11-16-22.xlsx
+drwxrwxrwx+ 1 root   users 1.4K Dec  7 15:52 @eaDir
+-rwxrwxrwx+ 1 Nathan users  63K Dec  7 15:52 food_attribute.csv
+-rwxrwxrwx+ 1 Nathan users  331 Dec  7 15:52 food_attribute_type.csv
+-rwxrwxrwx+ 1 Nathan users 127K Dec  7 15:52 food_calorie_conversion_factor.csv
+-rwxrwxrwx+ 1 Nathan users  997 Dec  7 15:52 food_category.csv
+-rwxrwxrwx+ 1 Nathan users 775K Dec  7 15:52 food.csv
+-rwxrwxrwx+ 1 Nathan users 179K Dec  7 15:52 food_nutrient_conversion_factor.csv
+-rwxrwxrwx+ 1 Nathan users  35M Dec  7 15:52 food_nutrient.csv
+-rwxrwxrwx+ 1 Nathan users 6.7K Dec  7 15:52 food_nutrient_derivation.csv
+-rwxrwxrwx+ 1 Nathan users  602 Dec  7 15:52 food_nutrient_source.csv
+-rwxrwxrwx+ 1 Nathan users 898K Dec  7 15:52 food_portion.csv
+-rwxrwxrwx+ 1 Nathan users  88K Dec  7 15:52 food_protein_conversion_factor.csv
+-rwxrwxrwx+ 1 Nathan users 610K Dec  7 15:52 food_update_log_entry.csv
+-rwxrwxrwx+ 1 Nathan users 2.0K Dec  7 15:52 measure_unit.csv
+-rwxrwxrwx+ 1 Nathan users  21K Dec  7 15:52 nutrient.csv
+-rwxrwxrwx+ 1 Nathan users  13K Dec  7 15:52 retention_factor.csv
+-rwxrwxrwx+ 1 Nathan users 128K Dec  7 15:52 sr_legacy_food.csv
+
+FoodData_Central_sr_legacy_food_csv_2018-04/@eaDir:
+total 72K
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 all_downloaded_table_record_counts.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 Download & API Field Descriptions-2019-10-11-16-22.xlsx@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food_attribute.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food_attribute_type.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food_calorie_conversion_factor.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food_category.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food_nutrient_conversion_factor.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food_nutrient.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food_nutrient_derivation.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food_nutrient_source.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food_portion.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food_protein_conversion_factor.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 food_update_log_entry.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 measure_unit.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 nutrient.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 retention_factor.csv@SynoEAStream
+-rwxrwxrwx+ 1 Nathan users 209 Dec  7 15:52 sr_legacy_food.csv@SynoEAStream
