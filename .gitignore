@@ -51,10 +51,7 @@ safariConsole*.txt
 # repository. This prevents git from treating it as a submodule.
 /wiki/
 
-# For now, transient notes that are useful locally but not necessarily 
-# a permenant part of project or something to push to Github
-# Same for tasks
-/_notes/*
+# Project task tracking (local only)
 /_tasks/
 
 # Source data - exclude environment config, tmp/, large datasets, generated files
