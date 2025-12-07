@@ -1,16 +1,35 @@
-# Senior Metrics PWA
+# My Nutrients PWA
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![SvelteKit](https://img.shields.io/badge/SvelteKit-2.x-orange.svg)](https://kit.svelte.dev/)
 [![Node.js: >=18.0.0](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
 
+> **Development Status**: v1.0.0 in active development (December 2025)
+>
+> This is the **My Nutrients** app, a multi-nutrient tracking tool for seniors. It's being built as a comprehensive refactor of **My Calcium**, expanding from single-nutrient to 20+ nutrient tracking.
+>
+> **For implementation details**, see `_notes/` directory:
+> - [ARCHITECTURE.md](_notes/ARCHITECTURE.md) - System design
+> - [IMPLEMENTATION_PLAN.md](_notes/IMPLEMENTATION_PLAN.md) - Development roadmap
+> - [MIGRATION_GUIDE.md](_notes/MIGRATION_GUIDE.md) - Migration from My Calcium
+>
+> The content below describes the current foundation (My Calcium features). All features will be preserved and enhanced in My Nutrients v1.0.
 
-### NOTE: 
-This repo is for a new app to be built based on a prior app, My Calcium. The repo has been initialized from the Ca-pwa repo and will be gradually transformed as this codebase is refactored into the new app. All content below is from the prior app. 
+---
 
---------
+A Progressive Web App (PWA) designed to be a simple, privacy-focused tool for tracking essential nutrients for senior health. Search a comprehensive food database, add custom foods, and monitor your progress towards your nutritional goals. All data is stored locally on your device and can be seamlessly synchronized across multiple devices using a secure, lightweight cloud backend.
 
-A Progressive Web App (PWA) designed to be a simple, privacy-focused tool for tracking daily calcium intake. Search a comprehensive food database, add custom foods, and monitor your progress towards your nutritional goals. All data is stored locally on your device and can be seamlessly synchronized across multiple devices using a secure, lightweight cloud backend.
+## My Nutrients v1.0 - Coming Soon
+
+**New in v1.0**:
+- Track 20+ essential nutrients (protein, fiber, calcium, vitamins, minerals, omega fatty acids)
+- Select up to 4 nutrients to display in food cards and daily summaries
+- Nutrient-specific analysis and charts
+- RDA-based goals for seniors (age 65+)
+- Enhanced food database with comprehensive nutrient profiles
+- All My Calcium features preserved and enhanced
+
+**Migration from My Calcium**: Seamless migration of all your calcium tracking data. See `_notes/MIGRATION_GUIDE.md` for details.
 
 [**Live Demo**](https://ca-pwa.vercel.app/)
 
