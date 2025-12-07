@@ -1,0 +1,124 @@
+{
+  "customFoods": [
+    {
+      "id": 1,
+      "name": "Calcium Supplement",
+      "calcium": 300,
+      "measure": "1 tablet",
+      "dateAdded": "2024-02-11T17:18:44.859Z",
+      "isCustom": true
+    },
+    {
+      "id": 2,
+      "name": "Ovaltine Choclate Malt mix",
+      "calcium": 110,
+      "measure": "2 Tablespoons",
+      "dateAdded": "2024-02-11T17:18:44.859Z",
+      "isCustom": true
+    },
+    {
+      "id": 3,
+      "name": "Ovaltine w/Fairlife Fat Free Milk",
+      "calcium": 490,
+      "measure": "1 Cup",
+      "dateAdded": "2024-02-11T17:18:44.859Z",
+      "isCustom": true
+    },
+    {
+      "id": 4,
+      "name": "Ovaltine w/Mootopia Fat Free Milk",
+      "calcium": 560,
+      "measure": "1 Cup",
+      "dateAdded": "2024-02-11T17:18:44.859Z",
+      "isCustom": true
+    },
+    {
+      "id": 5,
+      "name": "Fairlife Fat Free Milk",
+      "calcium": 380,
+      "measure": "1 Cup",
+      "dateAdded": "2024-02-11T17:18:44.859Z",
+      "isCustom": true
+    },
+    {
+      "id": 6,
+      "name": "Mootopia Fat Free Milk",
+      "calcium": 450,
+      "measure": "1 Cup",
+      "dateAdded": "2024-02-11T17:18:44.859Z",
+      "isCustom": true
+    },
+    {
+      "id": 7,
+      "name": "Milk Chocolate, Carnation Breakfast Essentials",
+      "calcium": 300,
+      "measure": "1 Cup",
+      "dateAdded": "2024-02-11T17:18:44.859Z",
+      "isCustom": true
+    },
+    {
+      "id": 8,
+      "name": "ZOI Greek Yogurt, Plain, Nonfat",
+      "calcium": 378,
+      "measure": "0.75 Cup",
+      "dateAdded": "2024-02-11T17:18:44.859Z",
+      "isCustom": true
+    },
+    {
+      "id": 9,
+      "name": "FAGE Greek Yogurt, Plain, Nonfat",
+      "calcium": 200,
+      "measure": "0.75 Cup",
+      "dateAdded": "2024-02-11T17:18:44.859Z",
+      "isCustom": true
+    },
+    {
+      "id": 10,
+      "name": "Chobani Greek Yogurt, Plain, Nonfat",
+      "calcium": 190,
+      "measure": "0.75 Cup",
+      "dateAdded": "2024-02-11T17:18:44.859Z",
+      "isCustom": true
+    },
+    {
+      "id": 11,
+      "name": "Multi Grain Cheerios",
+      "calcium": 200,
+      "measure": "1.33 Cup",
+      "dateAdded": "2024-02-11T17:18:44.859Z",
+      "isCustom": true
+    },
+    {
+      "id": 12,
+      "name": "Tropicana Calcium + Vitamin D Orange Juice",
+      "calcium": 350,
+      "measure": "1 Cup",
+      "dateAdded": "2024-02-11T17:18:44.859Z",
+      "isCustom": true
+    },
+    {
+      "id": 13,
+      "name": "Sanar Flax Seed, Ground",
+      "calcium": 12,
+      "measure": "1 Tablespoon",
+      "dateAdded": "2024-02-11T17:18:44.859Z",
+      "isCustom": true
+    },
+    {
+      "id": 14,
+      "name": "Sargento String Cheese",
+      "calcium": 190,
+      "measure": "21 Grams",
+      "dateAdded": "2024-02-11T17:18:44.859Z",
+      "isCustom": true
+    },
+    {
+      "id": 15,
+      "name": "LaLa Yogurt Smoothie",
+      "calcium": 260,
+      "measure": "7 oz",
+      "dateAdded": "2024-02-11T17:18:44.859Z",
+      "isCustom": true
+    }
+  ]
+}

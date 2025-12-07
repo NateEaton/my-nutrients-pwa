@@ -1,0 +1,105 @@
+# --- System / OS Files --- Ignore macOS and Windows specific files
+.DS_Store 
+Thumbs.db
+
+# Ignore Synology system directories globally
+@eaDir/
+\#recycle/
+
+# --- Project Dependencies --- Ignore node_modules folders at any level 
+# (root, client/, server/)
+node_modules/
+.svelte-kit
+
+# --- Build & Distribution --- Ignore the client-side build output directory
+/dist/
+/build/
+
+# Ignore optional build report files
+/.vite/
+
+# --- Configuration & Secrets --- Ignore sensitive configuration files. 
+# Use .template files instead.
+client_secret*.json
+
+# In the future, if you have a server config: /server/config.js Ignore 
+# all .env files containing secrets and environment-specific variables 
+# Only .env.example should ever be committed.
+.env 
+.env.*
+!.env.example
+source_data/.env
+
+# --- IDE / Editor --- Ignore common IDE and editor-specific directories
+.idea/ 
+.vscode/ 
+*.swp
+.history/
+CLAUDE.md
+.claude
+
+# --- Logs --- Ignore log files
+logs/ 
+*.log 
+*.log.txt
+npm-debug.log* 
+yarn-debug.log* yarn-error.log*
+safariConsole*.txt
+
+
+# --- Sub-Repositories --- Ignore the separately-cloned wiki Git 
+# repository. This prevents git from treating it as a submodule.
+/wiki/
+
+# For now, transient notes that are useful locally but not necessarily 
+# a permenant part of project or something to push to Github
+# Same for tasks
+/_notes/*
+/_tasks/
+
+# Source data - exclude environment config, tmp/, large datasets, generated files
+source_data/.env
+source_data/tmp/
+source_data/curated-*.json
+source_data/merged-*.json
+source_data/nutrientsearchresults_1087_Branded.csv
+source_data/nutrientsearchresults_1087_SR\ Legacy.csv
+source_data/nutrientsearchresults_1087_Survey\ \(FNDDS\).csv
+source_data/sr_legacy_foundation_download.csv
+source_data/mastered-sr_legacy_foundation_download.json
+
+# Cloudflare Workers secrets
+worker/wrangler.toml
+worker/.env*
+!worker/.env.example
+
+# Misc dev files
+/upgrade_migration/
+/tmp/
+/test/
+/backup/
+/backup*/
+.repomixignore
+*repomix*
+calcium-tracker-test-data.json
+generate-test-data.js
+README.txt
+source_data/analyze-db.cjs
+source_data/calcium-tracker-backup-2025-09-05-lme.json
+source_data/canada-nutrition-config.json
+source_data/iof-calcium-config.json
+source_data/iof-calcium-parsed.csv
+source_data/migrated-migration-report.json
+
+ocr/*
+!ocr/fetch_labels.js
+!ocr/generate_ocr_dataset.js
+!ocr/analyze_ocr_failures.js
+!ocr/merge_test_data.js
+!ocr/extract_upcs.js
+!ocr/run_tests.ts
+!ocr/package.json
+!ocr/tsconfig.json
+
+calcium-dev.eatonfamily.net.conf
+calcium-tracker-backup-*.json

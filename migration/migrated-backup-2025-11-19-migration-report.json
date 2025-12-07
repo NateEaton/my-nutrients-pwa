@@ -1,0 +1,3592 @@
+{
+  "exact": [
+    {
+      "oldId": 1258,
+      "newId": 2919,
+      "name": "Bread, whole-wheat, prepared from recipe, toasted",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 3306,
+      "newId": 8289,
+      "name": "Eggs, Grade A, Large, egg whole",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 148,
+      "newId": 6979,
+      "name": "Nuts, almond butter, plain, with salt added",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 656,
+      "newId": 1112,
+      "name": "Sauce, ready-to-serve, pepper or hot",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 771,
+      "newId": 1485,
+      "name": "Beverages, tea, green, instant, decaffeinated, lemon, unsweetened, fortified with vitamin C",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 982,
+      "newId": 2037,
+      "name": "Margarine, 80% fat, stick, includes regular and hydrogenated corn and soybean oils",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 1095,
+      "newId": 2394,
+      "name": "Beverages, tea, instant, decaffeinated, lemon, diet",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 1367,
+      "newId": 3367,
+      "name": "Vanilla extract, imitation, no alcohol",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 1628,
+      "newId": 4165,
+      "name": "Margarine, regular, 80% fat, composite, tub, with salt, with added vitamin D",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 1744,
+      "newId": 4559,
+      "name": "Salad dressing, spray-style dressing, assorted flavors",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 1896,
+      "newId": 5025,
+      "name": "Nuts, acorns, dried",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 2071,
+      "newId": 5435,
+      "name": "Nuts, beechnuts, dried",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 2072,
+      "newId": 5436,
+      "name": "Nuts, acorns, raw",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 2230,
+      "newId": 5712,
+      "name": "Chewing gum, sugarless",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 2307,
+      "newId": 5891,
+      "name": "Gelatin desserts, dry mix, reduced calorie, with aspartame, no added sodium",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 2310,
+      "newId": 5894,
+      "name": "Gelatin desserts, dry mix, reduced calorie, with aspartame, added phosphorus, potassium, sodium, vitamin C",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 2504,
+      "newId": 6340,
+      "name": "Mushrooms, shiitake, raw",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 2553,
+      "newId": 6490,
+      "name": "Longans, raw",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 2619,
+      "newId": 6657,
+      "name": "Corn flour, whole-grain, blue (harina de maiz morado)",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 2916,
+      "newId": 7435,
+      "name": "Sweeteners, tabletop, fructose, liquid",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 2926,
+      "newId": 7455,
+      "name": "Beverages, coffee, instant, with whitener, reduced calorie",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 2937,
+      "newId": 7469,
+      "name": "Rice cake, cracker (include hain mini rice cakes)",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 2944,
+      "newId": 7483,
+      "name": "Cream substitute, liquid, light",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 3240,
+      "newId": 8218,
+      "name": "Almond butter, creamy",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 4050,
+      "newId": 4139,
+      "name": "Chicken, heart, all classes, raw",
+      "details": "Perfect match on name, measure, and calcium",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 9,
+      "newId": 2187,
+      "name": "Cheese, mexican, queso chihuahua",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 10,
+      "newId": 4348,
+      "name": "Cheese, parmesan, grated",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 16,
+      "newId": 4746,
+      "name": "Cheese, mozzarella, whole milk",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 41,
+      "newId": 8327,
+      "name": "Cheese, ricotta, whole milk",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 203,
+      "newId": 515,
+      "name": "Fish, salmon, coho, wild, cooked, moist heat",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 398,
+      "newId": 491,
+      "name": "Fish, tuna salad",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 524,
+      "newId": 671,
+      "name": "Crackers, melba toast, plain",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 585,
+      "newId": 788,
+      "name": "Malt beverage, includes non-alcoholic beer",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 653,
+      "newId": 8318,
+      "name": "Sauce, salsa, ready-to-serve",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 706,
+      "newId": 1395,
+      "name": "Fish, seatrout, mixed species, cooked, dry heat",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 911,
+      "newId": 1914,
+      "name": "Fish, salmon, coho, wild, cooked, dry heat",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 1035,
+      "newId": 2182,
+      "name": "Cheese, low fat, cheddar or colby",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 1089,
+      "newId": 2383,
+      "name": "Tortillas, ready-to-bake or -fry, corn, without added salt",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 1110,
+      "newId": 2417,
+      "name": "Alcoholic beverage, wine, table, red",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 1454,
+      "newId": 3629,
+      "name": "Mollusks, oyster, eastern, wild, raw",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 1502,
+      "newId": 3694,
+      "name": "Alcoholic beverages, beer, higher alcohol",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 1691,
+      "newId": 4308,
+      "name": "Cheese, Mexican blend",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 1770,
+      "newId": 4586,
+      "name": "Salad dressing, mayonnaise, regular",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 1843,
+      "newId": 4750,
+      "name": "Cheese, parmesan, hard",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 1882,
+      "newId": 5004,
+      "name": "Nuts, mixed nuts, oil roasted, with peanuts, without salt added",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 1885,
+      "newId": 5007,
+      "name": "Nuts, mixed nuts, oil roasted, without peanuts, without salt added",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 1934,
+      "newId": 5082,
+      "name": "Peas, edible-podded, cooked, boiled, drained, with salt",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 2014,
+      "newId": 5303,
+      "name": "Bulgur, cooked",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 2029,
+      "newId": 5328,
+      "name": "Chocolate, dark, 70-85% cacao solids",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 2115,
+      "newId": 5500,
+      "name": "Okra, cooked, boiled, drained, with salt",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 2142,
+      "newId": 5551,
+      "name": "Potatoes, mashed, dehydrated, granules with milk, dry form",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 2143,
+      "newId": 5552,
+      "name": "Potatoes, mashed, dehydrated, prepared from granules with milk, water and margarine added",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 2180,
+      "newId": 5627,
+      "name": "Broccoli, cooked, boiled, drained, without salt",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 2182,
+      "newId": 5632,
+      "name": "Beans, snap, green, microwaved",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 2190,
+      "newId": 5652,
+      "name": "Persimmons, japanese, raw",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 2461,
+      "newId": 6266,
+      "name": "Asparagus, cooked, boiled, drained, with salt",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 2626,
+      "newId": 6667,
+      "name": "Quinoa, cooked",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 2862,
+      "newId": 7169,
+      "name": "Cucumber, with peel, raw",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 3157,
+      "newId": 8088,
+      "name": "Arugula, baby, raw",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 3238,
+      "newId": 8216,
+      "name": "Flaxseed, ground",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 3247,
+      "newId": 8227,
+      "name": "Cheese, parmesan, grated, refrigerated",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 3279,
+      "newId": 8261,
+      "name": "Spinach, baby",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 3384,
+      "newId": 2188,
+      "name": "Cheese, goat, soft type",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 3524,
+      "newId": 1032,
+      "name": "Sausage, chicken, beef, pork, skinless, smoked",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 3533,
+      "newId": 3972,
+      "name": "Sausage, Italian, pork, mild, raw",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 3750,
+      "newId": 2189,
+      "name": "Cheese, goat, semisoft type",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 3836,
+      "newId": 2673,
+      "name": "Salami, dry or hard, pork",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 4146,
+      "newId": 4880,
+      "name": "Pizza, meat and vegetable topping, regular crust, frozen, cooked",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 4213,
+      "newId": 6045,
+      "name": "Beef, short loin, top loin, steak, separable lean and fat, trimmed to 1/8 fat, all grades, raw",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 4330,
+      "newId": 6930,
+      "name": "Beef, ground, 70% lean meat / 30% fat, patty, cooked, broiled",
+      "details": "Name match for serving preference (measure/calcium differences expected)",
+      "isServingPreference": true
+    }
+  ],
+  "collapsed": [
+    {
+      "oldId": 2477,
+      "newId": 5058,
+      "name": "Squash, summer, zucchini, includes skin, cooked, boiled, drained, without salt",
+      "representativeName": "Squash, summer, zucchini, includes skin, cooked, boiled, drained, with salt*",
+      "details": "Found in collapsed foods under \"Squash, summer, zucchini, includes skin, cooked, boiled, drained, with salt*\"",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 2741,
+      "newId": 6979,
+      "name": "Nuts, almond butter, plain, without salt added",
+      "representativeName": "Nuts, almond butter, plain, with salt added*",
+      "details": "Found in collapsed foods under \"Nuts, almond butter, plain, with salt added*\"",
+      "isServingPreference": false
+    },
+    {
+      "oldId": 2108,
+      "newId": 5173,
+      "name": "Peas, green, cooked, boiled, drained, with salt",
+      "representativeName": "Peas, green, cooked, boiled, drained, without salt*",
+      "details": "Name match found in collapsed foods under \"Peas, green, cooked, boiled, drained, without salt*\" (serving preference)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 2321,
+      "newId": 4944,
+      "name": "Snacks, potato chips, plain, salted",
+      "representativeName": "Snacks, potato chips, plain, unsalted*",
+      "details": "Name match found in collapsed foods under \"Snacks, potato chips, plain, unsalted*\" (serving preference)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 2617,
+      "newId": 5850,
+      "name": "Pasta, dry, unenriched",
+      "representativeName": "Pasta, dry, enriched*",
+      "details": "Name match found in collapsed foods under \"Pasta, dry, enriched*\" (serving preference)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 2793,
+      "newId": 5627,
+      "name": "Broccoli, cooked, boiled, drained, with salt",
+      "representativeName": "Broccoli, cooked, boiled, drained, without salt*",
+      "details": "Name match found in collapsed foods under \"Broccoli, cooked, boiled, drained, without salt*\" (serving preference)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 2813,
+      "newId": 5458,
+      "name": "Sweet potato, cooked, baked in skin, flesh, without salt",
+      "representativeName": "Sweet potato, cooked, baked in skin, flesh, with salt*",
+      "details": "Name match found in collapsed foods under \"Sweet potato, cooked, baked in skin, flesh, with salt*\" (serving preference)",
+      "isServingPreference": true
+    },
+    {
+      "oldId": 2823,
+      "newId": 5063,
+      "name": "Spinach, cooked, boiled, drained, without salt",
+      "representativeName": "Spinach, cooked, boiled, drained, with salt*",
+      "details": "Name match found in collapsed foods under \"Spinach, cooked, boiled, drained, with salt*\" (serving preference)",
+      "isServingPreference": true
+    }
+  ],
+  "partial": [
+    {
+      "oldId": 1414,
+      "newId": 3426,
+      "name": "Egg, whole, cooked, scrambled",
+      "matchedName": "Egg, whole, cooked, scrambled",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "145mg → 9.04mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 438,
+      "newId": 540,
+      "name": "Beverages, Propel Zero, fruit-flavored, non-carbonated",
+      "matchedName": "Beverages, Propel Zero, fruit-flavored, non-carbonated",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 fl oz\" → \"1 bottle 12 fl oz\"",
+      "calciumDiff": "0.296mg → 3.56mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 490,
+      "newId": 609,
+      "name": "Leavening agents, cream of tartar",
+      "matchedName": "Leavening agents, cream of tartar",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"0.5 tsp\" → \"1 tsp\"",
+      "calciumDiff": "0.12mg → 0.24mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 492,
+      "newId": 613,
+      "name": "Leavening agents, baking soda",
+      "matchedName": "Leavening agents, baking soda",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"0.5 tsp\" → \"0.5 tsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 532,
+      "newId": 680,
+      "name": "Cookies, sugar wafer, with creme filling, sugar free",
+      "matchedName": "Cookies, sugar wafer, with creme filling, sugar free",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 oz\" → \"1 oz\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 588,
+      "newId": 796,
+      "name": "Beverages, carbonated, cola, regular",
+      "matchedName": "Beverages, carbonated, cola, regular",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 fl oz\" → \"1 can or bottle (16 fl oz)\"",
+      "calciumDiff": "0.307mg → 4.92mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 600,
+      "newId": 813,
+      "name": "Alcoholic beverage, distilled, whiskey, 86 proof",
+      "matchedName": "Alcoholic beverage, distilled, whiskey, 86 proof*",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 jigger (1.5 fl oz)\" → \"1 fl oz\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 601,
+      "newId": 815,
+      "name": "Beverages, Energy Drink, sugar free",
+      "matchedName": "Beverages, Energy Drink, sugar free",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"8 fl oz\" → \"8 fl oz\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 602,
+      "newId": 818,
+      "name": "Beverages, Energy Drink with carbonated water and high fructose corn syrup",
+      "matchedName": "Beverages, Energy Drink with carbonated water and high fructose corn syrup",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"8 fl oz\" → \"8 fl oz\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 603,
+      "newId": 813,
+      "name": "Alcoholic beverage, distilled, rum, 80 proof",
+      "matchedName": "Alcoholic beverage, distilled, whiskey, 86 proof*",
+      "score": 0.8222222222222222,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1.5 fl oz\" → \"1 fl oz\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (82%) with different measure, different calcium"
+    },
+    {
+      "oldId": 604,
+      "newId": 813,
+      "name": "Alcoholic beverage, distilled, vodka, 80 proof",
+      "matchedName": "Alcoholic beverage, distilled, whiskey, 86 proof*",
+      "score": 0.8444444444444444,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1.5 fl oz\" → \"1 fl oz\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (84%) with different measure, different calcium"
+    },
+    {
+      "oldId": 605,
+      "newId": 825,
+      "name": "Alcoholic beverage, distilled, all (gin, rum, vodka, whiskey) 80 proof",
+      "matchedName": "Alcoholic beverage, distilled, all (gin, rum, vodka, whiskey) 80 proof*",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 jigger (1.5 fl oz)\" → \"1 fl oz\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 607,
+      "newId": 830,
+      "name": "Snacks, Pretzels, gluten- free made with cornstarch and potato flour",
+      "matchedName": "Snacks, Pretzels, gluten- free made with cornstarch and potato flour",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 serving\" → \"1 serving\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 763,
+      "newId": 1472,
+      "name": "Beverages, coffee, instant, vanilla, sweetened, decaffeinated, with non dairy creamer",
+      "matchedName": "Beverages, coffee, instant, vanilla, sweetened, decaffeinated, with non dairy creamer",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 serving\" → \"1 serving\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 774,
+      "newId": 1490,
+      "name": "Beverages, tea, black, ready to drink",
+      "matchedName": "Beverages, tea, black, ready to drink",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"16 fl oz\" → \"16 fl oz\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 782,
+      "newId": 1502,
+      "name": "Beverages, tea, ready-to-drink, lemon, diet",
+      "matchedName": "Beverages, tea, ready-to-drink, lemon, diet",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 793,
+      "newId": 1516,
+      "name": "Beverages, Kiwi Strawberry Juice Drink",
+      "matchedName": "Beverages, Kiwi Strawberry Juice Drink",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"16 fl oz\" → \"16 fl oz\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 804,
+      "newId": 1530,
+      "name": "Cookies, chocolate chip sandwich, with creme filling",
+      "matchedName": "Cookies, chocolate chip sandwich, with creme filling",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cookie\" → \"1 cookie\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 808,
+      "newId": 1534,
+      "name": "Cookies, marshmallow, with rice cereal and chocolate chips",
+      "matchedName": "Cookies, marshmallow, with rice cereal and chocolate chips",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 bar\" → \"1 bar\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 814,
+      "newId": 1540,
+      "name": "Cookies, sugar wafer, chocolate-covered",
+      "matchedName": "Cookies, sugar wafer, chocolate-covered",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"3 cookie\" → \"3 cookie\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 953,
+      "newId": 825,
+      "name": "Alcoholic beverage, distilled, all (gin, rum, vodka, whiskey) 100 proof",
+      "matchedName": "Alcoholic beverage, distilled, all (gin, rum, vodka, whiskey) 80 proof*",
+      "score": 0.96875,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1.5 fl oz\" → \"1 fl oz\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (97%) with different measure, different calcium"
+    },
+    {
+      "oldId": 957,
+      "newId": 825,
+      "name": "Alcoholic beverage, distilled, all (gin, rum, vodka, whiskey) 94 proof",
+      "matchedName": "Alcoholic beverage, distilled, all (gin, rum, vodka, whiskey) 80 proof*",
+      "score": 0.9682539682539683,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1.5 fl oz\" → \"1 fl oz\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (97%) with different measure, different calcium"
+    },
+    {
+      "oldId": 963,
+      "newId": 2015,
+      "name": "Shortening, industrial, soy (partially hydrogenated ) for baking and confections",
+      "matchedName": "Shortening, industrial, soy (partially hydrogenated ) for baking and confections",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 967,
+      "newId": 2022,
+      "name": "Shortening, industrial, soy (partially hydrogenated ) and corn for frying",
+      "matchedName": "Shortening, industrial, soy (partially hydrogenated ) and corn for frying",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 968,
+      "newId": 2023,
+      "name": "Oil, industrial, soy (partially hydrogenated ), palm, principal uses icings and fillings",
+      "matchedName": "Oil, industrial, soy (partially hydrogenated ), palm, principal uses icings and fillings",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 971,
+      "newId": 2026,
+      "name": "Shortening, industrial, soy (partially hydrogenated), pourable liquid fry shortening",
+      "matchedName": "Shortening, industrial, soy (partially hydrogenated), pourable liquid fry shortening",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 972,
+      "newId": 2027,
+      "name": "Oil, industrial, soy, refined, for woks and light frying",
+      "matchedName": "Oil, industrial, soy, refined, for woks and light frying",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 973,
+      "newId": 2028,
+      "name": "Margarine-like shortening, industrial, soy (partially hydrogenated), cottonseed, and soy, principal use flaky pastries",
+      "matchedName": "Margarine-like shortening, industrial, soy (partially hydrogenated), cottonseed, and soy, principal use flaky pastries",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 tbsp\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 977,
+      "newId": 2032,
+      "name": "Oil, industrial, coconut, principal uses candy coatings, oil sprays, roasting nuts",
+      "matchedName": "Oil, industrial, coconut, principal uses candy coatings, oil sprays, roasting nuts",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 978,
+      "newId": 2033,
+      "name": "Oil, industrial, soy (partially hydrogenated), principal uses popcorn and flavoring vegetables",
+      "matchedName": "Oil, industrial, soy (partially hydrogenated), principal uses popcorn and flavoring vegetables",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 991,
+      "newId": 2046,
+      "name": "Fish oil, sardine",
+      "matchedName": "Fish oil, sardine",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 992,
+      "newId": 2047,
+      "name": "Shortening, multipurpose, soybean (hydrogenated) and palm (hydrogenated)",
+      "matchedName": "Shortening, multipurpose, soybean (hydrogenated) and palm (hydrogenated)",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 993,
+      "newId": 2048,
+      "name": "Shortening, special purpose for cakes and frostings, soybean (hydrogenated)",
+      "matchedName": "Shortening, special purpose for cakes and frostings, soybean (hydrogenated)",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 994,
+      "newId": 2049,
+      "name": "Fish oil, cod liver",
+      "matchedName": "Fish oil, cod liver",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 995,
+      "newId": 2050,
+      "name": "Fat, goose",
+      "matchedName": "Fat, goose",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 996,
+      "newId": 2051,
+      "name": "Oil, oat",
+      "matchedName": "Oil, oat",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 997,
+      "newId": 2053,
+      "name": "Oil, avocado",
+      "matchedName": "Oil, avocado",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 998,
+      "newId": 2054,
+      "name": "Shortening, special purpose for baking, soybean (hydrogenated) palm and cottonseed",
+      "matchedName": "Shortening, special purpose for baking, soybean (hydrogenated) palm and cottonseed",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 999,
+      "newId": 2055,
+      "name": "Shortening industrial, lard and vegetable oil",
+      "matchedName": "Shortening industrial, lard and vegetable oil",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1000,
+      "newId": 2056,
+      "name": "Shortening industrial, soybean (hydrogenated) and cottonseed",
+      "matchedName": "Shortening industrial, soybean (hydrogenated) and cottonseed",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1001,
+      "newId": 2057,
+      "name": "Shortening confectionery, coconut (hydrogenated) and or palm kernel (hydrogenated)",
+      "matchedName": "Shortening confectionery, coconut (hydrogenated) and or palm kernel (hydrogenated)",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1002,
+      "newId": 2059,
+      "name": "Oil, ucuhuba butter",
+      "matchedName": "Oil, ucuhuba butter",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1004,
+      "newId": 2064,
+      "name": "Oil, soybean, salad or cooking, (partially hydrogenated) and cottonseed",
+      "matchedName": "Oil, soybean, salad or cooking, (partially hydrogenated) and cottonseed",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1005,
+      "newId": 2065,
+      "name": "Oil, cupu assu",
+      "matchedName": "Oil, cupu assu",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1009,
+      "newId": 2151,
+      "name": "Seasoning mix, dry, chili, original",
+      "matchedName": "Seasoning mix, dry, chili, original",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1.33 tbsp\" → \"1.33 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1123,
+      "newId": 2436,
+      "name": "Beverages, Orange juice, light, No pulp",
+      "matchedName": "Beverages, Orange juice, light, No pulp",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"8 fl oz\" → \"8 fl oz\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1124,
+      "newId": 2437,
+      "name": "Alcoholic beverage, creme de menthe, 72 proof",
+      "matchedName": "Alcoholic beverage, creme de menthe, 72 proof",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 jigger 1.5 fl oz\" → \"1 jigger 1.5 fl oz\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1125,
+      "newId": 2444,
+      "name": "Beverages, water, bottled, yumberry, pomegranate with anti-oxidants, zero calories",
+      "matchedName": "Beverages, water, bottled, yumberry, pomegranate with anti-oxidants, zero calories",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"8 fl oz\" → \"8 fl oz\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1127,
+      "newId": 2449,
+      "name": "Rice crackers",
+      "matchedName": "Rice crackers",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 serving\" → \"1 serving\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1322,
+      "newId": 3238,
+      "name": "Oil, vegetable, soybean, refined",
+      "matchedName": "Oil, vegetable, soybean, refined",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1326,
+      "newId": 3243,
+      "name": "Oil, industrial, soy ( partially hydrogenated), all purpose",
+      "matchedName": "Oil, industrial, soy ( partially hydrogenated), all purpose",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1329,
+      "newId": 3246,
+      "name": "Oil, industrial, soy (partially hydrogenated)  and cottonseed, principal use as a tortilla shortening",
+      "matchedName": "Oil, industrial, soy (partially hydrogenated)  and cottonseed, principal use as a tortilla shortening",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1330,
+      "newId": 3247,
+      "name": "Oil, industrial, soy (partially hydrogenated ) and soy (winterized), pourable clear fry",
+      "matchedName": "Oil, industrial, soy (partially hydrogenated ) and soy (winterized), pourable clear fry",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1331,
+      "newId": 3248,
+      "name": "Oil, industrial, mid-oleic, sunflower",
+      "matchedName": "Oil, industrial, mid-oleic, sunflower",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1332,
+      "newId": 3249,
+      "name": "Oil, industrial, soy (partially hydrogenated), multiuse for non-dairy butter flavor",
+      "matchedName": "Oil, industrial, soy (partially hydrogenated), multiuse for non-dairy butter flavor",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1333,
+      "newId": 3250,
+      "name": "Oil, industrial, canola (partially hydrogenated) oil for deep fat frying",
+      "matchedName": "Oil, industrial, canola (partially hydrogenated) oil for deep fat frying",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1334,
+      "newId": 3251,
+      "name": "Oil, industrial, canola with antifoaming agent, principal uses salads, woks and light frying",
+      "matchedName": "Oil, industrial, canola with antifoaming agent, principal uses salads, woks and light frying",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1335,
+      "newId": 3252,
+      "name": "Oil, industrial, canola for salads, woks and light frying",
+      "matchedName": "Oil, industrial, canola for salads, woks and light frying",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1339,
+      "newId": 3256,
+      "name": "Margarine-like, vegetable oil spread, 20% fat, without salt",
+      "matchedName": "Margarine-like, vegetable oil spread, 20% fat, without salt*",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1342,
+      "newId": 3256,
+      "name": "Margarine-like, vegetable oil spread, 20% fat, with salt",
+      "matchedName": "Margarine-like, vegetable oil spread, 20% fat, without salt*",
+      "score": 0.9454545454545454,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (95%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1346,
+      "newId": 3263,
+      "name": "Animal fat, bacon grease",
+      "matchedName": "Animal fat, bacon grease",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 tsp\" → \"1 tsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1349,
+      "newId": 3266,
+      "name": "Oil, canola",
+      "matchedName": "Oil, canola",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1350,
+      "newId": 3267,
+      "name": "Fish oil, menhaden, fully hydrogenated",
+      "matchedName": "Fish oil, menhaden, fully hydrogenated",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1351,
+      "newId": 3268,
+      "name": "Fish oil, herring",
+      "matchedName": "Fish oil, herring",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1352,
+      "newId": 3269,
+      "name": "Oil, sunflower, high oleic (70% and over)",
+      "matchedName": "Oil, sunflower, high oleic (70% and over)",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1353,
+      "newId": 3270,
+      "name": "Fish oil, menhaden",
+      "matchedName": "Fish oil, menhaden",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1355,
+      "newId": 3272,
+      "name": "Oil, mustard",
+      "matchedName": "Oil, mustard",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1356,
+      "newId": 3273,
+      "name": "Fish oil, salmon",
+      "matchedName": "Fish oil, salmon",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1357,
+      "newId": 3274,
+      "name": "Shortening, confectionery, fractionated palm",
+      "matchedName": "Shortening, confectionery, fractionated palm",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1358,
+      "newId": 3275,
+      "name": "Shortening cake mix, soybean (hydrogenated) and cottonseed (hydrogenated)",
+      "matchedName": "Shortening cake mix, soybean (hydrogenated) and cottonseed (hydrogenated)",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1359,
+      "newId": 3276,
+      "name": "Shortening frying (heavy duty), soybean (hydrogenated), linoleic (less than 1%)",
+      "matchedName": "Shortening frying (heavy duty), soybean (hydrogenated), linoleic (less than 1%)",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1360,
+      "newId": 3277,
+      "name": "Shortening frying (heavy duty), palm (hydrogenated)",
+      "matchedName": "Shortening frying (heavy duty), palm (hydrogenated)",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1361,
+      "newId": 3278,
+      "name": "Shortening household soybean (hydrogenated) and palm",
+      "matchedName": "Shortening household soybean (hydrogenated) and palm",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1362,
+      "newId": 3279,
+      "name": "Oil, nutmeg butter",
+      "matchedName": "Oil, nutmeg butter",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1363,
+      "newId": 3280,
+      "name": "Shortening, household, lard and vegetable oil",
+      "matchedName": "Shortening, household, lard and vegetable oil",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1364,
+      "newId": 3282,
+      "name": "Oil, sunflower, linoleic, (partially hydrogenated)",
+      "matchedName": "Oil, sunflower, linoleic, (partially hydrogenated)*",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1365,
+      "newId": 3285,
+      "name": "Shortening bread, soybean (hydrogenated) and cottonseed",
+      "matchedName": "Shortening bread, soybean (hydrogenated) and cottonseed",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1369,
+      "newId": 3369,
+      "name": "Seasoning mix, dry, sazon, coriander & annatto",
+      "matchedName": "Seasoning mix, dry, sazon, coriander & annatto",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"0.25 tsp\" → \"0.25 tsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1370,
+      "newId": 3370,
+      "name": "Seasoning mix, dry, taco, original",
+      "matchedName": "Seasoning mix, dry, taco, original",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"2 tsp\" → \"2 tsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1371,
+      "newId": 3371,
+      "name": "Vanilla extract, imitation, alcohol",
+      "matchedName": "Vanilla extract, imitation, alcohol",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 tbsp\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1486,
+      "newId": 3671,
+      "name": "Beverages, Energy Drink, Monster, fortified with vitamins C, B2, B3, B6, B12",
+      "matchedName": "Beverages, Energy Drink, Monster, fortified with vitamins C, B2, B3, B6, B12",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 serving\" → \"1 serving\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1489,
+      "newId": 825,
+      "name": "Alcoholic beverage, distilled, all (gin, rum, vodka, whiskey) 90 proof",
+      "matchedName": "Alcoholic beverage, distilled, all (gin, rum, vodka, whiskey) 80 proof*",
+      "score": 0.9841269841269841,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1.5 fl oz\" → \"1 fl oz\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (98%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1490,
+      "newId": 825,
+      "name": "Alcoholic beverage, distilled, all (gin, rum, vodka, whiskey) 86 proof",
+      "matchedName": "Alcoholic beverage, distilled, all (gin, rum, vodka, whiskey) 80 proof*",
+      "score": 0.9841269841269841,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 Jigger 1.5 fl oz\" → \"1 fl oz\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (98%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1494,
+      "newId": 3686,
+      "name": "Beverages, tea, green, brewed, regular",
+      "matchedName": "Beverages, tea, green, brewed, regular",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1495,
+      "newId": 3687,
+      "name": "Beverages, Tropical Punch, ready-to-drink",
+      "matchedName": "Beverages, Tropical Punch, ready-to-drink",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"200 ml\" → \"1 NLEA Serving\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1500,
+      "newId": 3692,
+      "name": "Beverages, tea, green, brewed, decaffeinated",
+      "matchedName": "Beverages, tea, green, brewed, decaffeinated",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"240 ml\" → \"240 ml\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1510,
+      "newId": 3713,
+      "name": "Beverages, tea, black, ready-to-drink, lemon, diet",
+      "matchedName": "Beverages, tea, black, ready-to-drink, lemon, diet",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1525,
+      "newId": 3731,
+      "name": "Beverages, carbonated, tonic water",
+      "matchedName": "Beverages, carbonated, tonic water",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 fl oz\" → \"1 bottle (11 fl oz)\"",
+      "calciumDiff": "0.305mg → 3.36mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1531,
+      "newId": 3737,
+      "name": "Cookies, oatmeal, reduced fat",
+      "matchedName": "Cookies, oatmeal, reduced fat",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cookie\" → \"1 cookie\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1532,
+      "newId": 3738,
+      "name": "Cookies, Marie biscuit",
+      "matchedName": "Cookies, Marie biscuit",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"5 cookie\" → \"5 cookie\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1537,
+      "newId": 3743,
+      "name": "Crackers, water biscuits",
+      "matchedName": "Crackers, water biscuits",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"4 cracker 1 serving\" → \"4 cracker 1 serving\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1541,
+      "newId": 3747,
+      "name": "Bread, wheat, sprouted, toasted",
+      "matchedName": "Bread, wheat, sprouted, toasted",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 slice 1 serving\" → \"1 slice 1 serving\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1544,
+      "newId": 3750,
+      "name": "Crackers, toast thins, low sodium",
+      "matchedName": "Crackers, toast thins, low sodium",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 serving\" → \"1 serving\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1546,
+      "newId": 3752,
+      "name": "Bread, wheat, sprouted",
+      "matchedName": "Bread, wheat, sprouted",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 slice 1 serving\" → \"1 slice 1 serving\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1550,
+      "newId": 3756,
+      "name": "Crackers, sandwich-type, peanut butter filled, reduced fat",
+      "matchedName": "Crackers, sandwich-type, peanut butter filled, reduced fat",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 package\" → \"1 package\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1552,
+      "newId": 3759,
+      "name": "Cookies, chocolate sandwich, with creme filling, reduced fat",
+      "matchedName": "Cookies, chocolate sandwich, with creme filling, reduced fat",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 serving\" → \"1 serving\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1553,
+      "newId": 3760,
+      "name": "Cookies, peanut butter, commercially prepared, sugar free",
+      "matchedName": "Cookies, peanut butter, commercially prepared, sugar free",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 serving 3 cookies\" → \"1 serving 3 cookies\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1554,
+      "newId": 3761,
+      "name": "Cookies, oatmeal sandwich, with creme filling",
+      "matchedName": "Cookies, oatmeal sandwich, with creme filling",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cookie 1 serving\" → \"1 cookie 1 serving\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1618,
+      "newId": 4151,
+      "name": "Mayonnaise, reduced fat, with olive oil",
+      "matchedName": "Mayonnaise, reduced fat, with olive oil",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1621,
+      "newId": 4158,
+      "name": "Oil, industrial, soy, fully hydrogenated",
+      "matchedName": "Oil, industrial, soy, fully hydrogenated",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1622,
+      "newId": 4159,
+      "name": "Oil, industrial, soy, low linolenic",
+      "matchedName": "Oil, industrial, soy, low linolenic",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1623,
+      "newId": 4160,
+      "name": "Oil, industrial, cottonseed, fully hydrogenated",
+      "matchedName": "Oil, industrial, cottonseed, fully hydrogenated",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1625,
+      "newId": 4162,
+      "name": "Oil, industrial, soy, ultra low linolenic",
+      "matchedName": "Oil, industrial, soy, ultra low linolenic",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1629,
+      "newId": 4166,
+      "name": "Oil, babassu",
+      "matchedName": "Oil, babassu",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1630,
+      "newId": 4167,
+      "name": "Oil, teaseed",
+      "matchedName": "Oil, teaseed",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1631,
+      "newId": 4168,
+      "name": "Oil, sheanut",
+      "matchedName": "Oil, sheanut",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1632,
+      "newId": 4169,
+      "name": "Oil, hazelnut",
+      "matchedName": "Oil, hazelnut",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1633,
+      "newId": 4171,
+      "name": "Oil, soybean lecithin",
+      "matchedName": "Oil, soybean lecithin",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1634,
+      "newId": 4172,
+      "name": "Oil, cocoa butter",
+      "matchedName": "Oil, cocoa butter",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1635,
+      "newId": 4173,
+      "name": "Salad dressing, home recipe, vinegar and oil",
+      "matchedName": "Salad dressing, home recipe, vinegar and oil",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1637,
+      "newId": 4175,
+      "name": "Oil, tomatoseed",
+      "matchedName": "Oil, tomatoseed",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1638,
+      "newId": 4176,
+      "name": "Oil, poppyseed",
+      "matchedName": "Oil, poppyseed",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1640,
+      "newId": 4178,
+      "name": "Vegetable oil, palm kernel",
+      "matchedName": "Vegetable oil, palm kernel",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1647,
+      "newId": 4185,
+      "name": "Salad dressing, mayonnaise, imitation, soybean without cholesterol",
+      "matchedName": "Salad dressing, mayonnaise, imitation, soybean without cholesterol",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1648,
+      "newId": 4186,
+      "name": "Oil, soybean, salad or cooking",
+      "matchedName": "Oil, soybean, salad or cooking*",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1649,
+      "newId": 4187,
+      "name": "Oil, peanut, salad or cooking",
+      "matchedName": "Oil, peanut, salad or cooking",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1654,
+      "newId": 4192,
+      "name": "Salad dressing, mayonnaise, imitation, soybean",
+      "matchedName": "Salad dressing, mayonnaise, imitation, soybean",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1657,
+      "newId": 4198,
+      "name": "Lard",
+      "matchedName": "Lard",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1678,
+      "newId": 4287,
+      "name": "Butter, Clarified butter (ghee)",
+      "matchedName": "Butter, Clarified butter (ghee)",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"100 g\" → \"100 g\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1743,
+      "newId": 4558,
+      "name": "Oil, industrial, canola, high oleic",
+      "matchedName": "Oil, industrial, canola, high oleic",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1746,
+      "newId": 4562,
+      "name": "Oil, apricot kernel",
+      "matchedName": "Oil, apricot kernel",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1747,
+      "newId": 4563,
+      "name": "Oil, walnut",
+      "matchedName": "Oil, walnut",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1748,
+      "newId": 4564,
+      "name": "Oil, almond",
+      "matchedName": "Oil, almond",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1749,
+      "newId": 4565,
+      "name": "Oil, safflower, salad or cooking, linoleic, (over 70%)",
+      "matchedName": "Oil, safflower, salad or cooking, linoleic, (over 70%)",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1750,
+      "newId": 4566,
+      "name": "Oil, grapeseed",
+      "matchedName": "Oil, grapeseed",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1751,
+      "newId": 4567,
+      "name": "Oil, corn, industrial and retail, all purpose salad or cooking",
+      "matchedName": "Oil, corn, industrial and retail, all purpose salad or cooking",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 1752,
+      "newId": 4568,
+      "name": "Oil, safflower, salad or cooking, high oleic (primary safflower oil of commerce)",
+      "matchedName": "Oil, safflower, salad or cooking, high oleic (primary safflower oil of commerce)",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1758,
+      "newId": 4574,
+      "name": "Oil, cottonseed, salad or cooking",
+      "matchedName": "Oil, cottonseed, salad or cooking",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1761,
+      "newId": 4577,
+      "name": "Oil, rice bran",
+      "matchedName": "Oil, rice bran",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1762,
+      "newId": 4578,
+      "name": "Oil, sesame, salad or cooking",
+      "matchedName": "Oil, sesame, salad or cooking",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1763,
+      "newId": 4579,
+      "name": "Oil, palm",
+      "matchedName": "Oil, palm",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1765,
+      "newId": 4581,
+      "name": "Oil, wheat germ",
+      "matchedName": "Oil, wheat germ",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1768,
+      "newId": 4584,
+      "name": "Shortening, household, soybean (partially hydrogenated)-cottonseed (partially hydrogenated)",
+      "matchedName": "Shortening, household, soybean (partially hydrogenated)-cottonseed (partially hydrogenated)",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 1855,
+      "newId": 4915,
+      "name": "Sweetener, herbal extract powder from Stevia leaf",
+      "matchedName": "Sweetener, herbal extract powder from Stevia leaf",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 package\" → \"1 package\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 2022,
+      "newId": 5313,
+      "name": "Candies, Tamarind",
+      "matchedName": "Candies, Tamarind",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 serving\" → \"1 serving\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 2025,
+      "newId": 5317,
+      "name": "Candies, fruit snacks, with high vitamin C",
+      "matchedName": "Candies, fruit snacks, with high vitamin C",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 serving\" → \"1 serving\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 2217,
+      "newId": 5697,
+      "name": "Sweeteners, tabletop, fructose, dry, powder",
+      "matchedName": "Sweeteners, tabletop, fructose, dry, powder",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 2231,
+      "newId": 5713,
+      "name": "Syrups, sugar free",
+      "matchedName": "Syrups, sugar free",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 2232,
+      "newId": 5714,
+      "name": "Candies, hard, dietetic or low calorie (sorbitol)",
+      "matchedName": "Candies, hard, dietetic or low calorie (sorbitol)",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 piece\" → \"1 piece\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 2237,
+      "newId": 5726,
+      "name": "Oil, corn and canola",
+      "matchedName": "Oil, corn and canola",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 2240,
+      "newId": 5732,
+      "name": "Margarine-like, vegetable oil spread, stick or tub, sweetened",
+      "matchedName": "Margarine-like, vegetable oil spread, stick or tub, sweetened",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 tablespoon\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 2331,
+      "newId": 5925,
+      "name": "Syrups, corn, high-fructose",
+      "matchedName": "Syrups, corn, high-fructose",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 2418,
+      "newId": 6199,
+      "name": "Mushrooms, enoki, raw",
+      "matchedName": "Mushrooms, enoki, raw",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup sliced\" → \"1 cup sliced\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 2420,
+      "newId": 6201,
+      "name": "Pickles, cucumber, sour",
+      "matchedName": "Pickles, cucumber, sour*",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 slice\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 2571,
+      "newId": 6516,
+      "name": "Sweeteners, tabletop, saccharin (sodium saccharin)",
+      "matchedName": "Sweeteners, tabletop, saccharin (sodium saccharin)",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 serving 1 packet\" → \"1 serving 1 packet\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 2573,
+      "newId": 6518,
+      "name": "Candies, gum drops, no sugar or low calorie (sorbitol)",
+      "matchedName": "Candies, gum drops, no sugar or low calorie (sorbitol)",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 piece\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 2633,
+      "newId": 6675,
+      "name": "Noodles, chinese, chow mein",
+      "matchedName": "Noodles, chinese, chow mein",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1.5 oz\" → \"1.5 oz\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 2721,
+      "newId": 6808,
+      "name": "Chewing gum",
+      "matchedName": "Chewing gum",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 stick\" → \"10 Chiclets\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 2838,
+      "newId": 7143,
+      "name": "Mushrooms, shiitake, dried",
+      "matchedName": "Mushrooms, shiitake, dried",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 mushroom\" → \"4 mushrooms\"",
+      "calciumDiff": "0.396mg → 1.65mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 2932,
+      "newId": 7461,
+      "name": "Mayonnaise, low sodium, low calorie or diet",
+      "matchedName": "Mayonnaise, low sodium, low calorie or diet",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 2948,
+      "newId": 7487,
+      "name": "Mayonnaise, reduced-calorie or diet, cholesterol-free",
+      "matchedName": "Mayonnaise, reduced-calorie or diet, cholesterol-free",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 2984,
+      "newId": 7616,
+      "name": "Syrup, fruit flavored",
+      "matchedName": "Syrup, fruit flavored",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 serving\" → \"1 serving\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 2993,
+      "newId": 7631,
+      "name": "Crackers, saltines, whole wheat (includes multi-grain)",
+      "matchedName": "Crackers, saltines, whole wheat (includes multi-grain)",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 serving\" → \"1 serving\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 3048,
+      "newId": 7834,
+      "name": "Oil, corn, peanut, and olive",
+      "matchedName": "Oil, corn, peanut, and olive",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 teaspoon\" → \"1 teaspoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 3068,
+      "newId": 7872,
+      "name": "Jams, preserves, marmalade, reduced sugar",
+      "matchedName": "Jams, preserves, marmalade, reduced sugar",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 tablespoon\" → \"1 tablespoon\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 3079,
+      "newId": 7889,
+      "name": "Pectin, liquid",
+      "matchedName": "Pectin, liquid",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 fl oz assumed specific gravity of honey\" → \"1 fl oz assumed specific gravity of honey\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 3356,
+      "newId": 1745,
+      "name": "Pork sausage, reduced sodium, cooked",
+      "matchedName": "Pork sausage, reduced sodium, cooked",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"3 oz\" → \"3 oz\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 3382,
+      "newId": 2052,
+      "name": "Fat, turkey",
+      "matchedName": "Fat, turkey",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 3383,
+      "newId": 2058,
+      "name": "Shortening frying (heavy duty), beef tallow and cottonseed",
+      "matchedName": "Shortening frying (heavy duty), beef tallow and cottonseed",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 3749,
+      "newId": 2060,
+      "name": "Fat, chicken",
+      "matchedName": "Fat, chicken",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 4063,
+      "newId": 4194,
+      "name": "Fat, beef tallow",
+      "matchedName": "Fat, beef tallow",
+      "score": 1,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 tbsp\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with different measure, different calcium"
+    },
+    {
+      "oldId": 4393,
+      "newId": 7287,
+      "name": "Pork, fresh, variety meats and by-products, feet, cooked, simmered",
+      "matchedName": "Pork, fresh, variety meats and by-products, feet, cooked, simmered",
+      "score": 1,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"3 oz\" → \"3 oz\"",
+      "calciumDiff": "0mg → 0mg",
+      "details": "Name match (100%) with same measure, different calcium"
+    },
+    {
+      "oldId": 246,
+      "newId": 5173,
+      "name": "Asparagus, frozen, cooked, boiled, drained, without salt",
+      "matchedName": "Peas, green, cooked, boiled, drained, without salt*",
+      "score": 0.8235294117647058,
+      "measureMatch": false,
+      "calciumMatch": false,
+      "measureDiff": "\"1.0 cups\" → \"1 cup\"",
+      "calciumDiff": "32mg → 43.2mg",
+      "details": "Name match (82%) with different measure, different calcium"
+    },
+    {
+      "oldId": 361,
+      "newId": 1836,
+      "name": "Beans, black turtle, mature seeds, cooked, boiled, with salt",
+      "matchedName": "Beans, adzuki, mature seed, cooked, boiled, with salt",
+      "score": 0.8,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"1 cup\" → \"1 cup\"",
+      "calciumDiff": "102mg → 64.4mg",
+      "details": "Name match (80%) with same measure, different calcium"
+    },
+    {
+      "oldId": 3223,
+      "newId": 5611,
+      "name": "Cabbage, green, raw",
+      "matchedName": "Cabbage, red, raw",
+      "score": 0.8235294117647058,
+      "measureMatch": false,
+      "calciumMatch": true,
+      "measureDiff": "\"100 g\" → \"1 cup, chopped\"",
+      "calciumDiff": "41.8mg → 40mg",
+      "details": "Name match (82%) with different measure, same calcium"
+    },
+    {
+      "oldId": 4389,
+      "newId": 7282,
+      "name": "Pork, fresh, loin, center loin (chops), boneless, separable lean only, cooked, pan-broiled",
+      "matchedName": "Pork, fresh, loin, center loin (chops), boneless, separable lean and fat, cooked, pan-broiled",
+      "score": 0.9285714285714286,
+      "measureMatch": true,
+      "calciumMatch": false,
+      "measureDiff": "\"3 oz\" → \"3 oz\"",
+      "calciumDiff": "5.1mg → 7.65mg",
+      "details": "Name match (93%) with same measure, different calcium"
+    }
+  ],
+  "unmatched": [
+    {
+      "oldId": 110,
+      "name": "Potatoes, mashed, dehydrated, prepared from granules with milk",
+      "measure": "1.0 cups",
+      "calcium": 74,
+      "reason": "Not found in either abridged or full database",
+      "matchType": "NONE"
+    },
+    {
+      "oldId": 295,
+      "name": "Beef, tenderloin, steak, separable lean and fat, trimmed to 1/8\" fat",
+      "measure": "4.0 oz",
+      "calcium": 25,
+      "reason": "Not found in either abridged or full database",
+      "matchType": "NONE"
+    }
+  ],
+  "hiddenUnmatched": [
+    {
+      "oldId": 1753,
+      "name": "Oil, sunflower, linoleic, (approx. 65%)",
+      "measure": "1 cup",
+      "calcium": 0,
+      "reason": "No suitable match found",
+      "matchType": "NONE"
+    },
+    {
+      "oldId": 1764,
+      "name": "Oil, sunflower, linoleic (less than 60%)",
+      "measure": "1 cup",
+      "calcium": 0,
+      "reason": "No suitable match found",
+      "matchType": "NONE"
+    },
+    {
+      "oldId": 1769,
+      "name": "Oil, soybean, salad or cooking, (partially hydrogenated)",
+      "measure": "1 cup",
+      "calcium": 0,
+      "reason": "No suitable match found",
+      "matchType": "NONE"
+    },
+    {
+      "oldId": 2555,
+      "name": "Mango, dried, sweetened",
+      "measure": "100 g",
+      "calcium": 0,
+      "reason": "No suitable match found",
+      "matchType": "NONE"
+    },
+    {
+      "oldId": 2760,
+      "name": "Pickles, cucumber, sour, low sodium",
+      "measure": "1 cup (about 23 slices)",
+      "calcium": 0,
+      "reason": "No suitable match found",
+      "matchType": "NONE"
+    },
+    {
+      "oldId": 3256,
+      "name": "Mushroom, king oyster",
+      "measure": "100 g",
+      "calcium": 0,
+      "reason": "No suitable match found",
+      "matchType": "NONE"
+    },
+    {
+      "oldId": 3263,
+      "name": "Mushroom, pioppini",
+      "measure": "100 g",
+      "calcium": 0,
+      "reason": "No suitable match found",
+      "matchType": "NONE"
+    },
+    {
+      "oldId": 3270,
+      "name": "Mushroom, maitake",
+      "measure": "100 g",
+      "calcium": 0,
+      "reason": "No suitable match found",
+      "matchType": "NONE"
+    },
+    {
+      "oldId": 3271,
+      "name": "Mushroom, beech",
+      "measure": "100 g",
+      "calcium": 0.432,
+      "reason": "No suitable match found",
+      "matchType": "NONE"
+    },
+    {
+      "oldId": 3278,
+      "name": "Mushroom, lion's mane",
+      "measure": "100 g",
+      "calcium": 0,
+      "reason": "No suitable match found",
+      "matchType": "NONE"
+    },
+    {
+      "oldId": 3280,
+      "name": "Mushroom, oyster",
+      "measure": "100 g",
+      "calcium": 0,
+      "reason": "No suitable match found",
+      "matchType": "NONE"
+    },
+    {
+      "oldId": 3299,
+      "name": "Flour, corn, yellow, fine meal, enriched",
+      "measure": "100 g",
+      "calcium": 0,
+      "reason": "No suitable match found",
+      "matchType": "NONE"
+    },
+    {
+      "oldId": 3705,
+      "name": "Sausage, chicken or turkey, Italian style,  lower sodium",
+      "measure": "100 g",
+      "calcium": 0,
+      "reason": "No suitable match found",
+      "matchType": "NONE"
+    }
+  ],
+  "droppedByCuration": [
+    {
+      "oldId": 4464,
+      "name": "Bison, ground, raw",
+      "measure": "100 g",
+      "calcium": 6.83,
+      "reason": "Found in full database but dropped during curation",
+      "fullMatch": {
+        "food": {
+          "appId": 8056,
+          "name": "Bison, ground, raw",
+          "appName": "Bison, ground, raw",
+          "measure": "100 g",
+          "calcium": 6.83,
+          "calciumPer100g": 6.83,
+          "defaultServing": {
+            "amount": 100,
+            "unit": "g",
+            "gramWeight": 100
+          },
+          "sourceId": 2727571,
+          "sourceName": "usda-fdc",
+          "subset": "Foundation"
+        },
+        "appId": 8056,
+        "matchType": "EXACT",
+        "score": 1,
+        "details": "Name match for serving preference (measure/calcium differences expected)"
+      }
+    },
+    {
+      "oldId": 115,
+      "name": "Edamame, frozen, unprepared",
+      "measure": "1.0 cups",
+      "calcium": 71,
+      "reason": "Found in full database but dropped during curation",
+      "fullMatch": {
+        "food": {
+          "appId": 7171,
+          "name": "Edamame, frozen, prepared",
+          "appName": "Edamame, Frozen*",
+          "measure": "1 cup",
+          "calcium": 97.6,
+          "calciumPer100g": 63,
+          "defaultServing": {
+            "amount": 1,
+            "unit": "cup",
+            "gramWeight": 100
+          },
+          "sourceId": 168411,
+          "sourceName": "usda-fdc",
+          "subset": "SR Legacy",
+          "collapsedFrom": [
+            {
+              "sourceId": 168410,
+              "name": "Edamame, frozen, unprepared",
+              "measure": "1 cup",
+              "calcium": 70.8,
+              "calciumPer100g": 60,
+              "defaultServing": null,
+              "subset": "SR Legacy"
+            }
+          ]
+        },
+        "appId": 7171,
+        "matchType": "COLLAPSED",
+        "score": 1,
+        "details": "Name match found in collapsed foods under \"Edamame, frozen, prepared\" (serving preference)",
+        "originalFood": {
+          "sourceId": 168410,
+          "name": "Edamame, frozen, unprepared",
+          "measure": "1 cup",
+          "calcium": 70.8,
+          "calciumPer100g": 60,
+          "defaultServing": null,
+          "subset": "SR Legacy"
+        }
+      }
+    },
+    {
+      "oldId": 659,
+      "name": "Yardlong beans, mature seeds, cooked, boiled, with salt",
+      "measure": "1 cup",
+      "calcium": 71.8,
+      "reason": "Found in full database but dropped during curation",
+      "fullMatch": {
+        "food": {
+          "appId": 1330,
+          "name": "Yardlong beans, mature seeds, cooked, boiled, with salt",
+          "appName": "Yardlong Beans, Mature Seeds, Cooked, Boiled, With*",
+          "measure": "1 cup",
+          "calcium": 71.8,
+          "calciumPer100g": 42,
+          "defaultServing": {
+            "amount": 1,
+            "unit": "cup",
+            "gramWeight": 100
+          },
+          "sourceId": 174306,
+          "sourceName": "usda-fdc",
+          "subset": "SR Legacy",
+          "collapsedFrom": [
+            {
+              "sourceId": 174282,
+              "name": "Yardlong beans, mature seeds, cooked, boiled, without salt",
+              "measure": "1 cup",
+              "calcium": 71.8,
+              "calciumPer100g": 42,
+              "defaultServing": null,
+              "subset": "SR Legacy"
+            }
+          ]
+        },
+        "appId": 1330,
+        "matchType": "EXACT",
+        "score": 1,
+        "details": "Name match for serving preference (measure/calcium differences expected)"
+      }
+    },
+    {
+      "oldId": 1285,
+      "name": "Peanut butter, smooth style, without salt",
+      "measure": "1 cup",
+      "calcium": 126,
+      "reason": "Found in full database but dropped during curation",
+      "fullMatch": {
+        "food": {
+          "appId": 1369,
+          "name": "Peanut butter, smooth style, with salt (Includes foods for USDA's Food Distribution Program)",
+          "appName": "Peanut Butter, Smooth Style, With*",
+          "measure": "1 cup",
+          "calcium": 126,
+          "calciumPer100g": 49,
+          "defaultServing": {
+            "amount": 1,
+            "unit": "cup",
+            "gramWeight": 100
+          },
+          "sourceId": 174266,
+          "sourceName": "usda-fdc",
+          "subset": "SR Legacy",
+          "collapsedFrom": [
+            {
+              "sourceId": 172470,
+              "name": "Peanut butter, smooth style, without salt",
+              "measure": "1 cup",
+              "calcium": 126,
+              "calciumPer100g": 49,
+              "defaultServing": null,
+              "subset": "SR Legacy"
+            }
+          ]
+        },
+        "appId": 1369,
+        "matchType": "COLLAPSED",
+        "score": 1,
+        "details": "Name match found in collapsed foods under \"Peanut butter, smooth style, with salt (Includes foods for USDA's Food Distribution Program)\" (serving preference)",
+        "originalFood": {
+          "sourceId": 172470,
+          "name": "Peanut butter, smooth style, without salt",
+          "measure": "1 cup",
+          "calcium": 126,
+          "calciumPer100g": 49,
+          "defaultServing": null,
+          "subset": "SR Legacy"
+        }
+      }
+    },
+    {
+      "oldId": 3051,
+      "name": "Cheese, mozzarella, low sodium",
+      "measure": "1 cup, shredded",
+      "calcium": 826,
+      "reason": "Found in full database but dropped during curation",
+      "fullMatch": {
+        "food": {
+          "appId": 7838,
+          "name": "Cheese, mozzarella, low sodium",
+          "appName": "Cheese, mozzarella, low sodium",
+          "measure": "1 slice (1 oz)",
+          "calcium": 205,
+          "calciumPer100g": 731,
+          "defaultServing": {
+            "amount": 1,
+            "unit": "slice (1 oz)",
+            "gramWeight": 100
+          },
+          "sourceId": 167735,
+          "sourceName": "usda-fdc",
+          "subset": "SR Legacy"
+        },
+        "appId": 7838,
+        "matchType": "EXACT",
+        "score": 1,
+        "details": "Name match for serving preference (measure/calcium differences expected)"
+      }
+    },
+    {
+      "oldId": 3175,
+      "name": "Avocado, Hass, peeled, raw",
+      "measure": "100 g",
+      "calcium": 14.5,
+      "reason": "Found in full database but dropped during curation",
+      "fullMatch": {
+        "food": {
+          "appId": 8107,
+          "name": "Avocado, Hass, peeled, raw",
+          "appName": "Avocado, Hass, peeled, raw",
+          "measure": "100 g",
+          "calcium": 14.5,
+          "calciumPer100g": 14.5,
+          "defaultServing": {
+            "amount": 100,
+            "unit": "g",
+            "gramWeight": 100
+          },
+          "sourceId": 2710824,
+          "sourceName": "usda-fdc",
+          "subset": "Foundation"
+        },
+        "appId": 8107,
+        "matchType": "EXACT",
+        "score": 1,
+        "details": "Name match for serving preference (measure/calcium differences expected)"
+      }
+    },
+    {
+      "oldId": 3211,
+      "name": "Rice, brown, long grain, unenriched, raw",
+      "measure": "100 g",
+      "calcium": 8.06,
+      "reason": "Found in full database but dropped during curation",
+      "fullMatch": {
+        "food": {
+          "appId": 8182,
+          "name": "Rice, brown, long grain, unenriched, raw",
+          "appName": "Rice, brown, long grain, unenriched, raw",
+          "measure": "100 g",
+          "calcium": 8.06,
+          "calciumPer100g": 8.06,
+          "defaultServing": {
+            "amount": 100,
+            "unit": "g",
+            "gramWeight": 100
+          },
+          "sourceId": 2512380,
+          "sourceName": "usda-fdc",
+          "subset": "Foundation"
+        },
+        "appId": 8182,
+        "matchType": "EXACT",
+        "score": 1,
+        "details": "Name match for serving preference (measure/calcium differences expected)"
+      }
+    },
+    {
+      "oldId": 3216,
+      "name": "Pineapple, raw",
+      "measure": "100 g",
+      "calcium": 12.5,
+      "reason": "Found in full database but dropped during curation",
+      "fullMatch": {
+        "food": {
+          "appId": 8187,
+          "name": "Pineapple, raw",
+          "appName": "Pineapple, raw",
+          "measure": "100 g",
+          "calcium": 12.5,
+          "calciumPer100g": 12.5,
+          "defaultServing": {
+            "amount": 100,
+            "unit": "g",
+            "gramWeight": 100
+          },
+          "sourceId": 2346398,
+          "sourceName": "usda-fdc",
+          "subset": "Foundation"
+        },
+        "appId": 8187,
+        "matchType": "EXACT",
+        "score": 1,
+        "details": "Name match for serving preference (measure/calcium differences expected)"
+      }
+    },
+    {
+      "oldId": 3220,
+      "name": "Lettuce, romaine, green, raw",
+      "measure": "100 g",
+      "calcium": 27.6,
+      "reason": "Found in full database but dropped during curation",
+      "fullMatch": {
+        "food": {
+          "appId": 8191,
+          "name": "Lettuce, romaine, green, raw",
+          "appName": "Lettuce, romaine, green, raw",
+          "measure": "100 g",
+          "calcium": 27.6,
+          "calciumPer100g": 27.6,
+          "defaultServing": {
+            "amount": 100,
+            "unit": "g",
+            "gramWeight": 100
+          },
+          "sourceId": 2346389,
+          "sourceName": "usda-fdc",
+          "subset": "Foundation"
+        },
+        "appId": 8191,
+        "matchType": "EXACT",
+        "score": 1,
+        "details": "Name match for serving preference (measure/calcium differences expected)"
+      }
+    },
+    {
+      "oldId": 3224,
+      "name": "Lettuce, leaf, green, raw",
+      "measure": "100 g",
+      "calcium": 39.8,
+      "reason": "Found in full database but dropped during curation",
+      "fullMatch": {
+        "food": {
+          "appId": 8195,
+          "name": "Lettuce, leaf, green, raw",
+          "appName": "Lettuce, leaf, green, raw",
+          "measure": "100 g",
+          "calcium": 39.8,
+          "calciumPer100g": 39.8,
+          "defaultServing": {
+            "amount": 100,
+            "unit": "g",
+            "gramWeight": 100
+          },
+          "sourceId": 2346391,
+          "sourceName": "usda-fdc",
+          "subset": "Foundation"
+        },
+        "appId": 8195,
+        "matchType": "EXACT",
+        "score": 1,
+        "details": "Name match for serving preference (measure/calcium differences expected)"
+      }
+    }
+  ],
+  "stats": {
+    "totalFoods": 269,
+    "exactMatches": 70,
+    "collapsedMatches": 8,
+    "partialMatches": 166,
+    "unmatched": 2,
+    "hiddenUnmatched": 13,
+    "droppedByCuration": 10
+  },
+  "servingPreferenceDetails": [
+    {
+      "oldId": 9,
+      "newId": 2187,
+      "foodName": "Cheese, mexican, queso chihuahua",
+      "preferredUnit": "cup",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 10,
+      "newId": 4348,
+      "foodName": "Cheese, parmesan, grated*",
+      "preferredUnit": "tablespoon",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 16,
+      "newId": 4746,
+      "foodName": "Cheese, mozzarella, whole milk",
+      "preferredUnit": "fl oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 41,
+      "newId": 8327,
+      "foodName": "Cheese, ricotta, whole milk*",
+      "preferredUnit": "tablespoon",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 203,
+      "newId": 515,
+      "foodName": "Fish, salmon, coho, wild, cooked, moist heat",
+      "preferredUnit": "oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 246,
+      "newId": 5173,
+      "foodName": "Peas, green, cooked, boiled, drained, without salt*",
+      "preferredUnit": "fl oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 361,
+      "newId": 1836,
+      "foodName": "Beans, adzuki, mature seed, cooked, boiled, with salt",
+      "preferredUnit": "cup",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 398,
+      "newId": 491,
+      "foodName": "Fish, tuna salad",
+      "preferredUnit": "oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 524,
+      "newId": 671,
+      "foodName": "Crackers, melba toast, plain*",
+      "preferredUnit": "cup",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 585,
+      "newId": 788,
+      "foodName": "Malt beverage, includes non-alcoholic beer",
+      "preferredUnit": "cup",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 653,
+      "newId": 8318,
+      "foodName": "Sauce, salsa, ready-to-serve*",
+      "preferredUnit": "tablespoon",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 706,
+      "newId": 1395,
+      "foodName": "Fish, seatrout, mixed species, cooked, dry heat",
+      "preferredUnit": "oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 911,
+      "newId": 1914,
+      "foodName": "Fish, salmon, coho, wild, cooked, dry heat",
+      "preferredUnit": "oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 1035,
+      "newId": 2182,
+      "foodName": "Cheese, low fat, cheddar or colby",
+      "preferredUnit": "tablespoon",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 1089,
+      "newId": 2383,
+      "foodName": "Tortillas, ready-to-bake or -fry, corn, without added salt",
+      "preferredUnit": "oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 1110,
+      "newId": 2417,
+      "foodName": "Alcoholic beverage, wine, table, red",
+      "preferredUnit": "1 serving (5 fl oz)",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 1258,
+      "newId": 2919,
+      "foodName": "Bread, whole-wheat, prepared from recipe, toasted",
+      "preferredUnit": "slice",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 1454,
+      "newId": 3629,
+      "foodName": "Mollusks, oyster, eastern, wild, raw",
+      "preferredUnit": "fl oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 1502,
+      "newId": 3694,
+      "foodName": "Alcoholic beverages, beer, higher alcohol",
+      "preferredUnit": "oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 1691,
+      "newId": 4308,
+      "foodName": "Cheese, Mexican blend",
+      "preferredUnit": "tablespoon",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 1770,
+      "newId": 4586,
+      "foodName": "Salad dressing, mayonnaise, regular",
+      "preferredUnit": "fl oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 1843,
+      "newId": 4750,
+      "foodName": "Cheese, parmesan, hard",
+      "preferredUnit": "5 package (5 oz)",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 1882,
+      "newId": 5004,
+      "foodName": "Nuts, mixed nuts, oil roasted, with peanuts, without salt added*",
+      "preferredUnit": "fl oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 1885,
+      "newId": 5007,
+      "foodName": "Nuts, mixed nuts, oil roasted, without peanuts, without salt added*",
+      "preferredUnit": "fl oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 1934,
+      "newId": 5082,
+      "foodName": "Peas, edible-podded, cooked, boiled, drained, with salt",
+      "preferredUnit": "cup",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 2014,
+      "newId": 5303,
+      "foodName": "Bulgur, cooked",
+      "preferredUnit": "cup",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 2029,
+      "newId": 5328,
+      "foodName": "Chocolate, dark, 70-85% cacao solids",
+      "preferredUnit": "bar",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 2108,
+      "newId": 5173,
+      "foodName": "Peas, green, cooked, boiled, drained, without salt*",
+      "preferredUnit": "fl oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 2115,
+      "newId": 5500,
+      "foodName": "Okra, cooked, boiled, drained, with salt*",
+      "preferredUnit": "fl oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 2142,
+      "newId": 5551,
+      "foodName": "Potatoes, mashed, dehydrated, granules with milk, dry form",
+      "preferredUnit": "tablespoon",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 2143,
+      "newId": 5552,
+      "foodName": "Potatoes, mashed, dehydrated, prepared from granules with milk, water and margarine added",
+      "preferredUnit": "fl oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 2180,
+      "newId": 5627,
+      "foodName": "Broccoli, cooked, boiled, drained, without salt*",
+      "preferredUnit": "cup",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 2182,
+      "newId": 5632,
+      "foodName": "Beans, snap, green, microwaved",
+      "preferredUnit": "cup",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 2190,
+      "newId": 5652,
+      "foodName": "Persimmons, japanese, raw",
+      "preferredUnit": "1 fruit (2-1/2 dia)",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 2321,
+      "newId": 4944,
+      "foodName": "Snacks, potato chips, plain, unsalted*",
+      "preferredUnit": "1 bag (8 oz)",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 2461,
+      "newId": 6266,
+      "foodName": "Asparagus, cooked, boiled, drained, with salt*",
+      "preferredUnit": "cup",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 2617,
+      "newId": 5850,
+      "foodName": "Pasta, dry, enriched*",
+      "preferredUnit": "oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 2626,
+      "newId": 6667,
+      "foodName": "Quinoa, cooked",
+      "preferredUnit": "fl oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 2793,
+      "newId": 5627,
+      "foodName": "Broccoli, cooked, boiled, drained, without salt*",
+      "preferredUnit": "fl oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 2813,
+      "newId": 5458,
+      "foodName": "Sweet potato, cooked, baked in skin, flesh, with salt*",
+      "preferredUnit": "cup",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 2823,
+      "newId": 5063,
+      "foodName": "Spinach, cooked, boiled, drained, with salt*",
+      "preferredUnit": "fl oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 2862,
+      "newId": 7169,
+      "foodName": "Cucumber, with peel, raw*",
+      "preferredUnit": "fl oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 3157,
+      "newId": 8088,
+      "foodName": "Arugula, baby, raw",
+      "preferredUnit": "oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 3223,
+      "newId": 5611,
+      "foodName": "Cabbage, red, raw",
+      "preferredUnit": "oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 3238,
+      "newId": 8216,
+      "foodName": "Flaxseed, ground",
+      "preferredUnit": "oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 3247,
+      "newId": 8227,
+      "foodName": "Cheese, parmesan, grated, refrigerated",
+      "preferredUnit": "oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 3279,
+      "newId": 8261,
+      "foodName": "Spinach, baby",
+      "preferredUnit": "oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 3384,
+      "newId": 2188,
+      "foodName": "Cheese, goat, soft type",
+      "preferredUnit": "oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 3524,
+      "newId": 1032,
+      "foodName": "Sausage, chicken, beef, pork, skinless, smoked",
+      "preferredUnit": "link",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 3533,
+      "newId": 3972,
+      "foodName": "Sausage, Italian, pork, mild, raw",
+      "preferredUnit": "link",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 3750,
+      "newId": 2189,
+      "foodName": "Cheese, goat, semisoft type",
+      "preferredUnit": "oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 3836,
+      "newId": 2673,
+      "foodName": "Salami, dry or hard, pork",
+      "preferredUnit": "1 package (4 oz)",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 4146,
+      "newId": 4880,
+      "foodName": "Pizza, meat and vegetable topping, regular crust, frozen, cooked",
+      "preferredUnit": "oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 4213,
+      "newId": 6045,
+      "foodName": "Beef, short loin, top loin, steak, separable lean and fat, trimmed to 1/8 fat, all grades, raw",
+      "preferredUnit": "oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 4330,
+      "newId": 6930,
+      "foodName": "Beef, ground, 70% lean meat / 30% fat, patty, cooked, broiled",
+      "preferredUnit": "oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    },
+    {
+      "oldId": 4389,
+      "newId": 7282,
+      "foodName": "Pork, fresh, loin, center loin (chops), boneless, separable lean and fat, cooked, pan-broiled",
+      "preferredUnit": "oz",
+      "measureCount": 1,
+      "matchedIndex": 0,
+      "matched": true,
+      "details": "Single measure food (no index needed)"
+    }
+  ]
+}

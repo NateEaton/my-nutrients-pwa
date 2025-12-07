@@ -1,0 +1,184 @@
+#!/usr/bin/env python3
+"""
+Merge calcium-tracker-backup-2025-11-10-updated-with-missing-data.json
+with calcium-tracker-backup-2025-11-19.json to create a complete backup
+that includes:
+- All journal entries from both files
+- All custom foods from both files (deduplicated)
+- All serving preferences from 11-19
+- All favorites from 11-19
+- Settings from 11-19
+"""
+
+import json
+from datetime import datetime
+
+def load_json(filepath):
+    """Load and parse a JSON file."""
+    print(f"Loading {filepath}...")
+    with open(filepath, 'r') as f:
+        return json.load(f)
+
+def save_json(data, filepath):
+    """Save data to a JSON file."""
+    print(f"Saving to {filepath}...")
+    with open(filepath, 'w') as f:
+        json.dump(data, f, indent=2)
+    print(f"Saved successfully!")
+
+def merge_custom_foods(foods1, foods2):
+    """
+    Merge two lists of custom foods, avoiding duplicates.
+    Uses food name as the deduplication key.
+    If a food exists in both, prefer the version from foods2 (newer).
+    """
+    foods_by_name = {}
+
+    # Add foods from first list
+    for food in foods1:
+        name = food.get('name', '')
+        if name:
+            foods_by_name[name] = food
+
+    # Add/override with foods from second list (newer takes precedence)
+    for food in foods2:
+        name = food.get('name', '')
+        if name:
+            foods_by_name[name] = food
+
+    # Return as list
+    return list(foods_by_name.values())
+
+def merge_journal_entries(entries1, entries2):
+    """
+    Merge two journal entry dictionaries.
+    If a date exists in both, prefer entries2 (newer).
+    """
+    merged = dict(entries1)  # Start with all entries from first
+
+    # Add/override with entries from second
+    for date, entry in entries2.items():
+        merged[date] = entry
+
+    return merged
+
+def main():
+    print("="*60)
+    print("MERGING BACKUP FILES")
+    print("="*60)
+
+    # File paths
+    base_file = '/mnt/projects/Ca-pwa-svelte/migration/calcium-tracker-backup-2025-11-10-updated-with-missing-data.json'
+    latest_file = '/mnt/projects/Ca-pwa-svelte/migration/calcium-tracker-backup-2025-11-19.json'
+    output_file = '/mnt/projects/Ca-pwa-svelte/migration/calcium-tracker-backup-2025-11-19-merged.json'
+
+    # Load both files
+    base_data = load_json(base_file)
+    latest_data = load_json(latest_file)
+
+    print("\n" + "="*60)
+    print("ANALYZING SOURCE FILES")
+    print("="*60)
+
+    print(f"\nBase file (11-10 updated):")
+    print(f"  Journal entries: {len(base_data.get('journalEntries', {}))}")
+    print(f"  Custom foods: {len(base_data.get('customFoods', []))}")
+    print(f"  Favorites: {len(base_data.get('favorites', []))}")
+    print(f"  Serving preferences: {len(base_data.get('servingPreferences', {}))}")
+
+    print(f"\nLatest file (11-19):")
+    print(f"  Journal entries: {len(latest_data.get('journalEntries', {}))}")
+    print(f"  Custom foods: {len(latest_data.get('customFoods', []))}")
+    print(f"  Favorites: {len(latest_data.get('favorites', []))}")
+    print(f"  Serving preferences: {len(latest_data.get('servingPreferences', {}))}")
+
+    # Create merged data structure
+    print("\n" + "="*60)
+    print("MERGING DATA")
+    print("="*60)
+
+    merged_data = {}
+
+    # Merge journal entries (union of both, latest wins on conflicts)
+    print("\nMerging journal entries...")
+    merged_data['journalEntries'] = merge_journal_entries(
+        base_data.get('journalEntries', {}),
+        latest_data.get('journalEntries', {})
+    )
+    print(f"  Result: {len(merged_data['journalEntries'])} entries")
+
+    # Merge custom foods (deduplicate by name, latest wins)
+    print("\nMerging custom foods...")
+    merged_data['customFoods'] = merge_custom_foods(
+        base_data.get('customFoods', []),
+        latest_data.get('customFoods', [])
+    )
+    print(f"  Result: {len(merged_data['customFoods'])} custom foods")
+
+    # List the custom foods for verification
+    print("  Custom foods in merged file:")
+    for food in sorted(merged_data['customFoods'], key=lambda f: f.get('name', '')):
+        print(f"    - {food.get('name', 'Unknown')}")
+
+    # Use latest data for favorites (she may have added/removed some)
+    print("\nUsing favorites from latest file...")
+    merged_data['favorites'] = latest_data.get('favorites', [])
+    print(f"  Result: {len(merged_data['favorites'])} favorites")
+
+    # Use latest data for serving preferences
+    print("\nUsing serving preferences from latest file...")
+    merged_data['servingPreferences'] = latest_data.get('servingPreferences', {})
+    print(f"  Result: {len(merged_data['servingPreferences'])} preferences")
+
+    # Use latest preferences (app settings)
+    print("\nUsing preferences from latest file...")
+    merged_data['preferences'] = latest_data.get('preferences', {})
+    print(f"  Result: {merged_data['preferences']}")
+
+    # Use latest hidden foods
+    print("\nUsing hidden foods from latest file...")
+    merged_data['hiddenFoods'] = latest_data.get('hiddenFoods', [])
+    print(f"  Result: {len(merged_data['hiddenFoods'])} hidden foods")
+
+    # Include metadata from latest
+    print("\nUsing metadata from latest file...")
+    merged_data['metadata'] = latest_data.get('metadata', {})
+    if merged_data['metadata']:
+        print(f"  App version: {merged_data['metadata'].get('appVersion', 'unknown')}")
+        print(f"  Export date: {merged_data['metadata'].get('exportDate', 'unknown')}")
+
+    # Save merged data
+    print("\n" + "="*60)
+    print("SAVING MERGED FILE")
+    print("="*60)
+    save_json(merged_data, output_file)
+
+    # Summary
+    print("\n" + "="*60)
+    print("MERGE COMPLETE")
+    print("="*60)
+    print(f"\nOutput file: {output_file}")
+    print(f"\nFinal counts:")
+    print(f"  Journal entries: {len(merged_data['journalEntries'])}")
+    print(f"  Custom foods: {len(merged_data['customFoods'])}")
+    print(f"  Favorites: {len(merged_data['favorites'])}")
+    print(f"  Serving preferences: {len(merged_data['servingPreferences'])}")
+    print(f"  Hidden foods: {len(merged_data['hiddenFoods'])}")
+    print(f"  Preferences: {merged_data['preferences']}")
+
+    # Show date range
+    if merged_data['journalEntries']:
+        dates = sorted(merged_data['journalEntries'].keys())
+        print(f"\nJournal date range: {dates[0]} to {dates[-1]}")
+
+    print("\n" + "="*60)
+    print("NEXT STEPS")
+    print("="*60)
+    print("1. Run migration script on the merged file:")
+    print(f"   node migrate-backup-enhanced.mjs {output_file}")
+    print("2. Verify the migrated output")
+    print("3. Test on dev phone")
+    print("4. Deploy to production")
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,6992 @@
+{
+  "metadata": {
+    "version": "2.1.0",
+    "createdAt": "2025-11-11T05:35:52.985Z",
+    "appVersion": "1.0",
+    "buildId": "cd3e16e-dirty-20250822200411",
+    "buildTime": "2025-08-22T20:04:11.653Z",
+    "syncGenerationId": null,
+    "migratedFrom": "calcium-tracker-backup-2025-11-10-updated-with-missing-data.json",
+    "migrationStats": {
+      "totalFoods": 264,
+      "exactMatches": 87,
+      "collapsedMatches": 7,
+      "partialMatches": 165,
+      "unmatched": 1,
+      "hiddenUnmatched": 4,
+      "droppedByCuration": 0
+    },
+    "migrationMode": "forced",
+    "enhancedMigration": true,
+    "measureIndexMatching": true
+  },
+  "preferences": {
+    "dailyGoal": 1500,
+    "sortBy": "time",
+    "sortOrder": "desc",
+    "theme": "auto"
+  },
+  "customFoods": [
+    {
+      "name": "Calcium Supplement",
+      "calcium": 300,
+      "measure": "1 tablet",
+      "isCustom": true,
+      "dateAdded": "2025-08-10T03:25:50.552Z",
+      "id": -1
+    },
+    {
+      "name": "Ovaltine Choclate Malt mix",
+      "calcium": 110,
+      "measure": "2 Tablespoons",
+      "isCustom": true,
+      "dateAdded": "2025-08-10T03:25:50.565Z",
+      "id": -2
+    },
+    {
+      "name": "Ovaltine w/Fairlife Fat Free Milk",
+      "calcium": 490,
+      "measure": "1 Cup",
+      "isCustom": true,
+      "dateAdded": "2025-08-10T03:25:50.566Z",
+      "id": -3
+    },
+    {
+      "name": "Ovaltine w/Mootopia Fat Free Milk",
+      "calcium": 560,
+      "measure": "1 Cup",
+      "isCustom": true,
+      "dateAdded": "2025-08-10T03:25:50.568Z",
+      "id": -4
+    },
+    {
+      "name": "Fairlife Fat Free Milk",
+      "calcium": 380,
+      "measure": "1 Cup",
+      "isCustom": true,
+      "dateAdded": "2025-08-10T03:25:50.569Z",
+      "id": -5
+    },
+    {
+      "name": "Mootopia Fat Free Milk",
+      "calcium": 450,
+      "measure": "1 Cup",
+      "isCustom": true,
+      "dateAdded": "2025-08-10T03:25:50.571Z",
+      "id": -6
+    },
+    {
+      "name": "Milk Chocolate, Carnation Breakfast Essentials",
+      "calcium": 300,
+      "measure": "1 Cup",
+      "isCustom": true,
+      "dateAdded": "2025-08-10T03:25:50.572Z",
+      "id": -7
+    },
+    {
+      "name": "ZOI Greek Yogurt, Plain, Nonfat",
+      "calcium": 378,
+      "measure": "0.75 Cup",
+      "isCustom": true,
+      "dateAdded": "2025-08-10T03:25:50.574Z",
+      "id": -8
+    },
+    {
+      "name": "FAGE Greek Yogurt, Plain, Nonfat",
+      "calcium": 200,
+      "measure": "0.75 Cup",
+      "isCustom": true,
+      "dateAdded": "2025-08-10T03:25:50.576Z",
+      "id": -9
+    },
+    {
+      "name": "Chobani Greek Yogurt, Plain, Nonfat",
+      "calcium": 190,
+      "measure": "0.75 Cup",
+      "isCustom": true,
+      "dateAdded": "2025-08-10T03:25:50.578Z",
+      "id": -10
+    },
+    {
+      "name": "Multi Grain Cheerios",
+      "calcium": 200,
+      "measure": "1.33 Cup",
+      "isCustom": true,
+      "dateAdded": "2025-08-10T03:25:50.579Z",
+      "id": -11
+    },
+    {
+      "name": "Tropicana Calcium + Vitamin D Orange Juice",
+      "calcium": 350,
+      "measure": "1 Cup",
+      "isCustom": true,
+      "dateAdded": "2025-08-10T03:25:50.581Z",
+      "id": -12
+    },
+    {
+      "name": "Sanar Flax Seed, Ground",
+      "calcium": 12,
+      "measure": "1 Tablespoon",
+      "isCustom": true,
+      "dateAdded": "2025-08-10T03:25:50.582Z",
+      "id": -13
+    },
+    {
+      "name": "Sargento String Cheese",
+      "calcium": 190,
+      "measure": "21 Grams",
+      "isCustom": true,
+      "dateAdded": "2025-08-10T03:25:50.584Z",
+      "id": -14
+    },
+    {
+      "name": "LaLa Yogurt Smoothie",
+      "calcium": 260,
+      "measure": "7 oz",
+      "isCustom": true,
+      "dateAdded": "2025-08-10T03:25:50.585Z",
+      "id": -15
+    },
+    {
+      "name": "User-entered amount",
+      "calcium": 100,
+      "measure": "measure",
+      "isCustom": true,
+      "dateAdded": "2025-08-10T03:25:50.587Z",
+      "id": -16
+    },
+    {
+      "name": "Cheerios",
+      "calcium": 130,
+      "measure": "1 cups",
+      "isCustom": true,
+      "dateAdded": "2025-08-20T18:09:09.990Z",
+      "id": -17
+    },
+    {
+      "name": "Wheat Thins",
+      "calcium": 30,
+      "measure": "13 Cracker",
+      "isCustom": true,
+      "dateAdded": "2025-08-20T23:23:53.340Z",
+      "id": -18
+    },
+    {
+      "name": "Chicken breast",
+      "calcium": 20,
+      "measure": "1 4oz",
+      "isCustom": true,
+      "dateAdded": "2025-08-22T00:57:39.005Z",
+      "id": -19
+    },
+    {
+      "name": "7 Grain Medley",
+      "calcium": 60,
+      "measure": "1 cups",
+      "isCustom": true,
+      "dateAdded": "2025-09-16T21:33:40.585Z",
+      "id": -20
+    },
+    {
+      "name": "Nuts, costco",
+      "calcium": 60,
+      "measure": "1 Oz",
+      "isCustom": true,
+      "dateAdded": "2025-09-16T21:51:36.305Z",
+      "id": -21
+    },
+    {
+      "name": "Quiche",
+      "calcium": 200,
+      "measure": "6 Oz",
+      "isCustom": true,
+      "dateAdded": "2025-09-20T22:36:31.826Z",
+      "id": -22
+    },
+    {
+      "name": "Chicken pot pie",
+      "calcium": 35,
+      "measure": "1 cups",
+      "isCustom": true,
+      "dateAdded": "2025-09-20T23:54:02.300Z",
+      "id": -23
+    },
+    {
+      "name": "Kefir",
+      "calcium": 390,
+      "measure": "1 cups",
+      "isCustom": true,
+      "dateAdded": "2025-09-25T00:47:20.703Z",
+      "id": -24
+    },
+    {
+      "name": "Roasted potatoes",
+      "calcium": 40,
+      "measure": "1 cups",
+      "isCustom": true,
+      "dateAdded": "2025-09-26T18:37:44.625Z",
+      "id": -25
+    },
+    {
+      "name": "Latte whole milk",
+      "calcium": 350,
+      "measure": "1 cups",
+      "isCustom": true,
+      "dateAdded": "2025-09-26T18:39:41.714Z",
+      "id": -26
+    },
+    {
+      "name": "Tamale white chicken homemade",
+      "calcium": 150,
+      "measure": "1 cups",
+      "isCustom": true,
+      "dateAdded": "2025-10-03T21:09:28.705Z",
+      "id": -27
+    },
+    {
+      "name": "Black beans refried",
+      "calcium": 45,
+      "measure": "0.5 cups",
+      "isCustom": true,
+      "dateAdded": "2025-10-04T00:33:02.746Z",
+      "id": -28
+    },
+    {
+      "name": "Kale Salad Kit",
+      "calcium": 50,
+      "measure": "1 cups",
+      "isCustom": true,
+      "dateAdded": "2025-10-06T00:58:15.740Z",
+      "id": -29
+    },
+    {
+      "name": "Italian pizza cheese",
+      "calcium": 210,
+      "measure": "0.25 cups",
+      "isCustom": true,
+      "dateAdded": "2025-10-06T20:35:53.674Z",
+      "id": -30
+    },
+    {
+      "name": "Lavash",
+      "calcium": 10,
+      "measure": "1 Sheet",
+      "isCustom": true,
+      "dateAdded": "2025-10-06T20:36:22.458Z",
+      "id": -31
+    },
+    {
+      "name": "Cannelloni veal",
+      "calcium": 200,
+      "measure": "1 cups",
+      "isCustom": true,
+      "dateAdded": "2025-10-09T00:53:25.032Z",
+      "id": -32
+    },
+    {
+      "name": "Nature’s Bakery Blueberry Bar",
+      "calcium": 20,
+      "measure": "1 Package",
+      "isCustom": true,
+      "dateAdded": "2025-10-20T15:05:29.632Z",
+      "id": -33
+    },
+    {
+      "name": "Natures Bakery Blueberry",
+      "calcium": 10,
+      "measure": "0.5 Package",
+      "isCustom": true,
+      "dateAdded": "2025-10-20T15:07:29.692Z",
+      "id": -34
+    },
+    {
+      "name": "Nutthin crisps",
+      "calcium": 15,
+      "measure": "30 grams",
+      "isCustom": true,
+      "dateAdded": "2025-10-29T21:15:48.695Z",
+      "id": -35
+    },
+    {
+      "name": "Pinto Bean Chili",
+      "calcium": 55,
+      "measure": "1 cups",
+      "isCustom": true,
+      "dateAdded": "2025-11-03T23:28:31.517Z",
+      "id": -36
+    },
+    {
+      "name": "Quinoa and Bulgar",
+      "calcium": 60,
+      "measure": "1 cups",
+      "isCustom": true,
+      "dateAdded": "2025-11-06T01:44:21.496Z",
+      "id": -37
+    },
+    {
+      "name": "Egg, whole",
+      "calcium": 50,
+      "measure": "1 Large",
+      "isCustom": true,
+      "dateAdded": "2025-11-11T02:01:37.030Z",
+      "id": -38
+    }
+  ],
+  "favorites": [
+    2919,
+    3426,
+    6290,
+    8289,
+    8056
+  ],
+  "hiddenFoods": [
+    6979,
+    540,
+    609,
+    613,
+    680,
+    796,
+    813,
+    815,
+    818,
+    813,
+    813,
+    825,
+    830,
+    1112,
+    1472,
+    1485,
+    1490,
+    1502,
+    1516,
+    1530,
+    1534,
+    1540,
+    825,
+    825,
+    2015,
+    2022,
+    2023,
+    2026,
+    2027,
+    2028,
+    2032,
+    2033,
+    2037,
+    2046,
+    2047,
+    2048,
+    2049,
+    2050,
+    2051,
+    2053,
+    2054,
+    2055,
+    2056,
+    2057,
+    2059,
+    2064,
+    2065,
+    2151,
+    2394,
+    2436,
+    2437,
+    2444,
+    2449,
+    3238,
+    3243,
+    3246,
+    3247,
+    3248,
+    3249,
+    3250,
+    3251,
+    3252,
+    3256,
+    3256,
+    3263,
+    3266,
+    3267,
+    3268,
+    3269,
+    3270,
+    3272,
+    3273,
+    3274,
+    3275,
+    3276,
+    3277,
+    3278,
+    3279,
+    3280,
+    3282,
+    3285,
+    3367,
+    3369,
+    3370,
+    3371,
+    3671,
+    825,
+    825,
+    3686,
+    3687,
+    3692,
+    3713,
+    3731,
+    3737,
+    3738,
+    3743,
+    3747,
+    3750,
+    3752,
+    3756,
+    3759,
+    3760,
+    3761,
+    4151,
+    4158,
+    4159,
+    4160,
+    4162,
+    4165,
+    4166,
+    4167,
+    4168,
+    4169,
+    4171,
+    4172,
+    4173,
+    4175,
+    4176,
+    4178,
+    4185,
+    4186,
+    4187,
+    4192,
+    4198,
+    4287,
+    4558,
+    4559,
+    4562,
+    4563,
+    4564,
+    4565,
+    4566,
+    4567,
+    4568,
+    4574,
+    4577,
+    4578,
+    4579,
+    4581,
+    4584,
+    4915,
+    5025,
+    5313,
+    5317,
+    5435,
+    5436,
+    5697,
+    5712,
+    5713,
+    5714,
+    5726,
+    5732,
+    5891,
+    5894,
+    5925,
+    6199,
+    6340,
+    6490,
+    6493,
+    6516,
+    6518,
+    6657,
+    6675,
+    6808,
+    6979,
+    7017,
+    7143,
+    7435,
+    7455,
+    7461,
+    7469,
+    7483,
+    7487,
+    7616,
+    7631,
+    7834,
+    7872,
+    7889,
+    8218,
+    8237,
+    8244,
+    8251,
+    8252,
+    8259,
+    8262,
+    8281,
+    1745,
+    2052,
+    2058,
+    1749,
+    2060,
+    4139,
+    4194,
+    7287
+  ],
+  "servingPreferences": [
+    {
+      "foodId": 2187,
+      "preferredQuantity": 0.25,
+      "preferredUnit": "cup",
+      "lastUsed": "2025-09-22T22:13:04.415Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 4348,
+      "preferredQuantity": 1,
+      "preferredUnit": "tablespoon",
+      "lastUsed": "2025-11-02T17:13:39.388Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 4746,
+      "preferredQuantity": 1,
+      "preferredUnit": "fl oz",
+      "lastUsed": "2025-11-09T23:25:46.195Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 515,
+      "preferredQuantity": 4,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-11-09T23:24:20.229Z",
+      "preferredMeasureIndex": 1
+    },
+    {
+      "foodId": 6376,
+      "preferredQuantity": 2,
+      "preferredUnit": "fl oz",
+      "lastUsed": "2025-10-14T23:56:57.739Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 6035,
+      "preferredQuantity": 3,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-11-02T01:46:16.955Z",
+      "preferredMeasureIndex": 1
+    },
+    {
+      "foodId": 411,
+      "preferredQuantity": 0.5,
+      "preferredUnit": "cup",
+      "lastUsed": "2025-09-18T00:42:55.083Z"
+    },
+    {
+      "foodId": 491,
+      "preferredQuantity": 4,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-10-08T00:05:22.483Z",
+      "preferredMeasureIndex": 1
+    },
+    {
+      "foodId": 2788,
+      "preferredQuantity": 0.75,
+      "preferredUnit": "cup",
+      "lastUsed": "2025-10-04T18:58:01.922Z",
+      "preferredMeasureIndex": 1
+    },
+    {
+      "foodId": 788,
+      "preferredQuantity": 2,
+      "preferredUnit": "cup",
+      "lastUsed": "2025-11-02T17:15:39.002Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 1109,
+      "preferredQuantity": 1,
+      "preferredUnit": "tablespoon",
+      "lastUsed": "2025-10-28T19:42:45.646Z",
+      "preferredMeasureIndex": 2
+    },
+    {
+      "foodId": 1330,
+      "preferredQuantity": 3,
+      "preferredUnit": "fl oz",
+      "lastUsed": "2025-10-26T20:07:20.789Z"
+    },
+    {
+      "foodId": 1395,
+      "preferredQuantity": 8,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-10-10T16:45:14.263Z",
+      "preferredMeasureIndex": 1
+    },
+    {
+      "foodId": 1914,
+      "preferredQuantity": 2,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-10-23T23:03:29.799Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 2182,
+      "preferredQuantity": 2,
+      "preferredUnit": "tablespoon",
+      "lastUsed": "2025-10-05T17:14:55.660Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 2383,
+      "preferredQuantity": 2,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-11-05T23:15:09.214Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 2417,
+      "preferredQuantity": 2,
+      "preferredUnit": "1 serving (5 fl oz)",
+      "lastUsed": "2025-11-09T23:25:14.315Z",
+      "preferredMeasureIndex": 1
+    },
+    {
+      "foodId": 2919,
+      "preferredQuantity": 1.5,
+      "preferredUnit": "slice",
+      "lastUsed": "2025-11-07T19:46:54.520Z",
+      "preferredMeasureIndex": 1
+    },
+    {
+      "foodId": 3144,
+      "preferredQuantity": 2,
+      "preferredUnit": "tablespoon",
+      "lastUsed": "2025-10-28T19:37:09.144Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 3629,
+      "preferredQuantity": 3,
+      "preferredUnit": "fl oz",
+      "lastUsed": "2025-10-10T16:45:46.847Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 3694,
+      "preferredQuantity": 6,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-08-21T14:34:38.717Z",
+      "preferredMeasureIndex": 1
+    },
+    {
+      "foodId": 4308,
+      "preferredQuantity": 2,
+      "preferredUnit": "tablespoon",
+      "lastUsed": "2025-11-08T17:09:03.223Z"
+    },
+    {
+      "foodId": 4586,
+      "preferredQuantity": 1,
+      "preferredUnit": "fl oz",
+      "lastUsed": "2025-11-07T01:05:15.139Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 4747,
+      "preferredQuantity": 4,
+      "preferredUnit": "cubic inch",
+      "lastUsed": "2025-11-04T19:07:16.198Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 4750,
+      "preferredQuantity": 0.2,
+      "preferredUnit": "5 package (5 oz)",
+      "lastUsed": "2025-10-20T19:22:53.191Z",
+      "preferredMeasureIndex": 1
+    },
+    {
+      "foodId": 5004,
+      "preferredQuantity": 2,
+      "preferredUnit": "fl oz",
+      "lastUsed": "2025-10-08T21:08:38.785Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 5007,
+      "preferredQuantity": 2,
+      "preferredUnit": "fl oz",
+      "lastUsed": "2025-09-16T21:27:29.347Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 5082,
+      "preferredQuantity": 0.5,
+      "preferredUnit": "cup",
+      "lastUsed": "2025-11-03T21:44:41.032Z"
+    },
+    {
+      "foodId": 5303,
+      "preferredQuantity": 0.4,
+      "preferredUnit": "cup",
+      "lastUsed": "2025-10-30T00:16:39.838Z",
+      "preferredMeasureIndex": 1
+    },
+    {
+      "foodId": 5328,
+      "preferredQuantity": 0.2,
+      "preferredUnit": "bar",
+      "lastUsed": "2025-11-09T23:25:28.806Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 5173,
+      "preferredQuantity": 4,
+      "preferredUnit": "fl oz",
+      "lastUsed": "2025-10-10T23:10:06.856Z"
+    },
+    {
+      "foodId": 6320,
+      "preferredQuantity": 2,
+      "preferredUnit": "fl oz",
+      "lastUsed": "2025-11-03T03:24:08.738Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 5551,
+      "preferredQuantity": 4,
+      "preferredUnit": "tablespoon",
+      "lastUsed": "2025-08-22T00:59:07.243Z"
+    },
+    {
+      "foodId": 5552,
+      "preferredQuantity": 8,
+      "preferredUnit": "fl oz",
+      "lastUsed": "2025-08-22T23:56:13.411Z"
+    },
+    {
+      "foodId": 7066,
+      "preferredQuantity": 0.75,
+      "preferredUnit": "cup",
+      "lastUsed": "2025-11-07T01:02:51.036Z",
+      "preferredMeasureIndex": 2
+    },
+    {
+      "foodId": 5632,
+      "preferredQuantity": 0.25,
+      "preferredUnit": "cup",
+      "lastUsed": "2025-11-09T23:29:15.750Z"
+    },
+    {
+      "foodId": 6266,
+      "preferredQuantity": 0.75,
+      "preferredUnit": "cup",
+      "lastUsed": "2025-11-05T23:16:50.183Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 6290,
+      "preferredQuantity": 0.5,
+      "preferredUnit": "cup",
+      "lastUsed": "2025-11-08T04:09:10.661Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 5850,
+      "preferredQuantity": 3,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-10-10T16:56:21.176Z",
+      "preferredMeasureIndex": 6
+    },
+    {
+      "foodId": 6667,
+      "preferredQuantity": 4,
+      "preferredUnit": "fl oz",
+      "lastUsed": "2025-10-30T00:15:57.890Z"
+    },
+    {
+      "foodId": 7066,
+      "preferredQuantity": 8,
+      "preferredUnit": "fl oz",
+      "lastUsed": "2025-08-22T01:00:51.783Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 7098,
+      "preferredQuantity": 0.5,
+      "preferredUnit": "cup",
+      "lastUsed": "2025-10-26T19:56:57.936Z",
+      "preferredMeasureIndex": 1
+    },
+    {
+      "foodId": 5063,
+      "preferredQuantity": 2,
+      "preferredUnit": "fl oz",
+      "lastUsed": "2025-10-05T17:34:12.213Z"
+    },
+    {
+      "foodId": 7169,
+      "preferredQuantity": 2,
+      "preferredUnit": "fl oz",
+      "lastUsed": "2025-10-24T19:07:31.035Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 7838,
+      "preferredQuantity": 2,
+      "preferredUnit": "fl oz",
+      "lastUsed": "2025-09-26T18:14:31.273Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 8107,
+      "preferredQuantity": 1,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-11-08T17:09:24.973Z"
+    },
+    {
+      "foodId": 8187,
+      "preferredQuantity": 2,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-09-20T15:00:22.665Z"
+    },
+    {
+      "foodId": 8191,
+      "preferredQuantity": 4,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-10-20T19:45:34.448Z"
+    },
+    {
+      "foodId": 8194,
+      "preferredQuantity": 3,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-09-19T18:49:08.785Z"
+    },
+    {
+      "foodId": 8195,
+      "preferredQuantity": 2,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-11-07T19:47:17.190Z"
+    },
+    {
+      "foodId": 8216,
+      "preferredQuantity": 0.25,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-11-08T17:07:15.027Z"
+    },
+    {
+      "foodId": 8227,
+      "preferredQuantity": 0.5,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-11-09T23:30:08.619Z"
+    },
+    {
+      "foodId": 8261,
+      "preferredQuantity": 2.5,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-10-28T19:42:18.097Z"
+    },
+    {
+      "foodId": 2188,
+      "preferredQuantity": 2,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-08-21T14:33:16.151Z"
+    },
+    {
+      "foodId": 1032,
+      "preferredQuantity": 0.5,
+      "preferredUnit": "link",
+      "lastUsed": "2025-10-21T20:57:19.281Z"
+    },
+    {
+      "foodId": 3972,
+      "preferredQuantity": 0.5,
+      "preferredUnit": "link",
+      "lastUsed": "2025-10-07T00:07:24.651Z"
+    },
+    {
+      "foodId": 2189,
+      "preferredQuantity": 2,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-10-30T20:44:13.036Z"
+    },
+    {
+      "foodId": 2673,
+      "preferredQuantity": 0.5,
+      "preferredUnit": "1 package (4 oz)",
+      "lastUsed": "2025-10-13T21:43:28.520Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 4880,
+      "preferredQuantity": 2,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-10-20T19:24:39.612Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 6045,
+      "preferredQuantity": 3,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-09-19T18:46:09.842Z"
+    },
+    {
+      "foodId": 7207,
+      "preferredQuantity": 8,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-10-26T19:56:35.512Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 7295,
+      "preferredQuantity": 4,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-10-08T00:06:12.342Z",
+      "preferredMeasureIndex": 0
+    },
+    {
+      "foodId": 8056,
+      "preferredQuantity": 3,
+      "preferredUnit": "oz",
+      "lastUsed": "2025-09-18T00:43:22.703Z"
+    }
+  ],
+  "journalEntries": {
+    "2025-06-07": [
+      {
+        "name": "User-entered amount",
+        "calcium": 650,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-07T20:57:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Tropicana Calcium + Vitamin D Orange Juice",
+        "calcium": 350,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-06-07T16:02:00.000Z",
+        "isCustom": true,
+        "customFoodId": 12
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 85,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-07T16:02:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-06-07T14:30:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 150,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-07T14:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-06-08": [
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-06-08T14:41:00.000Z",
+        "isCustom": true,
+        "customFoodId": 4
+      },
+      {
+        "name": "Milk Chocolate, Carnation Breakfast Essentials",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-06-08T13:40:00.000Z",
+        "isCustom": true,
+        "customFoodId": 7
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-06-08T13:13:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      }
+    ],
+    "2025-06-09": [
+      {
+        "name": "User-entered amount",
+        "calcium": 650,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-09T17:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-06-09T14:39:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      }
+    ],
+    "2025-06-10": [
+      {
+        "name": "Tropicana Calcium + Vitamin D Orange Juice",
+        "calcium": 350,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-06-11T02:51:00.000Z",
+        "isCustom": true,
+        "customFoodId": 12
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-10T23:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Mootopia Fat Free Milk",
+        "calcium": 450,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-06-10T17:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 6
+      },
+      {
+        "name": "Ovaltine Choclate Malt mix",
+        "calcium": 110,
+        "servingQuantity": 2,
+        "servingUnit": "Tablespoons",
+        "timestamp": "2025-06-10T17:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 2
+      },
+      {
+        "name": "Milk Chocolate, Carnation Breakfast Essentials",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-06-10T15:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 7
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 100,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-10T14:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-06-10T14:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      }
+    ],
+    "2025-06-11": [
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-06-11T14:44:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 650,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-11T13:30:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-06-12": [
+      {
+        "name": "User-entered amount",
+        "calcium": 100,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-12T23:45:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 650,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-12T19:44:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-06-12T14:36:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 120,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-12T14:25:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-06-13": [
+      {
+        "name": "User-entered amount",
+        "calcium": 750,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-13T21:12:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-06-13T15:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "Mootopia Fat Free Milk",
+        "calcium": 450,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-06-13T14:55:00.000Z",
+        "isCustom": true,
+        "customFoodId": 6
+      }
+    ],
+    "2025-06-14": [
+      {
+        "name": "User-entered amount",
+        "calcium": 710,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-14T19:11:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-06-14T14:12:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      }
+    ],
+    "2025-06-15": [
+      {
+        "name": "User-entered amount",
+        "calcium": 750,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-15T22:35:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 150,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-15T22:34:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-06-15T15:35:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 100,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-15T14:34:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-06-16": [
+      {
+        "name": "User-entered amount",
+        "calcium": 530,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-16T13:30:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 240,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-16T21:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "FAGE Greek Yogurt, Plain, Nonfat",
+        "calcium": 200,
+        "servingQuantity": 0.75,
+        "servingUnit": "Cup",
+        "timestamp": "2025-06-16T22:24:00.000Z",
+        "isCustom": true,
+        "customFoodId": 9
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-06-17T02:23:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      }
+    ],
+    "2025-06-17": [
+      {
+        "name": "User-entered amount",
+        "calcium": 900,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-17T18:57:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-06-17T18:57:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 242,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-17T20:32:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-06-25": [
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-06-25T14:31:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 1120,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-25T20:40:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-06-26": [
+      {
+        "name": "User-entered amount",
+        "calcium": 240,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-26T17:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 650,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-26T20:46:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 270,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-27T01:34:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-06-27": [
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-06-27T14:30:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 750,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-27T14:35:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 240,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-27T19:27:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-06-27T22:28:00.000Z",
+        "isCustom": true,
+        "customFoodId": 4
+      }
+    ],
+    "2025-06-28": [
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-06-28T14:30:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 240,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-28T16:34:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 500,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-28T22:01:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-06-29": [
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-06-29T14:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 580,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-29T15:48:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 120,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-29T18:51:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Tropicana Calcium + Vitamin D Orange Juice",
+        "calcium": 350,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-06-29T21:25:00.000Z",
+        "isCustom": true,
+        "customFoodId": 12
+      }
+    ],
+    "2025-06-30": [
+      {
+        "name": "User-entered amount",
+        "calcium": 400,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-30T15:02:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-06-30T15:30:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 180,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-06-30T18:25:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-07-01": [
+      {
+        "name": "FAGE Greek Yogurt, Plain, Nonfat",
+        "calcium": 200,
+        "servingQuantity": 0.75,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-01T16:47:00.000Z",
+        "isCustom": true,
+        "customFoodId": 9
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 510,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-01T17:01:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-07-02": [
+      {
+        "name": "User-entered amount",
+        "calcium": 175,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-02T13:30:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-02T14:05:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "FAGE Greek Yogurt, Plain, Nonfat",
+        "calcium": 200,
+        "servingQuantity": 0.75,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-02T20:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 9
+      },
+      {
+        "name": "Ovaltine w/Fairlife Fat Free Milk",
+        "calcium": 490,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-02T21:30:00.000Z",
+        "isCustom": true,
+        "customFoodId": 3
+      }
+    ],
+    "2025-07-03": [
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-03T14:24:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "Ovaltine w/Fairlife Fat Free Milk",
+        "calcium": 490,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-03T16:23:00.000Z",
+        "isCustom": true,
+        "customFoodId": 3
+      },
+      {
+        "name": "FAGE Greek Yogurt, Plain, Nonfat",
+        "calcium": 200,
+        "servingQuantity": 0.75,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-03T20:59:00.000Z",
+        "isCustom": true,
+        "customFoodId": 9
+      },
+      {
+        "name": "Tropicana Calcium + Vitamin D Orange Juice",
+        "calcium": 350,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-03T23:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 12
+      }
+    ],
+    "2025-07-04": [
+      {
+        "name": "User-entered amount",
+        "calcium": 170,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-04T15:06:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-04T15:39:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "Tropicana Calcium + Vitamin D Orange Juice",
+        "calcium": 350,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-04T19:50:00.000Z",
+        "isCustom": true,
+        "customFoodId": 12
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 112,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-04T19:57:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 700,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-04T22:03:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-07-05": [
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-05T14:30:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "Milk Chocolate, Carnation Breakfast Essentials",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-05T17:38:00.000Z",
+        "isCustom": true,
+        "customFoodId": 7
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 112,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-05T20:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 700,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-05T21:37:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-07-06": [
+      {
+        "name": "User-entered amount",
+        "calcium": 130,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-06T15:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-06T15:08:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 180,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-06T18:06:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Tropicana Calcium + Vitamin D Orange Juice",
+        "calcium": 350,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-06T18:55:00.000Z",
+        "isCustom": true,
+        "customFoodId": 12
+      },
+      {
+        "name": "Ovaltine w/Fairlife Fat Free Milk",
+        "calcium": 490,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-06T22:30:00.000Z",
+        "isCustom": true,
+        "customFoodId": 3
+      }
+    ],
+    "2025-07-07": [
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-07T14:32:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "FAGE Greek Yogurt, Plain, Nonfat",
+        "calcium": 200,
+        "servingQuantity": 0.75,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-07T17:32:00.000Z",
+        "isCustom": true,
+        "customFoodId": 9
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 27,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-07T18:32:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Ovaltine w/Fairlife Fat Free Milk",
+        "calcium": 490,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-07T20:53:00.000Z",
+        "isCustom": true,
+        "customFoodId": 3
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 256,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-08T00:24:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-07-08": [
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-08T13:54:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 80,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-08T15:59:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Tropicana Calcium + Vitamin D Orange Juice",
+        "calcium": 350,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-08T17:54:00.000Z",
+        "isCustom": true,
+        "customFoodId": 12
+      },
+      {
+        "name": "Chobani Greek Yogurt, Plain, Nonfat",
+        "calcium": 190,
+        "servingQuantity": 0.75,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-08T20:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 10
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 480,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-08T21:57:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-07-09": [
+      {
+        "name": "User-entered amount",
+        "calcium": 60,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-09T14:52:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-09T16:21:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 170,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-09T16:21:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Chobani Greek Yogurt, Plain, Nonfat",
+        "calcium": 190,
+        "servingQuantity": 0.75,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-09T18:51:00.000Z",
+        "isCustom": true,
+        "customFoodId": 10
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 65,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-10T00:14:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 36,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-10T00:30:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 650,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-10T01:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-07-10": [
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-10T14:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "Milk Chocolate, Carnation Breakfast Essentials",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-10T14:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 7
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 75,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-10T14:10:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 225,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-10T17:07:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 100,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-10T22:28:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-07-11": [
+      {
+        "name": "FAGE Greek Yogurt, Plain, Nonfat",
+        "calcium": 200,
+        "servingQuantity": 0.75,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-11T14:46:00.000Z",
+        "isCustom": true,
+        "customFoodId": 9
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-11T15:47:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "Multi Grain Cheerios",
+        "calcium": 200,
+        "servingQuantity": 1.33,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-11T18:22:00.000Z",
+        "isCustom": true,
+        "customFoodId": 11
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 600,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-11T21:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-07-12": [
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-12T14:30:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 375,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-12T15:20:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 483,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-12T18:30:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 80,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-13T00:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-07-13": [
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-13T14:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "Milk Chocolate, Carnation Breakfast Essentials",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-13T21:24:00.000Z",
+        "isCustom": true,
+        "customFoodId": 7
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 100,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-13T21:26:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 800,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-13T22:05:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 150,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-13T23:30:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-07-14": [
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-14T15:08:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "Milk Chocolate, Carnation Breakfast Essentials",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-14T15:10:00.000Z",
+        "isCustom": true,
+        "customFoodId": 7
+      },
+      {
+        "name": "FAGE Greek Yogurt, Plain, Nonfat",
+        "calcium": 200,
+        "servingQuantity": 0.75,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-14T21:46:00.000Z",
+        "isCustom": true,
+        "customFoodId": 9
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 550,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-14T21:49:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 155,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-14T23:30:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-07-15": [
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-15T14:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 400,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-15T15:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 100,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-15T17:43:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 100,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-15T18:05:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-15T21:34:00.000Z",
+        "isCustom": true,
+        "customFoodId": 4
+      }
+    ],
+    "2025-07-16": [
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-16T15:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "Milk Chocolate, Carnation Breakfast Essentials",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-16T15:14:00.000Z",
+        "isCustom": true,
+        "customFoodId": 7
+      },
+      {
+        "name": "FAGE Greek Yogurt, Plain, Nonfat",
+        "calcium": 200,
+        "servingQuantity": 0.75,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-16T16:55:00.000Z",
+        "isCustom": true,
+        "customFoodId": 9
+      },
+      {
+        "name": "Tropicana Calcium + Vitamin D Orange Juice",
+        "calcium": 350,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-16T16:55:00.000Z",
+        "isCustom": true,
+        "customFoodId": 12
+      }
+    ],
+    "2025-07-17": [
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-17T14:21:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "Milk Chocolate, Carnation Breakfast Essentials",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-17T15:21:00.000Z",
+        "isCustom": true,
+        "customFoodId": 7
+      },
+      {
+        "name": "Fairlife Fat Free Milk",
+        "calcium": 380,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-17T18:23:00.000Z",
+        "isCustom": true,
+        "customFoodId": 5
+      },
+      {
+        "name": "Tropicana Calcium + Vitamin D Orange Juice",
+        "calcium": 350,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-17T20:38:00.000Z",
+        "isCustom": true,
+        "customFoodId": 12
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 150,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-17T23:38:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-07-18": [
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-18T15:03:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "Fairlife Fat Free Milk",
+        "calcium": 380,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-18T16:03:00.000Z",
+        "isCustom": true,
+        "customFoodId": 5
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 20,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-18T18:35:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 170,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-18T18:45:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 230,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-19T00:13:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-07-19": [
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-19T13:14:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "Milk Chocolate, Carnation Breakfast Essentials",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-19T14:14:00.000Z",
+        "isCustom": true,
+        "customFoodId": 7
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 145,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-19T18:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-19T19:16:00.000Z",
+        "isCustom": true,
+        "customFoodId": 4
+      },
+      {
+        "name": "Fairlife Fat Free Milk",
+        "calcium": 380,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-19T23:19:00.000Z",
+        "isCustom": true,
+        "customFoodId": 5
+      }
+    ],
+    "2025-07-20": [
+      {
+        "name": "User-entered amount",
+        "calcium": 459,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-21T02:08:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 150,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-20T22:55:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-20T20:47:00.000Z",
+        "isCustom": true,
+        "customFoodId": 4
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 70,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-20T17:49:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-20T14:46:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      }
+    ],
+    "2025-07-21": [
+      {
+        "name": "User-entered amount",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-21T23:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 30,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-21T23:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 150,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-21T20:06:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 225,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-21T18:30:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 130,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-21T15:15:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Milk Chocolate, Carnation Breakfast Essentials",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-21T15:10:00.000Z",
+        "isCustom": true,
+        "customFoodId": 7
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-21T14:06:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 375,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-21T13:07:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      }
+    ],
+    "2025-07-22": [
+      {
+        "name": "FAGE Greek Yogurt, Plain, Nonfat",
+        "calcium": 200,
+        "servingQuantity": 0.75,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-22T21:27:00.000Z",
+        "isCustom": true,
+        "customFoodId": 9
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-22T19:30:00.000Z",
+        "isCustom": true,
+        "customFoodId": 4
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 250,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-22T17:30:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-22T13:19:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      }
+    ],
+    "2025-07-23": [
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-23T13:30:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      },
+      {
+        "name": "Chobani Greek Yogurt, Plain, Nonfat",
+        "calcium": 190,
+        "servingQuantity": 0.75,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-23T13:09:00.000Z",
+        "isCustom": true,
+        "customFoodId": 10
+      }
+    ],
+    "2025-07-24": [
+      {
+        "name": "User-entered amount",
+        "calcium": 30,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-24T19:09:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 750,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-24T17:58:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-24T13:58:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      }
+    ],
+    "2025-07-25": [
+      {
+        "name": "User-entered amount",
+        "calcium": 400,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-26T02:12:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 100,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-25T23:01:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "FAGE Greek Yogurt, Plain, Nonfat",
+        "calcium": 200,
+        "servingQuantity": 0.75,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-25T22:58:00.000Z",
+        "isCustom": true,
+        "customFoodId": 9
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-25T16:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 4
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-25T14:19:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      }
+    ],
+    "2025-07-26": [
+      {
+        "name": "User-entered amount",
+        "calcium": 550,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-27T02:10:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 100,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "timestamp": "2025-07-27T00:00:00.000Z",
+        "isCustom": true,
+        "customFoodId": 16
+      },
+      {
+        "name": "FAGE Greek Yogurt, Plain, Nonfat",
+        "calcium": 200,
+        "servingQuantity": 0.75,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-26T20:30:00.000Z",
+        "isCustom": true,
+        "customFoodId": 9
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-26T13:52:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      }
+    ],
+    "2025-07-27": [
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:38:07.885Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 60,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:36:39.489Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 75,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:36:20.374Z"
+      },
+      {
+        "name": "Mootopia Fat Free Milk",
+        "calcium": 450,
+        "servingQuantity": 1,
+        "servingUnit": "Cup",
+        "timestamp": "2025-07-27T17:19:00.000Z",
+        "isCustom": true,
+        "customFoodId": 6
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "timestamp": "2025-07-27T13:13:00.000Z",
+        "isCustom": true,
+        "customFoodId": 1
+      }
+    ],
+    "2025-07-28": [
+      {
+        "name": "User-entered amount",
+        "calcium": 550,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:39:44.622Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 50,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:39:25.921Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 275,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:39:09.263Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 100,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:38:42.909Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:38:32.204Z"
+      }
+    ],
+    "2025-07-29": [
+      {
+        "name": "User-entered amount",
+        "calcium": 36,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:41:27.781Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:41:14.898Z"
+      },
+      {
+        "name": "FAGE Greek Yogurt, Plain, Nonfat",
+        "calcium": 200,
+        "servingQuantity": 0.75,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:41:02.431Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 130,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:40:39.765Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:40:28.199Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 120,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:40:21.762Z"
+      }
+    ],
+    "2025-07-30": [
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:43:29.792Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 20,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:43:21.815Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 138,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:43:11.228Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 200,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:43:00.643Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 200,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:42:49.766Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 225,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:41:50.716Z"
+      }
+    ],
+    "2025-07-31": [
+      {
+        "name": "User-entered amount",
+        "calcium": 650,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:44:23.522Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 206,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:44:11.225Z"
+      },
+      {
+        "name": "Sargento String Cheese",
+        "calcium": 190,
+        "servingQuantity": 21,
+        "servingUnit": "grams",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:43:59.601Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:43:52.272Z"
+      }
+    ],
+    "2025-08-01": [
+      {
+        "name": "User-entered amount",
+        "calcium": 77,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:45:36.124Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 270,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:45:23.531Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 225,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:45:03.555Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 200,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:44:50.508Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 50,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:44:39.921Z"
+      }
+    ],
+    "2025-08-02": [
+      {
+        "name": "User-entered amount",
+        "calcium": 550,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:46:48.120Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 65,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:46:34.150Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 40,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:46:21.386Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:46:10.890Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 612,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:46:04.591Z"
+      }
+    ],
+    "2025-08-03": [
+      {
+        "name": "User-entered amount",
+        "calcium": 550,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:47:41.989Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 200,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:47:29.105Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:47:16.513Z"
+      },
+      {
+        "name": "Tropicana Calcium + Vitamin D Orange Juice",
+        "calcium": 350,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:47:10.021Z"
+      }
+    ],
+    "2025-08-04": [
+      {
+        "name": "User-entered amount",
+        "calcium": 350,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:49:06.633Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:48:53.076Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 100,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:48:45.181Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 180,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:48:36.527Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 150,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:48:26.289Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:48:01.057Z"
+      }
+    ],
+    "2025-08-05": [
+      {
+        "name": "Multi Grain Cheerios",
+        "calcium": 200,
+        "servingQuantity": 1.33,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:50:37.206Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 200,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:49:58.620Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 850,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:49:46.443Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:49:34.760Z"
+      }
+    ],
+    "2025-08-06": [
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:51:32.368Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 150,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:51:23.773Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 40,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:51:12.783Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:51:00.501Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:50:54.023Z"
+      }
+    ],
+    "2025-08-07": [
+      {
+        "name": "User-entered amount",
+        "calcium": 130,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:52:32.730Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 150,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:52:14.060Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:51:58.529Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 600,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:51:51.602Z"
+      }
+    ],
+    "2025-08-08": [
+      {
+        "name": "User-entered amount",
+        "calcium": 200,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:53:30.617Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:53:15.600Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 250,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:53:04.442Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:52:48.651Z"
+      }
+    ],
+    "2025-08-09": [
+      {
+        "name": "User-entered amount",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:54:45.624Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 200,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:54:23.385Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:54:12.935Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-08-10T03:53:44.145Z"
+      }
+    ],
+    "2025-08-10": [
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:18:52.192Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 75,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:18:41.499Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 225,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:18:23.483Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:17:58.680Z"
+      }
+    ],
+    "2025-08-11": [
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:26:06.596Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 225,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:21:18.193Z"
+      },
+      {
+        "name": "Sargento String Cheese",
+        "calcium": 190,
+        "servingQuantity": 21,
+        "servingUnit": "grams",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:20:58.275Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:20:17.558Z"
+      }
+    ],
+    "2025-08-12": [
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:24:43.538Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 175,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:24:36.999Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 250,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:24:25.474Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:23:51.665Z"
+      },
+      {
+        "name": "Sargento String Cheese",
+        "calcium": 190,
+        "servingQuantity": 21,
+        "servingUnit": "grams",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:23:43.016Z"
+      }
+    ],
+    "2025-08-13": [
+      {
+        "name": "User-entered amount",
+        "calcium": 175,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:27:54.593Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 360,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:27:40.228Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:27:12.773Z"
+      },
+      {
+        "name": "Tropicana Calcium + Vitamin D Orange Juice",
+        "calcium": 350,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:27:06.632Z"
+      }
+    ],
+    "2025-08-14": [
+      {
+        "name": "User-entered amount",
+        "calcium": 400,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:29:42.175Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:29:28.366Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 175,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:29:16.797Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 100,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:29:06.548Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:28:32.219Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 750,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:28:25.035Z"
+      }
+    ],
+    "2025-08-15": [
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-11T01:57:05.669Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 100,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-11-11T01:56:40.417Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:30:07.483Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-08-15T16:30:01.275Z"
+      }
+    ],
+    "2025-08-16": [
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:02:38.409Z"
+      },
+      {
+        "name": "Tropicana Calcium + Vitamin D Orange Juice",
+        "calcium": 350,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:02:15.566Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:01:54.558Z"
+      },
+      {
+        "name": "Egg, whole",
+        "calcium": 50,
+        "servingQuantity": 1,
+        "servingUnit": "Large",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:01:37.036Z"
+      }
+    ],
+    "2025-08-17": [
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:03:56.629Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:03:38.018Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 550,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:03:20.429Z"
+      }
+    ],
+    "2025-08-18": [
+      {
+        "name": "User-entered amount",
+        "calcium": 65,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:06:25.396Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 90,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:05:55.326Z"
+      },
+      {
+        "name": "Multi Grain Cheerios",
+        "calcium": 200,
+        "servingQuantity": 1.33,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:05:39.084Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 65,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:05:16.148Z"
+      },
+      {
+        "name": "Milk Chocolate, Carnation Breakfast Essentials",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:04:52.570Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:04:34.495Z"
+      },
+      {
+        "name": "FAGE Greek Yogurt, Plain, Nonfat",
+        "calcium": 200,
+        "servingQuantity": 0.75,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:04:26.066Z"
+      }
+    ],
+    "2025-08-19": [
+      {
+        "name": "User-entered amount",
+        "calcium": 400,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:07:45.750Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 55,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:07:31.511Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:07:12.023Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:06:53.734Z"
+      }
+    ],
+    "2025-08-20": [
+      {
+        "name": "User-entered amount",
+        "calcium": 126,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:14:18.837Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 175,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:14:08.261Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 580,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:13:30.748Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:13:10.274Z"
+      }
+    ],
+    "2025-08-21": [
+      {
+        "name": "User-entered amount",
+        "calcium": 36,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:18:48.904Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 105,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:18:32.093Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 130,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:18:15.364Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:17:05.150Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:16:44.726Z"
+      }
+    ],
+    "2025-08-22": [
+      {
+        "name": "User-entered amount",
+        "calcium": 118,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:22:42.474Z"
+      },
+      {
+        "name": "User-entered amount",
+        "calcium": 138,
+        "servingQuantity": 1,
+        "servingUnit": "measure",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:22:28.766Z"
+      },
+      {
+        "name": "Sanar Flax Seed, Ground",
+        "calcium": 24,
+        "servingQuantity": 2,
+        "servingUnit": "tablespoon",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:22:04.223Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-11T02:21:29.689Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-08-22T18:43:55.635Z"
+      },
+      {
+        "name": "LaLa Yogurt Smoothie",
+        "calcium": 260,
+        "servingQuantity": 7,
+        "servingUnit": "oz",
+        "isCustom": true,
+        "timestamp": "2025-08-22T18:43:25.033Z"
+      }
+    ],
+    "2025-09-16": [
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-09-16T21:20:55.301Z"
+      },
+      {
+        "name": "Lettuce, romaine, green, raw",
+        "calcium": 31,
+        "servingQuantity": 4,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-09-16T21:24:20.090Z"
+      },
+      {
+        "name": "Cucumber, with peel, raw",
+        "calcium": 4,
+        "servingQuantity": 2,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-09-16T21:26:25.304Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-09-16T21:27:55.143Z"
+      },
+      {
+        "name": "Fish, salmon, chinook, cooked, dry heat",
+        "calcium": 23.8,
+        "servingQuantity": 3,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-09-16T21:28:49.278Z"
+      },
+      {
+        "name": "7 Grain Medley",
+        "calcium": 60,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-09-16T21:33:40.590Z"
+      },
+      {
+        "name": "Eggs, Grade A, Large, egg whole",
+        "calcium": 24.1,
+        "servingQuantity": 1,
+        "servingUnit": "whole",
+        "isCustom": false,
+        "timestamp": "2025-09-16T21:41:16.649Z"
+      },
+      {
+        "name": "Nuts, costco",
+        "calcium": 60,
+        "servingQuantity": 1,
+        "servingUnit": "Oz",
+        "isCustom": true,
+        "timestamp": "2025-09-16T21:51:36.311Z"
+      },
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-09-16T21:52:46.558Z"
+      },
+      {
+        "name": "Asparagus, cooked, boiled, drained, with salt",
+        "calcium": 31,
+        "servingQuantity": 0.75,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-09-16T21:53:39.027Z"
+      },
+      {
+        "name": "Mootopia Fat Free Milk",
+        "calcium": 450,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-09-17T15:30:17.198Z"
+      }
+    ],
+    "2025-09-17": [
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 840,
+        "servingQuantity": 1.5,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-09-17T15:30:46.167Z"
+      },
+      {
+        "name": "Tortillas, ready-to-bake or -fry, whole wheat",
+        "calcium": 100,
+        "servingQuantity": 1,
+        "servingUnit": "serving",
+        "isCustom": false,
+        "timestamp": "2025-09-18T00:42:03.703Z"
+      },
+      {
+        "name": "Beans, black turtle, mature seeds, cooked, boiled, with salt",
+        "calcium": 51,
+        "servingQuantity": 0.5,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-09-18T00:42:55.089Z"
+      },
+      {
+        "name": "Bison",
+        "calcium": 6,
+        "servingQuantity": 3,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-09-18T00:43:22.709Z"
+      },
+      {
+        "name": "Cheese, mexican, queso chihuahua",
+        "calcium": 46,
+        "servingQuantity": 1,
+        "servingUnit": "tablespoon",
+        "isCustom": false,
+        "timestamp": "2025-09-18T00:44:19.020Z"
+      },
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-09-18T00:44:46.240Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-09-18T00:44:59.467Z"
+      },
+      {
+        "name": "Fish, salmon, coho, wild, cooked, moist heat",
+        "calcium": 26,
+        "servingQuantity": 2,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-09-18T00:46:08.020Z"
+      },
+      {
+        "name": "7 Grain Medley",
+        "calcium": 11,
+        "servingQuantity": 3,
+        "servingUnit": "tablespoon",
+        "isCustom": true,
+        "timestamp": "2025-09-18T00:46:31.044Z"
+      },
+      {
+        "name": "Beans, snap, green, microwaved",
+        "calcium": 16,
+        "servingQuantity": 0.25,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-09-18T00:50:01.596Z"
+      },
+      {
+        "name": "Chocolate, dark, 70-85% cacao solids",
+        "calcium": 14.74,
+        "servingQuantity": 0.2,
+        "servingUnit": "bar",
+        "isCustom": false,
+        "timestamp": "2025-09-18T00:50:46.049Z"
+      }
+    ],
+    "2025-09-18": [
+      {
+        "name": "Sargento String Cheese",
+        "calcium": 190,
+        "servingQuantity": 21,
+        "servingUnit": "grams",
+        "isCustom": true,
+        "timestamp": "2025-09-18T19:24:20.836Z"
+      },
+      {
+        "name": "Cabbage, green, raw",
+        "calcium": 41.8,
+        "servingQuantity": 100,
+        "servingUnit": "g",
+        "isCustom": false,
+        "timestamp": "2025-09-18T19:24:55.576Z"
+      },
+      {
+        "name": "Ovaltine Choclate Malt mix",
+        "calcium": 165,
+        "servingQuantity": 3,
+        "servingUnit": "tablespoons",
+        "isCustom": true,
+        "timestamp": "2025-09-18T22:06:12.949Z"
+      },
+      {
+        "name": "Mootopia Fat Free Milk",
+        "calcium": 563,
+        "servingQuantity": 1.25,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-09-18T22:06:34.867Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-09-18T22:06:46.056Z"
+      },
+      {
+        "name": "Beef, short loin, top loin, steak, separable lean and fat, trimmed to 1/8 fat, all grades, raw",
+        "calcium": 20,
+        "servingQuantity": 3,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-09-19T18:46:09.849Z"
+      },
+      {
+        "name": "Broccoli, cooked, boiled, drained, without salt",
+        "calcium": 31.2,
+        "servingQuantity": 0.5,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-09-19T18:47:07.284Z"
+      },
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-09-19T18:49:47.969Z"
+      }
+    ],
+    "2025-09-19": [
+      {
+        "name": "Sargento String Cheese",
+        "calcium": 190,
+        "servingQuantity": 21,
+        "servingUnit": "grams",
+        "isCustom": true,
+        "timestamp": "2025-09-19T18:47:42.719Z"
+      },
+      {
+        "name": "Multi Grain Cheerios",
+        "calcium": 150,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-09-19T18:48:08.631Z"
+      },
+      {
+        "name": "Mootopia Fat Free Milk",
+        "calcium": 450,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-09-19T18:48:19.912Z"
+      },
+      {
+        "name": "Cabbage, green, raw",
+        "calcium": 36,
+        "servingQuantity": 3,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-09-19T18:49:08.787Z"
+      },
+      {
+        "name": "Fish, trout, rainbow, wild, cooked, dry heat",
+        "calcium": 73.1,
+        "servingQuantity": 3,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-09-19T21:14:07.259Z"
+      },
+      {
+        "name": "Eggplant, cooked, boiled, drained, without salt",
+        "calcium": 5.94,
+        "servingQuantity": 1,
+        "servingUnit": "1 cup (1 cubes)",
+        "isCustom": false,
+        "timestamp": "2025-09-19T21:14:30.039Z"
+      },
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-09-19T21:15:39.022Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-09-19T21:35:10.324Z"
+      }
+    ],
+    "2025-09-20": [
+      {
+        "name": "Pineapple, raw",
+        "calcium": 7,
+        "servingQuantity": 2,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-09-20T15:00:22.672Z"
+      },
+      {
+        "name": "LaLa Yogurt Smoothie",
+        "calcium": 74,
+        "servingQuantity": 2,
+        "servingUnit": "oz",
+        "isCustom": true,
+        "timestamp": "2025-09-20T15:00:55.432Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-09-20T15:01:28.167Z"
+      },
+      {
+        "name": "Quiche",
+        "calcium": 200,
+        "servingQuantity": 6,
+        "servingUnit": "Oz",
+        "isCustom": true,
+        "timestamp": "2025-09-20T22:36:31.831Z"
+      },
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 35.4,
+        "servingQuantity": 3,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-09-20T22:36:58.927Z"
+      },
+      {
+        "name": "Broccoli, cooked, boiled, drained, without salt",
+        "calcium": 47,
+        "servingQuantity": 0.75,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-09-20T22:38:30.513Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-09-20T22:38:51.173Z"
+      },
+      {
+        "name": "Chicken pot pie",
+        "calcium": 35,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-09-20T23:54:02.305Z"
+      }
+    ],
+    "2025-09-21": [
+      {
+        "name": "LaLa Yogurt Smoothie",
+        "calcium": 149,
+        "servingQuantity": 4,
+        "servingUnit": "oz",
+        "isCustom": true,
+        "timestamp": "2025-09-21T16:58:03.107Z"
+      },
+      {
+        "name": "Jams and preserves, apricot",
+        "calcium": 2.8,
+        "servingQuantity": 1,
+        "servingUnit": "1 packet (0.5 oz)",
+        "isCustom": false,
+        "timestamp": "2025-09-21T18:07:17.673Z"
+      },
+      {
+        "name": "Bread, whole-wheat, prepared from recipe, toasted",
+        "calcium": 30,
+        "servingQuantity": 2,
+        "servingUnit": "slice",
+        "isCustom": false,
+        "timestamp": "2025-09-21T18:07:31.959Z"
+      },
+      {
+        "name": "Sargento String Cheese",
+        "calcium": 190,
+        "servingQuantity": 21,
+        "servingUnit": "grams",
+        "isCustom": true,
+        "timestamp": "2025-09-22T02:15:07.983Z"
+      },
+      {
+        "name": "Potatoes, mashed, dehydrated, granules with milk, dry form",
+        "calcium": 71,
+        "servingQuantity": 4,
+        "servingUnit": "tablespoon",
+        "isCustom": false,
+        "timestamp": "2025-09-22T02:15:31.467Z"
+      },
+      {
+        "name": "Broccoli, frozen, chopped, cooked, boiled, drained, without salt",
+        "calcium": 61,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": false,
+        "timestamp": "2025-09-22T02:16:10.904Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-09-22T02:29:29.210Z"
+      },
+      {
+        "name": "Chicken breast",
+        "calcium": 20,
+        "servingQuantity": 1,
+        "servingUnit": "4oz",
+        "isCustom": true,
+        "timestamp": "2025-09-22T22:15:00.119Z"
+      }
+    ],
+    "2025-09-22": [
+      {
+        "name": "Potatoes, mashed, dehydrated, granules with milk, dry form",
+        "calcium": 284,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-09-22T22:09:45.040Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-09-22T22:10:03.213Z"
+      },
+      {
+        "name": "Beans, snap, green, frozen, cooked, boiled, drained without salt",
+        "calcium": 57,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": false,
+        "timestamp": "2025-09-22T22:11:33.878Z"
+      },
+      {
+        "name": "Tortillas, ready-to-bake or -fry, whole wheat",
+        "calcium": 100,
+        "servingQuantity": 1,
+        "servingUnit": "serving",
+        "isCustom": false,
+        "timestamp": "2025-09-22T22:12:00.105Z"
+      },
+      {
+        "name": "Chicken breast",
+        "calcium": 20,
+        "servingQuantity": 1,
+        "servingUnit": "4oz",
+        "isCustom": true,
+        "timestamp": "2025-09-22T22:12:12.112Z"
+      },
+      {
+        "name": "Cheese, mexican, queso chihuahua",
+        "calcium": 184,
+        "servingQuantity": 0.25,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-09-22T22:13:04.420Z"
+      },
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-09-22T22:14:06.372Z"
+      }
+    ],
+    "2025-09-24": [
+      {
+        "name": "Mollusks, oyster, Pacific, raw",
+        "calcium": 6.8,
+        "servingQuantity": 3,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-09-26T18:45:54.524Z"
+      },
+      {
+        "name": "Latte whole milk",
+        "calcium": 350,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-09-26T18:39:41.722Z"
+      },
+      {
+        "name": "Roasted potatoes",
+        "calcium": 40,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-09-26T18:37:44.641Z"
+      },
+      {
+        "name": "Beans, snap, green, microwaved",
+        "calcium": 26,
+        "servingQuantity": 0.4,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-09-26T18:31:16.707Z"
+      },
+      {
+        "name": "Fish, salmon, coho, wild, cooked, moist heat",
+        "calcium": 39,
+        "servingQuantity": 3,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-09-26T18:30:28.415Z"
+      },
+      {
+        "name": "Kefir",
+        "calcium": 390,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-09-25T00:47:20.711Z"
+      },
+      {
+        "name": "Tropicana Calcium + Vitamin D Orange Juice",
+        "calcium": 350,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-09-25T00:45:28.690Z"
+      }
+    ],
+    "2025-09-26": [
+      {
+        "name": "Kefir",
+        "calcium": 390,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-09-26T18:13:04.032Z"
+      },
+      {
+        "name": "Cheese, mozzarella, low sodium",
+        "calcium": 207,
+        "servingQuantity": 2,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-09-26T18:14:31.279Z"
+      }
+    ],
+    "2025-10-03": [
+      {
+        "name": "Chocolate, dark, 70-85% cacao solids",
+        "calcium": 14.74,
+        "servingQuantity": 0.2,
+        "servingUnit": "bar",
+        "isCustom": false,
+        "timestamp": "2025-10-04T00:35:14.716Z"
+      },
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-10-04T00:33:44.137Z"
+      },
+      {
+        "name": "Black beans refried",
+        "calcium": 45,
+        "servingQuantity": 0.5,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-10-04T00:33:02.761Z"
+      },
+      {
+        "name": "Sargento String Cheese",
+        "calcium": 190,
+        "servingQuantity": 21,
+        "servingUnit": "grams",
+        "isCustom": true,
+        "timestamp": "2025-10-03T21:15:59.421Z"
+      },
+      {
+        "name": "Beans, snap, green, microwaved",
+        "calcium": 26,
+        "servingQuantity": 0.4,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-03T21:15:46.712Z"
+      },
+      {
+        "name": "Cheese, Mexican blend",
+        "calcium": 185,
+        "servingQuantity": 0.25,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-03T21:15:19.472Z"
+      },
+      {
+        "name": "Taco shells, baked",
+        "calcium": 57,
+        "servingQuantity": 2,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-03T21:14:53.578Z"
+      },
+      {
+        "name": "Tamale white chicken homemade",
+        "calcium": 150,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-10-03T21:09:28.715Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 500,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-03T21:07:09.407Z"
+      }
+    ],
+    "2025-10-04": [
+      {
+        "name": "Fairlife Fat Free Milk",
+        "calcium": 380,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-04T21:18:26.381Z"
+      },
+      {
+        "name": "Sargento String Cheese",
+        "calcium": 190,
+        "servingQuantity": 21,
+        "servingUnit": "grams",
+        "isCustom": true,
+        "timestamp": "2025-10-04T19:12:05.465Z"
+      },
+      {
+        "name": "Nuts, mixed nuts, oil roasted, with peanuts, without salt added",
+        "calcium": 39,
+        "servingQuantity": 2,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-10-04T19:11:45.328Z"
+      },
+      {
+        "name": "Ovaltine w/Fairlife Fat Free Milk",
+        "calcium": 490,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-04T19:01:31.252Z"
+      },
+      {
+        "name": "Crackers, melba toast, plain",
+        "calcium": 21,
+        "servingQuantity": 0.75,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-04T18:58:01.927Z"
+      },
+      {
+        "name": "Celery, raw",
+        "calcium": 44,
+        "servingQuantity": 1,
+        "servingUnit": "serving",
+        "isCustom": false,
+        "timestamp": "2025-10-04T18:56:08.332Z"
+      },
+      {
+        "name": "Chicken breast",
+        "calcium": 20,
+        "servingQuantity": 1,
+        "servingUnit": "2oz",
+        "isCustom": true,
+        "timestamp": "2025-10-04T18:55:43.444Z"
+      },
+      {
+        "name": "Salad dressing, mayonnaise, regular",
+        "calcium": 2,
+        "servingQuantity": 2,
+        "servingUnit": "tablespoon",
+        "isCustom": false,
+        "timestamp": "2025-10-04T18:55:13.932Z"
+      },
+      {
+        "name": "LaLa Yogurt Smoothie",
+        "calcium": 190,
+        "servingQuantity": 7,
+        "servingUnit": "oz",
+        "isCustom": true,
+        "timestamp": "2025-10-04T15:28:20.393Z"
+      }
+    ],
+    "2025-10-05": [
+      {
+        "name": "Chicken breast",
+        "calcium": 20,
+        "servingQuantity": 1,
+        "servingUnit": "4oz",
+        "isCustom": true,
+        "timestamp": "2025-10-06T00:58:33.927Z"
+      },
+      {
+        "name": "Kale Salad Kit",
+        "calcium": 50,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-10-06T00:58:15.749Z"
+      },
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-10-06T00:56:11.872Z"
+      },
+      {
+        "name": "Ovaltine w/Fairlife Fat Free Milk",
+        "calcium": 490,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-05T20:49:17.296Z"
+      },
+      {
+        "name": "Spinach, cooked, boiled, drained, without salt",
+        "calcium": 61,
+        "servingQuantity": 2,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-10-05T17:34:12.220Z"
+      },
+      {
+        "name": "Cheese, low fat, cheddar or colby",
+        "calcium": 59,
+        "servingQuantity": 2,
+        "servingUnit": "tablespoon",
+        "isCustom": false,
+        "timestamp": "2025-10-05T17:14:55.665Z"
+      },
+      {
+        "name": "Egg, whole, cooked, scrambled",
+        "calcium": 109,
+        "servingQuantity": 0.75,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-05T17:14:12.331Z"
+      },
+      {
+        "name": "Chobani Greek Yogurt, Plain, Nonfat",
+        "calcium": 190,
+        "servingQuantity": 0.75,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-05T15:44:13.084Z"
+      }
+    ],
+    "2025-10-06": [
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-10-06T18:46:11.264Z"
+      },
+      {
+        "name": "Fairlife Fat Free Milk",
+        "calcium": 380,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-06T14:11:10.578Z"
+      },
+      {
+        "name": "Italian pizza cheese",
+        "calcium": 210,
+        "servingQuantity": 0.25,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-10-06T20:37:08.938Z"
+      },
+      {
+        "name": "Lavash",
+        "calcium": 10,
+        "servingQuantity": 1,
+        "servingUnit": "Sheet",
+        "isCustom": true,
+        "timestamp": "2025-10-06T20:36:22.462Z"
+      },
+      {
+        "name": "Multi Grain Cheerios",
+        "calcium": 150,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-06T14:10:54.056Z"
+      },
+      {
+        "name": "Sausage, Italian, pork, mild, raw",
+        "calcium": 6.05,
+        "servingQuantity": 0.5,
+        "servingUnit": "link",
+        "isCustom": false,
+        "timestamp": "2025-10-07T00:07:24.657Z"
+      }
+    ],
+    "2025-10-07": [
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-10-07T21:01:00.727Z"
+      },
+      {
+        "name": "Calcium Supplement",
+        "calcium": 300,
+        "servingQuantity": 1,
+        "servingUnit": "tablet",
+        "isCustom": true,
+        "timestamp": "2025-10-07T20:59:12.437Z"
+      },
+      {
+        "name": "Celery, raw",
+        "calcium": 44,
+        "servingQuantity": 1,
+        "servingUnit": "serving",
+        "isCustom": false,
+        "timestamp": "2025-10-08T00:03:43.608Z"
+      },
+      {
+        "name": "Chobani Greek Yogurt, Plain, Nonfat",
+        "calcium": 253,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-07T20:58:57.378Z"
+      },
+      {
+        "name": "Chocolate, dark, 70-85% cacao solids",
+        "calcium": 14.74,
+        "servingQuantity": 0.2,
+        "servingUnit": "bar",
+        "isCustom": false,
+        "timestamp": "2025-10-07T21:01:15.904Z"
+      },
+      {
+        "name": "Fish, tuna salad",
+        "calcium": 19,
+        "servingQuantity": 4,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-08T00:05:22.488Z"
+      },
+      {
+        "name": "Ovaltine w/Fairlife Fat Free Milk",
+        "calcium": 490,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-07T20:59:05.759Z"
+      },
+      {
+        "name": "Pork, fresh, loin, center loin (chops), boneless, separable lean only, cooked, pan-broiled",
+        "calcium": 7,
+        "servingQuantity": 4,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-08T00:04:56.192Z"
+      },
+      {
+        "name": "Squash, summer, zucchini, includes skin, cooked, boiled, drained, without salt",
+        "calcium": 24,
+        "servingQuantity": 0.75,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-07T21:00:47.180Z"
+      },
+      {
+        "name": "Sweet potato, cooked, baked in skin, flesh, without salt",
+        "calcium": 76,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-07T20:59:34.171Z"
+      }
+    ],
+    "2025-10-08": [
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-10-09T00:49:36.441Z"
+      },
+      {
+        "name": "Broccoli, cooked, boiled, drained, without salt",
+        "calcium": 47,
+        "servingQuantity": 0.75,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-09T00:50:58.015Z"
+      },
+      {
+        "name": "Cannelloni veal",
+        "calcium": 200,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-10-09T00:53:25.040Z"
+      },
+      {
+        "name": "Chobani Greek Yogurt, Plain, Nonfat",
+        "calcium": 63,
+        "servingQuantity": 0.25,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-08T18:05:12.842Z"
+      },
+      {
+        "name": "Nuts, mixed nuts, oil roasted, with peanuts, without salt added",
+        "calcium": 39,
+        "servingQuantity": 2,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-10-08T21:08:38.790Z"
+      },
+      {
+        "name": "Ovaltine w/Fairlife Fat Free Milk",
+        "calcium": 490,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-08T21:37:35.586Z"
+      },
+      {
+        "name": "Sargento String Cheese",
+        "calcium": 190,
+        "servingQuantity": 21,
+        "servingUnit": "grams",
+        "isCustom": true,
+        "timestamp": "2025-10-08T21:37:10.051Z"
+      }
+    ],
+    "2025-10-09": [
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-10-10T16:46:56.560Z"
+      },
+      {
+        "name": "Cannelloni veal",
+        "calcium": 200,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-10-10T16:41:12.859Z"
+      },
+      {
+        "name": "Cauliflower, green, cooked, no salt added",
+        "calcium": 43.2,
+        "servingQuantity": 0.3,
+        "servingUnit": "head",
+        "isCustom": false,
+        "timestamp": "2025-10-10T16:46:06.820Z"
+      },
+      {
+        "name": "Fish, seatrout, mixed species, cooked, dry heat",
+        "calcium": 50,
+        "servingQuantity": 8,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-10T16:45:14.269Z"
+      },
+      {
+        "name": "Mollusks, oyster, eastern, wild, raw",
+        "calcium": 55,
+        "servingQuantity": 3,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-10-10T16:45:46.853Z"
+      },
+      {
+        "name": "Squash, summer, zucchini, includes skin, cooked, boiled, drained, without salt",
+        "calcium": 24,
+        "servingQuantity": 0.75,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-10T16:46:32.923Z"
+      }
+    ],
+    "2025-10-10": [
+      {
+        "name": "Bread, french or vienna, toasted (includes sourdough)",
+        "calcium": 41.4,
+        "servingQuantity": 1,
+        "servingUnit": "1 slice, large",
+        "isCustom": false,
+        "timestamp": "2025-10-10T16:57:13.182Z"
+      },
+      {
+        "name": "Cheese, parmesan, shredded",
+        "calcium": 62.6,
+        "servingQuantity": 1,
+        "servingUnit": "tbsp",
+        "isCustom": false,
+        "timestamp": "2025-10-10T16:58:26.459Z"
+      },
+      {
+        "name": "Chicken breast",
+        "calcium": 20,
+        "servingQuantity": 1,
+        "servingUnit": "2oz",
+        "isCustom": true,
+        "timestamp": "2025-10-10T16:49:12.621Z"
+      },
+      {
+        "name": "Kefir",
+        "calcium": 390,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-10-10T16:47:50.098Z"
+      },
+      {
+        "name": "Lettuce, green leaf, raw",
+        "calcium": 13,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-10T16:48:55.750Z"
+      },
+      {
+        "name": "Ovaltine w/Fairlife Fat Free Milk",
+        "calcium": 490,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-10T16:48:30.750Z"
+      },
+      {
+        "name": "Pasta, dry, unenriched",
+        "calcium": 18,
+        "servingQuantity": 3,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-10T16:56:21.182Z"
+      },
+      {
+        "name": "Tomatoes, red, ripe, canned, packed in tomato juice",
+        "calcium": 79.2,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-10T16:49:32.201Z"
+      }
+    ],
+    "2025-10-11": [
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-10-12T00:36:10.467Z"
+      },
+      {
+        "name": "Bread, whole-wheat, prepared from recipe, toasted",
+        "calcium": 30,
+        "servingQuantity": 2,
+        "servingUnit": "slice",
+        "isCustom": false,
+        "timestamp": "2025-10-11T15:27:09.568Z"
+      },
+      {
+        "name": "Chocolate, dark, 70-85% cacao solids",
+        "calcium": 14.74,
+        "servingQuantity": 0.2,
+        "servingUnit": "bar",
+        "isCustom": false,
+        "timestamp": "2025-10-12T00:36:38.615Z"
+      },
+      {
+        "name": "Egg, whole, cooked, scrambled",
+        "calcium": 109,
+        "servingQuantity": 0.75,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-11T15:27:36.026Z"
+      },
+      {
+        "name": "Kefir",
+        "calcium": 390,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-10-11T15:26:56.509Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-12T02:44:57.696Z"
+      },
+      {
+        "name": "Peas, green, cooked, boiled, drained, without salt",
+        "calcium": 43.2,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-12T00:35:23.389Z"
+      },
+      {
+        "name": "Roasted potatoes",
+        "calcium": 40,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-10-12T00:35:58.149Z"
+      }
+    ],
+    "2025-10-12": [
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-10-13T00:10:45.194Z"
+      },
+      {
+        "name": "Bread, french or vienna (includes sourdough)",
+        "calcium": 72.3,
+        "servingQuantity": 1,
+        "servingUnit": "slice",
+        "isCustom": false,
+        "timestamp": "2025-10-13T00:10:58.074Z"
+      },
+      {
+        "name": "Cheese, parmesan, shredded",
+        "calcium": 62.6,
+        "servingQuantity": 1,
+        "servingUnit": "tbsp",
+        "isCustom": false,
+        "timestamp": "2025-10-13T00:12:08.632Z"
+      },
+      {
+        "name": "Fish, salmon, coho, wild, cooked, moist heat",
+        "calcium": 26,
+        "servingQuantity": 2,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-13T00:10:30.902Z"
+      },
+      {
+        "name": "Mootopia Fat Free Milk",
+        "calcium": 450,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-12T15:56:22.920Z"
+      },
+      {
+        "name": "Multi Grain Cheerios",
+        "calcium": 200,
+        "servingQuantity": 1.33,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-12T15:56:11.231Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-13T00:12:23.573Z"
+      }
+    ],
+    "2025-10-13": [
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-10-13T21:44:28.817Z"
+      },
+      {
+        "name": "Bread, french or vienna (includes sourdough)",
+        "calcium": 72.3,
+        "servingQuantity": 1,
+        "servingUnit": "slice",
+        "isCustom": false,
+        "timestamp": "2025-10-13T22:25:36.022Z"
+      },
+      {
+        "name": "Fish, salmon, coho, wild, cooked, dry heat",
+        "calcium": 25,
+        "servingQuantity": 2,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-13T17:42:37.915Z"
+      },
+      {
+        "name": "Italian pizza cheese",
+        "calcium": 420,
+        "servingQuantity": 4,
+        "servingUnit": "fl oz",
+        "isCustom": true,
+        "timestamp": "2025-10-13T21:39:45.653Z"
+      },
+      {
+        "name": "Lavash",
+        "calcium": 10,
+        "servingQuantity": 1,
+        "servingUnit": "sheet",
+        "isCustom": true,
+        "timestamp": "2025-10-13T21:39:29.829Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-13T21:39:09.042Z"
+      },
+      {
+        "name": "Salami, dry or hard, pork",
+        "calcium": 7.35,
+        "servingQuantity": 0.5,
+        "servingUnit": "1 package (4 oz)",
+        "isCustom": false,
+        "timestamp": "2025-10-13T21:43:28.528Z"
+      },
+      {
+        "name": "Squash, summer, zucchini, includes skin, cooked, boiled, drained, without salt",
+        "calcium": 24,
+        "servingQuantity": 0.75,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-13T21:44:41.924Z"
+      }
+    ],
+    "2025-10-14": [
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-10-14T23:58:36.491Z"
+      },
+      {
+        "name": "Asparagus, frozen, cooked, boiled, drained, without salt",
+        "calcium": 8,
+        "servingQuantity": 2,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-10-14T23:56:57.745Z"
+      },
+      {
+        "name": "Avocado, Hass, peeled, raw",
+        "calcium": 14.5,
+        "servingQuantity": 100,
+        "servingUnit": "g",
+        "isCustom": false,
+        "timestamp": "2025-10-14T18:41:38.841Z"
+      },
+      {
+        "name": "Chicken breast",
+        "calcium": 20,
+        "servingQuantity": 1,
+        "servingUnit": "4oz",
+        "isCustom": true,
+        "timestamp": "2025-10-14T23:58:12.715Z"
+      },
+      {
+        "name": "Chocolate, dark, 70-85% cacao solids",
+        "calcium": 14.74,
+        "servingQuantity": 0.2,
+        "servingUnit": "bar",
+        "isCustom": false,
+        "timestamp": "2025-10-14T23:58:59.981Z"
+      },
+      {
+        "name": "Cucumber, with peel, raw",
+        "calcium": 4,
+        "servingQuantity": 2,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-10-14T18:42:00.631Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 1120,
+        "servingQuantity": 2,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-14T23:59:27.281Z"
+      },
+      {
+        "name": "Sargento String Cheese",
+        "calcium": 190,
+        "servingQuantity": 21,
+        "servingUnit": "grams",
+        "isCustom": true,
+        "timestamp": "2025-10-14T23:57:47.252Z"
+      },
+      {
+        "name": "Squash, summer, zucchini, includes skin, cooked, boiled, drained, without salt",
+        "calcium": 8,
+        "servingQuantity": 2,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-10-14T23:57:15.339Z"
+      },
+      {
+        "name": "Sweet potato, cooked, baked in skin, flesh, without salt",
+        "calcium": 38,
+        "servingQuantity": 4,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-10-14T23:57:36.155Z"
+      },
+      {
+        "name": "Tamale white chicken homemade",
+        "calcium": 150,
+        "servingQuantity": 8,
+        "servingUnit": "fl oz",
+        "isCustom": true,
+        "timestamp": "2025-10-14T18:42:31.701Z"
+      }
+    ],
+    "2025-10-15": [
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-10-16T23:56:38.070Z"
+      },
+      {
+        "name": "Chicken breast",
+        "calcium": 20,
+        "servingQuantity": 1,
+        "servingUnit": "4oz",
+        "isCustom": true,
+        "timestamp": "2025-10-15T18:31:49.592Z"
+      },
+      {
+        "name": "Chocolate, dark, 70-85% cacao solids",
+        "calcium": 14.74,
+        "servingQuantity": 0.2,
+        "servingUnit": "bar",
+        "isCustom": false,
+        "timestamp": "2025-10-16T23:57:59.884Z"
+      },
+      {
+        "name": "Fish, snapper, mixed species, cooked, dry heat",
+        "calcium": 34,
+        "servingQuantity": 3,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-16T23:55:46.402Z"
+      },
+      {
+        "name": "Kale Salad Kit",
+        "calcium": 50,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-10-15T20:41:38.954Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 8,
+        "servingUnit": "fl oz",
+        "isCustom": true,
+        "timestamp": "2025-10-16T23:53:52.116Z"
+      },
+      {
+        "name": "Sargento String Cheese",
+        "calcium": 190,
+        "servingQuantity": 21,
+        "servingUnit": "grams",
+        "isCustom": true,
+        "timestamp": "2025-10-15T20:41:53.319Z"
+      },
+      {
+        "name": "Tortilla chips, low fat, baked without fat",
+        "calcium": 45.1,
+        "servingQuantity": 1,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-16T23:56:20.775Z"
+      }
+    ],
+    "2025-10-19": [
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-10-19T19:13:19.947Z"
+      },
+      {
+        "name": "Bread, whole-wheat, prepared from recipe, toasted",
+        "calcium": 30,
+        "servingQuantity": 2,
+        "servingUnit": "slice",
+        "isCustom": false,
+        "timestamp": "2025-10-19T18:39:42.162Z"
+      },
+      {
+        "name": "Cheese, mozzarella, whole milk",
+        "calcium": 283,
+        "servingQuantity": 0.5,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-19T19:12:31.374Z"
+      },
+      {
+        "name": "Kefir",
+        "calcium": 390,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-10-19T18:39:04.892Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 8,
+        "servingUnit": "fl oz",
+        "isCustom": true,
+        "timestamp": "2025-10-19T19:11:26.564Z"
+      },
+      {
+        "name": "Sargento String Cheese",
+        "calcium": 190,
+        "servingQuantity": 21,
+        "servingUnit": "grams",
+        "isCustom": true,
+        "timestamp": "2025-10-19T19:02:49.406Z"
+      },
+      {
+        "name": "Squash, summer, zucchini, includes skin, cooked, boiled, drained, without salt",
+        "calcium": 16,
+        "servingQuantity": 0.5,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-19T19:13:05.606Z"
+      }
+    ],
+    "2025-10-20": [
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-20T21:15:07.656Z"
+      },
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-10-20T19:48:08.669Z"
+      },
+      {
+        "name": "Potatoes, mashed, dehydrated, prepared from granules with milk",
+        "calcium": 37,
+        "servingQuantity": 4,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-10-20T19:47:45.466Z"
+      },
+      {
+        "name": "Okra, cooked, boiled, drained, with salt",
+        "calcium": 46,
+        "servingQuantity": 3,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-10-20T19:46:38.588Z"
+      },
+      {
+        "name": "Chicken breast",
+        "calcium": 20,
+        "servingQuantity": 1,
+        "servingUnit": "4oz",
+        "isCustom": true,
+        "timestamp": "2025-10-20T19:45:57.813Z"
+      },
+      {
+        "name": "Lettuce, romaine, green, raw",
+        "calcium": 31,
+        "servingQuantity": 4,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-20T19:45:34.453Z"
+      },
+      {
+        "name": "Cheese, mozzarella, whole milk",
+        "calcium": 71,
+        "servingQuantity": 2,
+        "servingUnit": "tablespoon",
+        "isCustom": false,
+        "timestamp": "2025-10-20T19:44:24.961Z"
+      },
+      {
+        "name": "Cheese, parmesan, grated, refrigerated",
+        "calcium": 270,
+        "servingQuantity": 1,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-20T19:43:27.456Z"
+      },
+      {
+        "name": "Pizza, meat and vegetable topping, regular crust, frozen, cooked",
+        "calcium": 392,
+        "servingQuantity": 2,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-20T19:24:39.618Z"
+      },
+      {
+        "name": "Kefir",
+        "calcium": 195,
+        "servingQuantity": 4,
+        "servingUnit": "fl oz",
+        "isCustom": true,
+        "timestamp": "2025-10-20T19:23:29.298Z"
+      },
+      {
+        "name": "Natures Bakery Blueberry",
+        "calcium": 10,
+        "servingQuantity": 0.5,
+        "servingUnit": "Package",
+        "isCustom": true,
+        "timestamp": "2025-10-20T15:07:29.696Z"
+      }
+    ],
+    "2025-10-21": [
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-21T20:59:39.746Z"
+      },
+      {
+        "name": "Squash, summer, zucchini, includes skin, cooked, boiled, drained, without salt",
+        "calcium": 16,
+        "servingQuantity": 0.5,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-21T20:59:23.191Z"
+      },
+      {
+        "name": "Chocolate, dark, 70-85% cacao solids",
+        "calcium": 14.74,
+        "servingQuantity": 0.2,
+        "servingUnit": "bar",
+        "isCustom": false,
+        "timestamp": "2025-10-21T20:58:29.445Z"
+      },
+      {
+        "name": "Cheese, Mexican blend",
+        "calcium": 185,
+        "servingQuantity": 0.25,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-21T20:58:11.903Z"
+      },
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-10-21T20:57:36.270Z"
+      },
+      {
+        "name": "Sausage, chicken, beef, pork, skinless, smoked",
+        "calcium": 42,
+        "servingQuantity": 0.5,
+        "servingUnit": "link",
+        "isCustom": false,
+        "timestamp": "2025-10-21T20:57:19.287Z"
+      },
+      {
+        "name": "Black beans refried",
+        "calcium": 45,
+        "servingQuantity": 0.5,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-10-21T20:56:27.725Z"
+      },
+      {
+        "name": "Tortillas, ready-to-bake or -fry, whole wheat",
+        "calcium": 100,
+        "servingQuantity": 1,
+        "servingUnit": "serving",
+        "isCustom": false,
+        "timestamp": "2025-10-21T20:56:00.938Z"
+      },
+      {
+        "name": "Lettuce, leaf, green, raw",
+        "calcium": 39.8,
+        "servingQuantity": 100,
+        "servingUnit": "g",
+        "isCustom": false,
+        "timestamp": "2025-10-21T20:55:09.643Z"
+      },
+      {
+        "name": "Chicken breast",
+        "calcium": 40,
+        "servingQuantity": 2,
+        "servingUnit": "4oz",
+        "isCustom": true,
+        "timestamp": "2025-10-21T20:54:50.638Z"
+      },
+      {
+        "name": "Sargento String Cheese",
+        "calcium": 190,
+        "servingQuantity": 21,
+        "servingUnit": "grams",
+        "isCustom": true,
+        "timestamp": "2025-10-21T20:54:21.567Z"
+      },
+      {
+        "name": "Kefir",
+        "calcium": 195,
+        "servingQuantity": 4,
+        "servingUnit": "fl oz",
+        "isCustom": true,
+        "timestamp": "2025-10-21T20:53:28.820Z"
+      }
+    ],
+    "2025-10-23": [
+      {
+        "name": "Chocolate, dark, 70-85% cacao solids",
+        "calcium": 14.74,
+        "servingQuantity": 0.2,
+        "servingUnit": "bar",
+        "isCustom": false,
+        "timestamp": "2025-10-23T23:04:17.232Z"
+      },
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-10-23T23:03:58.712Z"
+      },
+      {
+        "name": "Fish, salmon, coho, wild, cooked, dry heat",
+        "calcium": 25,
+        "servingQuantity": 2,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-23T23:03:29.807Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-23T22:46:05.090Z"
+      },
+      {
+        "name": "Cauliflower, green, cooked, no salt added",
+        "calcium": 28.8,
+        "servingQuantity": 0.2,
+        "servingUnit": "head",
+        "isCustom": false,
+        "timestamp": "2025-10-23T19:25:44.168Z"
+      },
+      {
+        "name": "Squash, winter, spaghetti, cooked, boiled, drained, or baked, with salt",
+        "calcium": 32.6,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-23T19:24:58.712Z"
+      },
+      {
+        "name": "Chicken breast",
+        "calcium": 20,
+        "servingQuantity": 1,
+        "servingUnit": "2oz",
+        "isCustom": true,
+        "timestamp": "2025-10-23T19:24:12.814Z"
+      },
+      {
+        "name": "Sargento String Cheese",
+        "calcium": 190,
+        "servingQuantity": 21,
+        "servingUnit": "grams",
+        "isCustom": true,
+        "timestamp": "2025-10-23T19:23:49.645Z"
+      },
+      {
+        "name": "Lettuce, leaf, green, raw",
+        "calcium": 30,
+        "servingQuantity": 75,
+        "servingUnit": "g",
+        "isCustom": false,
+        "timestamp": "2025-10-23T19:23:34.853Z"
+      },
+      {
+        "name": "Natures Bakery Blueberry",
+        "calcium": 10,
+        "servingQuantity": 0.5,
+        "servingUnit": "package",
+        "isCustom": true,
+        "timestamp": "2025-10-23T16:30:04.889Z"
+      },
+      {
+        "name": "Tropicana Calcium + Vitamin D Orange Juice",
+        "calcium": 350,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-23T16:29:47.416Z"
+      }
+    ],
+    "2025-10-24": [
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-24T20:57:56.044Z"
+      },
+      {
+        "name": "Biscuits, plain or buttermilk, refrigerated dough, higher fat, baked",
+        "calcium": 13.8,
+        "servingQuantity": 1,
+        "servingUnit": "biscuit",
+        "isCustom": false,
+        "timestamp": "2025-10-24T19:09:54.754Z"
+      },
+      {
+        "name": "Chocolate, dark, 70-85% cacao solids",
+        "calcium": 14.74,
+        "servingQuantity": 0.2,
+        "servingUnit": "bar",
+        "isCustom": false,
+        "timestamp": "2025-10-24T19:08:36.886Z"
+      },
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-10-24T19:08:26.237Z"
+      },
+      {
+        "name": "Cucumber, with peel, raw",
+        "calcium": 4,
+        "servingQuantity": 2,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-10-24T19:07:31.040Z"
+      },
+      {
+        "name": "Tomatoes, red, ripe, raw, year round average",
+        "calcium": 14.8,
+        "servingQuantity": 1,
+        "servingUnit": "serving",
+        "isCustom": false,
+        "timestamp": "2025-10-24T19:07:07.166Z"
+      },
+      {
+        "name": "Lettuce, leaf, green, raw",
+        "calcium": 30,
+        "servingQuantity": 75,
+        "servingUnit": "g",
+        "isCustom": false,
+        "timestamp": "2025-10-24T19:06:27.987Z"
+      },
+      {
+        "name": "Beans, snap, green, microwaved",
+        "calcium": 64,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-24T19:05:32.818Z"
+      },
+      {
+        "name": "Italian pizza cheese",
+        "calcium": 210,
+        "servingQuantity": 0.25,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-10-24T18:40:54.793Z"
+      },
+      {
+        "name": "Lavash",
+        "calcium": 5,
+        "servingQuantity": 0.5,
+        "servingUnit": "sheet",
+        "isCustom": true,
+        "timestamp": "2025-10-24T18:40:04.887Z"
+      },
+      {
+        "name": "Tropicana Calcium + Vitamin D Orange Juice",
+        "calcium": 350,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-24T18:12:16.341Z"
+      }
+    ],
+    "2025-10-26": [
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-10-26T19:57:53.345Z"
+      },
+      {
+        "name": "Okra, cooked, boiled, drained, with salt",
+        "calcium": 46,
+        "servingQuantity": 3,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-10-26T19:57:26.588Z"
+      },
+      {
+        "name": "Sweet potato, cooked, baked in skin, flesh, without salt",
+        "calcium": 38,
+        "servingQuantity": 0.5,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-26T19:56:57.941Z"
+      },
+      {
+        "name": "Pork loin, fresh, backribs, bone-in, cooked-roasted, lean only",
+        "calcium": 100,
+        "servingQuantity": 8,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-26T19:56:35.515Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-26T19:55:36.401Z"
+      },
+      {
+        "name": "Lettuce, leaf, green, raw",
+        "calcium": 30,
+        "servingQuantity": 75,
+        "servingUnit": "g",
+        "isCustom": false,
+        "timestamp": "2025-10-26T19:24:15.490Z"
+      },
+      {
+        "name": "Sargento String Cheese",
+        "calcium": 190,
+        "servingQuantity": 21,
+        "servingUnit": "grams",
+        "isCustom": true,
+        "timestamp": "2025-10-26T19:23:54.366Z"
+      },
+      {
+        "name": "Kefir",
+        "calcium": 195,
+        "servingQuantity": 4,
+        "servingUnit": "fl oz",
+        "isCustom": true,
+        "timestamp": "2025-10-26T19:23:33.911Z"
+      }
+    ],
+    "2025-10-27": [
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 840,
+        "servingQuantity": 1.5,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-27T17:18:55.388Z"
+      },
+      {
+        "name": "Kefir",
+        "calcium": 390,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-10-27T15:03:01.321Z"
+      }
+    ],
+    "2025-10-28": [
+      {
+        "name": "Sauce, salsa, ready-to-serve",
+        "calcium": 5,
+        "servingQuantity": 1,
+        "servingUnit": "tablespoon",
+        "isCustom": false,
+        "timestamp": "2025-10-28T19:42:45.651Z"
+      },
+      {
+        "name": "Spinach, baby",
+        "calcium": 48,
+        "servingQuantity": 2.5,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-28T19:42:18.102Z"
+      },
+      {
+        "name": "Avocado, Hass, peeled, raw",
+        "calcium": 12,
+        "servingQuantity": 3,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-28T19:41:31.220Z"
+      },
+      {
+        "name": "Cheese, Mexican blend",
+        "calcium": 185,
+        "servingQuantity": 0.25,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-28T19:40:20.148Z"
+      },
+      {
+        "name": "Tortillas, ready-to-bake or -fry, flour, shelf stable",
+        "calcium": 79.9,
+        "servingQuantity": 1,
+        "servingUnit": "tortilla",
+        "isCustom": false,
+        "timestamp": "2025-10-28T19:40:08.139Z"
+      },
+      {
+        "name": "Peanut butter, smooth style, without salt",
+        "calcium": 16,
+        "servingQuantity": 2,
+        "servingUnit": "tablespoon",
+        "isCustom": false,
+        "timestamp": "2025-10-28T19:37:09.150Z"
+      },
+      {
+        "name": "Bread, multi-grain, toasted (includes whole-grain)",
+        "calcium": 42.2,
+        "servingQuantity": 1,
+        "servingUnit": "1 slice large",
+        "isCustom": false,
+        "timestamp": "2025-10-28T19:36:14.569Z"
+      },
+      {
+        "name": "Lettuce, leaf, green, raw",
+        "calcium": 23,
+        "servingQuantity": 2,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-28T19:35:10.468Z"
+      },
+      {
+        "name": "Chicken breast",
+        "calcium": 10,
+        "servingQuantity": 0.5,
+        "servingUnit": "4oz",
+        "isCustom": true,
+        "timestamp": "2025-10-28T19:34:33.339Z"
+      },
+      {
+        "name": "Fairlife Fat Free Milk",
+        "calcium": 380,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-28T15:34:23.171Z"
+      },
+      {
+        "name": "Cheerios",
+        "calcium": 130,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-10-28T15:34:10.515Z"
+      }
+    ],
+    "2025-10-29": [
+      {
+        "name": "Ovaltine w/Fairlife Fat Free Milk",
+        "calcium": 490,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-30T00:16:56.184Z"
+      },
+      {
+        "name": "Bulgur, cooked",
+        "calcium": 7,
+        "servingQuantity": 0.4,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-30T00:16:39.847Z"
+      },
+      {
+        "name": "Quinoa, cooked",
+        "calcium": 16,
+        "servingQuantity": 4,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-10-30T00:15:57.895Z"
+      },
+      {
+        "name": "Squash, summer, zucchini, includes skin, cooked, boiled, drained, without salt",
+        "calcium": 16,
+        "servingQuantity": 0.5,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-30T00:15:17.707Z"
+      },
+      {
+        "name": "Eggplant, cooked, boiled, drained, with salt",
+        "calcium": 5.94,
+        "servingQuantity": 1,
+        "servingUnit": "1 cup (1 cubes)",
+        "isCustom": false,
+        "timestamp": "2025-10-30T00:14:34.571Z"
+      },
+      {
+        "name": "Lamb, New Zealand, imported, loin chop, separable lean only, cooked, fast fried",
+        "calcium": 36,
+        "servingQuantity": 3,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-30T00:14:10.542Z"
+      },
+      {
+        "name": "Sargento String Cheese",
+        "calcium": 190,
+        "servingQuantity": 21,
+        "servingUnit": "grams",
+        "isCustom": true,
+        "timestamp": "2025-10-29T21:17:43.494Z"
+      },
+      {
+        "name": "Nutthin crisps",
+        "calcium": 15,
+        "servingQuantity": 30,
+        "servingUnit": "grams",
+        "isCustom": true,
+        "timestamp": "2025-10-29T21:15:48.699Z"
+      },
+      {
+        "name": "Lettuce, leaf, green, raw",
+        "calcium": 23,
+        "servingQuantity": 2,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-29T19:19:24.753Z"
+      },
+      {
+        "name": "Chicken breast",
+        "calcium": 20,
+        "servingQuantity": 1,
+        "servingUnit": "4oz",
+        "isCustom": true,
+        "timestamp": "2025-10-29T19:19:07.754Z"
+      },
+      {
+        "name": "Avocado, Hass, peeled, raw",
+        "calcium": 12,
+        "servingQuantity": 3,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-29T19:18:35.527Z"
+      },
+      {
+        "name": "Bread, whole-wheat, prepared from recipe, toasted",
+        "calcium": 30,
+        "servingQuantity": 2,
+        "servingUnit": "slice",
+        "isCustom": false,
+        "timestamp": "2025-10-29T16:31:26.702Z"
+      },
+      {
+        "name": "Ovaltine w/Fairlife Fat Free Milk",
+        "calcium": 490,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-29T16:31:04.314Z"
+      }
+    ],
+    "2025-10-30": [
+      {
+        "name": "Ovaltine w/Fairlife Fat Free Milk",
+        "calcium": 490,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-31T01:01:36.554Z"
+      },
+      {
+        "name": "Sauce, pasta, spaghetti/marinara, ready-to-serve, low sodium",
+        "calcium": 17,
+        "servingQuantity": 4,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-10-30T20:45:29.656Z"
+      },
+      {
+        "name": "Cannelloni veal",
+        "calcium": 200,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-10-30T20:44:41.792Z"
+      },
+      {
+        "name": "Cheese, goat, semisoft type",
+        "calcium": 169,
+        "servingQuantity": 2,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-30T20:44:13.041Z"
+      },
+      {
+        "name": "Sargento String Cheese",
+        "calcium": 190,
+        "servingQuantity": 21,
+        "servingUnit": "grams",
+        "isCustom": true,
+        "timestamp": "2025-10-30T20:43:42.265Z"
+      },
+      {
+        "name": "Cheerios",
+        "calcium": 130,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-10-30T20:43:29.317Z"
+      },
+      {
+        "name": "Fairlife Fat Free Milk",
+        "calcium": 380,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-30T20:43:20.071Z"
+      }
+    ],
+    "2025-10-31": [
+      {
+        "name": "Cheese, parmesan, grated, refrigerated",
+        "calcium": 54,
+        "servingQuantity": 0.2,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-31T22:17:58.621Z"
+      },
+      {
+        "name": "Bread, multi-grain (includes whole-grain)",
+        "calcium": 42.2,
+        "servingQuantity": 1,
+        "servingUnit": "1 slice large",
+        "isCustom": false,
+        "timestamp": "2025-10-31T22:17:21.466Z"
+      },
+      {
+        "name": "Fairlife Fat Free Milk",
+        "calcium": 380,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-10-31T22:16:14.531Z"
+      },
+      {
+        "name": "Ovaltine Choclate Malt mix",
+        "calcium": 165,
+        "servingQuantity": 3,
+        "servingUnit": "tablespoons",
+        "isCustom": true,
+        "timestamp": "2025-10-31T22:16:04.326Z"
+      },
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-10-31T22:15:39.310Z"
+      },
+      {
+        "name": "Squash, summer, zucchini, includes skin, cooked, boiled, drained, without salt",
+        "calcium": 16,
+        "servingQuantity": 0.5,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-31T22:15:23.600Z"
+      },
+      {
+        "name": "Cannelloni veal",
+        "calcium": 200,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-10-31T22:15:13.676Z"
+      },
+      {
+        "name": "Bread, whole-wheat, prepared from recipe, toasted",
+        "calcium": 30,
+        "servingQuantity": 2,
+        "servingUnit": "slice",
+        "isCustom": false,
+        "timestamp": "2025-10-31T19:20:03.659Z"
+      },
+      {
+        "name": "Egg, whole, cooked, scrambled",
+        "calcium": 145,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-10-31T19:19:47.768Z"
+      },
+      {
+        "name": "Cheese, goat, semisoft type",
+        "calcium": 169,
+        "servingQuantity": 2,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-10-31T19:19:30.030Z"
+      }
+    ],
+    "2025-11-01": [
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 11.8,
+        "servingQuantity": 1,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-11-02T17:15:58.527Z"
+      },
+      {
+        "name": "Malt beverage, includes non-alcoholic beer",
+        "calcium": 33,
+        "servingQuantity": 2,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-11-02T17:15:39.008Z"
+      },
+      {
+        "name": "Peanuts, all types, raw",
+        "calcium": 101,
+        "servingQuantity": 0.75,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-11-02T17:14:30.613Z"
+      },
+      {
+        "name": "Salad dressing, caesar dressing, regular",
+        "calcium": 14.4,
+        "servingQuantity": 1,
+        "servingUnit": "1 serving (2 tbsp)",
+        "isCustom": false,
+        "timestamp": "2025-11-02T17:14:07.083Z"
+      },
+      {
+        "name": "Cheese, parmesan, grated",
+        "calcium": 53,
+        "servingQuantity": 1,
+        "servingUnit": "tablespoon",
+        "isCustom": false,
+        "timestamp": "2025-11-02T17:13:39.392Z"
+      },
+      {
+        "name": "Beef, tenderloin, steak, separable lean only, trimmed to 1/8 fat, all grades, raw",
+        "calcium": 27.1,
+        "servingQuantity": 4,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-02T01:47:44.740Z"
+      },
+      {
+        "name": "Lettuce, leaf, green, raw",
+        "calcium": 45,
+        "servingQuantity": 4,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-01T18:46:28.015Z"
+      },
+      {
+        "name": "Lavash",
+        "calcium": 10,
+        "servingQuantity": 1,
+        "servingUnit": "sheet",
+        "isCustom": true,
+        "timestamp": "2025-11-01T18:45:20.398Z"
+      },
+      {
+        "name": "Italian pizza cheese",
+        "calcium": 210,
+        "servingQuantity": 0.25,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-11-01T18:45:01.438Z"
+      },
+      {
+        "name": "Kefir",
+        "calcium": 293,
+        "servingQuantity": 6,
+        "servingUnit": "fl oz",
+        "isCustom": true,
+        "timestamp": "2025-11-01T15:42:03.211Z"
+      }
+    ],
+    "2025-11-02": [
+      {
+        "name": "Okra, cooked, boiled, drained, with salt",
+        "calcium": 31,
+        "servingQuantity": 2,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-11-03T03:24:08.741Z"
+      },
+      {
+        "name": "Tamale white chicken homemade",
+        "calcium": 150,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-11-03T03:23:40.915Z"
+      },
+      {
+        "name": "Peas, edible-podded, cooked, boiled, drained, with salt",
+        "calcium": 67.2,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-11-03T03:23:15.905Z"
+      },
+      {
+        "name": "Ovaltine w/Fairlife Fat Free Milk",
+        "calcium": 490,
+        "servingQuantity": 8,
+        "servingUnit": "fl oz",
+        "isCustom": true,
+        "timestamp": "2025-11-03T03:22:41.678Z"
+      },
+      {
+        "name": "Lettuce, leaf, green, raw",
+        "calcium": 34,
+        "servingQuantity": 3,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-02T19:48:36.032Z"
+      },
+      {
+        "name": "Avocado, Hass, peeled, raw",
+        "calcium": 8,
+        "servingQuantity": 2,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-02T19:48:10.563Z"
+      },
+      {
+        "name": "Bread, whole-wheat, prepared from recipe, toasted",
+        "calcium": 30,
+        "servingQuantity": 2,
+        "servingUnit": "slice",
+        "isCustom": false,
+        "timestamp": "2025-11-02T19:47:44.228Z"
+      },
+      {
+        "name": "Cheese, parmesan, grated, refrigerated",
+        "calcium": 539,
+        "servingQuantity": 2,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-02T19:47:22.391Z"
+      },
+      {
+        "name": "Fairlife Fat Free Milk",
+        "calcium": 380,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-02T17:12:43.938Z"
+      },
+      {
+        "name": "Cheerios",
+        "calcium": 98,
+        "servingQuantity": 6,
+        "servingUnit": "fl oz",
+        "isCustom": true,
+        "timestamp": "2025-11-02T17:12:35.620Z"
+      }
+    ],
+    "2025-11-03": [
+      {
+        "name": "Ovaltine w/Fairlife Fat Free Milk",
+        "calcium": 490,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-03T23:29:46.601Z"
+      },
+      {
+        "name": "Pinto Bean Chili",
+        "calcium": 55,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-11-03T23:28:31.521Z"
+      },
+      {
+        "name": "Cheese, parmesan, grated, refrigerated",
+        "calcium": 270,
+        "servingQuantity": 1,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-03T21:47:56.836Z"
+      },
+      {
+        "name": "Peaches, yellow, raw",
+        "calcium": 8.82,
+        "servingQuantity": 1,
+        "servingUnit": "serving",
+        "isCustom": false,
+        "timestamp": "2025-11-03T21:47:00.990Z"
+      },
+      {
+        "name": "Avocado, Hass, peeled, raw",
+        "calcium": 8,
+        "servingQuantity": 2,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-03T21:46:35.804Z"
+      },
+      {
+        "name": "Beans, snap, green, cooked, boiled, drained, with salt",
+        "calcium": 55,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-11-03T21:46:09.000Z"
+      },
+      {
+        "name": "Cereals, corn grits, white, regular and quick, enriched, cooked with water, with salt",
+        "calcium": 2.57,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-11-03T21:45:48.442Z"
+      },
+      {
+        "name": "Ovaltine w/Fairlife Fat Free Milk",
+        "calcium": 490,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-03T21:45:19.216Z"
+      },
+      {
+        "name": "Peas, edible-podded, cooked, boiled, drained, with salt",
+        "calcium": 34,
+        "servingQuantity": 0.5,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-11-03T21:44:41.036Z"
+      },
+      {
+        "name": "Tamale white chicken homemade",
+        "calcium": 150,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-11-03T21:44:18.774Z"
+      }
+    ],
+    "2025-11-04": [
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 35.4,
+        "servingQuantity": 3,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-11-05T02:21:27.294Z"
+      },
+      {
+        "name": "Chocolate, dark, 70-85% cacao solids",
+        "calcium": 14.74,
+        "servingQuantity": 0.2,
+        "servingUnit": "bar",
+        "isCustom": false,
+        "timestamp": "2025-11-05T02:21:10.236Z"
+      },
+      {
+        "name": "Flaxseed, ground",
+        "calcium": 65,
+        "servingQuantity": 1,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-04T22:48:47.674Z"
+      },
+      {
+        "name": "Bread, whole-wheat, prepared from recipe, toasted",
+        "calcium": 15,
+        "servingQuantity": 1,
+        "servingUnit": "slice",
+        "isCustom": false,
+        "timestamp": "2025-11-04T22:47:57.625Z"
+      },
+      {
+        "name": "Lettuce, leaf, green, raw",
+        "calcium": 23,
+        "servingQuantity": 2,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-04T22:47:25.235Z"
+      },
+      {
+        "name": "Rice, white, long-grain, precooked or instant, enriched, dry",
+        "calcium": 20.9,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-11-04T22:47:08.330Z"
+      },
+      {
+        "name": "Beans, snap, green, cooked, boiled, drained, with salt",
+        "calcium": 55,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-11-04T22:46:20.553Z"
+      },
+      {
+        "name": "Cereals, corn grits, white, regular and quick, enriched, dry",
+        "calcium": 6.24,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-11-04T22:46:04.736Z"
+      },
+      {
+        "name": "Cheese, mozzarella, whole milk, low moisture",
+        "calcium": 416,
+        "servingQuantity": 4,
+        "servingUnit": "cubic inch",
+        "isCustom": false,
+        "timestamp": "2025-11-04T19:07:16.203Z"
+      },
+      {
+        "name": "Tropicana Calcium + Vitamin D Orange Juice",
+        "calcium": 350,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-04T19:05:22.931Z"
+      }
+    ],
+    "2025-11-05": [
+      {
+        "name": "Chocolate, dark, 70-85% cacao solids",
+        "calcium": 14.74,
+        "servingQuantity": 0.2,
+        "servingUnit": "bar",
+        "isCustom": false,
+        "timestamp": "2025-11-07T01:01:23.894Z"
+      },
+      {
+        "name": "Quinoa and Bulgar",
+        "calcium": 60,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-11-07T01:00:02.773Z"
+      },
+      {
+        "name": "Fish, tuna, skipjack, fresh, cooked, dry heat",
+        "calcium": 31.4,
+        "servingQuantity": 3,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-07T00:57:24.092Z"
+      },
+      {
+        "name": "Cheese, parmesan, grated, refrigerated",
+        "calcium": 269,
+        "servingQuantity": 1,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-05T23:19:32.092Z"
+      },
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 35.4,
+        "servingQuantity": 3,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-11-05T23:18:18.457Z"
+      },
+      {
+        "name": "Asparagus, cooked, boiled, drained, with salt",
+        "calcium": 31,
+        "servingQuantity": 0.75,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-11-05T23:16:50.186Z"
+      },
+      {
+        "name": "Tortillas, ready-to-bake or -fry, corn, without added salt",
+        "calcium": 99,
+        "servingQuantity": 2,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-05T23:15:09.220Z"
+      },
+      {
+        "name": "Fish, lingcod, cooked, dry heat",
+        "calcium": 15.3,
+        "servingQuantity": 3,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-05T23:14:18.307Z"
+      },
+      {
+        "name": "Ovaltine w/Fairlife Fat Free Milk",
+        "calcium": 735,
+        "servingQuantity": 1.5,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-05T17:10:43.440Z"
+      }
+    ],
+    "2025-11-06": [
+      {
+        "name": "Ovaltine Choclate Malt mix",
+        "calcium": 55,
+        "servingQuantity": 1,
+        "servingUnit": "tablespoons",
+        "isCustom": true,
+        "timestamp": "2025-11-07T01:13:49.783Z"
+      },
+      {
+        "name": "Ovaltine w/Fairlife Fat Free Milk",
+        "calcium": 490,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-07T01:13:29.264Z"
+      },
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 35.4,
+        "servingQuantity": 3,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-11-07T01:06:59.468Z"
+      },
+      {
+        "name": "Salad dressing, mayonnaise, regular",
+        "calcium": 2,
+        "servingQuantity": 1,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-11-07T01:05:15.145Z"
+      },
+      {
+        "name": "Quinoa and Bulgar",
+        "calcium": 60,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-11-07T01:04:36.026Z"
+      },
+      {
+        "name": "Beef, top sirloin, steak, separable lean only, trimmed to 1/8 fat, choice, raw",
+        "calcium": 31.6,
+        "servingQuantity": 4,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-07T01:04:04.212Z"
+      },
+      {
+        "name": "Broccoli, cooked, boiled, drained, without salt",
+        "calcium": 47,
+        "servingQuantity": 0.75,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-11-07T01:02:51.040Z"
+      },
+      {
+        "name": "Wheat Thins",
+        "calcium": 30,
+        "servingQuantity": 13,
+        "servingUnit": "cracker",
+        "isCustom": true,
+        "timestamp": "2025-11-06T20:25:43.679Z"
+      },
+      {
+        "name": "Fish, tuna, skipjack, fresh, cooked, dry heat",
+        "calcium": 31.4,
+        "servingQuantity": 3,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-06T20:24:53.980Z"
+      },
+      {
+        "name": "Kefir",
+        "calcium": 293,
+        "servingQuantity": 0.75,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-11-06T18:26:10.366Z"
+      }
+    ],
+    "2025-11-07": [
+      {
+        "name": "Chocolate, dark, 70-85% cacao solids",
+        "calcium": 14.74,
+        "servingQuantity": 0.2,
+        "servingUnit": "bar",
+        "isCustom": false,
+        "timestamp": "2025-11-08T04:10:36.623Z"
+      },
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-11-08T04:10:12.478Z"
+      },
+      {
+        "name": "Cheese, Mexican blend",
+        "calcium": 93,
+        "servingQuantity": 2,
+        "servingUnit": "tablespoon",
+        "isCustom": false,
+        "timestamp": "2025-11-08T04:09:51.140Z"
+      },
+      {
+        "name": "Squash, summer, zucchini, includes skin, cooked, boiled, drained, without salt",
+        "calcium": 16,
+        "servingQuantity": 0.5,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-11-08T04:09:10.667Z"
+      },
+      {
+        "name": "Chicken breast",
+        "calcium": 20,
+        "servingQuantity": 1,
+        "servingUnit": "3oz",
+        "isCustom": true,
+        "timestamp": "2025-11-08T04:08:51.473Z"
+      },
+      {
+        "name": "Tortillas, ready-to-bake or -fry, whole wheat",
+        "calcium": 100,
+        "servingQuantity": 1,
+        "servingUnit": "serving",
+        "isCustom": false,
+        "timestamp": "2025-11-08T04:08:26.594Z"
+      },
+      {
+        "name": "Lettuce, leaf, green, raw",
+        "calcium": 23,
+        "servingQuantity": 2,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-07T19:47:17.199Z"
+      },
+      {
+        "name": "Bread, whole-wheat, prepared from recipe, toasted",
+        "calcium": 23,
+        "servingQuantity": 1.5,
+        "servingUnit": "slice",
+        "isCustom": false,
+        "timestamp": "2025-11-07T19:46:54.523Z"
+      },
+      {
+        "name": "Eggs, Grade A, Large, egg whole",
+        "calcium": 24.1,
+        "servingQuantity": 1,
+        "servingUnit": "whole",
+        "isCustom": false,
+        "timestamp": "2025-11-07T19:46:33.198Z"
+      },
+      {
+        "name": "Cheese, mozzarella, whole milk",
+        "calcium": 71,
+        "servingQuantity": 1,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-11-07T19:46:23.368Z"
+      },
+      {
+        "name": "Fairlife Fat Free Milk",
+        "calcium": 380,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-07T16:45:41.710Z"
+      },
+      {
+        "name": "Multi Grain Cheerios",
+        "calcium": 150,
+        "servingQuantity": 8,
+        "servingUnit": "fl oz",
+        "isCustom": true,
+        "timestamp": "2025-11-07T16:44:58.145Z"
+      }
+    ],
+    "2025-11-08": [
+      {
+        "name": "Rice, white, long-grain, parboiled, enriched, cooked",
+        "calcium": 30,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-11-09T02:00:41.726Z"
+      },
+      {
+        "name": "Crustaceans, shrimp, mixed species, cooked, moist heat (may contain additives to retain moisture)",
+        "calcium": 77.4,
+        "servingQuantity": 3,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-09T02:00:00.367Z"
+      },
+      {
+        "name": "Cheese, mozzarella, whole milk",
+        "calcium": 71,
+        "servingQuantity": 1,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-11-08T17:49:30.954Z"
+      },
+      {
+        "name": "Ovaltine w/Fairlife Fat Free Milk",
+        "calcium": 490,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-08T17:48:40.844Z"
+      },
+      {
+        "name": "Avocado, Hass, peeled, raw",
+        "calcium": 4,
+        "servingQuantity": 1,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-08T17:09:24.979Z"
+      },
+      {
+        "name": "Cheese, Mexican blend",
+        "calcium": 93,
+        "servingQuantity": 2,
+        "servingUnit": "tablespoon",
+        "isCustom": false,
+        "timestamp": "2025-11-08T17:09:03.229Z"
+      },
+      {
+        "name": "Chicken breast",
+        "calcium": 10,
+        "servingQuantity": 0.5,
+        "servingUnit": "4oz",
+        "isCustom": true,
+        "timestamp": "2025-11-08T17:08:49.264Z"
+      },
+      {
+        "name": "Tortillas, ready-to-bake or -fry, whole wheat",
+        "calcium": 100,
+        "servingQuantity": 1,
+        "servingUnit": "serving",
+        "isCustom": false,
+        "timestamp": "2025-11-08T17:08:13.703Z"
+      },
+      {
+        "name": "Flaxseed, ground",
+        "calcium": 16,
+        "servingQuantity": 0.25,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-08T17:07:15.034Z"
+      },
+      {
+        "name": "Kefir",
+        "calcium": 146,
+        "servingQuantity": 3,
+        "servingUnit": "fl oz",
+        "isCustom": true,
+        "timestamp": "2025-11-08T17:06:44.004Z"
+      },
+      {
+        "name": "Tropicana Calcium + Vitamin D Orange Juice",
+        "calcium": 175,
+        "servingQuantity": 4,
+        "servingUnit": "fl oz",
+        "isCustom": true,
+        "timestamp": "2025-11-08T17:06:20.621Z"
+      }
+    ],
+    "2025-11-09": [
+      {
+        "name": "Tropicana Calcium + Vitamin D Orange Juice",
+        "calcium": 263,
+        "servingQuantity": 6,
+        "servingUnit": "fl oz",
+        "isCustom": true,
+        "timestamp": "2025-11-09T23:35:34.365Z"
+      },
+      {
+        "name": "Cheese, parmesan, grated, refrigerated",
+        "calcium": 135,
+        "servingQuantity": 0.5,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-09T23:30:08.625Z"
+      },
+      {
+        "name": "Beans, snap, green, microwaved",
+        "calcium": 16,
+        "servingQuantity": 0.25,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-11-09T23:29:15.756Z"
+      },
+      {
+        "name": "Pear, Anjou, green, with skin, raw",
+        "calcium": 9.99,
+        "servingQuantity": 100,
+        "servingUnit": "g",
+        "isCustom": false,
+        "timestamp": "2025-11-09T23:29:01.260Z"
+      },
+      {
+        "name": "Persimmons, japanese, raw",
+        "calcium": 13.4,
+        "servingQuantity": 1,
+        "servingUnit": "1 fruit (2-1/2 dia)",
+        "isCustom": false,
+        "timestamp": "2025-11-09T23:27:43.065Z"
+      },
+      {
+        "name": "Lavash",
+        "calcium": 10,
+        "servingQuantity": 0.5,
+        "servingUnit": "sheet",
+        "isCustom": true,
+        "timestamp": "2025-11-09T23:26:19.701Z"
+      },
+      {
+        "name": "Cheese, mozzarella, whole milk",
+        "calcium": 71,
+        "servingQuantity": 1,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-11-09T23:25:46.199Z"
+      },
+      {
+        "name": "Chocolate, dark, 70-85% cacao solids",
+        "calcium": 14.74,
+        "servingQuantity": 0.2,
+        "servingUnit": "bar",
+        "isCustom": false,
+        "timestamp": "2025-11-09T23:25:28.810Z"
+      },
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-11-09T23:25:14.321Z"
+      },
+      {
+        "name": "Squash, winter, butternut, cooked, baked, with salt",
+        "calcium": 42,
+        "servingQuantity": 4,
+        "servingUnit": "fl oz",
+        "isCustom": false,
+        "timestamp": "2025-11-09T23:24:58.509Z"
+      },
+      {
+        "name": "Fish, salmon, coho, wild, cooked, moist heat",
+        "calcium": 52,
+        "servingQuantity": 4,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-09T23:24:20.235Z"
+      },
+      {
+        "name": "Fairlife Fat Free Milk",
+        "calcium": 380,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-09T20:56:02.038Z"
+      },
+      {
+        "name": "Multi Grain Cheerios",
+        "calcium": 200,
+        "servingQuantity": 1.33,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-09T20:55:49.361Z"
+      }
+    ],
+    "2025-11-10": [
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-11T01:33:20.575Z"
+      },
+      {
+        "name": "Chocolate, dark, 70-85% cacao solids",
+        "calcium": 14.74,
+        "servingQuantity": 0.2,
+        "servingUnit": "bar",
+        "isCustom": false,
+        "timestamp": "2025-11-11T01:32:56.039Z"
+      },
+      {
+        "name": "Eggplant, cooked, boiled, drained, with salt",
+        "calcium": 5.94,
+        "servingQuantity": 1,
+        "servingUnit": "1 cup (1 cubes)",
+        "isCustom": false,
+        "timestamp": "2025-11-11T01:28:40.582Z"
+      },
+      {
+        "name": "Squash, summer, zucchini, includes skin, cooked, boiled, drained, without salt",
+        "calcium": 16,
+        "servingQuantity": 0.5,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-11-11T01:28:06.859Z"
+      },
+      {
+        "name": "Fish, salmon, coho, wild, cooked, moist heat",
+        "calcium": 52,
+        "servingQuantity": 4,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-11T01:27:51.289Z"
+      },
+      {
+        "name": "Lettuce, leaf, green, raw",
+        "calcium": 23,
+        "servingQuantity": 2,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-10T19:15:53.422Z"
+      },
+      {
+        "name": "Italian pizza cheese",
+        "calcium": 105,
+        "servingQuantity": 2,
+        "servingUnit": "tablespoon",
+        "isCustom": true,
+        "timestamp": "2025-11-10T19:15:17.144Z"
+      },
+      {
+        "name": "Lavash",
+        "calcium": 10,
+        "servingQuantity": 1,
+        "servingUnit": "sheet",
+        "isCustom": true,
+        "timestamp": "2025-11-10T19:14:47.735Z"
+      },
+      {
+        "name": "Fairlife Fat Free Milk",
+        "calcium": 380,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-10T19:14:38.401Z"
+      },
+      {
+        "name": "Cheerios",
+        "calcium": 130,
+        "servingQuantity": 1,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-11-10T19:14:29.714Z"
+      }
+    ],
+    "2025-11-11": [
+      {
+        "name": "Chocolate, dark, 70-85% cacao solids",
+        "calcium": 14.74,
+        "servingQuantity": 0.2,
+        "servingUnit": "bar",
+        "isCustom": false,
+        "timestamp": "2025-11-12T02:36:31.352Z"
+      },
+      {
+        "name": "Alcoholic beverage, wine, table, red",
+        "calcium": 23.6,
+        "servingQuantity": 2,
+        "servingUnit": "1 serving (5 fl oz)",
+        "isCustom": false,
+        "timestamp": "2025-11-12T02:36:16.309Z"
+      },
+      {
+        "name": "Snacks, potato chips, plain, salted",
+        "calcium": 19.08,
+        "servingQuantity": 0.4,
+        "servingUnit": "1 bag (8 oz)",
+        "isCustom": false,
+        "timestamp": "2025-11-12T02:35:46.937Z"
+      },
+      {
+        "name": "Lettuce, leaf, green, raw",
+        "calcium": 23,
+        "servingQuantity": 2,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-12T02:33:20.133Z"
+      },
+      {
+        "name": "Mollusks, mussel, blue, cooked, moist heat",
+        "calcium": 28,
+        "servingQuantity": 3,
+        "servingUnit": "oz",
+        "isCustom": false,
+        "timestamp": "2025-11-12T02:32:45.729Z"
+      },
+      {
+        "name": "Wheat Thins",
+        "calcium": 27.69,
+        "servingQuantity": 12,
+        "servingUnit": "cracker",
+        "isCustom": true,
+        "timestamp": "2025-11-11T22:13:23.447Z"
+      },
+      {
+        "name": "Italian pizza cheese",
+        "calcium": 210,
+        "servingQuantity": 0.25,
+        "servingUnit": "cups",
+        "isCustom": true,
+        "timestamp": "2025-11-11T19:34:19.317Z"
+      },
+      {
+        "name": "Egg, whole, cooked, scrambled",
+        "calcium": 145,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-11-11T19:34:09.288Z"
+      },
+      {
+        "name": "Bread, french or vienna (includes sourdough)",
+        "calcium": 145,
+        "servingQuantity": 2,
+        "servingUnit": "slice",
+        "isCustom": false,
+        "timestamp": "2025-11-11T19:33:25.129Z"
+      },
+      {
+        "name": "Sanar Flax Seed, Ground",
+        "calcium": 12,
+        "servingQuantity": 1,
+        "servingUnit": "tablespoon",
+        "isCustom": true,
+        "timestamp": "2025-11-11T16:34:41.797Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-11T16:34:31.535Z"
+      }
+    ],
+    "2025-11-12": [
+      {
+        "name": "Squash, summer, zucchini, includes skin, cooked, boiled, drained, without salt",
+        "calcium": 16,
+        "servingQuantity": 0.5,
+        "servingUnit": "cup",
+        "isCustom": false,
+        "timestamp": "2025-11-13T00:45:44.253Z"
+      },
+      {
+        "name": "Potatoes, mashed, dehydrated, granules with milk, dry form",
+        "calcium": 71,
+        "servingQuantity": 4,
+        "servingUnit": "tablespoon",
+        "isCustom": false,
+        "timestamp": "2025-11-13T00:45:30.543Z"
+      },
+      {
+        "name": "Chicken breast",
+        "calcium": 20,
+        "servingQuantity": 1,
+        "servingUnit": "4oz",
+        "isCustom": true,
+        "timestamp": "2025-11-13T00:45:17.073Z"
+      },
+      {
+        "name": "Sargento String Cheese",
+        "calcium": 190,
+        "servingQuantity": 21,
+        "servingUnit": "grams",
+        "isCustom": true,
+        "timestamp": "2025-11-12T22:24:52.204Z"
+      },
+      {
+        "name": "Ovaltine w/Mootopia Fat Free Milk",
+        "calcium": 560,
+        "servingQuantity": 1,
+        "servingUnit": "cup",
+        "isCustom": true,
+        "timestamp": "2025-11-12T20:44:37.183Z"
+      }
+    ]
+  }
+}
