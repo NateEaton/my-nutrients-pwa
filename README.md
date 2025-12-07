@@ -1,8 +1,14 @@
-# My Calcium Tracker PWA
+# Senior Metrics PWA
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![SvelteKit](https://img.shields.io/badge/SvelteKit-2.x-orange.svg)](https://kit.svelte.dev/)
 [![Node.js: >=18.0.0](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
+
+
+### NOTE: 
+This repo is for a new app to be built based on a prior app, My Calcium. The repo has been initialized from the Ca-pwa repo and will be gradually transformed as this codebase is refactored into the new app. All content below is from the prior app. 
+
+--------
 
 A Progressive Web App (PWA) designed to be a simple, privacy-focused tool for tracking daily calcium intake. Search a comprehensive food database, add custom foods, and monitor your progress towards your nutritional goals. All data is stored locally on your device and can be seamlessly synchronized across multiple devices using a secure, lightweight cloud backend.
 
