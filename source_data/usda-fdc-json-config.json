@@ -1,0 +1,70 @@
+{
+  "sourceName": "usda-fdc-json",
+  "sourceIdColumn": "fdcId",
+  "inputFormat": "json",
+  "nutrientMapping": {
+    "203": "protein",
+    "291": "fiber",
+    "205": "carbohydrates",
+    "269": "sugars",
+    "204": "fat",
+    "606": "saturatedFat",
+    "645": "monounsaturatedFat",
+    "646": "polyunsaturatedFat",
+    "851": "omega3ALA",
+    "629": "omega3EPA",
+    "621": "omega3DHA",
+    "675": "omega6",
+    "301": "calcium",
+    "304": "magnesium",
+    "306": "potassium",
+    "303": "iron",
+    "309": "zinc",
+    "328": "vitaminD",
+    "418": "vitaminB12",
+    "435": "folate",
+    "415": "vitaminB6",
+    "320": "vitaminA",
+    "401": "vitaminC",
+    "430": "vitaminK"
+  },
+  "jsonPaths": {
+    "foundationFoods": "FoundationFoods",
+    "srLegacyFoods": "SRLegacyFoods",
+    "fdcId": "fdcId",
+    "description": "description",
+    "foodNutrients": "foodNutrients",
+    "nutrientNumber": "nutrient.number",
+    "nutrientAmount": "amount",
+    "foodPortions": "foodPortions",
+    "portionValue": "value",
+    "portionUnit": "measureUnit.name",
+    "portionAbbr": "measureUnit.abbreviation",
+    "portionModifier": "modifier",
+    "portionGramWeight": "gramWeight"
+  },
+  "metadata": {
+    "source": "USDA-FDC",
+    "label": "USDA FoodData Central",
+    "name": "USDA FoodData Central - Foundation & SR Legacy (JSON)",
+    "description": "Comprehensive food database from USDA FoodData Central with multi-nutrient data for nutrition tracking",
+    "version": "2025.3",
+    "created": "2025-12-08",
+    "author": "USDA Agricultural Research Service",
+    "sourceUrls": [
+      {
+        "name": "USDA FoodData Central",
+        "url": "https://fdc.nal.usda.gov/download-datasets.html"
+      },
+      {
+        "name": "Foundation Foods JSON",
+        "url": "https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_foundation_food_json_2024-04-24.zip"
+      },
+      {
+        "name": "SR Legacy JSON",
+        "url": "https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_json_2018-04.zip"
+      }
+    ],
+    "notes": "JSON format provides complete nutrient data including all vitamins, minerals, and macronutrients. All nutrient values are per 100g in source data and must be converted to portion sizes."
+  }
+}
