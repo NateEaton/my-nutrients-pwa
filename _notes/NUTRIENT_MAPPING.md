@@ -66,76 +66,98 @@ This document provides the complete reference for all nutrients tracked in My Nu
 
 ---
 
-## CSV Column Mapping
+## JSON Data Structure (USDA FoodData Central)
 
-**IMPORTANT**: This section will be updated once USDA FDC CSV files are downloaded and inspected.
+**Status**: ✅ Validated with Foundation Foods and SR Legacy JSON files
 
-### Expected CSV Format
+### JSON File Format
 
-USDA FDC CSV files typically have columns like:
-
-```
-fdcId, foodDescription, nutrientId, nutrientName, nutrientValue, nutrientUnit, ...
-```
-
-### Column Mapping Configuration
-
-To be added to `source_data/usda-fdc-config.json`:
+USDA FDC provides JSON files with the following structure:
 
 ```json
 {
-  "sourceName": "usda-fdc",
-  "sourceIdColumn": "fdcId",
-  "columnMapping": {
-    "foodDescription": "name",
-
-    "PLACEHOLDER_protein_column": "protein",
-    "PLACEHOLDER_fiber_column": "fiber",
-    "PLACEHOLDER_calcium_column": "calcium",
-    "PLACEHOLDER_magnesium_column": "magnesium",
-    "PLACEHOLDER_potassium_column": "potassium",
-    "PLACEHOLDER_iron_column": "iron",
-    "PLACEHOLDER_zinc_column": "zinc",
-    "PLACEHOLDER_vitaminD_column": "vitaminD",
-    "PLACEHOLDER_vitaminB12_column": "vitaminB12",
-    "PLACEHOLDER_folate_column": "folate",
-    "PLACEHOLDER_vitaminB6_column": "vitaminB6",
-    "PLACEHOLDER_vitaminA_column": "vitaminA",
-    "PLACEHOLDER_vitaminC_column": "vitaminC",
-    "PLACEHOLDER_vitaminK_column": "vitaminK",
-    "PLACEHOLDER_omega3_column": "omega3",
-    "PLACEHOLDER_omega6_column": "omega6",
-    "PLACEHOLDER_carbs_column": "carbohydrates",
-    "PLACEHOLDER_sugars_column": "sugars",
-    "PLACEHOLDER_fat_column": "fat",
-    "PLACEHOLDER_saturatedFat_column": "saturatedFat"
-  },
-  "dataTypeMapping": {
-    "protein": "float",
-    "fiber": "float",
-    "calcium": "float",
-    "magnesium": "float",
-    "potassium": "float",
-    "iron": "float",
-    "zinc": "float",
-    "vitaminD": "float",
-    "vitaminB12": "float",
-    "folate": "float",
-    "vitaminB6": "float",
-    "vitaminA": "float",
-    "vitaminC": "float",
-    "vitaminK": "float",
-    "omega3": "float",
-    "omega6": "float",
-    "carbohydrates": "float",
-    "sugars": "float",
-    "fat": "float",
-    "saturatedFat": "float"
-  }
+  "FoundationFoods": [  // or "SRLegacyFoods" for SR Legacy file
+    {
+      "fdcId": 1750337,
+      "description": "Hummus, commercial",
+      "foodCategory": {...},
+      "foodNutrients": [
+        {
+          "type": "FoodNutrient",
+          "id": 2219740,
+          "nutrient": {
+            "id": 1003,
+            "number": "203",
+            "name": "Protein",
+            "rank": 600,
+            "unitName": "g"
+          },
+          "amount": 7.35
+        },
+        {
+          "nutrient": {
+            "number": "291",
+            "name": "Fiber, total dietary",
+            "unitName": "g"
+          },
+          "amount": 5.40
+        }
+        // ... more nutrients
+      ],
+      "foodPortions": [
+        {
+          "id": 118804,
+          "value": 2.0,
+          "measureUnit": {
+            "id": 1001,
+            "name": "tablespoon",
+            "abbreviation": "tbsp"
+          },
+          "modifier": "",
+          "gramWeight": 33.9,
+          "sequenceNumber": 1
+        }
+        // ... more portions
+      ]
+    }
+    // ... more foods
+  ]
 }
 ```
 
-**TODO**: Replace PLACEHOLDER values with actual CSV column names after download.
+### Key Fields
+
+**Food-Level Fields**:
+- `fdcId` (number): Unique food identifier
+- `description` (string): Food name/description
+
+**Nutrient Data** (`foodNutrients` array):
+- `nutrient.number` (string): USDA nutrient code (e.g., "203" for Protein)
+- `nutrient.name` (string): Nutrient name
+- `nutrient.unitName` (string): Unit of measurement (g, mg, mcg)
+- `amount` (number): **Value per 100g** (IMPORTANT!)
+
+**Portion Data** (`foodPortions` array):
+- `value` (number): Quantity (e.g., 2.0)
+- `measureUnit.name` (string): Unit name (e.g., "tablespoon", "cup")
+- `measureUnit.abbreviation` (string): Short form (e.g., "tbsp", "cup")
+- `modifier` (string): Additional description (e.g., "drained", "whole")
+- `gramWeight` (number): Weight in grams for this portion
+
+### Critical Note: Nutrient Calculation
+
+**All nutrient values in `foodNutrients` are per 100g.**
+
+To calculate nutrients for a specific portion:
+
+```typescript
+nutrient_per_portion = nutrient_per_100g * (portion_gramWeight / 100)
+```
+
+Example:
+- Protein per 100g: 7.35g
+- Portion: 2 tbsp = 33.9g
+- **Protein per 2 tbsp**: `7.35 * (33.9 / 100) = 2.49g`
 
 ---
 
@@ -440,20 +462,27 @@ const vitaminA_RAE = vitaminA_IU * 0.3;
 
 ---
 
-## CSV Header Examples (To Be Updated)
+## Data Processing Strategy
 
-**Placeholder**: Once CSV files are downloaded, document actual header structure here.
+**Decision**: Use JSON files (not CSV) for data pipeline
 
-Example expected format:
-```
-fdcId, foodDescription, proteinValue, fiberValue, calciumValue, ...
-```
+**Rationale**:
+- ✅ Single file contains all data (food info, nutrients, portions)
+- ✅ Clean nested structure (easier to parse than normalized CSV tables)
+- ✅ All 20+ nutrients in one `foodNutrients` array
+- ✅ Portion sizes readily available in `foodPortions` array
+- ✅ No need to join multiple CSV files
 
-**TODO for Day 1-2**:
-1. Download USDA FDC CSV files
-2. Run `head -n 1 combined_input.csv` to see headers
-3. Update this section with actual column names
-4. Update `usda-fdc-config.json` accordingly
+**Files to Process**:
+1. `FoodData_Central_foundation_food_json_2025-04-24.json` (6.3MB unzipped)
+2. `FoodData_Central_sr_legacy_food_json_2018-04.json` (201MB unzipped)
+
+**Processing Steps**:
+1. Parse JSON file
+2. Extract `fdcId`, `description`, `foodNutrients`, `foodPortions`
+3. Map nutrient codes (203, 291, 301, etc.) to property names (protein, fiber, calcium, etc.)
+4. For each portion, calculate nutrients: `nutrient * (gramWeight / 100)`
+5. Generate database with all foods and their serving options
 
 ---
 
@@ -469,4 +498,4 @@ fdcId, foodDescription, proteinValue, fiberValue, calciumValue, ...
 ## Change Log
 
 - **2025-12-07**: Initial version, placeholders for CSV columns
-- **[TBD]**: Updated with actual CSV column names after download
+- **2025-12-08**: Updated with actual JSON structure after analyzing Foundation/SR Legacy files. Confirmed JSON approach for data pipeline.

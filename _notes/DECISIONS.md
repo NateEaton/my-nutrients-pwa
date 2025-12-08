@@ -24,34 +24,39 @@ Each decision follows this structure:
 
 ## Decision 1: Data Source Strategy
 
-**Decision**: Use USDA FDC CSV downloads as primary data source, not API
+**Decision**: Use USDA FDC JSON downloads as primary data source, not API
 
 **Context**: Need multi-nutrient data for 3,800+ foods with accurate serving sizes
 
 **Options Considered**:
 1. USDA FDC API only (fetch nutrients on-demand)
-2. CSV download to generate offline database
+2. JSON/CSV download to generate offline database
 3. Hybrid (API for new foods, cache in IndexedDB)
 
-**Chosen Approach**: Option 2 - CSV download with offline database
+**Chosen Approach**: Option 2 - JSON download with offline database
 
 **Rationale**:
-- CSV downloads contain **all nutrients** per food/serving measure
-- API responses only provide nutrients per 100g (requires manual serving calculations)
+- JSON downloads contain **all nutrients** per food (foodNutrients array)
+- JSON includes portion data (foodPortions array) with gram weights
+- Nutrients per 100g can be calculated for any serving: `nutrient * (gramWeight / 100)`
 - Offline-first architecture preserved (works without network)
 - No API rate limits during search
-- Serving sizes are accurate from source data
+- Single file format (easier than normalized CSV tables)
 - User already familiar with curated database approach
 
 **Consequences**:
 - ✅ Offline functionality maintained
-- ✅ Accurate serving sizes
+- ✅ Accurate serving sizes (calculated from portions)
 - ✅ Fast search (no network latency)
+- ✅ Clean data structure (JSON easier to parse than CSV)
 - ⚠️ Larger initial bundle (~2-3MB vs 400KB)
 - ⚠️ Database updates require new app builds
 - ⚠️ Data processing pipeline needed
+- ⚠️ Nutrient calculation required (not pre-calculated per portion)
 
 **Status**: Active
+
+**Updated**: 2025-12-08 - Confirmed JSON format after analyzing Foundation Foods and SR Legacy files
 
 ---
 
