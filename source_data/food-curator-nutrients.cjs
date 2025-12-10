@@ -150,31 +150,31 @@ function processData(rawData) {
   let initialCount = foods.length;
   console.log(`📊 Input: ${initialCount} foods\n`);
 
-  // Step 1: Filter by keep list (if provided)
+  // Helper function to check if a food is in the keep list
+  const isKept = (food) => keepSet.has(normalizeName(food.name));
+
   if (keepSet.size > 0) {
-    const before = foods.length;
-    const keptFoods = foods.filter((f) => keepSet.has(normalizeName(f.name)));
-    const excludedFoods = foods.filter((f) => !keepSet.has(normalizeName(f.name)));
-
-    console.log(`📋 Keep list: ${keepSet.size} entries`);
-    console.log(`   Kept: ${keptFoods.length} foods`);
-    console.log(`   Excluded: ${excludedFoods.length} foods`);
-
-    foods = keptFoods;
-    logStep("Apply keep list", before, foods.length);
+    const keptCount = foods.filter(isKept).length;
+    console.log(`📋 Keep list active: ${keepSet.size} entries (${keptCount} foods protected from filtering)\n`);
   }
 
-  // Step 2: Filter by exclude list (if provided)
+  // Step 1: Filter by exclude list (if provided)
+  // Keep list foods are EXEMPT from exclude filtering
   if (excludeSet.size > 0) {
     const before = foods.length;
     foods = foods.filter((f) => {
+      // Protect keep-list foods from exclusion
+      if (keepSet.size > 0 && isKept(f)) {
+        return true;
+      }
+
       const nameLower = f.name.toLowerCase();
       return ![...excludeSet].some((term) => nameLower.includes(term.toLowerCase()));
     });
-    logStep("Apply exclude list", before, foods.length);
+    logStep("Apply exclude list (keep-list protected)", before, foods.length);
   }
 
-  // Step 3: Deduplicate measures within each food
+  // Step 2: Deduplicate measures within each food
   const before3 = foods.length;
   let totalMeasures = 0;
   let duplicateMeasures = 0;
@@ -205,15 +205,28 @@ function processData(rawData) {
     };
   });
 
-  console.log(`  3. Deduplicate measures within foods`);
+  console.log(`  2. Deduplicate measures within foods`);
   console.log(`     Total measures: ${totalMeasures} | Unique: ${totalMeasures - duplicateMeasures} | Removed: ${duplicateMeasures}`);
 
-  // Step 4: Remove foods with no measures
-  const before4 = foods.length;
-  foods = foods.filter((f) => f.measures && f.measures.length > 0);
-  logStep("Remove foods with no measures", before4, foods.length);
+  // Step 3: Remove foods with no measures
+  // Note: Even keep-list foods are removed if they have no measures (can't be used in app)
+  const before3b = foods.length;
+  const foodsWithNoMeasures = foods.filter((f) => !f.measures || f.measures.length === 0);
 
-  // Step 5: Count nutrients
+  // Warn if any keep-list foods are being dropped
+  if (keepSet.size > 0) {
+    const keptFoodsDropped = foodsWithNoMeasures.filter(isKept);
+    if (keptFoodsDropped.length > 0) {
+      console.log(`\n⚠️  Warning: ${keptFoodsDropped.length} keep-list food(s) have no measures and will be dropped:`);
+      keptFoodsDropped.forEach(f => console.log(`     - ${f.name}`));
+      console.log('');
+    }
+  }
+
+  foods = foods.filter((f) => f.measures && f.measures.length > 0);
+  logStep("Remove foods with no measures", before3b, foods.length);
+
+  // Count nutrients for statistics
   let nutrientCounts = {};
   foods.forEach((food) => {
     if (food.nutrientsPer100g) {
