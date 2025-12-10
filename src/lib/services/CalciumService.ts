@@ -19,12 +19,14 @@
 import { get } from 'svelte/store';
 import { calciumState, showToast } from '$lib/stores/calcium';
 import type { FoodEntry, CustomFood, CalciumSettings, UserServingPreference } from '$lib/types/calcium';
+import type { NutrientSettings, NutrientValues } from '$lib/types/nutrients';
 import { DEFAULT_FOOD_DATABASE, getPrimaryMeasure } from '$lib/data/foodDatabase';
 import { SyncService } from '$lib/services/SyncService';
 import { SyncTrigger } from '$lib/utils/syncTrigger';
 import { getBuildInfo } from '$lib/utils/buildInfo';
 import { getMonthKey } from '$lib/types/sync';
 import { logger } from '$lib/utils/logger';
+import { DEFAULT_NUTRIENT_GOALS, getDefaultDisplayedNutrients } from '$lib/config/nutrientDefaults';
 
 /**
  * Main service class for managing calcium tracking data including foods, settings, and IndexedDB operations.
@@ -578,6 +580,57 @@ export class CalciumService {
     }));
 
     await this.saveSettings();
+
+    // Trigger smart sync for persistent data change (settings)
+    SyncTrigger.triggerDataSync('persistent');
+  }
+
+  /**
+   * Gets the current nutrient settings (multi-nutrient support).
+   * @returns Promise resolving to the current nutrient settings
+   */
+  async getNutrientSettings(): Promise<NutrientSettings> {
+    const storedGoals = localStorage.getItem('nutrient_goals');
+    const storedDisplayed = localStorage.getItem('nutrient_displayed');
+    const theme = localStorage.getItem('calcium_theme') || 'auto';
+    const colorScheme = localStorage.getItem('calcium_color_scheme') || 'blue';
+
+    const nutrientGoals = storedGoals ? JSON.parse(storedGoals) : DEFAULT_NUTRIENT_GOALS;
+    const displayedNutrients = storedDisplayed ? JSON.parse(storedDisplayed) : getDefaultDisplayedNutrients();
+
+    return {
+      nutrientGoals,
+      displayedNutrients,
+      theme: theme as 'auto' | 'light' | 'dark',
+      colorScheme: colorScheme as any
+    };
+  }
+
+  /**
+   * Updates the nutrient settings with new values.
+   * @param newSettings Partial nutrient settings object with values to update
+   */
+  async updateNutrientSettings(newSettings: Partial<NutrientSettings>): Promise<void> {
+    const currentSettings = await this.getNutrientSettings();
+    const updatedSettings = { ...currentSettings, ...newSettings };
+
+    // Save to localStorage
+    if (updatedSettings.nutrientGoals) {
+      localStorage.setItem('nutrient_goals', JSON.stringify(updatedSettings.nutrientGoals));
+    }
+    if (updatedSettings.displayedNutrients) {
+      // Validate max 4 nutrients
+      if (updatedSettings.displayedNutrients.length > 4) {
+        throw new Error('Cannot display more than 4 nutrients');
+      }
+      localStorage.setItem('nutrient_displayed', JSON.stringify(updatedSettings.displayedNutrients));
+    }
+    if (updatedSettings.theme) {
+      localStorage.setItem('calcium_theme', updatedSettings.theme);
+    }
+    if (updatedSettings.colorScheme) {
+      localStorage.setItem('calcium_color_scheme', updatedSettings.colorScheme);
+    }
 
     // Trigger smart sync for persistent data change (settings)
     SyncTrigger.triggerDataSync('persistent');
@@ -1261,10 +1314,13 @@ private async clearAllData(): Promise<void> {
     }
 
     try {
+      const totalNutrients = this.calculateTotalNutrients(foods);
+
+      // Legacy: Calculate totalCalcium for backward compatibility
       const totalCalcium = foods.reduce((sum, food) => {
         // Use getPrimaryMeasure for compatibility with both formats
         const primaryMeasure = getPrimaryMeasure(food);
-        return sum + primaryMeasure.calcium;
+        return sum + (primaryMeasure.calcium || primaryMeasure.nutrients?.calcium || 0);
       }, 0);
 
       const journalEntry = {
@@ -1272,7 +1328,8 @@ private async clearAllData(): Promise<void> {
         foods: foods,
         lastModified: Date.now(),
         syncStatus: 'pending',
-        totalCalcium: totalCalcium
+        totalNutrients: totalNutrients,
+        totalCalcium: totalCalcium // Legacy field for backward compatibility
       };
 
       await new Promise<void>((resolve, reject) => {
@@ -1293,6 +1350,38 @@ private async clearAllData(): Promise<void> {
       console.error(`Error saving foods for date ${dateString}:`, error);
       throw error;
     }
+  }
+
+  /**
+   * Calculate total nutrients from an array of food entries
+   * @param foods Array of food entries
+   * @returns NutrientValues object with aggregated totals
+   */
+  calculateTotalNutrients(foods: FoodEntry[]): any {
+    const totals: any = {};
+
+    for (const food of foods) {
+      // Handle both old (single calcium field) and new (nutrients object) formats
+      let foodNutrients: any = {};
+
+      // Check if this is old format with calcium field
+      if ('calcium' in food && typeof food.calcium === 'number') {
+        foodNutrients = { calcium: food.calcium };
+      }
+      // Check if this is new format with nutrients object
+      else if ('nutrients' in food && food.nutrients) {
+        foodNutrients = food.nutrients;
+      }
+
+      // Aggregate all nutrients
+      for (const [nutrient, value] of Object.entries(foodNutrients)) {
+        if (typeof value === 'number') {
+          totals[nutrient] = (totals[nutrient] || 0) + value;
+        }
+      }
+    }
+
+    return totals;
   }
 
   /**

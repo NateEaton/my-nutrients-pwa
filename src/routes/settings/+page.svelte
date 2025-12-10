@@ -25,6 +25,7 @@
   import ExportModal from "$lib/components/ExportModal.svelte";
   import RestoreModal from "$lib/components/RestoreModal.svelte";
   import SyncSettingsModal from "$lib/components/SyncSettingsModal.svelte";
+  import NutrientSettingsModal from "$lib/components/NutrientSettingsModal.svelte";
 
   let dailyGoal = 1000;
   let selectedTheme = "auto";
@@ -34,6 +35,7 @@
   let showExportModal = false;
   let showRestoreModal = false;
   let showSyncModal = false;
+  let showNutrientModal = false;
 
   // Update UI when state changes (like after restore) but not during user input
   let isUserEditing = false;
@@ -190,6 +192,10 @@
     showSyncModal = true;
   }
 
+  function openNutrientModal() {
+    showNutrientModal = true;
+  }
+
   // PWA Update handling
   async function checkForUpdate() {
     try {
@@ -262,6 +268,15 @@
           />
           <span class="input-suffix">mg</span>
         </div>
+      </div>
+
+      <div class="setting-item clickable" on:click={openNutrientModal}>
+        <span class="material-icons setting-icon">science</span>
+        <div class="setting-info">
+          <span class="setting-title">Manage Nutrients</span>
+          <span class="setting-subtitle">Choose which nutrients to track and set goals</span>
+        </div>
+        <span class="material-icons chevron">chevron_right</span>
       </div>
     </div>
 
@@ -441,6 +456,7 @@
 <BackupModal bind:show={showBackupModal} />
 <ExportModal bind:show={showExportModal} />
 <RestoreModal bind:show={showRestoreModal} />
+<NutrientSettingsModal bind:show={showNutrientModal} />
 {#if FEATURES.SYNC_ENABLED}
   <SyncSettingsModal bind:show={showSyncModal} />
 {/if}
