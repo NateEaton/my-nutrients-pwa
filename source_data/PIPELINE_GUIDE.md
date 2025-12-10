@@ -75,7 +75,7 @@ Assign permanent, stable IDs to each food for consistent references:
 node master-key-assigner-json.cjs \
   --input combined-nutrient-data.json \
   --map master-key-map.json \
-  --output mastered-nutrient-data
+  --output mastered-nutrient-data.json
 ```
 
 **What this does:**
@@ -162,7 +162,7 @@ node json-data-processor.cjs \
 node master-key-assigner-json.cjs \
   --input combined-nutrient-data.json \
   --map master-key-map.json \
-  --output mastered-nutrient-data
+  --output mastered-nutrient-data.json
 
 # Step 3: Curate
 node food-curator-nutrients.cjs \
