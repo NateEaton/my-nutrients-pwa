@@ -1104,7 +1104,7 @@
           </div>
         {/if}
 
-        <!-- Nutrient Inputs (Custom Mode) or Calcium (Database Mode) -->
+        <!-- Nutrient Inputs (Custom Mode only) -->
         {#if isCustomMode}
           <div class="form-group">
             <label class="form-label">Nutrients (enter at least one)</label>
@@ -1127,21 +1127,6 @@
                 </div>
               {/each}
             </div>
-          </div>
-        {:else}
-          <div class="form-group">
-            <label class="form-label" for="calcium">Calcium (mg)</label>
-            <input
-              id="calcium"
-              type="number"
-              class="form-input"
-              bind:value={calcium}
-              placeholder="0"
-              min="0.00"
-              step="0.01"
-              disabled={isSubmitting ||
-                (!isCustomMode && !editingFood && !isSelectedFromSearch)}
-            />
           </div>
         {/if}
 
