@@ -27,6 +27,7 @@
   import SmartScanModal from './SmartScanModal.svelte';
   import SourceIndicator from "./SourceIndicator.svelte";
   import { logger } from '$lib/utils/logger';
+  import { getNutrientLabel, getNutrientUnit, getDefaultDisplayedNutrients } from "$lib/config/nutrientDefaults";
 
   /** Whether the modal is visible */
   export let show = false;
@@ -75,6 +76,34 @@
 
   // Smart Scanning (UPC → OCR → Manual)
   let showSmartScanModal = false;
+
+  // Multi-nutrient support
+  let displayedNutrients = getDefaultDisplayedNutrients();
+
+  // Calculate nutrient preview based on current selection and serving size
+  $: calculatedNutrients = (() => {
+    if (!currentFoodData || !isSelectedFromSearch) return {};
+
+    const selectedMeasure = availableMeasures[selectedMeasureIndex];
+    if (!selectedMeasure) return {};
+
+    // Handle both new multi-nutrient format and legacy calcium-only format
+    const result = {};
+
+    if (selectedMeasure.nutrients && typeof selectedMeasure.nutrients === 'object') {
+      // New format: has nutrients object
+      for (const [nutrientId, baseValue] of Object.entries(selectedMeasure.nutrients)) {
+        if (baseValue && typeof baseValue === 'number') {
+          result[nutrientId] = baseValue * servingQuantity;
+        }
+      }
+    } else if (selectedMeasure.calcium !== undefined) {
+      // Legacy format: only has calcium
+      result.calcium = selectedMeasure.calcium * servingQuantity;
+    }
+
+    return result;
+  })();
 
   // Create a temporary food object for source indicator display
   $: displayFoodForIndicator = (() => {
@@ -141,6 +170,14 @@
   // Initialize component on mount
   onMount(async () => {
     // Database is already available via static import
+    // Load nutrient settings
+    try {
+      const settings = await calciumService.getNutrientSettings();
+      displayedNutrients = settings.displayedNutrients || getDefaultDisplayedNutrients();
+    } catch (error) {
+      console.error('Failed to load nutrient settings:', error);
+    }
+
     // If the modal was opened before component mount, re-run form setup
     if (show) {
       resetForm();
@@ -1014,6 +1051,24 @@
           />
         </div>
 
+        <!-- Nutrient Preview Section -->
+        {#if !isCustomMode && isSelectedFromSearch && Object.keys(calculatedNutrients).length > 0}
+          <div class="nutrient-preview">
+            <h4 class="nutrient-preview-title">Nutrients per serving</h4>
+            <div class="nutrient-preview-grid">
+              {#each displayedNutrients as nutrientId}
+                {@const value = calculatedNutrients[nutrientId]}
+                {#if value !== undefined && value !== null}
+                  <div class="nutrient-preview-item">
+                    <span class="nutrient-preview-label">{getNutrientLabel(nutrientId)}</span>
+                    <span class="nutrient-preview-value">{value.toFixed(1)} {getNutrientUnit(nutrientId)}</span>
+                  </div>
+                {/if}
+              {/each}
+            </div>
+          </div>
+        {/if}
+
         <div class="form-group">
           <div class="form-label-row">
             <label class="form-label" for="servingQuantity">Serving Size</label>
@@ -1724,6 +1779,55 @@
   /* Ensure consistent disabled styling */
   .smart-scan-btn.offline .material-icons {
     color: var(--text-secondary);
+  }
+
+  /* Nutrient Preview Styles */
+  .nutrient-preview {
+    background: var(--surface-variant);
+    border-radius: var(--spacing-sm);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .nutrient-preview-title {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 var(--spacing-sm) 0;
+  }
+
+  .nutrient-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-sm);
+  }
+
+  .nutrient-preview-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-xs);
+    background: var(--surface);
+    border-radius: var(--spacing-xs);
+  }
+
+  .nutrient-preview-label {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+  }
+
+  .nutrient-preview-value {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--primary-color);
+  }
+
+  @media (max-width: 30rem) {
+    .nutrient-preview-grid {
+      grid-template-columns: 1fr;
+    }
   }
 
 </style>
