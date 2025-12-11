@@ -63,7 +63,7 @@
     }
   }
 
-  function toggleNutrient(nutrientId: string) {
+  function toggleNutrient(nutrientId) {
     const index = settings.displayedNutrients.indexOf(nutrientId);
 
     if (index > -1) {
@@ -80,11 +80,11 @@
     }
   }
 
-  function isDisplayed(nutrientId: string): boolean {
+  function isDisplayed(nutrientId) {
     return settings.displayedNutrients.includes(nutrientId);
   }
 
-  function canSelectMore(): boolean {
+  function canSelectMore() {
     return settings.displayedNutrients.length < MAX_DISPLAYED;
   }
 
