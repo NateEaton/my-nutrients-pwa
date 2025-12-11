@@ -344,3 +344,57 @@ export const FDC_TO_NUTRIENT_MAP: Record<string, string> = NUTRIENT_METADATA.red
 export function getDefaultDisplayedNutrients(): string[] {
   return ['protein', 'calcium', 'fiber', 'vitaminD'];
 }
+
+/**
+ * Validation ranges for nutrient inputs (per serving)
+ * min: minimum acceptable value
+ * max: maximum reasonable value per serving
+ */
+export interface NutrientValidationRange {
+  min: number;
+  max: number;
+}
+
+export const NUTRIENT_VALIDATION_RANGES: Record<string, NutrientValidationRange> = {
+  // Macronutrients (g) - max based on typical serving sizes
+  protein: { min: 0, max: 200 },
+  fiber: { min: 0, max: 50 },
+  carbohydrates: { min: 0, max: 500 },
+  sugars: { min: 0, max: 200 },
+  fat: { min: 0, max: 200 },
+  saturatedFat: { min: 0, max: 100 },
+  monounsaturatedFat: { min: 0, max: 100 },
+  polyunsaturatedFat: { min: 0, max: 100 },
+
+  // Omega fatty acids (g)
+  omega3: { min: 0, max: 20 },
+  omega3ALA: { min: 0, max: 20 },
+  omega3EPA: { min: 0, max: 10 },
+  omega3DHA: { min: 0, max: 10 },
+  omega6: { min: 0, max: 50 },
+
+  // Minerals (mg)
+  calcium: { min: 0, max: 10000 },
+  magnesium: { min: 0, max: 5000 },
+  potassium: { min: 0, max: 10000 },
+  iron: { min: 0, max: 1000 },
+  zinc: { min: 0, max: 1000 },
+
+  // Vitamins - mcg units
+  vitaminD: { min: 0, max: 5000 }, // mcg
+  vitaminB12: { min: 0, max: 10000 }, // mcg
+  folate: { min: 0, max: 10000 }, // mcg DFE
+  vitaminA: { min: 0, max: 50000 }, // mcg RAE
+  vitaminK: { min: 0, max: 10000 }, // mcg
+
+  // Vitamins - mg units
+  vitaminB6: { min: 0, max: 1000 }, // mg
+  vitaminC: { min: 0, max: 10000 }, // mg
+};
+
+/**
+ * Get validation range for a specific nutrient
+ */
+export function getNutrientValidationRange(nutrientId: string): NutrientValidationRange {
+  return NUTRIENT_VALIDATION_RANGES[nutrientId] || { min: 0, max: 100000 };
+}

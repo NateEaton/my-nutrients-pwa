@@ -133,11 +133,20 @@ function calculatePortionNutrients(nutrientsPer100g, gramWeight) {
 // Format measure string from portion data
 function formatMeasure(portion) {
   const value = portion.value || 1;
-  const unitName = portion.measureUnit?.name || portion.measureUnit?.abbreviation || 'serving';
+  let unitName = portion.measureUnit?.name || portion.measureUnit?.abbreviation || 'serving';
   const modifier = portion.modifier || '';
 
+  // Filter out "undetermined" from unit name (USDA placeholder value)
+  if (unitName.toLowerCase() === 'undetermined') {
+    // Try abbreviation first, then fall back to modifier, then generic 'serving'
+    unitName = portion.measureUnit?.abbreviation || modifier || 'serving';
+  }
+
   let measure = `${value} ${unitName}`;
-  if (modifier) {
+  // Only add modifier if it exists, is not "undetermined", and is different from unitName
+  if (modifier &&
+      modifier.toLowerCase() !== 'undetermined' &&
+      modifier.toLowerCase() !== unitName.toLowerCase()) {
     measure += ` (${modifier})`;
   }
 

@@ -31,11 +31,10 @@ client_secret*.json
 source_data/.env
 
 # --- IDE / Editor --- Ignore common IDE and editor-specific directories
-.idea/ 
-.vscode/ 
+.idea/
+.vscode/
 *.swp
 .history/
-CLAUDE.md
 .claude
 
 # --- Logs --- Ignore log files

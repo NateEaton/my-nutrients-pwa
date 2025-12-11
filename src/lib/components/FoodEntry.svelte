@@ -19,13 +19,25 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import { formatCalcium } from "$lib/data/foodDatabase";
+  import { getNutrientLabel, getNutrientUnit } from "$lib/config/nutrientDefaults";
   import SourceIndicator from "./SourceIndicator.svelte";
   import MetadataPopup from "./MetadataPopup.svelte";
 
   export let food;
   export let index;
+  export let displayedNutrients = []; // Array of nutrient IDs to display
 
   const dispatch = createEventDispatcher();
+
+  // Format nutrients for display
+  $: nutrientValues = displayedNutrients
+    .map(nutrientId => {
+      const value = food.nutrients?.[nutrientId];
+      if (value === undefined || value === null) return null;
+      return `${value.toFixed(1)}${getNutrientUnit(nutrientId)} ${getNutrientLabel(nutrientId)}`;
+    })
+    .filter(Boolean)
+    .join(' | ');
 
   let showMetadataPopup = false;
 
@@ -69,11 +81,9 @@
           • {food.note}
         {/if}
       </div>
-    </div>
-
-    <div class="food-calcium">
-      <span class="calcium-amount">{formatCalcium(food.calcium)}</span>
-      <span class="calcium-unit">mg</span>
+      {#if nutrientValues}
+        <div class="food-nutrients">{nutrientValues}</div>
+      {/if}
     </div>
   </div>
 </div>
@@ -135,22 +145,11 @@
     color: var(--text-secondary);
   }
 
-  .food-calcium {
-    display: flex;
-    align-items: baseline;
-    gap: var(--spacing-xs);
-    flex-shrink: 0;
-  }
-
-  .calcium-amount {
-    font-size: var(--font-size-xl);
-    font-weight: bold;
+  .food-nutrients {
+    font-size: var(--font-size-sm);
     color: var(--primary-color);
-  }
-
-  .calcium-unit {
-    font-size: var(--font-size-xs);
-    color: var(--text-secondary);
+    margin-top: var(--spacing-xs);
+    font-weight: 500;
   }
 
 
@@ -168,8 +167,8 @@
       font-size: var(--font-size-base);
     }
 
-    .calcium-amount {
-      font-size: var(--font-size-lg);
+    .food-nutrients {
+      font-size: var(--font-size-xs);
     }
   }
 </style>

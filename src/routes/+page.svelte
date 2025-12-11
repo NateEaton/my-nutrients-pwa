@@ -17,6 +17,7 @@
 -->
 
 <script>
+  import { onMount } from "svelte";
   import {
     calciumState,
     foods,
@@ -28,10 +29,36 @@
   import SummaryCard from "$lib/components/SummaryCard.svelte";
   import SortControls from "$lib/components/SortControls.svelte";
   import AddFoodModal from "$lib/components/AddFoodModal.svelte";
+  import { getDefaultDisplayedNutrients, DEFAULT_NUTRIENT_GOALS } from "$lib/config/nutrientDefaults";
 
   let showAddModal = false;
   let editingFood = null;
   let editingIndex = -1;
+
+  // Multi-nutrient support
+  let nutrientSettings = {
+    nutrientGoals: {},
+    displayedNutrients: []
+  };
+
+  // Load nutrient settings on mount
+  onMount(async () => {
+    try {
+      nutrientSettings = await calciumService.getNutrientSettings();
+    } catch (error) {
+      console.error('Failed to load nutrient settings:', error);
+      // Use defaults
+      nutrientSettings = {
+        nutrientGoals: DEFAULT_NUTRIENT_GOALS,
+        displayedNutrients: getDefaultDisplayedNutrients()
+      };
+    }
+  });
+
+  // Calculate total nutrients from foods
+  $: totalNutrients = $foods.length > 0
+    ? calciumService.calculateTotalNutrients($foods)
+    : {};
 
   function handleAddFood() {
     editingFood = null;
@@ -90,8 +117,9 @@
   <!-- Summary Card -->
   <SummaryCard
     currentDate={$calciumState.currentDate}
-    dailyTotal={$dailyTotal}
-    dailyGoal={$dailyGoal}
+    totalNutrients={totalNutrients}
+    nutrientGoals={nutrientSettings.nutrientGoals}
+    displayedNutrients={nutrientSettings.displayedNutrients}
     on:dateChange={handleDateChange}
   />
 
@@ -107,6 +135,7 @@
         <FoodEntry
           {food}
           {index}
+          displayedNutrients={nutrientSettings.displayedNutrients}
           on:edit={handleEditFood}
           on:delete={handleDeleteFood}
         />
