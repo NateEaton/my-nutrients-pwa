@@ -244,31 +244,9 @@
       <p>Loading settings...</p>
     </div>
   {:else}
-    <!-- Goal Settings Section -->
+    <!-- Nutrition Section -->
     <div class="settings-section">
-      <h3 class="section-title">Goal</h3>
-
-      <div class="setting-item inline">
-        <span class="material-icons setting-icon">flag</span>
-        <div class="setting-info">
-          <span class="setting-title">Daily Calcium Target</span>
-          <span class="setting-subtitle">Your daily calcium goal in mg</span>
-        </div>
-        <div class="setting-control">
-          <input
-            type="number"
-            bind:value={dailyGoal}
-            min="100"
-            max="5000"
-            step="50"
-            class="goal-input"
-            on:focus={startEditing}
-            on:input={startEditing}
-            on:blur={saveDailyGoal}
-          />
-          <span class="input-suffix">mg</span>
-        </div>
-      </div>
+      <h3 class="section-title">Nutrition</h3>
 
       <button class="setting-nav-item" on:click={openNutrientModal}>
         <span class="material-icons setting-icon">science</span>
