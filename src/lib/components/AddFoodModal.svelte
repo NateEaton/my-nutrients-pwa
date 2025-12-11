@@ -1121,19 +1121,22 @@
                 {@const validationRange = getNutrientValidationRange(nutrientId)}
                 <div class="nutrient-input-item">
                   <label class="nutrient-input-label" for="nutrient-{nutrientId}">
-                    {getNutrientLabel(nutrientId)} ({getNutrientUnit(nutrientId)})
+                    {getNutrientLabel(nutrientId)}
                   </label>
-                  <input
-                    id="nutrient-{nutrientId}"
-                    type="number"
-                    class="form-input nutrient-input"
-                    bind:value={nutrientInputs[nutrientId]}
-                    placeholder="0"
-                    min={validationRange.min}
-                    max={validationRange.max}
-                    step="0.01"
-                    disabled={isSubmitting}
-                  />
+                  <div class="nutrient-input-with-unit">
+                    <input
+                      id="nutrient-{nutrientId}"
+                      type="number"
+                      class="form-input nutrient-input"
+                      bind:value={nutrientInputs[nutrientId]}
+                      placeholder="0"
+                      min={validationRange.min}
+                      max={validationRange.max}
+                      step="0.01"
+                      disabled={isSubmitting}
+                    />
+                    <span class="nutrient-unit">{getNutrientUnit(nutrientId)}</span>
+                  </div>
                 </div>
               {/each}
             </div>
@@ -1939,8 +1942,28 @@
     font-weight: 500;
   }
 
+  .nutrient-input-with-unit {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    position: relative;
+  }
+
   .nutrient-input {
-    width: 100%;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .nutrient-unit {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    font-weight: 500;
+    white-space: nowrap;
+    user-select: none;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--surface-variant);
+    border-radius: var(--spacing-xs);
+    border: 1px solid var(--divider);
   }
 
   @media (max-width: 30rem) {
