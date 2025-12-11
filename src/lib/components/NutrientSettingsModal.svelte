@@ -16,18 +16,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<script lang="ts">
-  import { createEventDispatcher, onMount } from "svelte";
+<script>
+  import { createEventDispatcher } from "svelte";
   import { calciumService } from "$lib/stores/calcium";
   import { NUTRIENT_METADATA, DEFAULT_NUTRIENT_GOALS } from "$lib/config/nutrientDefaults";
-  import type { NutrientSettings } from "$lib/types/nutrients";
 
   export let show = false;
 
   const dispatch = createEventDispatcher();
   const MAX_DISPLAYED = 4;
 
-  let settings: NutrientSettings = {
+  let settings = {
     nutrientGoals: {},
     displayedNutrients: [],
     theme: 'auto',
@@ -96,13 +95,13 @@
     }
   }
 
-  function handleBackdropClick(event: MouseEvent) {
+  function handleBackdropClick(event) {
     if (event.target === event.currentTarget) {
       handleClose();
     }
   }
 
-  async function handleSubmit(event: Event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
     if (isSubmitting) return;
