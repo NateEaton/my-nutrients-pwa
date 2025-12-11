@@ -344,10 +344,12 @@
     // Set up available measures for multi-measure selection
     availableMeasures = getAllMeasures(food);
     selectedMeasureIndex = 0; // Default to first measure
-    
+
     // Get selected measure (initially primary/first measure)
     const selectedMeasure = availableMeasures[selectedMeasureIndex];
-    calcium = selectedMeasure.calcium.toString();
+    // Handle both nutrients format and legacy format
+    const calciumValue = selectedMeasure.nutrients?.calcium ?? selectedMeasure.calcium ?? 0;
+    calcium = calciumValue.toString();
 
     // If this is a custom food, switch to custom mode
     if (food.isCustom) {
@@ -375,7 +377,9 @@
 
           // Manually apply the measure WITHOUT overwriting saved servingQuantity/servingUnit
           const selectedMeasure = availableMeasures[selectedMeasureIndex];
-          calcium = selectedMeasure.calcium.toString();
+          // Handle both nutrients format and legacy format
+          const calciumValue = selectedMeasure.nutrients?.calcium ?? selectedMeasure.calcium ?? 0;
+          calcium = calciumValue.toString();
           parsedFoodMeasure = unitConverter.parseUSDAMeasure(selectedMeasure.measure);
         }
 
@@ -401,8 +405,10 @@
   function handleMeasureSelection() {
     if (availableMeasures.length > 0) {
       const selectedMeasure = availableMeasures[selectedMeasureIndex];
-      calcium = selectedMeasure.calcium.toString();
-      
+      // Handle both nutrients format and legacy format
+      const calciumValue = selectedMeasure.nutrients?.calcium ?? selectedMeasure.calcium ?? 0;
+      calcium = calciumValue.toString();
+
       // Parse the new measure for unit conversion
       parsedFoodMeasure = unitConverter.parseUSDAMeasure(selectedMeasure.measure);
       
@@ -520,8 +526,11 @@
           const measure = measures[measureIndex];
           const parsedMeasure = unitConverter.parseUSDAMeasure(measure.measure);
 
+          // Get calcium value - handle both new nutrients format and legacy format
+          const baseCalcium = measure.nutrients?.calcium ?? measure.calcium ?? 0;
+
           // Calculate calcium for the preferred serving
-          const calciumPerBaseUnit = measure.calcium / parsedMeasure.originalQuantity;
+          const calciumPerBaseUnit = baseCalcium / parsedMeasure.originalQuantity;
           const preferredCalcium = calciumPerBaseUnit * savedPreference.preferredQuantity;
 
           return {
@@ -533,7 +542,17 @@
     }
 
     // No preference found - return primary measure
-    return getPrimaryMeasure(food);
+    const primaryMeasure = getPrimaryMeasure(food);
+
+    // Handle both new nutrients format and legacy format
+    if (primaryMeasure && !primaryMeasure.calcium && primaryMeasure.nutrients?.calcium) {
+      return {
+        ...primaryMeasure,
+        calcium: primaryMeasure.nutrients.calcium
+      };
+    }
+
+    return primaryMeasure;
   }
 
   function closeModal() {
@@ -1073,8 +1092,9 @@
               on:change={handleMeasureSelection}
             >
               {#each availableMeasures as measure, index}
+                {@const calciumValue = measure.nutrients?.calcium ?? measure.calcium ?? 0}
                 <option value={index}>
-                  {formatCalcium(measure.calcium)}mg per {measure.measure}
+                  {formatCalcium(calciumValue)}mg per {measure.measure}
                 </option>
               {/each}
             </select>
