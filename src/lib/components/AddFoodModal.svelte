@@ -57,6 +57,9 @@
   let servingQuantity = 1;
   let servingUnit = "serving";
 
+  // Multi-nutrient inputs for custom foods
+  let nutrientInputs = {}; // { nutrientId: value }
+
   // Current selected food data for unit conversion
   let currentFoodData = null;
   let selectedCustomFood = null; // Track selected custom food from search for serving preferences
@@ -198,6 +201,16 @@
       servingQuantity = editingFood.servingQuantity;
       servingUnit = editingFood.servingUnit;
 
+      // Initialize nutrient inputs from existing food
+      nutrientInputs = {};
+      if (editingFood.nutrients && typeof editingFood.nutrients === 'object') {
+        // Copy existing nutrients
+        nutrientInputs = { ...editingFood.nutrients };
+      } else if (editingFood.calcium) {
+        // Legacy format - only has calcium
+        nutrientInputs = { calcium: editingFood.calcium };
+      }
+
       // Store original calcium per unit for recalculation in edit mode
       currentFoodData = {
         name: editingFood.name,
@@ -234,6 +247,7 @@
       calcium = "";
       servingQuantity = 1;
       servingUnit = "serving";
+      nutrientInputs = {}; // Clear nutrient inputs
     }
     errorMessage = "";
     isSubmitting = false;
@@ -273,6 +287,7 @@
     showSearchResults = false;
     errorMessage = "";
     hasResetToOriginal = false;
+    nutrientInputs = {}; // Clear nutrient inputs when switching modes
 
     if (!isCustomMode) {
       // Focus food name input when switching to search mode
@@ -623,10 +638,40 @@
       return;
     }
 
-    const calciumValue = parseFloat(calcium);
-    if (isNaN(calciumValue) || calciumValue < 0 || calciumValue > 10000) {
-      errorMessage = "Please enter a calcium amount between 0 and 10,000 mg";
-      return;
+    // Validate nutrients based on mode
+    let calciumValue;
+    let nutrients = {};
+
+    if (isCustomMode) {
+      // Custom mode: validate multi-nutrient inputs
+      const hasAtLeastOneNutrient = Object.values(nutrientInputs).some(
+        value => value && parseFloat(value) > 0
+      );
+
+      if (!hasAtLeastOneNutrient) {
+        errorMessage = "Please enter at least one nutrient value";
+        return;
+      }
+
+      // Build nutrients object from inputs
+      for (const [nutrientId, value] of Object.entries(nutrientInputs)) {
+        const numValue = parseFloat(value);
+        if (!isNaN(numValue) && numValue > 0) {
+          nutrients[nutrientId] = numValue;
+        }
+      }
+
+      // Set calciumValue for backward compatibility
+      calciumValue = nutrients.calcium || 0;
+    } else {
+      // Database mode: validate single calcium value
+      calciumValue = parseFloat(calcium);
+      if (isNaN(calciumValue) || calciumValue < 0 || calciumValue > 10000) {
+        errorMessage = "Please enter a calcium amount between 0 and 10,000 mg";
+        return;
+      }
+      // For database mode, also build nutrients object for consistency
+      nutrients = { calcium: calciumValue };
     }
 
     if (!servingQuantity || servingQuantity <= 0) {
@@ -649,7 +694,8 @@
 
       const foodData = {
         name: foodName.trim(),
-        calcium: calciumValue,
+        calcium: calciumValue,  // Keep for backward compatibility
+        nutrients: nutrients,    // New multi-nutrient support
         servingQuantity: servingQuantity,
         servingUnit: servingUnit.trim(),
         isCustom: isCustomMode,
@@ -675,6 +721,7 @@
             await calciumService.addFood({
               name: existingFood.name,
               calcium: calciumValue,
+              nutrients: nutrients,
               servingQuantity: servingQuantity,
               servingUnit: servingUnit.trim(),
               isCustom: true,
@@ -703,7 +750,8 @@
 
           await calciumService.saveCustomFood({
             name: foodName.trim(),
-            calcium: calciumValue,
+            calcium: calciumValue,  // Keep for backward compatibility
+            nutrients: nutrients,    // New multi-nutrient support
             measure: `${servingQuantity} ${servingUnit.trim()}`,
             sourceMetadata: sourceMetadata
           });
@@ -1036,20 +1084,46 @@
           </div>
         {/if}
 
-        <div class="form-group">
-          <label class="form-label" for="calcium">Calcium (mg)</label>
-          <input
-            id="calcium"
-            type="number"
-            class="form-input"
-            bind:value={calcium}
-            placeholder="0"
-            min="0.00"
-            step="0.01"
-            disabled={isSubmitting ||
-              (!isCustomMode && !editingFood && !isSelectedFromSearch)}
-          />
-        </div>
+        <!-- Nutrient Inputs (Custom Mode) or Calcium (Database Mode) -->
+        {#if isCustomMode}
+          <div class="form-group">
+            <label class="form-label">Nutrients (enter at least one)</label>
+            <div class="nutrient-inputs-grid">
+              {#each displayedNutrients as nutrientId}
+                <div class="nutrient-input-item">
+                  <label class="nutrient-input-label" for="nutrient-{nutrientId}">
+                    {getNutrientLabel(nutrientId)} ({getNutrientUnit(nutrientId)})
+                  </label>
+                  <input
+                    id="nutrient-{nutrientId}"
+                    type="number"
+                    class="form-input nutrient-input"
+                    bind:value={nutrientInputs[nutrientId]}
+                    placeholder="0"
+                    min="0"
+                    step="0.01"
+                    disabled={isSubmitting}
+                  />
+                </div>
+              {/each}
+            </div>
+          </div>
+        {:else}
+          <div class="form-group">
+            <label class="form-label" for="calcium">Calcium (mg)</label>
+            <input
+              id="calcium"
+              type="number"
+              class="form-input"
+              bind:value={calcium}
+              placeholder="0"
+              min="0.00"
+              step="0.01"
+              disabled={isSubmitting ||
+                (!isCustomMode && !editingFood && !isSelectedFromSearch)}
+            />
+          </div>
+        {/if}
 
         <!-- Nutrient Preview Section -->
         {#if !isCustomMode && isSelectedFromSearch && Object.keys(calculatedNutrients).length > 0}
@@ -1826,6 +1900,36 @@
 
   @media (max-width: 30rem) {
     .nutrient-preview-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Nutrient Inputs Grid (Custom Food Mode) */
+  .nutrient-inputs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-sm);
+  }
+
+  .nutrient-input-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .nutrient-input-label {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .nutrient-input {
+    width: 100%;
+  }
+
+  @media (max-width: 30rem) {
+    .nutrient-inputs-grid {
       grid-template-columns: 1fr;
     }
   }
