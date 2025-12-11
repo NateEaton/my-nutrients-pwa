@@ -20,6 +20,8 @@
 import { FDC_CONFIG } from '$lib/config/fdc.js';
 import { HouseholdMeasureService } from './HouseholdMeasureService';
 import { logger } from '$lib/utils/logger';
+import { FDC_TO_NUTRIENT_MAP } from '$lib/config/nutrientDefaults';
+import type { NutrientValues } from '$lib/types/nutrients';
 
 interface FDCProduct {
   fdcId: number;
@@ -56,11 +58,17 @@ interface ParsedProduct {
   householdServingFullText?: string;
   smartServing?: any;
 
+  // Multi-nutrient support
+  nutrients: NutrientValues;
+  nutrientsPerServing: NutrientValues;
+
+  // Legacy calcium fields (for backward compatibility)
   calcium: string;
   calciumValue: number | null;
   calciumPercentDV?: number | null;
   calciumFromPercentDV?: number | null;
   calciumPerServing?: number | null;
+
   ingredients: string;
   confidence: string;
   rawData: FDCProduct;
@@ -247,40 +255,22 @@ export class FDCService {
         householdServingFullText: product.householdServingFullText
       });
 
-      // Extract calcium from labelNutrients and foodNutrients
-      let calcium = '';
-      let calciumValue = null;
+      // Extract all nutrients from the product
+      const nutrients = this.extractNutrients(product);
+      logger.debug('FDC', 'Extracted nutrients (per 100g):', nutrients);
 
-      logger.debug('FDC', 'Raw product data for calcium analysis:', {
-        labelNutrients: product.labelNutrients,
-        foodNutrients: product.foodNutrients ? product.foodNutrients.filter(n => n.nutrientName && n.nutrientName.toLowerCase().includes('calcium')) : null,
-        servingSize: product.servingSize,
-        servingSizeUnit: product.servingSizeUnit
-      });
+      // Calculate per-serving nutrients
+      const nutrientsPerServing = this.calculateNutrientsPerServing(
+        nutrients,
+        servingCount,
+        servingUnit
+      );
+      logger.debug('FDC', 'Calculated per-serving nutrients:', nutrientsPerServing);
 
-      // First try labelNutrients
-      if (product.labelNutrients && product.labelNutrients.calcium) {
-        calciumValue = product.labelNutrients.calcium.value;
-        if (calciumValue !== null && calciumValue !== undefined) {
-          calcium = `${calciumValue} mg`;
-          logger.debug('FDC', 'Found calcium in labelNutrients:', calcium);
-        }
-      }
-
-      // If no calcium in labelNutrients, check foodNutrients array
-      if (!calciumValue && product.foodNutrients) {
-        const calciumNutrient = product.foodNutrients.find(
-          nutrient => nutrient.nutrientNumber === "301" || // Calcium nutrient number
-                      nutrient.nutrientId === 301 || // Fallback to nutrientId
-                      (nutrient.nutrientName && nutrient.nutrientName.toLowerCase().includes('calcium'))
-        );
-
-        if (calciumNutrient && calciumNutrient.value) {
-          calciumValue = calciumNutrient.value;
-          calcium = `${calciumValue} mg`;
-          logger.debug('FDC', 'Found calcium in foodNutrients:', calcium);
-        }
-      }
+      // Legacy calcium support (for backward compatibility)
+      const calciumValue = nutrients.calcium || null;
+      const calcium = calciumValue ? `${calciumValue} mg` : '';
+      const calciumPerServing = nutrientsPerServing.calcium || null;
 
       // Extract calcium percent daily value from foodNutrients
       let calciumPercentDV = null;
@@ -295,31 +285,6 @@ export class FDCService {
           calciumPercentDV = calciumNutrient.percentDailyValue;
           // Calculate calcium amount from percent DV: (percentDV / 100) * 1300mg
           calciumFromPercentDV = Math.round((calciumPercentDV / 100) * 1300);
-        }
-      }
-
-      // Calculate per-serving calcium from API calcium (per 100g) and serving size
-      let calciumPerServing = null;
-      logger.debug('FDC', 'Per-serving calcium calculation check:');
-      logger.debug('FDC', `  - calciumValue: ${calciumValue} (type: ${typeof calciumValue})`);
-      logger.debug('FDC', `  - servingCount: ${servingCount} (type: ${typeof servingCount})`);
-      logger.debug('FDC', `  - servingUnit: "${servingUnit}" (type: ${typeof servingUnit})`);
-      logger.debug('FDC', `  - isVolumeOrMassUnit: ${this.householdMeasureService.isVolumeOrMassUnit(servingUnit)}`);
-
-      if (calciumValue && servingCount && this.householdMeasureService.isVolumeOrMassUnit(servingUnit)) {
-        // API calcium is per 100g, calculate for actual serving size
-        // Treating grams and milliliters as equivalent (1:1 density)
-        calciumPerServing = Math.round((calciumValue * servingCount) / 100);
-        logger.debug('FDC', `✅ Calculated per-serving calcium: ${calciumValue}mg/100g × ${servingCount}${servingUnit} / 100 = ${calciumPerServing}mg`);
-      } else {
-        logger.debug('FDC', '❌ Cannot calculate per-serving calcium - missing required data');
-        if (!calciumValue) logger.debug('FDC', '    Missing calciumValue');
-        if (!servingCount) logger.debug('FDC', '    Missing servingCount');
-        if (!this.householdMeasureService.isVolumeOrMassUnit(servingUnit)) logger.debug('FDC', `    Invalid servingUnit: "${servingUnit}"`);
-
-        // If we can't calculate per-serving, use the raw value as fallback
-        if (calciumValue) {
-          logger.debug('FDC', `Using raw calciumValue as fallback: ${calciumValue}mg`);
         }
       }
 
@@ -388,11 +353,17 @@ export class FDCService {
         householdServingFullText: product.householdServingFullText,
         smartServing: smartServingResult, // Include smart serving analysis
 
+        // Multi-nutrient support
+        nutrients: nutrients, // Per 100g values
+        nutrientsPerServing: nutrientsPerServing, // Per serving values
+
+        // Legacy calcium fields (for backward compatibility)
         calcium: calcium,
         calciumValue: calciumValue,
         calciumPercentDV: calciumPercentDV,
         calciumFromPercentDV: calciumFromPercentDV,
         calciumPerServing: calciumPerServing,
+
         ingredients: ingredients,
         confidence: 'high', // UPC lookups are always high confidence
         rawData: product // Include raw data for debugging
@@ -407,6 +378,75 @@ export class FDCService {
     }
   }
 
+
+  /**
+   * Extract all nutrients from USDA FDC product data
+   * @param product - Raw product data from FDC API
+   * @returns NutrientValues object with all available nutrients (per 100g)
+   */
+  private extractNutrients(product: FDCProduct): NutrientValues {
+    const nutrients: NutrientValues = {};
+
+    // Try labelNutrients first (if available)
+    if (product.labelNutrients) {
+      for (const [fdcId, nutrientKey] of Object.entries(FDC_TO_NUTRIENT_MAP)) {
+        const labelValue = product.labelNutrients[nutrientKey];
+        if (labelValue && labelValue.value != null) {
+          nutrients[nutrientKey] = parseFloat(labelValue.value);
+        }
+      }
+    }
+
+    // Then try foodNutrients array (more comprehensive)
+    if (product.foodNutrients && Array.isArray(product.foodNutrients)) {
+      for (const nutrient of product.foodNutrients) {
+        const nutrientId = nutrient.nutrientNumber || nutrient.nutrientId?.toString();
+        if (!nutrientId) continue;
+
+        const nutrientKey = FDC_TO_NUTRIENT_MAP[nutrientId];
+        if (nutrientKey && nutrient.value != null) {
+          // Only override if we don't already have a value, or if this value is more specific
+          if (!nutrients[nutrientKey]) {
+            nutrients[nutrientKey] = parseFloat(nutrient.value);
+          }
+        }
+      }
+    }
+
+    return nutrients;
+  }
+
+  /**
+   * Calculate per-serving nutrient values from per-100g values
+   * @param nutrients - Nutrient values per 100g
+   * @param servingCount - Serving size value (e.g., 240)
+   * @param servingUnit - Serving unit (e.g., "ml" or "g")
+   * @returns NutrientValues calculated for the serving size
+   */
+  private calculateNutrientsPerServing(
+    nutrients: NutrientValues,
+    servingCount: number,
+    servingUnit: string
+  ): NutrientValues {
+    const perServing: NutrientValues = {};
+
+    // Only calculate if we have valid serving size in mass/volume units
+    if (!servingCount || !this.householdMeasureService.isVolumeOrMassUnit(servingUnit)) {
+      logger.debug('FDC', 'Cannot calculate per-serving nutrients - invalid serving size');
+      return nutrients; // Return original per-100g values as fallback
+    }
+
+    // Calculate per-serving for each nutrient
+    // API values are per 100g, so: (value * servingCount) / 100
+    for (const [key, value] of Object.entries(nutrients)) {
+      if (value != null) {
+        perServing[key] = Math.round((value * servingCount) / 100 * 10) / 10; // Round to 1 decimal
+      }
+    }
+
+    logger.debug('FDC', `Calculated per-serving from ${servingCount}${servingUnit} (${Object.keys(perServing).length} nutrients)`);
+    return perServing;
+  }
 
   /**
    * Validate that a string looks like a UPC code

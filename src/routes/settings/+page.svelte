@@ -25,6 +25,7 @@
   import ExportModal from "$lib/components/ExportModal.svelte";
   import RestoreModal from "$lib/components/RestoreModal.svelte";
   import SyncSettingsModal from "$lib/components/SyncSettingsModal.svelte";
+  import NutrientSettingsModal from "$lib/components/NutrientSettingsModal.svelte";
 
   let dailyGoal = 1000;
   let selectedTheme = "auto";
@@ -34,6 +35,7 @@
   let showExportModal = false;
   let showRestoreModal = false;
   let showSyncModal = false;
+  let showNutrientModal = false;
 
   // Update UI when state changes (like after restore) but not during user input
   let isUserEditing = false;
@@ -190,6 +192,10 @@
     showSyncModal = true;
   }
 
+  function openNutrientModal() {
+    showNutrientModal = true;
+  }
+
   // PWA Update handling
   async function checkForUpdate() {
     try {
@@ -238,31 +244,18 @@
       <p>Loading settings...</p>
     </div>
   {:else}
-    <!-- Goal Settings Section -->
+    <!-- Nutrition Section -->
     <div class="settings-section">
-      <h3 class="section-title">Goal</h3>
+      <h3 class="section-title">Nutrition</h3>
 
-      <div class="setting-item inline">
-        <span class="material-icons setting-icon">flag</span>
+      <button class="setting-nav-item" on:click={openNutrientModal}>
+        <span class="material-icons setting-icon">science</span>
         <div class="setting-info">
-          <span class="setting-title">Daily Calcium Target</span>
-          <span class="setting-subtitle">Your daily calcium goal in mg</span>
+          <span class="setting-title">Manage Nutrients</span>
+          <span class="setting-subtitle">Choose which nutrients to track and set goals</span>
         </div>
-        <div class="setting-control">
-          <input
-            type="number"
-            bind:value={dailyGoal}
-            min="100"
-            max="5000"
-            step="50"
-            class="goal-input"
-            on:focus={startEditing}
-            on:input={startEditing}
-            on:blur={saveDailyGoal}
-          />
-          <span class="input-suffix">mg</span>
-        </div>
-      </div>
+        <span class="material-icons nav-chevron">chevron_right</span>
+      </button>
     </div>
 
     <!-- Appearance Section -->
@@ -441,6 +434,7 @@
 <BackupModal bind:show={showBackupModal} />
 <ExportModal bind:show={showExportModal} />
 <RestoreModal bind:show={showRestoreModal} />
+<NutrientSettingsModal bind:show={showNutrientModal} />
 {#if FEATURES.SYNC_ENABLED}
   <SyncSettingsModal bind:show={showSyncModal} />
 {/if}
