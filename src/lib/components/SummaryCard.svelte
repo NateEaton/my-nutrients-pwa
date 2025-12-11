@@ -20,18 +20,15 @@
   import { createEventDispatcher, onMount, onDestroy } from "svelte";
   import DatePicker from "./DatePicker.svelte";
   import { addDays } from "$lib/utils/dateUtils";
+  import { getNutrientLabel, getNutrientUnit } from "$lib/config/nutrientDefaults";
 
   export let currentDate;
-  export let dailyTotal;
-  export let dailyGoal;
+  export let totalNutrients = {}; // NutrientValues object
+  export let nutrientGoals = {}; // Record<string, number>
+  export let displayedNutrients = []; // string[] - max 4 nutrients to display
 
   const dispatch = createEventDispatcher();
   let summaryCardElement;
-
-  // Calculate progress percentage
-  $: actualPercentage = (dailyTotal / dailyGoal) * 100;
-  $: progressPercentage = Math.min(actualPercentage, 100);
-  $: displayPercentage = Math.round(actualPercentage);
 
   // Touch handling
   let touchStartX = 0;
@@ -116,33 +113,40 @@
 <div class="summary-card" bind:this={summaryCardElement}>
   <DatePicker {currentDate} on:dateChange={handleDateChange} />
 
-  <div class="calcium-summary">
-    <div class="summary-numbers">
-      <div class="current-section">
-        <div class="current-amount">{Math.round(dailyTotal)}</div>
-        <div class="current-label">Total</div>
+  <div class="nutrients-summary">
+    {#if displayedNutrients.length === 0}
+      <div class="no-nutrients-message">
+        <p>No nutrients selected. Go to Settings to choose nutrients to track.</p>
       </div>
+    {:else}
+      <div class="nutrients-grid" class:single={displayedNutrients.length === 1} class:two={displayedNutrients.length === 2} class:three={displayedNutrients.length === 3} class:four={displayedNutrients.length === 4}>
+        {#each displayedNutrients as nutrientId}
+          {@const total = totalNutrients[nutrientId] || 0}
+          {@const goal = nutrientGoals[nutrientId] || 0}
+          {@const percent = goal > 0 ? (total / goal) * 100 : 0}
+          {@const progressPercent = Math.min(percent, 100)}
 
-      <div class="progress-section">
-        <div class="progress-bar-container">
-          <div class="progress-bar">
-            <div
-              class="progress-fill"
-              class:incomplete={actualPercentage < 100}
-              style="width: {progressPercentage}%"
-            ></div>
+          <div class="nutrient-card">
+            <div class="nutrient-header">
+              <span class="nutrient-name">{getNutrientLabel(nutrientId)}</span>
+            </div>
+            <div class="nutrient-value">{total.toFixed(1)}<span class="unit">{getNutrientUnit(nutrientId)}</span></div>
+            <div class="progress-bar-container">
+              <div class="progress-bar">
+                <div
+                  class="progress-fill"
+                  class:incomplete={percent < 100}
+                  style="width: {progressPercent}%"
+                ></div>
+              </div>
+            </div>
+            <div class="nutrient-goal">
+              {percent.toFixed(0)}% of {goal}{getNutrientUnit(nutrientId)}
+            </div>
           </div>
-          <div class="progress-text">{displayPercentage}%</div>
-        </div>
+        {/each}
       </div>
-
-      <div class="goal-section">
-        <div class="goal-display">
-          <div class="goal-amount">{dailyGoal}</div>
-          <div class="goal-label">Goal</div>
-        </div>
-      </div>
-    </div>
+    {/if}
   </div>
 </div>
 
@@ -156,62 +160,83 @@
     box-shadow: var(--shadow);
   }
 
-  .calcium-summary {
+  .nutrients-summary {
     margin-top: var(--spacing-lg);
   }
 
-  .summary-numbers {
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    gap: var(--spacing-lg);
-    align-items: center;
-  }
-
-  .current-section,
-  .goal-section {
+  .no-nutrients-message {
     text-align: center;
-  }
-
-  .current-amount,
-  .goal-amount {
-    font-size: var(--font-size-2xl);
-    font-weight: bold;
-    line-height: 1;
-    margin-bottom: var(--spacing-xs);
-    color: var(--text-primary);
-  }
-
-  .current-label,
-  .goal-label {
-    font-size: var(--font-size-sm);
+    padding: var(--spacing-xl);
     color: var(--text-secondary);
+  }
+
+  .nutrients-grid {
+    display: grid;
+    gap: var(--spacing-md);
+  }
+
+  /* Grid layouts based on number of nutrients */
+  .nutrients-grid.single {
+    grid-template-columns: 1fr;
+  }
+
+  .nutrients-grid.two {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .nutrients-grid.three {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .nutrients-grid.four {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .nutrient-card {
+    background: var(--surface-variant);
+    border-radius: var(--spacing-sm);
+    padding: var(--spacing-md);
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
     gap: var(--spacing-xs);
   }
 
-  .goal-display {
+  .nutrient-header {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    padding: var(--spacing-sm);
   }
 
-  .progress-section {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-sm);
+  .nutrient-name {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .nutrient-value {
+    font-size: var(--font-size-2xl);
+    font-weight: bold;
+    color: var(--text-primary);
+    line-height: 1;
+  }
+
+  .nutrient-value .unit {
+    font-size: var(--font-size-sm);
+    font-weight: normal;
+    color: var(--text-secondary);
+    margin-left: var(--spacing-xs);
   }
 
   .progress-bar-container {
-    position: relative;
+    margin: var(--spacing-xs) 0;
   }
 
   .progress-bar {
     width: 100%;
-    height: var(--spacing-sm); /* 8px equivalent */
-    background: var(--surface-variant);
+    height: 6px;
+    background: var(--background);
     border-radius: var(--spacing-xs);
     overflow: hidden;
   }
@@ -227,28 +252,37 @@
     background: var(--error-color);
   }
 
-  .progress-text {
-    text-align: center;
-    font-size: var(--font-size-sm);
-    font-weight: 500;
+  .nutrient-goal {
+    font-size: var(--font-size-xs);
     color: var(--text-secondary);
+    text-align: left;
   }
 
   /* Mobile responsive */
-  @media (max-width: 30rem) { /* 480px equivalent */
-    .summary-numbers {
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: var(--spacing-sm);
+  @media (max-width: 48rem) { /* 768px equivalent - tablet */
+    .nutrients-grid.three {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 30rem) { /* 480px equivalent - mobile */
+    .summary-card {
+      padding: var(--spacing-md) var(--spacing-lg);
+      margin: var(--spacing-md);
     }
 
-    .current-amount,
-    .goal-amount {
+    .nutrients-grid.two,
+    .nutrients-grid.three,
+    .nutrients-grid.four {
+      grid-template-columns: 1fr;
+    }
+
+    .nutrient-card {
+      padding: var(--spacing-sm) var(--spacing-md);
+    }
+
+    .nutrient-value {
       font-size: var(--font-size-xl);
-    }
-
-    .current-label,
-    .goal-label {
-      font-size: var(--font-size-xs);
     }
   }
 </style>
