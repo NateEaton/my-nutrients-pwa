@@ -270,14 +270,14 @@
         </div>
       </div>
 
-      <div class="setting-item clickable" on:click={openNutrientModal}>
+      <button class="setting-nav-item" on:click={openNutrientModal}>
         <span class="material-icons setting-icon">science</span>
         <div class="setting-info">
           <span class="setting-title">Manage Nutrients</span>
           <span class="setting-subtitle">Choose which nutrients to track and set goals</span>
         </div>
-        <span class="material-icons chevron">chevron_right</span>
-      </div>
+        <span class="material-icons nav-chevron">chevron_right</span>
+      </button>
     </div>
 
     <!-- Appearance Section -->
