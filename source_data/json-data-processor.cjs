@@ -137,7 +137,8 @@ function formatMeasure(portion) {
   const modifier = portion.modifier || '';
 
   let measure = `${value} ${unitName}`;
-  if (modifier) {
+  // Only add modifier if it exists and is not "undetermined" (USDA placeholder value)
+  if (modifier && modifier.toLowerCase() !== 'undetermined') {
     measure += ` (${modifier})`;
   }
 

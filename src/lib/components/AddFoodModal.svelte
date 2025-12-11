@@ -27,7 +27,7 @@
   import SmartScanModal from './SmartScanModal.svelte';
   import SourceIndicator from "./SourceIndicator.svelte";
   import { logger } from '$lib/utils/logger';
-  import { getNutrientLabel, getNutrientUnit, getDefaultDisplayedNutrients } from "$lib/config/nutrientDefaults";
+  import { getNutrientLabel, getNutrientUnit, getDefaultDisplayedNutrients, getNutrientValidationRange } from "$lib/config/nutrientDefaults";
 
   /** Whether the modal is visible */
   export let show = false;
@@ -672,10 +672,18 @@
         return;
       }
 
-      // Build nutrients object from inputs
+      // Build nutrients object from inputs and validate each value
       for (const [nutrientId, value] of Object.entries(nutrientInputs)) {
         const numValue = parseFloat(value);
         if (!isNaN(numValue) && numValue > 0) {
+          // Validate against range for this nutrient
+          const range = getNutrientValidationRange(nutrientId);
+          if (numValue < range.min || numValue > range.max) {
+            const unit = getNutrientUnit(nutrientId);
+            const label = getNutrientLabel(nutrientId);
+            errorMessage = `${label} must be between ${range.min} and ${range.max} ${unit}`;
+            return;
+          }
           nutrients[nutrientId] = numValue;
         }
       }
@@ -1110,6 +1118,7 @@
             <label class="form-label">Nutrients (enter at least one)</label>
             <div class="nutrient-inputs-grid">
               {#each displayedNutrients as nutrientId}
+                {@const validationRange = getNutrientValidationRange(nutrientId)}
                 <div class="nutrient-input-item">
                   <label class="nutrient-input-label" for="nutrient-{nutrientId}">
                     {getNutrientLabel(nutrientId)} ({getNutrientUnit(nutrientId)})
@@ -1120,7 +1129,8 @@
                     class="form-input nutrient-input"
                     bind:value={nutrientInputs[nutrientId]}
                     placeholder="0"
-                    min="0"
+                    min={validationRange.min}
+                    max={validationRange.max}
                     step="0.01"
                     disabled={isSubmitting}
                   />
