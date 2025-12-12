@@ -78,15 +78,16 @@ export class SearchService {
    * Enhanced search with word boundary detection and multi-keyword requirements
    */
   static searchFoods(
-    query: string, 
-    foods: any[], 
+    query: string,
+    foods: any[],
     options: SearchOptions = {}
   ): SearchResult[] {
     if (!query || query.length < 2) return [];
 
     const searchContext = this.createSearchContext(query, options);
+    console.log(`[SEARCH] Query: "${query}", Favorites Set:`, Array.from(searchContext.favorites));
     const results = this.performEnhancedSearch(foods, searchContext);
-    
+
     return this.rankAndLimit(results, options);
   }
 
@@ -218,6 +219,8 @@ export class SearchService {
 
     // Prioritize favorites (highest priority)
     if (context.favorites.has(food.id)) {
+      console.log(`[SEARCH] Food "${food.name}" (ID: ${food.id}, type: ${typeof food.id}) is a FAVORITE - adding ${this.SCORING.FAVORITE_BONUS} bonus points`);
+      console.log(`[SEARCH] Favorites Set contains (IDs and types):`, Array.from(context.favorites).map(id => `${id} (${typeof id})`));
       score += this.SCORING.FAVORITE_BONUS;
     }
 
@@ -260,9 +263,15 @@ export class SearchService {
 
   private static rankAndLimit(results: SearchResult[], options: SearchOptions): SearchResult[] {
     const maxResults = options.maxResults || 15;
-    
-    return results
-      .sort((a, b) => b.score - a.score)
-      .slice(0, maxResults);
+
+    const sorted = results.sort((a, b) => b.score - a.score);
+
+    // Log top 5 results for debugging
+    console.log(`[SEARCH] Top 5 results:`);
+    sorted.slice(0, 5).forEach((result, index) => {
+      console.log(`  ${index + 1}. "${result.food.name}" (ID: ${result.food.id}) - Score: ${result.score}`);
+    });
+
+    return sorted.slice(0, maxResults);
   }
 }
