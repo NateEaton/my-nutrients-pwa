@@ -1372,13 +1372,13 @@ private async clearAllData(): Promise<void> {
       // Handle both old (single calcium field) and new (nutrients object) formats
       let foodNutrients: any = {};
 
-      // Check if this is old format with calcium field
-      if ('calcium' in food && typeof food.calcium === 'number') {
-        foodNutrients = { calcium: food.calcium };
-      }
-      // Check if this is new format with nutrients object
-      else if ('nutrients' in food && food.nutrients) {
+      // Prioritize new format (nutrients object)
+      if ('nutrients' in food && food.nutrients) {
         foodNutrients = food.nutrients;
+      }
+      // Fall back to old format (calcium field only) for legacy data
+      else if ('calcium' in food && typeof food.calcium === 'number') {
+        foodNutrients = { calcium: food.calcium };
       }
 
       // Aggregate all nutrients
