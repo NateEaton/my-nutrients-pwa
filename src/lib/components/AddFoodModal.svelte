@@ -193,12 +193,24 @@
         calculatedNutrients = { calcium: editingFood.calcium };
       }
 
-      // Store original calcium per unit for recalculation in edit mode
+      // Store original nutrients per unit for recalculation in edit mode
+      const nutrientsPerUnit = {};
+      if (editingFood.nutrients && typeof editingFood.nutrients === 'object') {
+        // Calculate all nutrients per unit
+        for (const [nutrientId, value] of Object.entries(editingFood.nutrients)) {
+          if (value && typeof value === 'number') {
+            nutrientsPerUnit[nutrientId] = parseFloat((value / editingFood.servingQuantity).toFixed(4));
+          }
+        }
+      } else if (editingFood.calcium) {
+        // Legacy format - only has calcium
+        nutrientsPerUnit.calcium = parseFloat((editingFood.calcium / editingFood.servingQuantity).toFixed(4));
+      }
+
       currentFoodData = {
         name: editingFood.name,
-        calcium: parseFloat(
-          (editingFood.calcium / editingFood.servingQuantity).toFixed(2)
-        ), // calcium per unit
+        calcium: nutrientsPerUnit.calcium || 0, // Backward compatibility
+        nutrients: nutrientsPerUnit, // All nutrients per unit
         measure: `1 ${editingFood.servingUnit}`,
         isCustom: editingFood.isCustom || false,
       };
@@ -432,8 +444,11 @@
       } else if (selectedMeasure.calcium !== undefined) {
         baseNutrients = { calcium: selectedMeasure.calcium };
       }
+    } else if (currentFoodData.nutrients && typeof currentFoodData.nutrients === 'object') {
+      // Fall back to currentFoodData nutrients (edit mode or custom foods)
+      baseNutrients = { ...currentFoodData.nutrients };
     } else if (currentFoodData.calcium !== undefined) {
-      // Fall back to currentFoodData for legacy foods
+      // Legacy fallback - only has calcium
       baseNutrients = { calcium: currentFoodData.calcium };
     }
 

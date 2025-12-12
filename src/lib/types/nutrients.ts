@@ -57,6 +57,7 @@ export interface NutrientValues {
 
 export interface FoodEntry {
   name: string;
+  calcium?: number; // Backward compatibility - deprecated, use nutrients.calcium
   nutrients: NutrientValues;
   servingQuantity: number;
   servingUnit: string;
