@@ -88,21 +88,25 @@
     if (!currentFoodData || !isSelectedFromSearch) return {};
 
     const selectedMeasure = availableMeasures[selectedMeasureIndex];
-    if (!selectedMeasure) return {};
+    if (!selectedMeasure || !parsedFoodMeasure) return {};
 
     // Handle both new multi-nutrient format and legacy calcium-only format
     const result = {};
+
+    // The measure's nutrients are for parsedFoodMeasure.originalQuantity units
+    // Scale proportionally if user changes serving quantity
+    const scaleFactor = servingQuantity / (parsedFoodMeasure.originalQuantity || 1);
 
     if (selectedMeasure.nutrients && typeof selectedMeasure.nutrients === 'object') {
       // New format: has nutrients object
       for (const [nutrientId, baseValue] of Object.entries(selectedMeasure.nutrients)) {
         if (baseValue && typeof baseValue === 'number') {
-          result[nutrientId] = baseValue * servingQuantity;
+          result[nutrientId] = baseValue * scaleFactor;
         }
       }
     } else if (selectedMeasure.calcium !== undefined) {
       // Legacy format: only has calcium
-      result.calcium = selectedMeasure.calcium * servingQuantity;
+      result.calcium = selectedMeasure.calcium * scaleFactor;
     }
 
     return result;
