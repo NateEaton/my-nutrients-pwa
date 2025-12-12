@@ -1894,15 +1894,7 @@
       font-size: var(--font-size-base);
     }
 
-    .unit-suggestions-list {
-      flex-direction: column;
-      gap: var(--spacing-xs);
-    }
-
-    .unit-suggestion {
-      width: 100%;
-      text-align: center;
-    }
+    /* Keep unit suggestions in horizontal row on mobile to save vertical space */
   }
 
   /* Multi-measure styles */
