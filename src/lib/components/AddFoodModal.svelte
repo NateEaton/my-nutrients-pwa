@@ -83,34 +83,8 @@
   // Multi-nutrient support
   let displayedNutrients = getDefaultDisplayedNutrients();
 
-  // Calculate nutrient preview based on current selection and serving size
-  $: calculatedNutrients = (() => {
-    if (!currentFoodData || !isSelectedFromSearch) return {};
-
-    const selectedMeasure = availableMeasures[selectedMeasureIndex];
-    if (!selectedMeasure || !parsedFoodMeasure) return {};
-
-    // Handle both new multi-nutrient format and legacy calcium-only format
-    const result = {};
-
-    // The measure's nutrients are for parsedFoodMeasure.originalQuantity units
-    // Scale proportionally if user changes serving quantity
-    const scaleFactor = servingQuantity / (parsedFoodMeasure.originalQuantity || 1);
-
-    if (selectedMeasure.nutrients && typeof selectedMeasure.nutrients === 'object') {
-      // New format: has nutrients object
-      for (const [nutrientId, baseValue] of Object.entries(selectedMeasure.nutrients)) {
-        if (baseValue && typeof baseValue === 'number') {
-          result[nutrientId] = baseValue * scaleFactor;
-        }
-      }
-    } else if (selectedMeasure.calcium !== undefined) {
-      // Legacy format: only has calcium
-      result.calcium = selectedMeasure.calcium * scaleFactor;
-    }
-
-    return result;
-  })();
+  // Calculated nutrients for preview (updated by updateCalculatedNutrients)
+  let calculatedNutrients = {};
 
   // Create a temporary food object for source indicator display
   $: displayFoodForIndicator = (() => {
@@ -398,9 +372,10 @@
       // Use cleaned unit for better display (handles descriptive and compound units)
       servingUnit =
         parsedFoodMeasure.cleanedUnit || parsedFoodMeasure.detectedUnit;
-    }
 
-    updateUnitSuggestions();
+      // Calculate initial nutrients for the default serving
+      updateCalculatedNutrients();
+    }
 
     searchResults = [];
     showSearchResults = false;
@@ -425,69 +400,87 @@
     }
   }
 
-  function updateCalcium() {
-    if (currentFoodData && servingQuantity && parsedFoodMeasure) {
-      // For multi-measure foods, get calcium from the currently selected measure
-      let baseCalcium;
-      if (availableMeasures.length > 0 && selectedMeasureIndex < availableMeasures.length) {
-        // Use calcium from the currently selected measure, handling both formats
-        const selectedMeasure = availableMeasures[selectedMeasureIndex];
-        baseCalcium = selectedMeasure.nutrients?.calcium ?? selectedMeasure.calcium ?? 0;
-      } else {
-        // Fall back to currentFoodData.calcium for legacy foods or when no measures available
-        baseCalcium = currentFoodData.calcium;
-      }
+  function updateCalculatedNutrients() {
+    if (!currentFoodData || !servingQuantity || !parsedFoodMeasure) {
+      calculatedNutrients = {};
+      calcium = "";
+      return;
+    }
 
-      // For descriptive measures or unknown unit types, use simple proportional calculation
-      if (
-        parsedFoodMeasure.isDescriptive ||
-        parsedFoodMeasure.unitType === "unknown"
-      ) {
-        const newCalcium = parseFloat(
-          (
-            (baseCalcium * servingQuantity) /
-            parsedFoodMeasure.originalQuantity
-          ).toFixed(2)
-        );
-        calcium = newCalcium.toString();
-        return;
+    // Get base nutrients from the currently selected measure
+    let baseNutrients = {};
+    if (availableMeasures.length > 0 && selectedMeasureIndex < availableMeasures.length) {
+      const selectedMeasure = availableMeasures[selectedMeasureIndex];
+      // Handle both multi-nutrient format and legacy calcium-only format
+      if (selectedMeasure.nutrients && typeof selectedMeasure.nutrients === 'object') {
+        baseNutrients = { ...selectedMeasure.nutrients };
+      } else if (selectedMeasure.calcium !== undefined) {
+        baseNutrients = { calcium: selectedMeasure.calcium };
       }
+    } else if (currentFoodData.calcium !== undefined) {
+      // Fall back to currentFoodData for legacy foods
+      baseNutrients = { calcium: currentFoodData.calcium };
+    }
 
+    const result = {};
+
+    // For descriptive measures or unknown unit types, use simple proportional calculation
+    if (
+      parsedFoodMeasure.isDescriptive ||
+      parsedFoodMeasure.unitType === "unknown"
+    ) {
+      const scaleFactor = servingQuantity / parsedFoodMeasure.originalQuantity;
+      for (const [nutrientId, baseValue] of Object.entries(baseNutrients)) {
+        if (baseValue && typeof baseValue === 'number') {
+          result[nutrientId] = parseFloat((baseValue * scaleFactor).toFixed(2));
+        }
+      }
+    } else {
       try {
         // For compound units like "container (6 oz)", handle conversion specially
         if (parsedFoodMeasure.isCompound) {
           // For compound units, user quantity changes are simple proportional
-          const newCalcium = parseFloat(
-            (
-              (baseCalcium * servingQuantity) /
-              parsedFoodMeasure.originalQuantity
-            ).toFixed(2)
-          );
-          calcium = newCalcium.toString();
+          const scaleFactor = servingQuantity / parsedFoodMeasure.originalQuantity;
+          for (const [nutrientId, baseValue] of Object.entries(baseNutrients)) {
+            if (baseValue && typeof baseValue === 'number') {
+              result[nutrientId] = parseFloat((baseValue * scaleFactor).toFixed(2));
+            }
+          }
         } else {
           // Use UnitConverter for regular convertible units
-          const newCalcium = unitConverter.calculateCalciumForConvertedUnits(
-            baseCalcium,
-            parsedFoodMeasure.originalQuantity,
-            parsedFoodMeasure.detectedUnit,
-            servingQuantity,
-            servingUnit
-          );
-          calcium = newCalcium.toString();
+          for (const [nutrientId, baseValue] of Object.entries(baseNutrients)) {
+            if (baseValue && typeof baseValue === 'number') {
+              const newValue = unitConverter.calculateCalciumForConvertedUnits(
+                baseValue,
+                parsedFoodMeasure.originalQuantity,
+                parsedFoodMeasure.detectedUnit,
+                servingQuantity,
+                servingUnit
+              );
+              result[nutrientId] = newValue;
+            }
+          }
         }
       } catch (error) {
         // Fallback to simple calculation if unit conversion fails
-        const newCalcium = parseFloat(
-          (
-            (baseCalcium * servingQuantity) /
-            parsedFoodMeasure.originalQuantity
-          ).toFixed(2)
-        );
-        calcium = newCalcium.toString();
+        const scaleFactor = servingQuantity / parsedFoodMeasure.originalQuantity;
+        for (const [nutrientId, baseValue] of Object.entries(baseNutrients)) {
+          if (baseValue && typeof baseValue === 'number') {
+            result[nutrientId] = parseFloat((baseValue * scaleFactor).toFixed(2));
+          }
+        }
       }
     }
 
+    calculatedNutrients = result;
+    calcium = (result.calcium || 0).toString();
+
     updateUnitSuggestions();
+  }
+
+  // Legacy function name for backward compatibility (just calls the new function)
+  function updateCalcium() {
+    updateCalculatedNutrients();
   }
 
   function updateUnitSuggestions() {
