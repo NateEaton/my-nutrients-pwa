@@ -475,6 +475,13 @@
     calculatedNutrients = result;
     calcium = (result.calcium || 0).toString();
 
+    // Populate nutrient inputs for database mode (allows user override)
+    if (!isCustomMode && isSelectedFromSearch) {
+      for (const [nutrientId, value] of Object.entries(result)) {
+        nutrientInputs[nutrientId] = value;
+      }
+    }
+
     updateUnitSuggestions();
   }
 
@@ -689,20 +696,34 @@
       // Set calciumValue for backward compatibility
       calciumValue = nutrients.calcium || 0;
     } else {
-      // Database mode: use calculated nutrients from reactive statement
-      if (Object.keys(calculatedNutrients).length > 0) {
-        // Use calculated nutrients from selected food and serving size
-        nutrients = { ...calculatedNutrients };
-        calciumValue = nutrients.calcium || 0;
-      } else {
-        // Fallback to calcium variable for legacy or edge cases
-        calciumValue = parseFloat(calcium);
-        if (isNaN(calciumValue) || calciumValue < 0 || calciumValue > 10000) {
-          errorMessage = "Please enter a calcium amount between 0 and 10,000 mg";
-          return;
-        }
-        nutrients = { calcium: calciumValue };
+      // Database mode: use nutrient inputs (allows user override of calculated values)
+      const hasAtLeastOneNutrient = Object.values(nutrientInputs).some(
+        value => value && parseFloat(value) > 0
+      );
+
+      if (!hasAtLeastOneNutrient) {
+        errorMessage = "Please select a food with nutrient data";
+        return;
       }
+
+      // Build nutrients object from inputs and validate each value
+      for (const [nutrientId, value] of Object.entries(nutrientInputs)) {
+        const numValue = parseFloat(value);
+        if (!isNaN(numValue) && numValue > 0) {
+          // Validate against range for this nutrient
+          const range = getNutrientValidationRange(nutrientId);
+          if (numValue < range.min || numValue > range.max) {
+            const unit = getNutrientUnit(nutrientId);
+            const label = getNutrientLabel(nutrientId);
+            errorMessage = `${label} must be between ${range.min} and ${range.max} ${unit}`;
+            return;
+          }
+          nutrients[nutrientId] = numValue;
+        }
+      }
+
+      // Set calciumValue for backward compatibility
+      calciumValue = nutrients.calcium || 0;
     }
 
     if (!servingQuantity || servingQuantity <= 0) {
@@ -1104,9 +1125,8 @@
               on:change={handleMeasureSelection}
             >
               {#each availableMeasures as measure, index}
-                {@const calciumValue = measure.nutrients?.calcium ?? measure.calcium ?? 0}
                 <option value={index}>
-                  {formatCalcium(calciumValue)}mg per {measure.measure}
+                  {measure.measure}
                 </option>
               {/each}
             </select>
@@ -1147,17 +1167,33 @@
           </div>
         {/if}
 
-        <!-- Nutrient Preview Section -->
+        <!-- Nutrient Inputs (Normal/Database Mode) -->
         {#if !isCustomMode && isSelectedFromSearch && Object.keys(calculatedNutrients).length > 0}
-          <div class="nutrient-preview">
-            <h4 class="nutrient-preview-title">Nutrients per serving</h4>
-            <div class="nutrient-preview-grid">
+          <div class="form-group">
+            <label class="form-label">Nutrients per serving</label>
+            <div class="nutrient-inputs-grid">
               {#each displayedNutrients as nutrientId}
                 {@const value = calculatedNutrients[nutrientId]}
                 {#if value !== undefined && value !== null}
-                  <div class="nutrient-preview-item">
-                    <span class="nutrient-preview-label">{getNutrientLabel(nutrientId)}</span>
-                    <span class="nutrient-preview-value">{value.toFixed(1)} {getNutrientUnit(nutrientId)}</span>
+                  {@const validationRange = getNutrientValidationRange(nutrientId)}
+                  <div class="nutrient-input-item">
+                    <label class="nutrient-input-label" for="nutrient-db-{nutrientId}">
+                      {getNutrientLabel(nutrientId)}
+                    </label>
+                    <div class="nutrient-input-with-unit">
+                      <input
+                        id="nutrient-db-{nutrientId}"
+                        type="number"
+                        class="form-input nutrient-input"
+                        bind:value={nutrientInputs[nutrientId]}
+                        placeholder="0"
+                        min={validationRange.min}
+                        max={validationRange.max}
+                        step="0.01"
+                        disabled={isSubmitting}
+                      />
+                      <span class="nutrient-unit">{getNutrientUnit(nutrientId)}</span>
+                    </div>
                   </div>
                 {/if}
               {/each}
