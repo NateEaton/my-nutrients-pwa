@@ -1163,7 +1163,7 @@
                       {/if}
                     </div>
                     <div class="search-item-details">
-                      {formatCalcium(getSearchResultDisplay(food).calcium)}mg per {getSearchResultDisplay(food).measure}
+                      {getSearchResultDisplay(food).measure}
                       {#if hasMultipleMeasures(food)}
                         <span class="measure-count">({getAllMeasures(food).length} servings)</span>
                       {/if}
