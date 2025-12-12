@@ -896,14 +896,16 @@
 
           const hasNutrientOverrides = Object.keys(nutrientOverrides).length > 0;
 
-          if (
-            hasResetToOriginal ||
-            (!quantityChanged && !unitChanged && !measureIndexChanged && !hasNutrientOverrides)
-          ) {
-            // User reset to original or values match default - delete any existing preference
+          // Determine if we should save a preference
+          const hasMultipleMeasures = availableMeasures.length > 1;
+          const isAddingFood = !editingFood; // Not editing an existing food
+          const hasChanges = quantityChanged || unitChanged || measureIndexChanged || hasNutrientOverrides;
+
+          if (hasResetToOriginal) {
+            // User explicitly reset to original - delete preference
             await calciumService.deleteServingPreference(foodToSave.id);
-          } else if (quantityChanged || unitChanged || measureIndexChanged || hasNutrientOverrides) {
-            // Save preference if user changed quantity, unit, measure selection, OR nutrients
+          } else if (hasChanges) {
+            // User made changes - save preference
             await calciumService.saveServingPreference(
               foodToSave.id,
               servingQuantity,
@@ -911,6 +913,18 @@
               selectedMeasureIndex,  // Include measure index for multi-measure foods
               hasNutrientOverrides ? nutrientOverrides : undefined  // Include nutrient overrides if present
             );
+          } else if (hasMultipleMeasures && isAddingFood) {
+            // Multi-measure food being added with default - save preference to simplify future adds
+            await calciumService.saveServingPreference(
+              foodToSave.id,
+              servingQuantity,
+              servingUnit,
+              selectedMeasureIndex,
+              undefined  // No nutrient overrides
+            );
+          } else if (!hasChanges) {
+            // No changes and not a multi-measure add - delete any existing preference
+            await calciumService.deleteServingPreference(foodToSave.id);
           }
         }
 
