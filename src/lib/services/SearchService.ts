@@ -85,7 +85,6 @@ export class SearchService {
     if (!query || query.length < 2) return [];
 
     const searchContext = this.createSearchContext(query, options);
-    console.log(`[SEARCH] Query: "${query}", Favorites Set:`, Array.from(searchContext.favorites));
     const results = this.performEnhancedSearch(foods, searchContext);
 
     return this.rankAndLimit(results, options);
@@ -217,16 +216,8 @@ export class SearchService {
   private static applyBonuses(food: any, context: SearchContext, baseScore: number, analysis: KeywordAnalysis): number {
     let score = baseScore;
 
-    // Debug: log every food being scored if favorites Set is not empty
-    if (context.favorites.size > 0 && food.name.toLowerCase().includes('beef')) {
-      console.log(`[SEARCH] Checking food "${food.name}" (ID: ${food.id}, type: ${typeof food.id})`);
-      console.log(`[SEARCH] Is in favorites?`, context.favorites.has(food.id));
-      console.log(`[SEARCH] Favorites Set:`, Array.from(context.favorites).map(id => `${id} (${typeof id})`));
-    }
-
     // Prioritize favorites (highest priority)
     if (context.favorites.has(food.id)) {
-      console.log(`[SEARCH] ✓ Food "${food.name}" (ID: ${food.id}) IS A FAVORITE - adding ${this.SCORING.FAVORITE_BONUS} bonus points`);
       score += this.SCORING.FAVORITE_BONUS;
     }
 
@@ -272,14 +263,8 @@ export class SearchService {
   private static rankAndLimit(results: SearchResult[], options: SearchOptions): SearchResult[] {
     const maxResults = options.maxResults || 15;
 
-    const sorted = results.sort((a, b) => b.score - a.score);
-
-    // Log top 5 results for debugging
-    console.log(`[SEARCH] Top 5 results:`);
-    sorted.slice(0, 5).forEach((result, index) => {
-      console.log(`  ${index + 1}. "${result.food.name}" (ID: ${result.food.id}) - Score: ${result.score}`);
-    });
-
-    return sorted.slice(0, maxResults);
+    return results
+      .sort((a, b) => b.score - a.score)
+      .slice(0, maxResults);
   }
 }

@@ -1470,12 +1470,10 @@ private async clearAllData(): Promise<void> {
    * @throws Error if foodId is invalid
    */
   async toggleFavorite(foodId: number): Promise<void> {
-    console.log(`[FAVORITES] toggleFavorite called with ID: ${foodId} (type: ${typeof foodId})`);
-
     if (!this.db) return;
 
     if (!foodId || typeof foodId !== 'number' || foodId <= 0) {
-      console.error('[FAVORITES] ❌ Invalid foodId for toggleFavorite:', foodId, `(type: ${typeof foodId})`);
+      console.error('Invalid foodId for toggleFavorite:', foodId);
       showToast('Cannot favorite this food', 'error');
       return;
     }
@@ -1485,7 +1483,6 @@ private async clearAllData(): Promise<void> {
 
     const food = this.foodDatabase.find(f => f.id === foodId);
     const foodName = food ? food.name : `Food ID ${foodId}`;
-    console.log(`[FAVORITES] Found food: "${foodName}", currently favorited:`, favorites.has(foodId));
 
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction(['favorites'], 'readwrite');
@@ -1518,8 +1515,6 @@ private async clearAllData(): Promise<void> {
 
         request.onsuccess = () => {
           favorites.add(foodId);
-          console.log(`[FAVORITES] ✓ Added favorite: "${foodName}" (ID: ${foodId}, type: ${typeof foodId})`);
-          console.log(`[FAVORITES] Current favorites Set:`, Array.from(favorites));
           calciumState.update(state => ({ ...state, favorites }));
           resolve();
 
@@ -1547,7 +1542,6 @@ private async clearAllData(): Promise<void> {
       request.onsuccess = () => {
         const favoriteRecords = request.result || [];
         const favorites = new Set(favoriteRecords.map((record: any) => record.foodId));
-        console.log(`[FAVORITES] Loaded ${favorites.size} favorites from IndexedDB:`, Array.from(favorites).map(id => `${id} (${typeof id})`));
 
         calciumState.update(state => ({ ...state, favorites }));
         resolve();
