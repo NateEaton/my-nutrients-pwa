@@ -535,15 +535,25 @@
           const measure = measures[measureIndex];
           const parsedMeasure = unitConverter.parseUSDAMeasure(measure.measure);
 
-          // Get calcium value - handle both new nutrients format and legacy format
-          const baseCalcium = measure.nutrients?.calcium ?? measure.calcium ?? 0;
+          // Calculate ALL nutrients for the preferred serving (not just calcium)
+          const scaleFactor = savedPreference.preferredQuantity / parsedMeasure.originalQuantity;
+          const preferredNutrients = {};
 
-          // Calculate calcium for the preferred serving
-          const calciumPerBaseUnit = baseCalcium / parsedMeasure.originalQuantity;
-          const preferredCalcium = calciumPerBaseUnit * savedPreference.preferredQuantity;
+          // Handle both new multi-nutrient format and legacy calcium-only format
+          if (measure.nutrients && typeof measure.nutrients === 'object') {
+            for (const [nutrientId, baseValue] of Object.entries(measure.nutrients)) {
+              if (baseValue && typeof baseValue === 'number') {
+                preferredNutrients[nutrientId] = baseValue * scaleFactor;
+              }
+            }
+          } else if (measure.calcium !== undefined) {
+            // Legacy format
+            preferredNutrients.calcium = measure.calcium * scaleFactor;
+          }
 
           return {
-            calcium: preferredCalcium,
+            calcium: preferredNutrients.calcium || 0, // Backward compatibility
+            nutrients: preferredNutrients,
             measure: `${savedPreference.preferredQuantity} ${savedPreference.preferredUnit}`
           };
         }
