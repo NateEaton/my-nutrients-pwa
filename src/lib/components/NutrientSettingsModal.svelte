@@ -157,13 +157,15 @@
         <h2 class="modal-title">Manage Nutrients</h2>
       </div>
 
-      <div class="modal-body">
-        {#if isLoading}
+      {#if isLoading}
+        <div class="modal-body">
           <div class="loading-state">
             <p>Loading settings...</p>
           </div>
-        {:else}
-          <form on:submit={handleSubmit}>
+        </div>
+      {:else}
+        <form on:submit={handleSubmit} class="modal-form">
+          <div class="modal-body">
             <div class="section-header">
               <h3>Display Preferences</h3>
               <p class="hint">Select up to {MAX_DISPLAYED} nutrients to display in food cards</p>
@@ -215,27 +217,27 @@
             {#if errorMessage}
               <div class="error-message">{errorMessage}</div>
             {/if}
+          </div>
 
-            <div class="modal-actions">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                on:click={resetToDefaults}
-                disabled={isSubmitting}
-              >
-                Reset to Defaults
-              </button>
-              <button
-                type="submit"
-                class="btn btn-primary"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Saving..." : "Save Settings"}
-              </button>
-            </div>
-          </form>
-        {/if}
-      </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              on:click={resetToDefaults}
+              disabled={isSubmitting}
+            >
+              Reset to Defaults
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Saving..." : "Save Settings"}
+            </button>
+          </div>
+        </form>
+      {/if}
     </div>
   </div>
 {/if}
@@ -253,6 +255,8 @@
     justify-content: center;
     z-index: 1000;
     padding: 1rem;
+    touch-action: none; /* Prevent touch scrolling on backdrop */
+    overscroll-behavior: contain; /* Prevent scroll chaining to background */
   }
 
   .modal-content {
@@ -264,10 +268,19 @@
     display: flex;
     flex-direction: column;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden; /* Prevent content from overflowing rounded corners */
   }
 
   .nutrient-settings-modal {
     max-width: 700px;
+  }
+
+  .modal-form {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden; /* Prevent overflow */
+    min-height: 0; /* Allow flexbox to shrink */
   }
 
   .modal-header {
@@ -276,6 +289,7 @@
     padding: 1rem;
     border-bottom: 1px solid var(--border);
     gap: 0.5rem;
+    flex-shrink: 0; /* Keep header fixed size */
   }
 
   .back-btn {
@@ -311,6 +325,7 @@
     padding: 1.5rem;
     overflow-y: auto;
     flex: 1;
+    min-height: 0; /* Allow flexbox to shrink below content size */
   }
 
   .loading-state {
@@ -441,13 +456,14 @@
     text-align: center;
   }
 
-  .modal-actions {
+  .modal-footer {
     display: flex;
     gap: 1rem;
     justify-content: flex-end;
-    margin-top: 2rem;
-    padding-top: 1rem;
+    padding: 1rem 1.5rem;
     border-top: 1px solid var(--border);
+    flex-shrink: 0; /* Keep footer fixed size */
+    background-color: var(--surface);
   }
 
   .btn {
@@ -485,9 +501,14 @@
   }
 
   @media (max-width: 640px) {
+    .modal-overlay {
+      padding: 0; /* Full screen on mobile */
+    }
+
     .modal-content {
       max-width: 100%;
       max-height: 100vh;
+      height: 100vh; /* Full viewport height on mobile */
       border-radius: 0;
     }
 
@@ -506,8 +527,9 @@
       flex: 1;
     }
 
-    .modal-actions {
+    .modal-footer {
       flex-direction: column;
+      gap: 0.75rem;
     }
 
     .btn {
