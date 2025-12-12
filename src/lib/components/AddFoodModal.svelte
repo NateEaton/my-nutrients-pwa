@@ -1416,6 +1416,8 @@
     justify-content: center;
     z-index: 1000;
     padding: var(--spacing-lg);
+    touch-action: none; /* Prevent touch scrolling on backdrop */
+    overscroll-behavior: contain; /* Prevent scroll chaining to background */
   }
 
   .modal-content {
@@ -2086,10 +2088,7 @@
     border: 1px solid var(--divider);
   }
 
-  @media (max-width: 30rem) {
-    .nutrient-inputs-grid {
-      grid-template-columns: 1fr;
-    }
-  }
+  /* Keep 2-column layout on mobile for nutrients (2x2 grid for 4 nutrients) */
+  /* Removed single-column override to keep buttons visible on mobile */
 
 </style>
