@@ -161,6 +161,7 @@ export interface UserServingPreference {
   preferredUnit: string;
   lastUsed: string;
   preferredMeasureIndex?: number; // Optional: index of preferred measure for multi-measure foods
+  nutrientOverrides?: NutrientValues; // Optional: user-edited nutrient values that override calculated values
 }
 
 export interface JournalEntry {

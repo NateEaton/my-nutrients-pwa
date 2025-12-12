@@ -201,7 +201,7 @@
                           bind:value={settings.nutrientGoals[nutrient.id]}
                           placeholder={nutrient.defaultGoal.toString()}
                           min="0"
-                          step="0.1"
+                          step="0.01"
                           class="goal-input"
                         />
                         <span class="unit">{nutrient.unit}</span>

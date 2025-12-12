@@ -37,12 +37,14 @@
 
   // Multi-nutrient support
   let nutrientSettings = {
-    nutrientGoals: {},
-    displayedNutrients: []
+    nutrientGoals: DEFAULT_NUTRIENT_GOALS,
+    displayedNutrients: getDefaultDisplayedNutrients()
   };
 
-  // Load nutrient settings on mount
-  onMount(async () => {
+  // Load nutrient settings on mount and when modal closes (in case settings changed)
+  onMount(loadNutrientSettings);
+
+  async function loadNutrientSettings() {
     try {
       nutrientSettings = await calciumService.getNutrientSettings();
     } catch (error) {
@@ -53,7 +55,7 @@
         displayedNutrients: getDefaultDisplayedNutrients()
       };
     }
-  });
+  }
 
   // Calculate total nutrients from foods
   $: totalNutrients = $foods.length > 0

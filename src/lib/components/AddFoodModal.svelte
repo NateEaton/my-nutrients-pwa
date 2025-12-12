@@ -365,8 +365,19 @@
           parsedFoodMeasure = unitConverter.parseUSDAMeasure(selectedMeasure.measure);
         }
 
-        // Recalculate calcium for preferred serving
+        // Recalculate nutrients for preferred serving
         updateCalcium();
+
+        // Apply nutrient overrides if present (user-edited values)
+        if (savedPreference.nutrientOverrides && Object.keys(savedPreference.nutrientOverrides).length > 0) {
+          for (const [nutrientId, overrideValue] of Object.entries(savedPreference.nutrientOverrides)) {
+            calculatedNutrients[nutrientId] = overrideValue;
+            nutrientInputs[nutrientId] = overrideValue;
+            if (nutrientId === 'calcium') {
+              calcium = overrideValue.toString();
+            }
+          }
+        }
       }
     }
 
@@ -549,6 +560,13 @@
           } else if (measure.calcium !== undefined) {
             // Legacy format
             preferredNutrients.calcium = measure.calcium * scaleFactor;
+          }
+
+          // Apply nutrient overrides if present (user-edited values take precedence)
+          if (savedPreference.nutrientOverrides && Object.keys(savedPreference.nutrientOverrides).length > 0) {
+            for (const [nutrientId, overrideValue] of Object.entries(savedPreference.nutrientOverrides)) {
+              preferredNutrients[nutrientId] = overrideValue;
+            }
           }
 
           return {
@@ -845,19 +863,38 @@
           const unitChanged = servingUnit !== defaultUnit;
           const measureIndexChanged = availableMeasures.length > 1 && selectedMeasureIndex !== defaultMeasureIndex;
 
+          // Detect nutrient overrides (user manually edited calculated values)
+          const nutrientOverrides = {};
+          if (!isCustomMode && isSelectedFromSearch && Object.keys(calculatedNutrients).length > 0) {
+            for (const [nutrientId, calculatedValue] of Object.entries(calculatedNutrients)) {
+              const inputValue = nutrientInputs[nutrientId];
+              if (inputValue !== undefined && inputValue !== null) {
+                const numInputValue = parseFloat(inputValue);
+                const numCalculatedValue = parseFloat(calculatedValue);
+                // Check if user edited the value (with small epsilon for floating point comparison)
+                if (!isNaN(numInputValue) && Math.abs(numInputValue - numCalculatedValue) > 0.01) {
+                  nutrientOverrides[nutrientId] = numInputValue;
+                }
+              }
+            }
+          }
+
+          const hasNutrientOverrides = Object.keys(nutrientOverrides).length > 0;
+
           if (
             hasResetToOriginal ||
-            (!quantityChanged && !unitChanged && !measureIndexChanged)
+            (!quantityChanged && !unitChanged && !measureIndexChanged && !hasNutrientOverrides)
           ) {
             // User reset to original or values match default - delete any existing preference
             await calciumService.deleteServingPreference(foodToSave.id);
-          } else if (quantityChanged || unitChanged || measureIndexChanged) {
-            // Save preference if user changed quantity, unit, OR measure selection
+          } else if (quantityChanged || unitChanged || measureIndexChanged || hasNutrientOverrides) {
+            // Save preference if user changed quantity, unit, measure selection, OR nutrients
             await calciumService.saveServingPreference(
               foodToSave.id,
               servingQuantity,
               servingUnit,
-              selectedMeasureIndex  // Include measure index for multi-measure foods
+              selectedMeasureIndex,  // Include measure index for multi-measure foods
+              hasNutrientOverrides ? nutrientOverrides : undefined  // Include nutrient overrides if present
             );
           }
         }
