@@ -237,7 +237,9 @@ export class SearchService {
 
     // Boost score for foods with higher calcium content (use primary measure for compatibility)
     const primaryMeasure = getPrimaryMeasure(food);
-    score += Math.log(primaryMeasure.calcium + 1) * this.SCORING.CALCIUM_BONUS_MULTIPLIER;
+    // Handle both legacy format (measure.calcium) and new format (measure.nutrients.calcium)
+    const calciumValue = primaryMeasure.nutrients?.calcium ?? primaryMeasure.calcium ?? 0;
+    score += Math.log(calciumValue + 1) * this.SCORING.CALCIUM_BONUS_MULTIPLIER;
 
     return score;
   }
