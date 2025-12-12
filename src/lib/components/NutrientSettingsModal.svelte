@@ -461,22 +461,22 @@
   }
 
   .btn-secondary {
-    background-color: var(--surface);
-    color: var(--text-primary);
-    border: 1px solid var(--border);
+    background-color: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--divider);
   }
 
   .btn-secondary:hover:not(:disabled) {
-    background-color: var(--border);
+    background-color: var(--divider);
   }
 
   .btn-primary {
-    background-color: var(--primary);
+    background-color: var(--primary-color);
     color: white;
   }
 
   .btn-primary:hover:not(:disabled) {
-    opacity: 0.9;
+    background-color: var(--primary-color-dark);
   }
 
   .btn:disabled {
