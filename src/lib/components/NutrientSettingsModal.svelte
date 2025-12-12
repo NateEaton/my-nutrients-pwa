@@ -155,6 +155,7 @@
           <span class="material-icons">arrow_back</span>
         </button>
         <h2 class="modal-title">Manage Nutrients</h2>
+        <div class="header-spacer"></div>
       </div>
 
       {#if isLoading}
@@ -284,29 +285,33 @@
   }
 
   .modal-header {
-    display: flex;
+    display: grid;
+    grid-template-columns: 48px 1fr 48px;
     align-items: center;
-    padding: 1rem;
-    border-bottom: 1px solid var(--border);
-    gap: 0.5rem;
+    padding: var(--spacing-lg);
+    background-color: var(--primary-color);
+    color: white;
+    min-height: 64px;
     flex-shrink: 0; /* Keep header fixed size */
   }
 
   .back-btn {
     background: none;
     border: none;
-    color: var(--text-primary);
+    color: white;
     cursor: pointer;
-    padding: 0.5rem;
+    padding: var(--spacing-sm);
+    border-radius: 50%;
+    transition: background-color 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    transition: background-color 0.2s;
+    min-width: 48px;
+    min-height: 48px;
   }
 
   .back-btn:hover {
-    background-color: var(--border);
+    background-color: var(--hover-overlay);
   }
 
   .back-btn:disabled {
@@ -316,9 +321,13 @@
 
   .modal-title {
     margin: 0;
-    font-size: 1.25rem;
+    font-size: var(--font-size-xl);
     font-weight: 600;
-    color: var(--text-primary);
+    text-align: left;
+  }
+
+  .header-spacer {
+    /* Balances the back button */
   }
 
   .modal-body {
