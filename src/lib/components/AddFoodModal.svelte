@@ -174,6 +174,7 @@
     if (editingFood) {
       // Edit mode - populate with existing data
       isCustomMode = editingFood.isCustom || false;
+      isSelectedFromSearch = !editingFood.isCustom; // Set true for database foods
       foodName = editingFood.name;
       calcium = editingFood.calcium.toString();
       servingQuantity = editingFood.servingQuantity;
@@ -181,12 +182,15 @@
 
       // Initialize nutrient inputs from existing food
       nutrientInputs = {};
+      calculatedNutrients = {};
       if (editingFood.nutrients && typeof editingFood.nutrients === 'object') {
-        // Copy existing nutrients
+        // Copy existing nutrients to both inputs and calculated
         nutrientInputs = { ...editingFood.nutrients };
+        calculatedNutrients = { ...editingFood.nutrients };
       } else if (editingFood.calcium) {
         // Legacy format - only has calcium
         nutrientInputs = { calcium: editingFood.calcium };
+        calculatedNutrients = { calcium: editingFood.calcium };
       }
 
       // Store original calcium per unit for recalculation in edit mode
