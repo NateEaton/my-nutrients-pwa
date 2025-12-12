@@ -217,10 +217,16 @@ export class SearchService {
   private static applyBonuses(food: any, context: SearchContext, baseScore: number, analysis: KeywordAnalysis): number {
     let score = baseScore;
 
+    // Debug: log every food being scored if favorites Set is not empty
+    if (context.favorites.size > 0 && food.name.toLowerCase().includes('beef')) {
+      console.log(`[SEARCH] Checking food "${food.name}" (ID: ${food.id}, type: ${typeof food.id})`);
+      console.log(`[SEARCH] Is in favorites?`, context.favorites.has(food.id));
+      console.log(`[SEARCH] Favorites Set:`, Array.from(context.favorites).map(id => `${id} (${typeof id})`));
+    }
+
     // Prioritize favorites (highest priority)
     if (context.favorites.has(food.id)) {
-      console.log(`[SEARCH] Food "${food.name}" (ID: ${food.id}, type: ${typeof food.id}) is a FAVORITE - adding ${this.SCORING.FAVORITE_BONUS} bonus points`);
-      console.log(`[SEARCH] Favorites Set contains (IDs and types):`, Array.from(context.favorites).map(id => `${id} (${typeof id})`));
+      console.log(`[SEARCH] ✓ Food "${food.name}" (ID: ${food.id}) IS A FAVORITE - adding ${this.SCORING.FAVORITE_BONUS} bonus points`);
       score += this.SCORING.FAVORITE_BONUS;
     }
 
