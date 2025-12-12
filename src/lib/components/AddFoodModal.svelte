@@ -426,8 +426,9 @@
       // For multi-measure foods, get calcium from the currently selected measure
       let baseCalcium;
       if (availableMeasures.length > 0 && selectedMeasureIndex < availableMeasures.length) {
-        // Use calcium from the currently selected measure
-        baseCalcium = availableMeasures[selectedMeasureIndex].calcium;
+        // Use calcium from the currently selected measure, handling both formats
+        const selectedMeasure = availableMeasures[selectedMeasureIndex];
+        baseCalcium = selectedMeasure.nutrients?.calcium ?? selectedMeasure.calcium ?? 0;
       } else {
         // Fall back to currentFoodData.calcium for legacy foods or when no measures available
         baseCalcium = currentFoodData.calcium;
@@ -691,14 +692,20 @@
       // Set calciumValue for backward compatibility
       calciumValue = nutrients.calcium || 0;
     } else {
-      // Database mode: validate single calcium value
-      calciumValue = parseFloat(calcium);
-      if (isNaN(calciumValue) || calciumValue < 0 || calciumValue > 10000) {
-        errorMessage = "Please enter a calcium amount between 0 and 10,000 mg";
-        return;
+      // Database mode: use calculated nutrients from reactive statement
+      if (Object.keys(calculatedNutrients).length > 0) {
+        // Use calculated nutrients from selected food and serving size
+        nutrients = { ...calculatedNutrients };
+        calciumValue = nutrients.calcium || 0;
+      } else {
+        // Fallback to calcium variable for legacy or edge cases
+        calciumValue = parseFloat(calcium);
+        if (isNaN(calciumValue) || calciumValue < 0 || calciumValue > 10000) {
+          errorMessage = "Please enter a calcium amount between 0 and 10,000 mg";
+          return;
+        }
+        nutrients = { calcium: calciumValue };
       }
-      // For database mode, also build nutrients object for consistency
-      nutrients = { calcium: calciumValue };
     }
 
     if (!servingQuantity || servingQuantity <= 0) {
