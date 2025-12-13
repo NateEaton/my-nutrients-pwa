@@ -106,9 +106,18 @@
   }
 
   function getNutrientValue(food, nutrientId) {
-    const measure = getPrimaryMeasure(food);
+    // Access the full measure object directly, not through getPrimaryMeasure
+    // which only returns {measure, calcium}
+    let measureObj;
+    if (food.measures && Array.isArray(food.measures) && food.measures.length > 0) {
+      measureObj = food.measures[0];
+    } else {
+      // Legacy format: food has direct properties
+      measureObj = food;
+    }
+
     // Support both new (nutrients object) and legacy (direct calcium property) formats
-    const value = measure.nutrients?.[nutrientId] ?? measure[nutrientId] ?? 0;
+    const value = measureObj.nutrients?.[nutrientId] ?? measureObj[nutrientId] ?? 0;
     return value;
   }
 
