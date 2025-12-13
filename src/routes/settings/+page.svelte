@@ -17,7 +17,7 @@
 -->
 
 <script>
-  import { calciumState, showToast, calciumService } from "$lib/stores/calcium";
+  import { nutrientState, showToast, nutrientService } from "$lib/stores/calcium";
   import { pwaUpdateAvailable, pwaUpdateFunction } from "$lib/stores/pwa";
   import { onMount } from "svelte";
   import { FEATURES } from "$lib/utils/featureFlags";
@@ -41,13 +41,13 @@
   let isUserEditing = false;
 
   // Only update from state when user is not actively editing
-  $: if (!isUserEditing && $calciumState.settings?.dailyGoal !== undefined) {
-    dailyGoal = $calciumState.settings.dailyGoal;
+  $: if (!isUserEditing && $nutrientState.settings?.dailyGoal !== undefined) {
+    dailyGoal = $nutrientState.settings.dailyGoal;
   }
 
   onMount(async () => {
     try {
-      const settings = await calciumService.getSettings();
+      const settings = await nutrientService.getSettings();
       dailyGoal = settings.dailyGoal;
       selectedTheme = settings.theme || "auto";
       selectedColorScheme = settings.colorScheme || "blue";
@@ -69,7 +69,7 @@
   async function saveDailyGoal() {
     isUserEditing = false; // Allow state updates again
 
-    if (!calciumService) return;
+    if (!nutrientService) return;
 
     // Validate goal range
     if (dailyGoal < 100 || dailyGoal > 5000) {
@@ -78,7 +78,7 @@
     }
 
     try {
-      await calciumService.updateSettings({ dailyGoal });
+      await nutrientService.updateSettings({ dailyGoal });
       showToast("Daily goal updated", "success");
     } catch (error) {
       console.error("Error saving daily goal:", error);
@@ -101,10 +101,10 @@
   }
 
   async function saveTheme() {
-    if (!calciumService) return;
+    if (!nutrientService) return;
 
     try {
-      await calciumService.updateSettings({ theme: selectedTheme });
+      await nutrientService.updateSettings({ theme: selectedTheme });
       applyTheme(selectedTheme);
       showToast("Theme updated", "success");
     } catch (error) {
@@ -160,10 +160,10 @@
 
   // Update color scheme setting
   async function updateColorScheme(newScheme) {
-    if (!calciumService) return;
+    if (!nutrientService) return;
 
     try {
-      await calciumService.updateSettings({ colorScheme: newScheme });
+      await nutrientService.updateSettings({ colorScheme: newScheme });
       selectedColorScheme = newScheme;
 
       // Apply the color scheme immediately

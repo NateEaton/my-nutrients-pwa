@@ -18,7 +18,7 @@
 
 <script>
   import { onMount, onDestroy, afterUpdate } from "svelte";
-  import { calciumState, calciumService } from "$lib/stores/calcium";
+  import { nutrientState, nutrientService } from "$lib/stores/calcium";
   import { goto } from "$app/navigation";
   import { formatDate, isToday, getTodayString } from "$lib/utils/dateUtils";
   import { NUTRIENT_METADATA, getNutrientLabel, getNutrientUnit, getDefaultDisplayedNutrients } from "$lib/config/nutrientDefaults";
@@ -134,7 +134,7 @@
   onMount(async () => {
     // Load nutrient settings
     try {
-      nutrientSettings = await calciumService.getNutrientSettings();
+      nutrientSettings = await nutrientService.getNutrientSettings();
       // Default to first displayed nutrient
       if (nutrientSettings.displayedNutrients && nutrientSettings.displayedNutrients.length > 0) {
         selectedNutrient = nutrientSettings.displayedNutrients[0];
@@ -231,7 +231,7 @@
   }
 
   async function loadDataForView() {
-    const allData = await calciumService.getAllJournalData();
+    const allData = await nutrientService.getAllJournalData();
 
     switch (currentView) {
       case "daily":

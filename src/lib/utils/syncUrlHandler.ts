@@ -19,7 +19,7 @@
 // src/lib/utils/syncUrlHandler.ts
 
 import { SyncService } from '$lib/services/SyncService';
-import { showToast } from '$lib/stores/calcium';
+import { showToast } from '$lib/stores/nutrients';
 
 /**
  * Utility class for handling sync URLs that allow users to join existing

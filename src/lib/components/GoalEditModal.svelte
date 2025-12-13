@@ -18,7 +18,7 @@
 
 <script>
   import { createEventDispatcher } from "svelte";
-  import { calciumState, calciumService } from "$lib/stores/calcium";
+  import { nutrientState, nutrientService } from "$lib/stores/calcium";
 
   export let show = false;
   export let currentGoal = 1000;
@@ -67,7 +67,7 @@
 
     try {
       // Update goal via service
-      await calciumService.updateSettings({ dailyGoal: newGoal });
+      await nutrientService.updateSettings({ dailyGoal: newGoal });
       
       // Close modal and dispatch success
       show = false;

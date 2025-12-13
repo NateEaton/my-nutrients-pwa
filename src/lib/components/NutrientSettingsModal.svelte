@@ -18,7 +18,7 @@
 
 <script>
   import { createEventDispatcher } from "svelte";
-  import { calciumService } from "$lib/stores/calcium";
+  import { nutrientService } from "$lib/stores/calcium";
   import { NUTRIENT_METADATA, DEFAULT_NUTRIENT_GOALS } from "$lib/config/nutrientDefaults";
 
   export let show = false;
@@ -54,7 +54,7 @@
     isLoading = true;
     errorMessage = "";
     try {
-      settings = await calciumService.getNutrientSettings();
+      settings = await nutrientService.getNutrientSettings();
     } catch (error) {
       console.error("Error loading nutrient settings:", error);
       errorMessage = "Failed to load settings";
@@ -123,7 +123,7 @@
     errorMessage = "";
 
     try {
-      await calciumService.updateNutrientSettings(settings);
+      await nutrientService.updateNutrientSettings(settings);
 
       show = false;
       dispatch("updated", { settings });

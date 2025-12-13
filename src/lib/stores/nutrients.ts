@@ -24,7 +24,7 @@
 import { writable, derived, get } from 'svelte/store';
 import type { CalciumSettings } from '$lib/types/calcium';
 import type { FoodEntry, CustomFood, UserServingPreference } from '$lib/types/nutrients';
-import { CalciumService } from '$lib/services/CalciumService';
+import { NutrientService } from '$lib/services/NutrientService';
 
 // CalciumState interface (kept here for backward compatibility)
 interface CalciumState {
@@ -57,9 +57,9 @@ function getTodayString(): string {
 }
 
 // Main application state
-export const calciumState = writable<CalciumState>({
+export const nutrientState = writable<CalciumState>({
   currentDate: getTodayString(),
-  foods: [], // This array will be sorted in-place by CalciumService
+  foods: [], // This array will be sorted in-place by NutrientService
   customFoods: [],
   favorites: new Set<number>(),
   hiddenFoods: new Set<number>(),
@@ -75,42 +75,42 @@ export const calciumState = writable<CalciumState>({
 
 // Derived stores for computed values
 export const dailyTotal = derived(
-  calciumState,
+  nutrientState,
   ($state) => $state.foods.reduce((sum, food) => sum + food.calcium, 0)
 );
 
 export const goalProgress = derived(
-  [dailyTotal, calciumState],
+  [dailyTotal, nutrientState],
   ([$total, $state]) => Math.min(Math.round(($total / $state.settings.dailyGoal) * 100), 100)
 );
 
 // REMOVED: sortedFoods derived store - foods array is now sorted in-place
-// The foods array in calciumState is maintained in sorted order by CalciumService
+// The foods array in nutrientState is maintained in sorted order by NutrientService
 
-// Shared CalciumService instance 
-export const calciumService = new CalciumService();
+// Shared NutrientService instance 
+export const nutrientService = new NutrientService();
 
 // Current daily goal (derived for easy access)
 export const dailyGoal = derived(
-  calciumState,
+  nutrientState,
   ($state) => $state.settings.dailyGoal
 );
 
 // Helper stores for UI state
 export const isToday = derived(
-  calciumState,
+  nutrientState,
   ($state) => $state.currentDate === getTodayString()
 );
 
 // Access to the main foods array (which is kept sorted)
 export const foods = derived(
-  calciumState,
+  nutrientState,
   ($state) => $state.foods
 );
 
 // Current sort settings for UI display
 export const sortSettings = derived(
-  calciumState,
+  nutrientState,
   ($state) => ({
     sortBy: $state.settings.sortBy,
     sortOrder: $state.settings.sortOrder

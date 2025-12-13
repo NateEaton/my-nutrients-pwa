@@ -17,7 +17,7 @@
 -->
 
 <script>
-  import { calciumState, calciumService } from "$lib/stores/calcium";
+  import { nutrientState, nutrientService } from "$lib/stores/calcium";
 
   /** Whether the backup modal is visible */
   export let show = false;
@@ -53,11 +53,11 @@
 
   async function generateBackupStats() {
     try {
-      if (!calciumService) {
+      if (!nutrientService) {
         backupStats = "Service not initialized yet";
         return;
       }
-      const backupData = await calciumService.generateBackup();
+      const backupData = await nutrientService.generateBackup();
       const stats = calculateStats(backupData);
       backupStats = stats;
     } catch (error) {
@@ -107,10 +107,10 @@
 
     isGenerating = true;
     try {
-      if (!calciumService) {
-        throw new Error("CalciumService not initialized");
+      if (!nutrientService) {
+        throw new Error("NutrientService not initialized");
       }
-      const backupData = await calciumService.generateBackup();
+      const backupData = await nutrientService.generateBackup();
 
       // Create filename with current date (local timezone)
       const now = new Date();

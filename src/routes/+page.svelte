@@ -19,11 +19,11 @@
 <script>
   import { onMount } from "svelte";
   import {
-    calciumState,
+    nutrientState,
     foods,
     dailyTotal,
     dailyGoal,
-    calciumService,
+    nutrientService,
   } from "$lib/stores/calcium";
   import FoodEntry from "$lib/components/FoodEntry.svelte";
   import SummaryCard from "$lib/components/SummaryCard.svelte";
@@ -46,7 +46,7 @@
 
   async function loadNutrientSettings() {
     try {
-      nutrientSettings = await calciumService.getNutrientSettings();
+      nutrientSettings = await nutrientService.getNutrientSettings();
     } catch (error) {
       console.error('Failed to load nutrient settings:', error);
       // Use defaults
@@ -59,7 +59,7 @@
 
   // Calculate total nutrients from foods
   $: totalNutrients = $foods.length > 0
-    ? calciumService.calculateTotalNutrients($foods)
+    ? nutrientService.calculateTotalNutrients($foods)
     : {};
 
   function handleAddFood() {
@@ -77,7 +77,7 @@
       calcium: "calcium",
     };
     const serviceSortBy = sortMapping[sortBy] || sortBy;
-    await calciumService.updateSort(serviceSortBy);
+    await nutrientService.updateSort(serviceSortBy);
   }
 
   function handleEditFood(event) {
@@ -87,11 +87,11 @@
   }
 
   async function handleDeleteFood(event) {
-    await calciumService.removeFood(event.detail.index);
+    await nutrientService.removeFood(event.detail.index);
   }
 
   async function handleDateChange(event) {
-    await calciumService.changeDate(event.detail.date);
+    await nutrientService.changeDate(event.detail.date);
   }
 
   function handleFoodAdded() {
@@ -118,7 +118,7 @@
 <div class="page-container">
   <!-- Summary Card -->
   <SummaryCard
-    currentDate={$calciumState.currentDate}
+    currentDate={$nutrientState.currentDate}
     totalNutrients={totalNutrients}
     nutrientGoals={nutrientSettings.nutrientGoals}
     displayedNutrients={nutrientSettings.displayedNutrients}

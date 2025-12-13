@@ -17,7 +17,7 @@
  */
 
 import { get } from 'svelte/store';
-import { calciumState, showToast } from '$lib/stores/calcium';
+import { nutrientState, showToast } from '$lib/stores/nutrients';
 import type { CalciumSettings } from '$lib/types/calcium';
 import type { FoodEntry, CustomFood, UserServingPreference, NutrientSettings, NutrientValues } from '$lib/types/nutrients';
 import { DEFAULT_FOOD_DATABASE, getPrimaryMeasure } from '$lib/data/foodDatabase';
@@ -32,7 +32,7 @@ import { DEFAULT_NUTRIENT_GOALS, getDefaultDisplayedNutrients } from '$lib/confi
  * Main service class for managing calcium tracking data including foods, settings, and IndexedDB operations.
  * Handles CRUD operations, data migration, favorites, and backup/restore functionality.
  */
-export class CalciumService {
+export class NutrientService {
   private db: IDBDatabase | null = null;
   private foodDatabase: any[] = DEFAULT_FOOD_DATABASE;
   private nextCustomFoodId: number = -1;
@@ -62,7 +62,7 @@ export class CalciumService {
     await this.loadServingPreferences();
     await this.applySortToFoods();
 
-    calciumState.update(state => ({ ...state, isLoading: false }));
+    nutrientState.update(state => ({ ...state, isLoading: false }));
   }
 
   private async initializeIndexedDB(): Promise<void> {
@@ -404,7 +404,7 @@ export class CalciumService {
   }
 
   private async applySortToFoods(): Promise<void> {
-    const state = get(calciumState);
+    const state = get(nutrientState);
 
     const sortedFoods = [...state.foods].sort((a, b) => {
       let comparison = 0;
@@ -427,7 +427,7 @@ export class CalciumService {
       return state.settings.sortOrder === 'asc' ? comparison : -comparison;
     });
 
-    calciumState.update(state => ({
+    nutrientState.update(state => ({
       ...state,
       foods: sortedFoods
     }));
@@ -439,7 +439,7 @@ export class CalciumService {
    * @param sortOrder Optional sort order; if not provided, toggles current order
    */
   async updateSort(sortBy: 'time' | 'name' | 'calcium', sortOrder?: 'asc' | 'desc'): Promise<void> {
-    const state = get(calciumState);
+    const state = get(nutrientState);
 
     let newSortOrder = sortOrder;
     if (!newSortOrder) {
@@ -450,7 +450,7 @@ export class CalciumService {
       }
     }
 
-    calciumState.update(state => ({
+    nutrientState.update(state => ({
       ...state,
       settings: {
         ...state.settings,
@@ -474,7 +474,7 @@ export class CalciumService {
       timestamp: new Date().toISOString()
     };
 
-    calciumState.update(state => ({
+    nutrientState.update(state => ({
       ...state,
       foods: [...state.foods, newFood]
     }));
@@ -483,7 +483,7 @@ export class CalciumService {
     await this.saveDailyFoods();
 
     // Trigger smart sync for journal entry change
-    const currentDate = get(calciumState).currentDate;
+    const currentDate = get(nutrientState).currentDate;
     SyncTrigger.triggerDataSync('journal', currentDate);
   }
 
@@ -493,7 +493,7 @@ export class CalciumService {
    * @throws Error if index is invalid
    */
   async removeFood(index: number): Promise<void> {
-    const state = get(calciumState);
+    const state = get(nutrientState);
 
     if (index < 0 || index >= state.foods.length) {
       throw new Error('Invalid food index for removal');
@@ -501,7 +501,7 @@ export class CalciumService {
 
     const removedFood = state.foods[index];
 
-    calciumState.update(state => ({
+    nutrientState.update(state => ({
       ...state,
       foods: state.foods.filter((_, i) => i !== index)
     }));
@@ -509,7 +509,7 @@ export class CalciumService {
     await this.saveDailyFoods();
 
     // Trigger smart sync for journal entry change
-    const currentDate = get(calciumState).currentDate;
+    const currentDate = get(nutrientState).currentDate;
     SyncTrigger.triggerDataSync('journal', currentDate);
   }
 
@@ -520,13 +520,13 @@ export class CalciumService {
    * @throws Error if index is invalid
    */
   async updateFood(index: number, updatedFood: Omit<FoodEntry, 'timestamp'>): Promise<void> {
-    const state = get(calciumState);
+    const state = get(nutrientState);
 
     if (index < 0 || index >= state.foods.length) {
       throw new Error('Invalid food index for update');
     }
 
-    calciumState.update(state => {
+    nutrientState.update(state => {
       const foods = [...state.foods];
       foods[index] = {
         ...updatedFood,
@@ -539,7 +539,7 @@ export class CalciumService {
     await this.saveDailyFoods();
 
     // Trigger smart sync for journal entry change
-    const currentDate = get(calciumState).currentDate;
+    const currentDate = get(nutrientState).currentDate;
     SyncTrigger.triggerDataSync('journal', currentDate);
   }
 
@@ -550,7 +550,7 @@ export class CalciumService {
   async changeDate(newDate: string): Promise<void> {
     await this.saveDailyFoods();
 
-    calciumState.update(state => ({
+    nutrientState.update(state => ({
       ...state,
       currentDate: newDate,
       foods: []
@@ -565,7 +565,7 @@ export class CalciumService {
    * @returns Promise resolving to the current settings
    */
   async getSettings(): Promise<CalciumSettings> {
-    const state = get(calciumState);
+    const state = get(nutrientState);
     return state.settings;
   }
 
@@ -574,7 +574,7 @@ export class CalciumService {
    * @param newSettings Partial settings object with values to update
    */
   async updateSettings(newSettings: Partial<CalciumSettings>): Promise<void> {
-    calciumState.update(state => ({
+    nutrientState.update(state => ({
       ...state,
       settings: { ...state.settings, ...newSettings }
     }));
@@ -712,7 +712,7 @@ export class CalciumService {
           }
         };
 
-        calciumState.update(state => {
+        nutrientState.update(state => {
           const newCustomFoods = [...state.customFoods.filter(f => f.id !== savedFood.id), savedFood];
           return { ...state, customFoods: newCustomFoods };
         });
@@ -739,7 +739,7 @@ export class CalciumService {
       const request = store.delete(id);
 
       request.onsuccess = () => {
-        calciumState.update(state => ({
+        nutrientState.update(state => ({
           ...state,
           customFoods: state.customFoods.filter(food => food.id !== id)
         }));
@@ -770,11 +770,11 @@ export class CalciumService {
       ...(sortSettings ? JSON.parse(sortSettings) : {})
     };
 
-    calciumState.update(state => ({ ...state, settings }));
+    nutrientState.update(state => ({ ...state, settings }));
   }
 
   async saveSettings(): Promise<void> {
-    const state = get(calciumState);
+    const state = get(nutrientState);
 
     localStorage.setItem('calcium_goal', state.settings.dailyGoal.toString());
 
@@ -790,11 +790,11 @@ export class CalciumService {
   }
 
   async loadDailyFoods(): Promise<void> {
-    const state = get(calciumState);
+    const state = get(nutrientState);
 
     try {
       const foods = await this.loadFoodsForDate(state.currentDate);
-      calciumState.update(state => ({ ...state, foods }));
+      nutrientState.update(state => ({ ...state, foods }));
     } catch (error) {
       console.error('Error loading daily foods:', error);
       showToast('Error loading foods for this date', 'error');
@@ -802,7 +802,7 @@ export class CalciumService {
   }
 
   private async saveDailyFoods(): Promise<void> {
-    const state = get(calciumState);
+    const state = get(nutrientState);
 
     try {
       await this.saveFoodsForDate(state.currentDate, state.foods);
@@ -835,7 +835,7 @@ export class CalciumService {
           };
         });
 
-        calciumState.update(state => ({ ...state, customFoods }));
+        nutrientState.update(state => ({ ...state, customFoods }));
         resolve();
       };
 
@@ -852,7 +852,7 @@ export class CalciumService {
    */
   async generateBackup(): Promise<any> {
     logger.debug('GENERATE BACKUP', 'Starting backup generation...');
-    const state = get(calciumState);
+    const state = get(nutrientState);
     const syncService = SyncService.getInstance();
     const syncSettings = syncService.getSettings();
 
@@ -956,7 +956,7 @@ export class CalciumService {
       if (backupData.preferences) {
         logger.debug('RESTORE', 'Restoring preferences...');
         // Merge preferences instead of replacing to prevent data loss if backup is incomplete
-        calciumState.update(state => ({
+        nutrientState.update(state => ({
           ...state,
           settings: { ...state.settings, ...backupData.preferences }
         }));
@@ -1150,7 +1150,7 @@ private async clearAllData(): Promise<void> {
       const request = store.put(preference);
 
       request.onsuccess = () => {
-        calciumState.update(state => {
+        nutrientState.update(state => {
           const newPreferences = new Map(state.servingPreferences);
           newPreferences.set(foodId, preference);
           return { ...state, servingPreferences: newPreferences };
@@ -1174,7 +1174,7 @@ private async clearAllData(): Promise<void> {
    * @returns The serving preference or null if none exists
    */
   getServingPreference(foodId: number): UserServingPreference | null {
-    const state = get(calciumState);
+    const state = get(nutrientState);
     return state.servingPreferences.get(foodId) || null;
   }
 
@@ -1191,7 +1191,7 @@ private async clearAllData(): Promise<void> {
       const request = store.delete(foodId);
 
       request.onsuccess = () => {
-        calciumState.update(state => {
+        nutrientState.update(state => {
           const newPreferences = new Map(state.servingPreferences);
           newPreferences.delete(foodId);
           return { ...state, servingPreferences: newPreferences };
@@ -1478,7 +1478,7 @@ private async clearAllData(): Promise<void> {
       return;
     }
 
-    const state = get(calciumState);
+    const state = get(nutrientState);
     const favorites = new Set(state.favorites);
 
     const food = this.foodDatabase.find(f => f.id === foodId);
@@ -1493,7 +1493,7 @@ private async clearAllData(): Promise<void> {
 
         request.onsuccess = () => {
           favorites.delete(foodId);
-          calciumState.update(state => ({ ...state, favorites }));
+          nutrientState.update(state => ({ ...state, favorites }));
           resolve();
 
           // Trigger smart sync for persistent data change (remove favorite)
@@ -1515,7 +1515,7 @@ private async clearAllData(): Promise<void> {
 
         request.onsuccess = () => {
           favorites.add(foodId);
-          calciumState.update(state => ({ ...state, favorites }));
+          nutrientState.update(state => ({ ...state, favorites }));
           resolve();
 
           // Trigger smart sync for persistent data change (add favorite)
@@ -1543,13 +1543,13 @@ private async clearAllData(): Promise<void> {
         const favoriteRecords = request.result || [];
         const favorites = new Set(favoriteRecords.map((record: any) => record.foodId));
 
-        calciumState.update(state => ({ ...state, favorites }));
+        nutrientState.update(state => ({ ...state, favorites }));
         resolve();
       };
 
       request.onerror = () => {
         console.error('Error loading favorites:', request.error);
-        calciumState.update(state => ({ ...state, favorites: new Set() }));
+        nutrientState.update(state => ({ ...state, favorites: new Set() }));
         resolve();
       };
     });
@@ -1567,13 +1567,13 @@ private async clearAllData(): Promise<void> {
         const hiddenRecords = request.result || [];
         const hiddenFoods = new Set(hiddenRecords.map((record: any) => record.foodId));
 
-        calciumState.update(state => ({ ...state, hiddenFoods }));
+        nutrientState.update(state => ({ ...state, hiddenFoods }));
         resolve();
       };
 
       request.onerror = () => {
         console.error('Error loading hidden foods:', request.error);
-        calciumState.update(state => ({ ...state, hiddenFoods: new Set() }));
+        nutrientState.update(state => ({ ...state, hiddenFoods: new Set() }));
         resolve();
       };
     });
@@ -1593,7 +1593,7 @@ private async clearAllData(): Promise<void> {
       return;
     }
 
-    const state = get(calciumState);
+    const state = get(nutrientState);
     const hiddenFoods = new Set(state.hiddenFoods);
 
     return new Promise((resolve, reject) => {
@@ -1605,7 +1605,7 @@ private async clearAllData(): Promise<void> {
 
         request.onsuccess = () => {
           hiddenFoods.delete(foodId);
-          calciumState.update(state => ({ ...state, hiddenFoods }));
+          nutrientState.update(state => ({ ...state, hiddenFoods }));
           resolve();
 
           // Trigger smart sync for persistent data change (unhide food)
@@ -1627,7 +1627,7 @@ private async clearAllData(): Promise<void> {
 
         request.onsuccess = () => {
           hiddenFoods.add(foodId);
-          calciumState.update(state => ({ ...state, hiddenFoods }));
+          nutrientState.update(state => ({ ...state, hiddenFoods }));
           resolve();
 
           // Trigger smart sync for persistent data change (hide food)
@@ -1649,7 +1649,7 @@ private async clearAllData(): Promise<void> {
    * @returns True if the food is hidden, false otherwise
    */
   isHidden(foodId: number): boolean {
-    const state = get(calciumState);
+    const state = get(nutrientState);
     return state.hiddenFoods.has(foodId);
   }
 
@@ -1697,13 +1697,13 @@ private async clearAllData(): Promise<void> {
           servingPreferences.set(record.foodId, record);
         }
 
-        calciumState.update(state => ({ ...state, servingPreferences }));
+        nutrientState.update(state => ({ ...state, servingPreferences }));
         resolve();
       };
 
       request.onerror = () => {
         console.error('Error loading serving preferences:', request.error);
-        calciumState.update(state => ({ ...state, servingPreferences: new Map() }));
+        nutrientState.update(state => ({ ...state, servingPreferences: new Map() }));
         resolve();
       };
     });
@@ -1743,7 +1743,7 @@ private async clearAllData(): Promise<void> {
         completedCount++;
         if (completedCount === expectedCount) {
           const favorites = new Set(foodIds);
-          calciumState.update(state => ({ ...state, favorites }));
+          nutrientState.update(state => ({ ...state, favorites }));
 
           resolve();
         }
@@ -1791,7 +1791,7 @@ private async clearAllData(): Promise<void> {
       
       if (expectedCount === 0) {
         const hiddenFoods = new Set<number>();
-        calciumState.update(state => ({ ...state, hiddenFoods }));
+        nutrientState.update(state => ({ ...state, hiddenFoods }));
         resolve();
         return;
       }
@@ -1800,7 +1800,7 @@ private async clearAllData(): Promise<void> {
         completedCount++;
         if (completedCount === expectedCount) {
           const hiddenFoods = new Set(foodIds);
-          calciumState.update(state => ({ ...state, hiddenFoods }));
+          nutrientState.update(state => ({ ...state, hiddenFoods }));
           resolve();
         }
       };
@@ -1843,7 +1843,7 @@ private async clearAllData(): Promise<void> {
           for (const pref of preferencesArray) {
             servingPreferences.set(pref.foodId, pref);
           }
-          calciumState.update(state => ({ ...state, servingPreferences }));
+          nutrientState.update(state => ({ ...state, servingPreferences }));
           resolve();
         }
       };
@@ -1872,7 +1872,7 @@ private async clearAllData(): Promise<void> {
     try {
 
       if (syncData.preferences) {
-        calciumState.update(state => ({
+        nutrientState.update(state => ({
           ...state,
           settings: syncData.preferences
         }));

@@ -19,7 +19,7 @@
 <script>
   import { onMount, onDestroy } from "svelte";
   import { goto } from "$app/navigation";
-  import { calciumState, calciumService } from "$lib/stores/calcium";
+  import { nutrientState, nutrientService } from "$lib/stores/calcium";
   import { DATABASE_METADATA } from "$lib/data/foodDatabase";
   import { NUTRIENT_METADATA, getNutrientLabel, getNutrientUnit, getDefaultDisplayedNutrients } from "$lib/config/nutrientDefaults";
 
@@ -60,7 +60,7 @@
 
   async function getAllJournalData() {
     // Use the IndexedDB method that reads from the new journalEntries store
-    return await calciumService.getAllJournalData();
+    return await nutrientService.getAllJournalData();
   }
 
   async function generateSummary(allData, dates) {
@@ -347,7 +347,7 @@
   onMount(async () => {
     try {
       // Load nutrient settings first
-      nutrientSettings = await calciumService.getNutrientSettings();
+      nutrientSettings = await nutrientService.getNutrientSettings();
       // Default to first displayed nutrient
       if (nutrientSettings.displayedNutrients && nutrientSettings.displayedNutrients.length > 0) {
         selectedNutrient = nutrientSettings.displayedNutrients[0];

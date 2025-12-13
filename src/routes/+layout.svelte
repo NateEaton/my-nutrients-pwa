@@ -20,7 +20,7 @@
   import { onMount } from "svelte";
   import { logBuildInfo } from "$lib/utils/buildInfo";
   import { page } from "$app/stores";
-  import { calciumState, calciumService, showToast } from "$lib/stores/calcium";
+  import { nutrientState, nutrientService, showToast } from "$lib/stores/calcium";
   import { pwaUpdateAvailable, pwaUpdateFunction, pwaOfflineReady } from "$lib/stores/pwa";
   import Header from "$lib/components/Header.svelte";
   import Toast from "$lib/components/Toast.svelte";
@@ -36,7 +36,7 @@
   let syncService = null;
 
   onMount(async () => {
-    await calciumService.initialize();
+    await nutrientService.initialize();
 
     // Initialize network status first
     NetworkStatusService.getInstance().initialize();
@@ -151,7 +151,7 @@
 
   async function initializeColorScheme() {
     try {
-      const settings = await calciumService.getSettings();
+      const settings = await nutrientService.getSettings();
       const colorScheme = settings.colorScheme || (__APP_ENV__ === 'development' ? 'orange' : 'blue');
       applyColorScheme(colorScheme);
     } catch (error) {
@@ -217,7 +217,7 @@
       onAboutClick={openAboutDialog}
     />
     <main class="main-content">
-      {#if $calciumState.isLoading}
+      {#if $nutrientState.isLoading}
         <div class="loading">
           <div class="loading-spinner">
             <div class="spinner-container">

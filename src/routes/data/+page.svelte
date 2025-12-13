@@ -18,7 +18,7 @@
 
 <script>
   import { onMount, onDestroy } from "svelte";
-  import { calciumState, showToast, calciumService } from "$lib/stores/calcium";
+  import { nutrientState, showToast, nutrientService } from "$lib/stores/calcium";
   import { DEFAULT_FOOD_DATABASE, getPrimaryMeasure, getAllMeasures, hasMultipleMeasures, formatCalcium } from "$lib/data/foodDatabase";
   import { SearchService } from "$lib/services/SearchService";
   import { goto } from "$app/navigation";
@@ -56,11 +56,11 @@
   function getFoodTypeForSort(food) {
     if (selectedFilter === "available") {
       if (food.isCustom) return "Custom";
-      if ($calciumState.favorites.has(food.id)) return "Favorite";
+      if ($nutrientState.favorites.has(food.id)) return "Favorite";
       return "Database";
     } else if (selectedFilter === "database") {
-      if ($calciumState.favorites.has(food.id)) return "Favorite";
-      if ($calciumState.hiddenFoods.has(food.id)) return "Hidden";
+      if ($nutrientState.favorites.has(food.id)) return "Favorite";
+      if ($nutrientState.hiddenFoods.has(food.id)) return "Hidden";
       return "Database";
     } else if (selectedFilter === "user") {
       return "Custom"; // All are custom in user filter
@@ -109,21 +109,21 @@
     // Apply filter - let SearchService handle hidden foods filtering consistently
     if (selectedFilter === "available") {
       // Show all addable foods: all database foods + custom foods (SearchService will filter hidden)
-      foods = [...foodDatabase, ...$calciumState.customFoods];
+      foods = [...foodDatabase, ...$nutrientState.customFoods];
     } else if (selectedFilter === "database") {
       // Show all database foods for management (including hidden and favorites)
       foods = [...foodDatabase];
     } else if (selectedFilter === "user") {
       // Show only custom foods
-      foods = [...$calciumState.customFoods];
+      foods = [...$nutrientState.customFoods];
     }
 
     // Apply enhanced search and filtering
     if (searchQuery.trim()) {
-      const hiddenFoodsForSearch = selectedFilter === "database" ? new Set() : $calciumState.hiddenFoods;
+      const hiddenFoodsForSearch = selectedFilter === "database" ? new Set() : $nutrientState.hiddenFoods;
       const results = SearchService.searchFoods(searchQuery, foods, {
         mode: "database",
-        favorites: $calciumState.favorites,
+        favorites: $nutrientState.favorites,
         hiddenFoods: hiddenFoodsForSearch, // Don't filter hidden foods in database mode
         maxResults: 1000, // Show all matching foods for complete bulk operations
       });
@@ -131,7 +131,7 @@
     } else {
       // Apply hidden foods filtering when NOT searching (SearchService handles it when searching)
       if (selectedFilter === "available") {
-        foods = foods.filter((food) => food.isCustom || !$calciumState.hiddenFoods.has(food.id));
+        foods = foods.filter((food) => food.isCustom || !$nutrientState.hiddenFoods.has(food.id));
       }
     }
 
@@ -174,11 +174,11 @@
   $: eligibleFoodsForBulk = filteredFoods.filter(
     (food) =>
       !food.isCustom && // Only database foods can be hidden
-      !$calciumState.favorites.has(food.id) // Skip favorites
+      !$nutrientState.favorites.has(food.id) // Skip favorites
   );
 
   $: hiddenEligibleFoods = eligibleFoodsForBulk.filter((food) =>
-    $calciumState.hiddenFoods.has(food.id)
+    $nutrientState.hiddenFoods.has(food.id)
   );
 
   $: allNonFavoritesHidden =
@@ -188,7 +188,7 @@
   $: someNonFavoritesHidden = hiddenEligibleFoods.length > 0;
 
   $: favoriteCount = filteredFoods.filter(
-    (food) => !food.isCustom && $calciumState.favorites.has(food.id)
+    (food) => !food.isCustom && $nutrientState.favorites.has(food.id)
   ).length;
 
   $: bulkActionText = allNonFavoritesHidden
@@ -206,14 +206,14 @@
     let totalCount = 0;
     if (selectedFilter === "available") {
       const visibleDatabaseFoods = foodDatabase.filter(
-        (food) => !$calciumState.hiddenFoods.has(food.id)
+        (food) => !$nutrientState.hiddenFoods.has(food.id)
       );
       totalCount =
-        visibleDatabaseFoods.length + $calciumState.customFoods.length;
+        visibleDatabaseFoods.length + $nutrientState.customFoods.length;
     } else if (selectedFilter === "database") {
       totalCount = foodDatabase.length;
     } else if (selectedFilter === "user") {
-      totalCount = $calciumState.customFoods.length;
+      totalCount = $nutrientState.customFoods.length;
     }
   }
 
@@ -224,16 +224,16 @@
 
     if (selectedFilter === "available") {
       const visibleDatabaseFoods = foodDatabase.filter(
-        (food) => !$calciumState.hiddenFoods.has(food.id)
+        (food) => !$nutrientState.hiddenFoods.has(food.id)
       );
       totalCount =
-        visibleDatabaseFoods.length + $calciumState.customFoods.length;
+        visibleDatabaseFoods.length + $nutrientState.customFoods.length;
       filterLabel = "available";
     } else if (selectedFilter === "database") {
       totalCount = foodDatabase.length;
       filterLabel = "database";
     } else if (selectedFilter === "user") {
-      totalCount = $calciumState.customFoods.length;
+      totalCount = $nutrientState.customFoods.length;
       filterLabel = "custom";
     }
 
@@ -297,30 +297,30 @@
   async function toggleFoodHidden(food) {
     if (food.isCustom || !food.id) return; // Can't hide custom foods
 
-    if (calciumService) {
+    if (nutrientService) {
       // If food is currently a favorite and we're trying to hide it, remove from favorites first
       if (
-        $calciumState.favorites.has(food.id) &&
-        !$calciumState.hiddenFoods.has(food.id)
+        $nutrientState.favorites.has(food.id) &&
+        !$nutrientState.hiddenFoods.has(food.id)
       ) {
-        await calciumService.toggleFavorite(food.id);
+        await nutrientService.toggleFavorite(food.id);
       }
-      await calciumService.toggleHiddenFood(food.id);
+      await nutrientService.toggleHiddenFood(food.id);
     }
   }
 
   async function toggleFavorite(food) {
     if (food.isCustom) return; // Only allow favorites for database foods
 
-    if (calciumService) {
+    if (nutrientService) {
       // If food is currently hidden and we're trying to favorite it, unhide it first
       if (
-        $calciumState.hiddenFoods.has(food.id) &&
-        !$calciumState.favorites.has(food.id)
+        $nutrientState.hiddenFoods.has(food.id) &&
+        !$nutrientState.favorites.has(food.id)
       ) {
-        await calciumService.toggleHiddenFood(food.id);
+        await nutrientService.toggleHiddenFood(food.id);
       }
-      await calciumService.toggleFavorite(food.id);
+      await nutrientService.toggleFavorite(food.id);
     }
   }
 
@@ -346,9 +346,9 @@
     const foodName = foodToDelete.name;
     const foodId = foodToDelete.id;
 
-    if (calciumService) {
+    if (nutrientService) {
       try {
-        await calciumService.deleteCustomFood(foodId);
+        await nutrientService.deleteCustomFood(foodId);
         showToast(`Deleted ${foodName}`, "success");
       } catch (error) {
         console.error("Error deleting custom food:", error);
@@ -447,14 +447,14 @@
   }
 
   async function handleBulkToggle() {
-    if (isBulkOperationInProgress || !calciumService) return;
+    if (isBulkOperationInProgress || !nutrientService) return;
 
     isBulkOperationInProgress = true;
 
     try {
       // Capture the current state before making any changes
       const currentEligibleFoods = [...eligibleFoodsForBulk];
-      const currentHiddenState = new Set($calciumState.hiddenFoods);
+      const currentHiddenState = new Set($nutrientState.hiddenFoods);
       const targetHidden = !allNonFavoritesHidden;
 
       // Process all eligible foods - don't filter, just set them all to the target state
@@ -468,7 +468,7 @@
 
           // Only toggle if the current state doesn't match the target state
           if (isCurrentlyHidden !== targetHidden) {
-            await calciumService.toggleHiddenFood(food.id);
+            await nutrientService.toggleHiddenFood(food.id);
           }
         }
 
@@ -789,9 +789,9 @@
                 <input
                   type="checkbox"
                   class="hide-checkbox"
-                  checked={$calciumState.hiddenFoods.has(food.id)}
+                  checked={$nutrientState.hiddenFoods.has(food.id)}
                   on:change={() => toggleFoodHidden(food)}
-                  title={$calciumState.hiddenFoods.has(food.id)
+                  title={$nutrientState.hiddenFoods.has(food.id)
                     ? "Unhide food"
                     : "Hide food"}
                 />
@@ -832,14 +832,14 @@
             {#if !food.isCustom}
               <button
                 class="favorite-btn"
-                class:favorite={$calciumState.favorites.has(food.id)}
+                class:favorite={$nutrientState.favorites.has(food.id)}
                 on:click={() => toggleFavorite(food)}
-                title={$calciumState.favorites.has(food.id)
+                title={$nutrientState.favorites.has(food.id)
                   ? "Remove from favorites"
                   : "Add to favorites"}
               >
                 <span class="material-icons">
-                  {$calciumState.favorites.has(food.id)
+                  {$nutrientState.favorites.has(food.id)
                     ? "star"
                     : "star_border"}
                 </span>
