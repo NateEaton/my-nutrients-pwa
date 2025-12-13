@@ -18,7 +18,7 @@
 
 <script>
   import { createEventDispatcher, onMount } from "svelte";
-  import { nutrientState, nutrientService, showToast } from "$lib/stores/calcium";
+  import { nutrientState, nutrientService, showToast } from "$lib/stores/nutrients";
   import { isOnline } from "$lib/stores/networkStatus";
   import { DEFAULT_FOOD_DATABASE, getPrimaryMeasure, getAllMeasures, hasMultipleMeasures, formatCalcium } from "$lib/data/foodDatabase";
   import { SearchService } from "$lib/services/SearchService";

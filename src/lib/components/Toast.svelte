@@ -17,7 +17,7 @@
 -->
 
 <script>
-  import { toastStore } from "$lib/stores/calcium";
+  import { toastStore } from "$lib/stores/nutrients";
   import { tick } from "svelte";
 
   let isVisible = false;

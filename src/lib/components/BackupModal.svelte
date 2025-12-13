@@ -17,7 +17,7 @@
 -->
 
 <script>
-  import { nutrientState, nutrientService } from "$lib/stores/calcium";
+  import { nutrientState, nutrientService } from "$lib/stores/nutrients";
 
   /** Whether the backup modal is visible */
   export let show = false;

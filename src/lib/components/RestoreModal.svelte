@@ -17,7 +17,7 @@
 -->
 
 <script>
-  import { showToast, nutrientService } from "$lib/stores/calcium";
+  import { showToast, nutrientService } from "$lib/stores/nutrients";
   import { onDestroy } from "svelte";
   import { syncState } from "$lib/stores/sync";
   import { SyncService } from "$lib/services/SyncService";

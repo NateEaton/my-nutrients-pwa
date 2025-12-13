@@ -17,7 +17,7 @@
 -->
 
 <script>
-  import { nutrientState, showToast, nutrientService } from "$lib/stores/calcium";
+  import { nutrientState, showToast, nutrientService } from "$lib/stores/nutrients";
   import { pwaUpdateAvailable, pwaUpdateFunction } from "$lib/stores/pwa";
   import { onMount } from "svelte";
   import { FEATURES } from "$lib/utils/featureFlags";

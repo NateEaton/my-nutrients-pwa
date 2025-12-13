@@ -18,7 +18,7 @@
 
 <script>
   import { createEventDispatcher } from "svelte";
-  import { sortSettings } from "$lib/stores/calcium";
+  import { sortSettings } from "$lib/stores/nutrients";
 
   const dispatch = createEventDispatcher();
 

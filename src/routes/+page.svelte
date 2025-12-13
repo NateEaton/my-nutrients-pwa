@@ -24,7 +24,7 @@
     dailyTotal,
     dailyGoal,
     nutrientService,
-  } from "$lib/stores/calcium";
+  } from "$lib/stores/nutrients";
   import FoodEntry from "$lib/components/FoodEntry.svelte";
   import SummaryCard from "$lib/components/SummaryCard.svelte";
   import SortControls from "$lib/components/SortControls.svelte";

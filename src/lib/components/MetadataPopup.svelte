@@ -18,7 +18,7 @@
 
 <script>
   import { createEventDispatcher } from "svelte";
-  import { nutrientService } from "$lib/stores/calcium";
+  import { nutrientService } from "$lib/stores/nutrients";
   import SourceIndicator from "./SourceIndicator.svelte";
   import { logger } from '$lib/utils/logger';
 

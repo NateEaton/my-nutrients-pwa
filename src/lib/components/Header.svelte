@@ -20,7 +20,7 @@
   import { goto, preloadData } from "$app/navigation";
   import { page } from "$app/stores";
   import { base } from "$app/paths";
-  import { showToast } from "$lib/stores/calcium";
+  import { showToast } from "$lib/stores/nutrients";
   import { FEATURES } from "$lib/utils/featureFlags";
   import { syncIcon, syncState, setSyncStatus } from "$lib/stores/sync";
   import { SyncService } from "$lib/services/SyncService";

@@ -17,7 +17,7 @@
 -->
 
 <script>
-  import { nutrientState, nutrientService } from "$lib/stores/calcium";
+  import { nutrientState, nutrientService } from "$lib/stores/nutrients";
   import { NUTRIENT_METADATA, getNutrientUnit } from "$lib/config/nutrientDefaults";
 
   /** Whether the export modal is visible */
