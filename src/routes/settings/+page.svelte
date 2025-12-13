@@ -1,5 +1,5 @@
 <!--
- * My Calcium Tracker PWA
+ * My Nutrients Tracker PWA
  * Copyright (C) 2025 Nathan A. Eaton Jr.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -232,7 +232,7 @@
 </script>
 
 <svelte:head>
-  <title>Settings - My Calcium</title>
+  <title>Settings - My Nutrients</title>
 </svelte:head>
 
 <div class="settings-container">

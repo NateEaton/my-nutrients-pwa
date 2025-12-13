@@ -1,5 +1,5 @@
 <!--
- * My Calcium Tracker PWA
+ * My Nutrients Tracker PWA
  * Copyright (C) 2025 Nathan A. Eaton Jr.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 </script>
 
 <svelte:head>
-  <title>User Guide - My Calcium</title>
+  <title>User Guide - My Nutrients</title>
 </svelte:head>
 
 <div class="guide-container">
@@ -31,18 +31,18 @@
       Getting Started
     </summary>
     <div class="section-content">
-      <h4>Welcome to My Calcium!</h4>
+      <h4>Welcome to My Nutrients!</h4>
       <p>
-        My Calcium helps you track your daily calcium intake to support bone health and meet
-        nutritional goals. All your data stays private on your device, and you can use the app
-        offline.
+        My Nutrients helps you track essential nutrients (protein, calcium, fiber, vitamins, and more)
+        to support your health and meet nutritional goals. All your data stays private on your device,
+        and you can use the app offline.
       </p>
 
       <h4>First Steps</h4>
       <ol class="steps-list">
         <li>
           <strong>Find Your Foods:</strong> Search the database, scan barcodes, or add custom
-          foods with calcium content
+          foods with detailed nutrient information
         </li>
         <li>
           <strong>Log Your Intake:</strong> Add foods throughout the day with automatic serving

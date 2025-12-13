@@ -1,5 +1,5 @@
 <!--
- * My Calcium Tracker PWA
+ * My Nutrients Tracker PWA
  * Copyright (C) 2025 Nathan A. Eaton Jr.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -87,10 +87,10 @@
       <div class="modal-content">
         <div class="about-content">
           <div class="app-info">
-            <h3 class="app-name">My Calcium</h3>
+            <h3 class="app-name">My Nutrients</h3>
             <p class="app-description">
-              A simple, privacy-focused app to help you track your daily calcium
-              intake in support of achieving your health goals.
+              A simple, privacy-focused app to help you track essential nutrients
+              for better health and achieving your wellness goals.
             </p>
           </div>
 
