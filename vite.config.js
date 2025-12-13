@@ -137,7 +137,7 @@ export default defineConfig(({ mode }) => {
       __APP_ENV__: JSON.stringify(mode),
     },
     build: {
-      chunkSizeWarningLimit: 750,
+      chunkSizeWarningLimit: 3500, // Increased for food database (~3MB with nutrient data)
     },
     // The optimizeDeps and server sections for WASM are no longer needed
   };
