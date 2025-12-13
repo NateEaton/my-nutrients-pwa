@@ -21,6 +21,14 @@
   import { calciumState, calciumService } from "$lib/stores/calcium";
   import { goto } from "$app/navigation";
   import { formatDate, isToday, getTodayString } from "$lib/utils/dateUtils";
+  import { NUTRIENT_METADATA, getNutrientLabel, getNutrientUnit, getDefaultDisplayedNutrients } from "$lib/config/nutrientDefaults";
+
+  // Nutrient selection state
+  let selectedNutrient = 'calcium';
+  let nutrientSettings = {
+    nutrientGoals: {},
+    displayedNutrients: getDefaultDisplayedNutrients()
+  };
 
   // Stats state
   let currentView = "weekly";
@@ -124,6 +132,17 @@
   }
 
   onMount(async () => {
+    // Load nutrient settings
+    try {
+      nutrientSettings = await calciumService.getNutrientSettings();
+      // Default to first displayed nutrient
+      if (nutrientSettings.displayedNutrients && nutrientSettings.displayedNutrients.length > 0) {
+        selectedNutrient = nutrientSettings.displayedNutrients[0];
+      }
+    } catch (error) {
+      console.error('Failed to load nutrient settings:', error);
+    }
+
     resetToCurrentDate();
     await switchView("weekly");
 
@@ -252,7 +271,10 @@
         return foodHour === hour;
       });
 
-      const hourTotal = hourFoods.reduce((sum, food) => sum + food.calcium, 0);
+      const hourTotal = hourFoods.reduce((sum, food) => {
+        const nutrientValue = food.nutrients?.[selectedNutrient] ?? food[selectedNutrient] ?? 0;
+        return sum + nutrientValue;
+      }, 0);
 
       return {
         date: dateStr,
@@ -286,7 +308,7 @@
         year: "numeric",
       }),
       data: hourlyData,
-      unit: "mg",
+      unit: getNutrientUnit(selectedNutrient),
       averageValue:
         hoursWithData > 0 ? Math.round(dayTotal / hoursWithData) : 0,
       totalValue: dayTotal,
@@ -326,7 +348,12 @@
       const isFuture = date > today;
 
       const foods = allData[dateStr] || [];
-      const totalCalcium = foods.reduce((sum, food) => sum + food.calcium, 0);
+      const totalNutrient = foods.reduce((sum, food) => {
+        const nutrientValue = food.nutrients?.[selectedNutrient] ?? food[selectedNutrient] ?? 0;
+        return sum + nutrientValue;
+      }, 0);
+
+      const currentGoal = nutrientSettings.nutrientGoals?.[selectedNutrient] || 0;
 
       data.push({
         date: dateStr,
@@ -336,8 +363,8 @@
           year: "numeric",
         }),
         shortDate: dayNames[i],
-        value: isFuture ? 0 : totalCalcium,
-        goalMet: totalCalcium >= $calciumState.settings.dailyGoal,
+        value: isFuture ? 0 : totalNutrient,
+        goalMet: totalNutrient >= currentGoal,
         foodCount: foods.length,
         isToday: isToday,
         isFuture: isFuture,
@@ -373,7 +400,7 @@
       title: "Average",
       subtitle: subtitle,
       data: data,
-      unit: "mg",
+      unit: getNutrientUnit(selectedNutrient),
       averageValue: Math.round(
         data
           .filter((d) => !d.isFuture) // Remove: && d.value > 0
@@ -417,7 +444,12 @@
       const isFuture = date > today;
 
       const foods = allData[dateStr] || [];
-      const totalCalcium = foods.reduce((sum, food) => sum + food.calcium, 0);
+      const totalNutrient = foods.reduce((sum, food) => {
+        const nutrientValue = food.nutrients?.[selectedNutrient] ?? food[selectedNutrient] ?? 0;
+        return sum + nutrientValue;
+      }, 0);
+
+      const currentGoal = nutrientSettings.nutrientGoals?.[selectedNutrient] || 0;
 
       data.push({
         date: dateStr,
@@ -428,8 +460,8 @@
         }),
         shortDate: date.toLocaleDateString("en-US", { weekday: "short" }),
         chartLabel: day.toString(),
-        value: isFuture ? 0 : totalCalcium,
-        goalMet: totalCalcium >= $calciumState.settings.dailyGoal,
+        value: isFuture ? 0 : totalNutrient,
+        goalMet: totalNutrient >= currentGoal,
         foodCount: foods.length,
         isToday: isToday,
         isFuture: isFuture,
@@ -444,7 +476,7 @@
         year: "numeric",
       }),
       data: data,
-      unit: "mg",
+      unit: getNutrientUnit(selectedNutrient),
       averageValue: Math.round(
         data
           .filter((d) => !d.isFuture) // Remove: && d.value > 0
@@ -495,10 +527,15 @@
       if (monthDays.length > 0 && !isFutureMonth) {
         const monthTotal = monthDays.reduce((sum, dateStr) => {
           const foods = allData[dateStr];
-          return sum + foods.reduce((daySum, food) => daySum + food.calcium, 0);
+          return sum + foods.reduce((daySum, food) => {
+            const nutrientValue = food.nutrients?.[selectedNutrient] ?? food[selectedNutrient] ?? 0;
+            return daySum + nutrientValue;
+          }, 0);
         }, 0);
         averageDaily = Math.round(monthTotal / monthDays.length);
       }
+
+      const currentGoal = nutrientSettings.nutrientGoals?.[selectedNutrient] || 0;
 
       data.push({
         date:
@@ -513,7 +550,7 @@
         }),
         shortDate: monthNames[month],
         value: averageDaily,
-        goalMet: averageDaily >= $calciumState.settings.dailyGoal,
+        goalMet: averageDaily >= currentGoal,
         daysTracked: monthDays.length,
         isFuture: isFutureMonth,
       });
@@ -523,7 +560,7 @@
       title: "Average",
       subtitle: targetYear.toString(),
       data: data,
-      unit: "mg",
+      unit: getNutrientUnit(selectedNutrient),
       averageValue: Math.round(
         data
           .filter((d) => !d.isFuture) // Remove: && d.value > 0
@@ -719,11 +756,14 @@
   $: goalAchievement = (() => {
     if (!currentData?.data.length) return 0;
 
+    const currentGoal = nutrientSettings.nutrientGoals?.[selectedNutrient] || 0;
+    if (currentGoal === 0) return 0;
+
     if (currentView === "daily") {
       const dayTotal = currentData.totalValue || 0;
-      return dayTotal >= $calciumState.settings.dailyGoal
+      return dayTotal >= currentGoal
         ? 100
-        : Math.round((dayTotal / $calciumState.settings.dailyGoal) * 100);
+        : Math.round((dayTotal / currentGoal) * 100);
     }
 
     const allNonFutureDays = currentData.data.filter(
@@ -737,8 +777,7 @@
       0
     );
     const averageValue = totalValue / allNonFutureDays.length;
-    const percentageOfGoal =
-      (averageValue / $calciumState.settings.dailyGoal) * 100;
+    const percentageOfGoal = (averageValue / currentGoal) * 100;
 
     return Math.round(percentageOfGoal);
   })();
@@ -813,7 +852,7 @@
 
     const data = currentData.data;
     const dataMax = currentData.maxValue;
-    const goal = $calciumState.settings.dailyGoal;
+    const goal = nutrientSettings.nutrientGoals?.[selectedNutrient] || 0;
     const chartCeiling = Math.max(dataMax, goal);
     const maxValue = chartCeiling * 1.25;
 
@@ -907,13 +946,16 @@
 
   function createGoalLine(maxValue) {
     if (!goalLineContainer) return;
-    
+
     // Clear any existing goal line
     goalLineContainer.innerHTML = "";
-    
+
+    const currentGoal = nutrientSettings.nutrientGoals?.[selectedNutrient] || 0;
+    if (currentGoal === 0) return;
+
     const goalLine = document.createElement("div");
     goalLine.className = "goal-line";
-    const goalPercent = ($calciumState.settings.dailyGoal / maxValue) * 100;
+    const goalPercent = (currentGoal / maxValue) * 100;
     goalLine.style.bottom = `${goalPercent}%`;
     goalLine.style.position = "absolute";
     goalLine.style.width = "100%";
@@ -976,6 +1018,33 @@
 
 <div class="stats-page">
   <div class="stats-content">
+    <!-- Nutrient Selector -->
+    <div class="nutrient-selector-container">
+      <label for="nutrient-select" class="nutrient-selector-label">
+        <span class="material-icons">science</span>
+        Select Nutrient
+      </label>
+      <select
+        id="nutrient-select"
+        bind:value={selectedNutrient}
+        on:change={() => loadDataForView()}
+        class="nutrient-select"
+      >
+        <!-- Displayed Nutrients (starred) -->
+        <optgroup label="⭐ Tracked Nutrients">
+          {#each NUTRIENT_METADATA.filter(n => nutrientSettings.displayedNutrients.includes(n.id)) as nutrient}
+            <option value={nutrient.id}>{nutrient.label} ({nutrient.unit})</option>
+          {/each}
+        </optgroup>
+        <!-- All Other Nutrients -->
+        <optgroup label="All Nutrients">
+          {#each NUTRIENT_METADATA.filter(n => !nutrientSettings.displayedNutrients.includes(n.id)) as nutrient}
+            <option value={nutrient.id}>{nutrient.label} ({nutrient.unit})</option>
+          {/each}
+        </optgroup>
+      </select>
+    </div>
+
     <!-- Time Period Controls -->
     <div class="stats-view-controls">
       <div class="view-options">
@@ -1073,7 +1142,7 @@
               {currentData.averageValue.toFixed(2)}
             {/if}
           </span>
-          <span class="stats-unit">mg</span>
+          <span class="stats-unit">{currentData?.unit || getNutrientUnit(selectedNutrient)}</span>
         </div>
         <div class="stats-description">
           <div class="stats-left">
@@ -1148,7 +1217,7 @@
             <span class="material-icons">flag</span>
           </div>
           <div class="stat-content">
-            <div class="stat-value">{$calciumState.settings.dailyGoal} mg</div>
+            <div class="stat-value">{nutrientSettings.nutrientGoals?.[selectedNutrient] || 0} {getNutrientUnit(selectedNutrient)}</div>
             <div class="stat-label">Daily Goal</div>
           </div>
         </div>
@@ -1189,6 +1258,51 @@
     flex: 1;
     overflow-y: auto;
     padding: var(--spacing-lg);
+  }
+
+  .nutrient-selector-container {
+    margin-bottom: var(--spacing-sm);
+    background-color: var(--surface);
+    border-radius: var(--spacing-sm);
+    padding: var(--spacing-md);
+    border: 1px solid var(--divider);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+
+  .nutrient-selector-label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  .nutrient-selector-label .material-icons {
+    font-size: var(--icon-size-md);
+    color: var(--primary-color);
+  }
+
+  .nutrient-select {
+    flex: 1;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--divider);
+    border-radius: var(--spacing-xs);
+    background: var(--background);
+    color: var(--text-primary);
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    cursor: pointer;
+    min-height: var(--touch-target-min);
+  }
+
+  .nutrient-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-alpha-10);
   }
 
   .stats-view-controls {
@@ -1240,7 +1354,7 @@
   .stats-summary-card {
     background-color: var(--surface);
     border-radius: var(--spacing-md);
-    padding: var(--spacing-md) var(--spacing-xl);
+    padding: var(--spacing-sm) var(--spacing-xl);
     margin-bottom: var(--spacing-sm);
     box-shadow: var(--shadow);
     border: 1px solid var(--divider);
@@ -1259,7 +1373,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
   }
 
   .stats-period-wrapper {
@@ -1461,7 +1575,7 @@
     align-items: baseline;
     justify-content: center;
     gap: var(--spacing-xs);
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
   }
 
   .stats-value {
@@ -1518,7 +1632,7 @@
 
   .chart-area {
     position: relative;
-    height: 16.25rem; /* 260px - same as chart-scroll-wrapper */
+    height: 14.625rem; /* 234px - reduced by 10% from 260px */
   }
 
   .goal-line-container {
@@ -1686,7 +1800,7 @@
   .stat-card {
     background-color: var(--surface);
     border-radius: var(--spacing-sm);
-    padding: var(--spacing-lg) var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-sm);
     text-align: center;
     border: 1px solid var(--divider);
     transition: all 0.2s ease;
@@ -1698,23 +1812,23 @@
   }
 
   .stat-icon {
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
   }
 
   .stat-icon .material-icons {
-    font-size: var(--icon-size-lg);
+    font-size: var(--icon-size-md);
     color: var(--primary-color);
   }
 
   .stat-value {
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-base);
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: var(--spacing-xs);
+    margin-bottom: 0.125rem;
   }
 
   .stat-label {
-    font-size: var(--font-size-xs);
+    font-size: 0.625rem; /* ~10px, reduced from xs */
     font-weight: 500;
     color: var(--text-secondary);
     text-transform: uppercase;
@@ -1737,6 +1851,16 @@
       padding-bottom: 5rem;
     }
 
+    .nutrient-selector-container {
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--spacing-sm);
+    }
+
+    .nutrient-selector-label {
+      justify-content: center;
+    }
+
     .view-option span:not(.material-icons) {
       display: none;
     }
@@ -1746,7 +1870,7 @@
     }
 
     .stats-summary-card {
-      padding: var(--spacing-md) var(--spacing-lg);
+      padding: var(--spacing-sm) var(--spacing-md);
     }
 
     .stats-value {

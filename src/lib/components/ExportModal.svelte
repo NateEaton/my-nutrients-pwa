@@ -18,6 +18,7 @@
 
 <script>
   import { calciumState, calciumService } from "$lib/stores/calcium";
+  import { NUTRIENT_METADATA, getNutrientUnit } from "$lib/config/nutrientDefaults";
 
   /** Whether the export modal is visible */
   export let show = false;
@@ -114,18 +115,37 @@
    * @returns {string} The CSV content
    */
   function generateCSV(journalData) {
-    // CSV header
-    const rows = ["date,name,calcium,servingQuantity,servingUnit,timestamp"];
+    // Build CSV header with all nutrients
+    const nutrientHeaders = NUTRIENT_METADATA.map(nutrient => {
+      return `${nutrient.id}_${nutrient.unit}`;
+    });
+
+    const headerRow = [
+      'date',
+      'name',
+      'servingQuantity',
+      'servingUnit',
+      ...nutrientHeaders,
+      'timestamp'
+    ].join(',');
+
+    const rows = [headerRow];
 
     // Convert each entry to CSV row
     for (const [date, entries] of Object.entries(journalData)) {
       for (const entry of entries) {
+        // Extract nutrient values (handles both new nutrients object and legacy calcium field)
+        const nutrientValues = NUTRIENT_METADATA.map(nutrient => {
+          const value = entry.nutrients?.[nutrient.id] ?? entry[nutrient.id] ?? '';
+          return escapeCSV(value);
+        });
+
         const row = [
           escapeCSV(date),
           escapeCSV(entry.name),
-          escapeCSV(entry.calcium),
           escapeCSV(entry.servingQuantity),
           escapeCSV(entry.servingUnit),
+          ...nutrientValues,
           escapeCSV(entry.timestamp),
         ].join(",");
         rows.push(row);
@@ -154,7 +174,7 @@
       const month = String(now.getMonth() + 1).padStart(2, "0");
       const day = String(now.getDate()).padStart(2, "0");
       const dateStr = `${year}-${month}-${day}`;
-      const filename = `calcium-tracker-export-${dateStr}.csv`;
+      const filename = `my-nutrients-export-${dateStr}.csv`;
 
       // Create and download file
       const blob = new Blob([csvContent], {
@@ -212,8 +232,8 @@
             <div class="info-text">
               <h3>Export Journal Entries</h3>
               <p>
-                Download all journal entries as a CSV file for use in
-                spreadsheet applications or data analysis tools.
+                Download all journal entries with complete nutrient data as a CSV file for use in
+                spreadsheet applications or data analysis tools. Includes all 20+ tracked nutrients.
               </p>
             </div>
           </div>
