@@ -107,6 +107,104 @@ const NUTRIENT_MAPPINGS = {
 
 // --- Utility Functions ---
 
+/**
+ * Nutrient precision configuration
+ * Defines appropriate decimal places for each nutrient type
+ */
+const NUTRIENT_PRECISION = {
+  // Macronutrients (g) - 1 decimal place
+  protein: 1,
+  fiber: 1,
+  carbohydrates: 1,
+  sugars: 1,
+  fat: 1,
+  saturatedFat: 1,
+  monounsaturatedFat: 1,
+  polyunsaturatedFat: 1,
+
+  // Omega fatty acids (g) - 2-3 decimal places (often very small values)
+  omega3: 3,
+  omega3ALA: 3,
+  omega3EPA: 3,
+  omega3DHA: 3,
+  omega6: 3,
+
+  // Minerals (mg) - 0-1 decimal places based on magnitude
+  calcium: 'dynamic', // 0 decimals if >10, 1 decimal if <10
+  magnesium: 'dynamic',
+  potassium: 'dynamic',
+  iron: 'dynamic',
+  zinc: 'dynamic',
+
+  // Vitamins in mcg - 1-2 decimal places based on magnitude
+  vitaminD: 'dynamic',
+  vitaminB12: 'dynamic',
+  folate: 'dynamic',
+  vitaminA: 'dynamic',
+  vitaminK: 'dynamic',
+
+  // Vitamins in mg - 1 decimal place
+  vitaminB6: 1,
+  vitaminC: 1,
+};
+
+/**
+ * Round nutrient value to appropriate precision
+ * @param {string} nutrientKey - The nutrient identifier
+ * @param {number} value - The raw nutrient value
+ * @returns {number} Rounded value
+ */
+function roundNutrientValue(nutrientKey, value) {
+  if (value == null || isNaN(value)) return 0;
+  if (value === 0) return 0;
+
+  const precision = NUTRIENT_PRECISION[nutrientKey];
+
+  // Dynamic precision based on magnitude
+  if (precision === 'dynamic') {
+    if (value >= 10) {
+      // Whole numbers for large values
+      return Math.round(value);
+    } else if (value >= 1) {
+      // 1 decimal for medium values
+      return Math.round(value * 10) / 10;
+    } else {
+      // 2 decimals for small values
+      return Math.round(value * 100) / 100;
+    }
+  }
+
+  // Fixed precision
+  const factor = Math.pow(10, precision);
+  return Math.round(value * factor) / factor;
+}
+
+/**
+ * Round all nutrients in a nutrients object
+ * @param {Object} nutrients - Object with nutrient key-value pairs
+ * @param {boolean} omitZeros - Whether to omit zero values
+ * @returns {Object} Rounded nutrients object
+ */
+function roundNutrients(nutrients, omitZeros = true) {
+  if (!nutrients || typeof nutrients !== 'object') {
+    return {};
+  }
+
+  const rounded = {};
+  for (const [key, value] of Object.entries(nutrients)) {
+    const roundedValue = roundNutrientValue(key, value);
+
+    // Omit zeros if requested
+    if (omitZeros && roundedValue === 0) {
+      continue;
+    }
+
+    rounded[key] = roundedValue;
+  }
+
+  return rounded;
+}
+
 function loadInputData(filePath) {
   if (!fs.existsSync(filePath)) {
     console.error(`❌ Input file not found: ${filePath}`);
@@ -142,9 +240,12 @@ function processFood(food, options) {
   // Process measures array
   if (food.measures && Array.isArray(food.measures)) {
     processed.measures = food.measures.map((measure) => {
+      // Round nutrients and optionally omit zeros
+      const roundedNutrients = roundNutrients(measure.nutrients || {}, true);
+
       const processedMeasure = {
         measure: measure.measure,
-        nutrients: measure.nutrients || {},
+        nutrients: roundedNutrients,
       };
 
       if (options.minify) {
@@ -157,7 +258,8 @@ function processFood(food, options) {
   // Add metadata if not minimal
   if (!options.minimal) {
     if (food.nutrientsPer100g) {
-      processed.nutrientsPer100g = food.nutrientsPer100g;
+      // Also round nutrientsPer100g
+      processed.nutrientsPer100g = roundNutrients(food.nutrientsPer100g, true);
     }
     if (food.sourceId) {
       processed.sourceId = food.sourceId;
