@@ -1384,6 +1384,154 @@
     font-size: 20px;
   }
 
+  /* Mobile Card View (< 768px) */
+  .food-card {
+    background-color: var(--surface);
+    border: 1px solid var(--divider);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+
+  .food-card.custom {
+    border-left: 3px solid var(--secondary-color);
+    background-color: var(--custom-food-bg);
+  }
+
+  .food-nutrients {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  .nutrient-value {
+    white-space: nowrap;
+  }
+
+  .nutrient-separator {
+    color: var(--divider);
+    margin: 0 4px;
+  }
+
+  /* Desktop Table View (>= 768px) */
+  .food-table-container {
+    overflow-x: auto;
+    border-radius: 8px;
+    border: 1px solid var(--divider);
+    background-color: var(--surface);
+  }
+
+  .food-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+
+  .food-table thead {
+    background-color: var(--surface-variant);
+    border-bottom: 2px solid var(--divider);
+  }
+
+  .food-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  .food-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--divider);
+    color: var(--text-secondary);
+  }
+
+  .food-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .food-table tbody tr:hover {
+    background-color: var(--hover-overlay);
+  }
+
+  .food-table tbody tr.custom {
+    background-color: var(--custom-food-bg);
+    border-left: 3px solid var(--secondary-color);
+  }
+
+  .food-table .checkbox-col {
+    width: 60px;
+    text-align: center;
+  }
+
+  .food-table .name-col {
+    min-width: 250px;
+  }
+
+  .food-table .nutrient-col {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .food-table .actions-col {
+    width: 80px;
+    text-align: center;
+  }
+
+  .food-name-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .food-name-cell .food-name {
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .food-name-cell .food-measure {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  .favorite-btn-table,
+  .delete-btn-table {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .favorite-btn-table:hover {
+    background-color: var(--divider);
+    color: var(--primary-color);
+  }
+
+  .favorite-btn-table.favorite {
+    color: var(--primary-color);
+  }
+
+  .delete-btn-table:hover {
+    background-color: var(--divider);
+    color: var(--error-color);
+  }
+
+  .favorite-btn-table .material-icons,
+  .delete-btn-table .material-icons {
+    font-size: 20px;
+  }
+
   /* Delete Confirmation Modal */
   .modal-backdrop {
     position: fixed;
