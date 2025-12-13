@@ -118,7 +118,7 @@
       const month = String(now.getMonth() + 1).padStart(2, "0");
       const day = String(now.getDate()).padStart(2, "0");
       const dateStr = `${year}-${month}-${day}`;
-      const filename = `calcium-tracker-backup-${dateStr}.json`;
+      const filename = `nutrients-tracker-backup-${dateStr}.json`;
 
       // Create and download file
       const blob = new Blob([JSON.stringify(backupData, null, 2)], {
