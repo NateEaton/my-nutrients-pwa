@@ -993,7 +993,19 @@
         servingUnit = scanData.finalServingUnit || 'serving';
         logger.debug('ADD FOOD', 'Set serving info from UPC:', { servingQuantity, servingUnit });
 
-        // Use the final calculated per-serving calcium with fallbacks
+        // Extract all nutrients from scan result (per-serving values)
+        nutrientInputs = {};
+        if (scanData.nutrientsPerServing && typeof scanData.nutrientsPerServing === 'object') {
+          // Use per-serving nutrients directly
+          nutrientInputs = { ...scanData.nutrientsPerServing };
+          logger.debug('ADD FOOD', 'Set nutrients from UPC (per-serving):', nutrientInputs);
+        } else if (scanData.nutrients && typeof scanData.nutrients === 'object') {
+          // Fallback to raw nutrients if per-serving not available
+          nutrientInputs = { ...scanData.nutrients };
+          logger.debug('ADD FOOD', 'Set nutrients from UPC (raw):', nutrientInputs);
+        }
+
+        // Legacy: also set calcium variable for backward compatibility
         calcium = '';
         if (scanData.calciumPerServing) {
           calcium = scanData.calciumPerServing.toString();
@@ -1002,7 +1014,7 @@
         } else if (scanData.calciumFromPercentDV) {
           calcium = scanData.calciumFromPercentDV.toString();
         }
-        logger.debug('ADD FOOD', 'Set calcium from UPC:', calcium);
+        logger.debug('ADD FOOD', 'Set calcium from UPC (legacy):', calcium);
 
       } else if (scanData.method === 'OCR') {
         logger.debug('ADD FOOD', 'Processing OCR scan data:', scanData);
