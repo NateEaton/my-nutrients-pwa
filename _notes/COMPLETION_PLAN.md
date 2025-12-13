@@ -105,7 +105,24 @@ $: canSelectMore = settings.displayedNutrients.length < MAX_DISPLAYED;
 
 ---
 
-#### Task 6.3: Global Branding Update (My Calcium → My Nutrients)
+#### Task 6.3: Backup Filename Update
+
+**File**: `src/lib/components/BackupModal.svelte`
+
+**Change** (line 121):
+```javascript
+// Old
+const filename = `calcium-tracker-backup-${dateStr}.json`;
+
+// New
+const filename = `nutrients-tracker-backup-${dateStr}.json`;
+```
+
+**Impact**: All future backups will use the new filename. Existing backups with old filenames will still restore correctly.
+
+---
+
+#### Task 6.4: Global Branding Update (My Calcium → My Nutrients)
 
 **Issue**: "My Calcium" branding appears in 60+ locations throughout the codebase, creating confusion and inconsistency.
 
@@ -134,11 +151,21 @@ $: canSelectMore = settings.displayedNutrients.length < MAX_DISPLAYED;
    - `calciumState` → `nutrientState`
    - **Recommendation**: Rename in Phase 7 (refactoring) to avoid scope creep
 
-6. **User-Facing Strings**:
+6. **Backup Filename**:
+   - `src/lib/components/BackupModal.svelte` line 121:
+   - `calcium-tracker-backup-${dateStr}.json` → `nutrients-tracker-backup-${dateStr}.json`
+
+7. **User-Facing Strings**:
    - Settings page headers
    - Menu labels
    - Empty states
    - Toast messages
+
+8. **Documentation Files**:
+   - `docs/index.html`: Complete rewrite (currently says "My Calcium - Calcium Tracker")
+   - `README.md`: Polish and finalize (already has My Nutrients sections but needs consistency check)
+   - `src/routes/guide/+page.svelte`: Update user guide to reference nutrients, not just calcium
+   - `src/lib/components/AboutDialog.svelte`: Update app name and description
 
 **Automated Approach**:
 ```bash
@@ -158,7 +185,12 @@ grep -r "My Calcium" src/ --include="*.svelte" --include="*.ts" --include="*.js"
 - `vite.config.js`
 - All component headers (40+ files)
 - `src/lib/components/Header.svelte` (menu title)
+- `src/lib/components/AboutDialog.svelte` (app name, description)
+- `src/lib/components/BackupModal.svelte` (backup filename)
 - `src/routes/settings/+page.svelte` (page title)
+- `src/routes/guide/+page.svelte` (user guide content)
+- `docs/index.html` (landing page - full rewrite needed)
+- `README.md` (polish and finalize)
 
 ---
 
@@ -622,13 +654,22 @@ The `source_data/html-docs-generator.cjs` script generates `static/database-docs
 
 ---
 
-**Recommendation**: **Option B (Show Only Displayed Nutrients)** with a note at the top of the HTML explaining how to view more nutrients in-app.
+**Important Clarification**: The database docs HTML is **static** - it's generated once by the build pipeline and committed to the repo. It **cannot** dynamically show different nutrients based on user settings (since those are stored in browser localStorage).
+
+**Viable Options**:
+- **Option A**: Show a fixed set of 4 "most popular" nutrients (protein, calcium, fiber, vitamin D)
+- **Option B**: Show all 25 nutrients (large file, ~10-15MB estimated)
+- **Option C**: Remove HTML docs entirely, direct users to in-app database browser
+- **Option D**: Generate CSV export instead of HTML
+
+**Recommendation**: **Option A (Fixed 4 Nutrients)** - protein, calcium, fiber, vitamin D - with prominent note at top: "For complete nutrient information, use the Database page in the app."
 
 **Rationale**:
 - The database browser page (in-app) is superior for exploration
-- HTML docs serve as a quick reference, not exhaustive data dump
-- Showing 4 nutrients keeps file size manageable (~2-3MB)
+- HTML docs serve as a static reference, not interactive tool
+- Showing 4 fixed nutrients keeps file size manageable (~2-3MB)
 - Users who need detailed analysis can use the in-app browser or export to CSV
+- These 4 nutrients are the default displayedNutrients, so they're most relevant
 
 **Alternative**: Defer this to post-launch. The HTML docs aren't critical functionality.
 
@@ -721,9 +762,23 @@ The `source_data/html-docs-generator.cjs` script generates `static/database-docs
 #### Task 10.5: Documentation Updates
 
 **User-Facing**:
-- Update guide page with nutrient selection instructions
+- Update guide page (`src/routes/guide/+page.svelte`) with nutrient selection instructions
 - Add FAQ: "How do I change which nutrients are displayed?"
-- Update about page with app description
+- Update about dialog (`src/lib/components/AboutDialog.svelte`) with app description
+- Update landing page (`docs/index.html`) - see detailed task below
+- Polish README.md for final release (already mostly updated)
+
+**Landing Page Rewrite** (`docs/index.html`):
+Current state: "My Calcium - Calcium Tracker" with calcium-focused description
+Required changes:
+- Title: "My Nutrients - Essential Nutrient Tracker"
+- Meta description: Update from calcium-only to multi-nutrient tracking
+- Header: "My Nutrients" instead of "My Calcium"
+- Subtitle: From "Track Your Daily Calcium Intake" to "Track Essential Nutrients for Better Health"
+- Benefits section: Update from calcium benefits to comprehensive nutrition benefits
+- Features list: Update to mention multi-nutrient tracking, nutrient selection
+- Call-to-action: Keep launch app button, update surrounding text
+- Disclaimer: Update any calcium-specific medical advice to general nutrition tracking disclaimer
 
 **Developer-Facing**:
 - Update `CLAUDE.md` with new branding
