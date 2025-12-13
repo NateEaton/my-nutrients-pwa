@@ -831,7 +831,6 @@
             <span>Name</span>
             <span class="material-icons sort-icon">{getSortIcon("name")}</span>
           </div>
-          {@const activeNutrient = getNutrientMetadata(selectedNutrientForControls)}
           <div
             class="sort-option"
             class:active={sortBy === selectedNutrientForControls}
@@ -839,10 +838,10 @@
             on:keydown={(e) => handleSortKeydown(e, selectedNutrientForControls)}
             role="button"
             tabindex="0"
-            title="Sort by {activeNutrient?.label || 'nutrient'}"
+            title="Sort by {getNutrientMetadata(selectedNutrientForControls)?.label || 'nutrient'}"
           >
             <span class="material-icons">science</span>
-            <span>{activeNutrient?.shortLabel || activeNutrient?.label || 'Nutrient'}</span>
+            <span>{getNutrientMetadata(selectedNutrientForControls)?.shortLabel || getNutrientMetadata(selectedNutrientForControls)?.label || 'Nutrient'}</span>
             <span class="material-icons sort-icon">{getSortIcon(selectedNutrientForControls)}</span>
           </div>
           <div
