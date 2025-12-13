@@ -405,18 +405,10 @@
         on:change={handleNutrientChange}
         class="nutrient-select"
       >
-        <!-- Displayed Nutrients (starred) -->
-        <optgroup label="⭐ Tracked Nutrients">
-          {#each NUTRIENT_METADATA.filter(n => nutrientSettings.displayedNutrients.includes(n.id)) as nutrient}
-            <option value={nutrient.id}>{nutrient.label} ({nutrient.unit})</option>
-          {/each}
-        </optgroup>
-        <!-- All Other Nutrients -->
-        <optgroup label="All Nutrients">
-          {#each NUTRIENT_METADATA.filter(n => !nutrientSettings.displayedNutrients.includes(n.id)) as nutrient}
-            <option value={nutrient.id}>{nutrient.label} ({nutrient.unit})</option>
-          {/each}
-        </optgroup>
+        <!-- Show only tracked nutrients (1-4) for mobile-friendly selector -->
+        {#each NUTRIENT_METADATA.filter(n => nutrientSettings.displayedNutrients.includes(n.id)) as nutrient}
+          <option value={nutrient.id}>{nutrient.label} ({nutrient.unit})</option>
+        {/each}
       </select>
     </div>
 
