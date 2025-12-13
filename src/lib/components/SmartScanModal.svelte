@@ -177,6 +177,11 @@
       isLoading = true;
       error = null;
 
+      // Check if MediaDevices API is available
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error('Camera access is not supported. Please use HTTPS or localhost.');
+      }
+
       // Unified camera constraints for both modes
       const constraints = {
         video: {
