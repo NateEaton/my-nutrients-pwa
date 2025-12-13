@@ -22,8 +22,21 @@
  */
 
 import { writable, derived, get } from 'svelte/store';
-import type { CalciumState, FoodEntry, CustomFood, CalciumSettings, UserServingPreference } from '$lib/types/calcium';
+import type { CalciumSettings } from '$lib/types/calcium';
+import type { FoodEntry, CustomFood, UserServingPreference } from '$lib/types/nutrients';
 import { CalciumService } from '$lib/services/CalciumService';
+
+// CalciumState interface (kept here for backward compatibility)
+interface CalciumState {
+  currentDate: string;
+  foods: FoodEntry[];
+  customFoods: CustomFood[];
+  favorites: Set<number>;
+  hiddenFoods: Set<number>;
+  servingPreferences: Map<number, UserServingPreference>;
+  settings: CalciumSettings;
+  isLoading: boolean;
+}
 
 // Toast store for notifications
 export const toastStore = writable<{ message: string; type: 'info' | 'success' | 'error' | 'warning' }>({

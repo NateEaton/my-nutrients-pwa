@@ -138,8 +138,14 @@ function formatMeasure(portion) {
 
   // Filter out "undetermined" from unit name (USDA placeholder value)
   if (unitName.toLowerCase() === 'undetermined') {
-    // Try abbreviation first, then fall back to modifier, then generic 'serving'
-    unitName = portion.measureUnit?.abbreviation || modifier || 'serving';
+    // Try abbreviation first (but check it's not also "undetermined"),
+    // then fall back to modifier (if not 'undetermined'), then generic 'serving'
+    const cleanModifier = (modifier && modifier.toLowerCase() !== 'undetermined') ? modifier : '';
+    const cleanAbbr = (portion.measureUnit?.abbreviation &&
+                       portion.measureUnit.abbreviation.toLowerCase() !== 'undetermined')
+                      ? portion.measureUnit.abbreviation
+                      : '';
+    unitName = cleanAbbr || cleanModifier || 'serving';
   }
 
   let measure = `${value} ${unitName}`;

@@ -90,7 +90,9 @@ function normalizeName(originalName) {
   norm = norm.replace(/,?\s*(with salt|without salt|salted|unsalted|low sodium|reduced sodium|no salt added)/gi, "");
   norm = norm.replace(/\b(enriched|unenriched|fortified|sweetened|unsweetened|ready-to-drink|from concentrate|chilled)\b/gi, "");
   norm = norm.replace(/\b(canned|frozen|raw|unprepared|prepared|cooked|boiled|steamed|baked|roasted|drained|fried)\b/gi, "");
-  norm = norm.replace(/\b(low fat|reduced fat|fat free|nonfat|part-skim|whole milk|low moisture|lean only|lean and fat|commercial)\b/gi, "");
+  // NOTE: Preserve nutritionally significant fat descriptors (whole milk, low fat, nonfat, lean only, etc.)
+  // Only remove non-nutritional descriptors
+  norm = norm.replace(/\b(low moisture|commercial)\b/gi, "");
 
   // Stage 5: Final cleanup
   norm = norm

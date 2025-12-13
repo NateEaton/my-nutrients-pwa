@@ -145,7 +145,7 @@
 
 {#if show}
   <div class="modal-overlay" on:click={handleBackdropClick}>
-    <div class="modal-content nutrient-settings-modal" on:click|stopPropagation>
+    <div class="modal-content" on:click|stopPropagation>
       <div class="modal-header">
         <button
           class="back-btn"
@@ -155,15 +155,18 @@
           <span class="material-icons">arrow_back</span>
         </button>
         <h2 class="modal-title">Manage Nutrients</h2>
+        <div class="header-spacer"></div>
       </div>
 
-      <div class="modal-body">
-        {#if isLoading}
+      {#if isLoading}
+        <div class="modal-body">
           <div class="loading-state">
             <p>Loading settings...</p>
           </div>
-        {:else}
-          <form on:submit={handleSubmit}>
+        </div>
+      {:else}
+        <form on:submit={handleSubmit} class="modal-form">
+          <div class="modal-body">
             <div class="section-header">
               <h3>Display Preferences</h3>
               <p class="hint">Select up to {MAX_DISPLAYED} nutrients to display in food cards</p>
@@ -201,7 +204,7 @@
                           bind:value={settings.nutrientGoals[nutrient.id]}
                           placeholder={nutrient.defaultGoal.toString()}
                           min="0"
-                          step="0.1"
+                          step="0.01"
                           class="goal-input"
                         />
                         <span class="unit">{nutrient.unit}</span>
@@ -215,84 +218,98 @@
             {#if errorMessage}
               <div class="error-message">{errorMessage}</div>
             {/if}
+          </div>
 
-            <div class="modal-actions">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                on:click={resetToDefaults}
-                disabled={isSubmitting}
-              >
-                Reset to Defaults
-              </button>
-              <button
-                type="submit"
-                class="btn btn-primary"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Saving..." : "Save Settings"}
-              </button>
-            </div>
-          </form>
-        {/if}
-      </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              on:click={resetToDefaults}
+              disabled={isSubmitting}
+            >
+              Reset to Defaults
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Saving..." : "Save Settings"}
+            </button>
+          </div>
+        </form>
+      {/if}
     </div>
   </div>
 {/if}
 
 <style>
+  /* Full-screen modal backdrop */
   .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--modal-backdrop);
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
-    padding: 1rem;
+    touch-action: none; /* Prevent touch scrolling on backdrop */
+    overscroll-behavior: contain; /* Prevent scroll chaining to background */
   }
 
+  /* Full-screen modal container */
   .modal-content {
-    background-color: var(--surface);
-    border-radius: 12px;
-    max-width: 600px;
     width: 100%;
-    max-height: 90vh;
+    height: 100%;
+    max-width: 480px; /* Match app container width */
+    background-color: var(--surface);
+    border-radius: 0;
+    margin: 0;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
   }
 
-  .nutrient-settings-modal {
-    max-width: 700px;
-  }
-
-  .modal-header {
+  .modal-form {
     display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden; /* Prevent overflow */
+    min-height: 0; /* Allow flexbox to shrink */
+  }
+
+  /* Modal header */
+  .modal-header {
+    display: grid;
+    grid-template-columns: var(--touch-target-min) 1fr var(--touch-target-min);
     align-items: center;
-    padding: 1rem;
-    border-bottom: 1px solid var(--border);
-    gap: 0.5rem;
+    padding: var(--spacing-lg);
+    background-color: var(--primary-color);
+    color: white;
+    min-height: var(--header-height);
+    flex-shrink: 0;
   }
 
   .back-btn {
     background: none;
     border: none;
-    color: var(--text-primary);
+    color: white;
     cursor: pointer;
-    padding: 0.5rem;
+    padding: var(--spacing-sm);
+    border-radius: 50%;
+    transition: background-color 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    transition: background-color 0.2s;
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
   }
 
   .back-btn:hover {
-    background-color: var(--border);
+    background-color: var(--hover-overlay);
   }
 
   .back-btn:disabled {
@@ -302,15 +319,21 @@
 
   .modal-title {
     margin: 0;
-    font-size: 1.25rem;
+    font-size: var(--font-size-xl);
     font-weight: 600;
-    color: var(--text-primary);
+    text-align: left;
   }
 
+  .header-spacer {
+    /* Balances the back button */
+  }
+
+  /* Modal content */
   .modal-body {
-    padding: 1.5rem;
-    overflow-y: auto;
     flex: 1;
+    padding: var(--spacing-xl);
+    overflow-y: auto;
+    min-height: 0; /* Allow flexbox to shrink below content size */
   }
 
   .loading-state {
@@ -441,13 +464,14 @@
     text-align: center;
   }
 
-  .modal-actions {
+  .modal-footer {
     display: flex;
     gap: 1rem;
     justify-content: flex-end;
-    margin-top: 2rem;
-    padding-top: 1rem;
+    padding: 1rem 1.5rem;
     border-top: 1px solid var(--border);
+    flex-shrink: 0; /* Keep footer fixed size */
+    background-color: var(--surface);
   }
 
   .btn {
@@ -461,22 +485,22 @@
   }
 
   .btn-secondary {
-    background-color: var(--surface);
-    color: var(--text-primary);
-    border: 1px solid var(--border);
+    background-color: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--divider);
   }
 
   .btn-secondary:hover:not(:disabled) {
-    background-color: var(--border);
+    background-color: var(--divider);
   }
 
   .btn-primary {
-    background-color: var(--primary);
+    background-color: var(--primary-color);
     color: white;
   }
 
   .btn-primary:hover:not(:disabled) {
-    opacity: 0.9;
+    background-color: var(--primary-color-dark);
   }
 
   .btn:disabled {
@@ -484,13 +508,8 @@
     cursor: not-allowed;
   }
 
+  /* Mobile adjustments */
   @media (max-width: 640px) {
-    .modal-content {
-      max-width: 100%;
-      max-height: 100vh;
-      border-radius: 0;
-    }
-
     .nutrient-item {
       flex-direction: column;
       align-items: flex-start;
@@ -506,8 +525,9 @@
       flex: 1;
     }
 
-    .modal-actions {
+    .modal-footer {
       flex-direction: column;
+      gap: 0.75rem;
     }
 
     .btn {

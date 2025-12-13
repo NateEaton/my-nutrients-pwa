@@ -78,15 +78,15 @@ export class SearchService {
    * Enhanced search with word boundary detection and multi-keyword requirements
    */
   static searchFoods(
-    query: string, 
-    foods: any[], 
+    query: string,
+    foods: any[],
     options: SearchOptions = {}
   ): SearchResult[] {
     if (!query || query.length < 2) return [];
 
     const searchContext = this.createSearchContext(query, options);
     const results = this.performEnhancedSearch(foods, searchContext);
-    
+
     return this.rankAndLimit(results, options);
   }
 
@@ -228,7 +228,9 @@ export class SearchService {
 
     // Boost score for foods with higher calcium content (use primary measure for compatibility)
     const primaryMeasure = getPrimaryMeasure(food);
-    score += Math.log(primaryMeasure.calcium + 1) * this.SCORING.CALCIUM_BONUS_MULTIPLIER;
+    // Handle both legacy format (measure.calcium) and new format (measure.nutrients.calcium)
+    const calciumValue = primaryMeasure.nutrients?.calcium ?? primaryMeasure.calcium ?? 0;
+    score += Math.log(calciumValue + 1) * this.SCORING.CALCIUM_BONUS_MULTIPLIER;
 
     return score;
   }
@@ -260,7 +262,7 @@ export class SearchService {
 
   private static rankAndLimit(results: SearchResult[], options: SearchOptions): SearchResult[] {
     const maxResults = options.maxResults || 15;
-    
+
     return results
       .sort((a, b) => b.score - a.score)
       .slice(0, maxResults);

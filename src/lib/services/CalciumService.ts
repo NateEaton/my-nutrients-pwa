@@ -18,8 +18,8 @@
 
 import { get } from 'svelte/store';
 import { calciumState, showToast } from '$lib/stores/calcium';
-import type { FoodEntry, CustomFood, CalciumSettings, UserServingPreference } from '$lib/types/calcium';
-import type { NutrientSettings, NutrientValues } from '$lib/types/nutrients';
+import type { CalciumSettings } from '$lib/types/calcium';
+import type { FoodEntry, CustomFood, UserServingPreference, NutrientSettings, NutrientValues } from '$lib/types/nutrients';
 import { DEFAULT_FOOD_DATABASE, getPrimaryMeasure } from '$lib/data/foodDatabase';
 import { SyncService } from '$lib/services/SyncService';
 import { SyncTrigger } from '$lib/utils/syncTrigger';
@@ -1124,8 +1124,15 @@ private async clearAllData(): Promise<void> {
    * @param quantity The preferred quantity
    * @param unit The preferred unit
    * @param measureIndex Optional: index of preferred measure for multi-measure foods
+   * @param nutrientOverrides Optional: user-edited nutrient values that override calculated values
    */
-  async saveServingPreference(foodId: number, quantity: number, unit: string, measureIndex?: number): Promise<void> {
+  async saveServingPreference(
+    foodId: number,
+    quantity: number,
+    unit: string,
+    measureIndex?: number,
+    nutrientOverrides?: any
+  ): Promise<void> {
     if (!this.db) return;
 
     const preference: UserServingPreference = {
@@ -1133,7 +1140,8 @@ private async clearAllData(): Promise<void> {
       preferredQuantity: quantity,
       preferredUnit: unit,
       lastUsed: new Date().toISOString(),
-      ...(measureIndex !== undefined && { preferredMeasureIndex: measureIndex })
+      ...(measureIndex !== undefined && { preferredMeasureIndex: measureIndex }),
+      ...(nutrientOverrides && Object.keys(nutrientOverrides).length > 0 && { nutrientOverrides })
     };
 
     return new Promise((resolve, reject) => {
@@ -1364,13 +1372,13 @@ private async clearAllData(): Promise<void> {
       // Handle both old (single calcium field) and new (nutrients object) formats
       let foodNutrients: any = {};
 
-      // Check if this is old format with calcium field
-      if ('calcium' in food && typeof food.calcium === 'number') {
-        foodNutrients = { calcium: food.calcium };
-      }
-      // Check if this is new format with nutrients object
-      else if ('nutrients' in food && food.nutrients) {
+      // Prioritize new format (nutrients object)
+      if ('nutrients' in food && food.nutrients) {
         foodNutrients = food.nutrients;
+      }
+      // Fall back to old format (calcium field only) for legacy data
+      else if ('calcium' in food && typeof food.calcium === 'number') {
+        foodNutrients = { calcium: food.calcium };
       }
 
       // Aggregate all nutrients
