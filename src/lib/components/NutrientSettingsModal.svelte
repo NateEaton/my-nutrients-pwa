@@ -84,9 +84,8 @@
     return settings.displayedNutrients.includes(nutrientId);
   }
 
-  function canSelectMore() {
-    return settings.displayedNutrients.length < MAX_DISPLAYED;
-  }
+  // Reactive statement - updates automatically when displayedNutrients changes
+  $: canSelectMore = settings.displayedNutrients.length < MAX_DISPLAYED;
 
   function handleClose() {
     if (!isSubmitting) {
@@ -181,13 +180,12 @@
                 <div class="nutrient-list">
                   {#each nutrients as nutrient}
                     {@const displayed = isDisplayed(nutrient.id)}
-                    {@const canSelect = canSelectMore() || displayed}
                     <div class="nutrient-item">
                       <label class="nutrient-checkbox">
                         <input
                           type="checkbox"
                           checked={displayed}
-                          disabled={!canSelect && !displayed}
+                          disabled={!displayed && !canSelectMore}
                           on:change={() => toggleNutrient(nutrient.id)}
                         />
                         <span class="nutrient-name">
