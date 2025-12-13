@@ -797,20 +797,23 @@
             <span>Name</span>
             <span class="material-icons sort-icon">{getSortIcon("name")}</span>
           </div>
-          <div
-            class="sort-option"
-            class:active={sortBy === "calcium"}
-            on:click={() => handleSortClick("calcium")}
-            on:keydown={(e) => handleSortKeydown(e, "calcium")}
-            role="button"
-            tabindex="0"
-          >
-            <span class="material-icons">science</span>
-            <span>Ca</span>
-            <span class="material-icons sort-icon"
-              >{getSortIcon("calcium")}</span
-            >
-          </div>
+          {#each displayedNutrients as nutrientId}
+            {@const nutrient = getNutrientMetadata(nutrientId)}
+            {#if nutrient}
+              <div
+                class="sort-option"
+                class:active={sortBy === nutrientId}
+                on:click={() => handleSortClick(nutrientId)}
+                on:keydown={(e) => handleSortKeydown(e, nutrientId)}
+                role="button"
+                tabindex="0"
+              >
+                <span class="material-icons">science</span>
+                <span>{nutrient.shortLabel || nutrient.label}</span>
+                <span class="material-icons sort-icon">{getSortIcon(nutrientId)}</span>
+              </div>
+            {/if}
+          {/each}
           <div
             class="sort-option"
             class:active={sortBy === "type"}
@@ -833,83 +836,161 @@
 
       <!-- Results -->
       <div class="results-container">
-        {#each filteredFoods as food}
-          <div
-            class="food-item"
-            class:custom={food.isCustom}
-            class:database-mode={selectedFilter === "database"}
-          >
-            {#if selectedFilter === "database" && !food.isCustom}
-              <div class="hide-checkbox-container">
-                <input
-                  type="checkbox"
-                  class="hide-checkbox"
-                  checked={$nutrientState.hiddenFoods.has(food.id)}
-                  on:change={() => toggleFoodHidden(food)}
-                  title={$nutrientState.hiddenFoods.has(food.id)
-                    ? "Unhide food"
-                    : "Hide food"}
-                />
-              </div>
-            {:else if selectedFilter === "available" && !food.isCustom}
-              <div class="docs-link-container">
-                <button
-                  class="docs-link-btn"
-                  on:click={() => openFoodDocs(food)}
-                  title="View in database documentation"
-                >
-                  <span class="material-icons">open_in_new</span>
-                </button>
-              </div>
-            {/if}
-            <div class="food-info">
-              <div class="food-name">
-                {food.name}
-                {#if food.isCustom && food.sourceMetadata}
-                  <SourceIndicator {food} size="small" clickable={true} on:click={() => handleInfoClick(food)} />
-                {/if}
-              </div>
-              <div class="food-measure">
-                {getPrimaryMeasure(food).measure}
-                {#if hasMultipleMeasures(food)}
-                  <span class="measure-count">({getAllMeasures(food).length} servings)</span>
-                {/if}
-              </div>
-            </div>
-            <div class="food-calcium">
-              <div class="calcium-amount" title="{getPrimaryMeasure(food).calcium}mg">
-                {formatCalcium(getPrimaryMeasure(food).calcium)}mg
-              </div>
-              <div class="food-type">
-                {food.isCustom ? "User" : "Database"}
-              </div>
-            </div>
-            {#if !food.isCustom}
-              <button
-                class="favorite-btn"
-                class:favorite={$nutrientState.favorites.has(food.id)}
-                on:click={() => toggleFavorite(food)}
-                title={$nutrientState.favorites.has(food.id)
-                  ? "Remove from favorites"
-                  : "Add to favorites"}
-              >
-                <span class="material-icons">
-                  {$nutrientState.favorites.has(food.id)
-                    ? "star"
-                    : "star_border"}
-                </span>
-              </button>
-            {:else if selectedFilter !== "database"}
-              <button
-                class="delete-btn"
-                on:click={() => confirmDeleteFood(food)}
-                title="Delete custom food"
-              >
-                <span class="material-icons">delete</span>
-              </button>
-            {/if}
+        {#if windowWidth >= 768}
+          <!-- Desktop: Table View -->
+          <div class="food-table-container">
+            <table class="food-table">
+              <thead>
+                <tr>
+                  {#if selectedFilter === "database"}
+                    <th class="checkbox-col">Show</th>
+                  {/if}
+                  <th class="name-col">Food Name</th>
+                  {#each displayedNutrients as nutrientId}
+                    {@const nutrient = getNutrientMetadata(nutrientId)}
+                    {#if nutrient}
+                      <th class="nutrient-col">{nutrient.label} ({nutrient.unit})</th>
+                    {/if}
+                  {/each}
+                  <th class="actions-col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {#each filteredFoods as food}
+                  <tr class:custom={food.isCustom}>
+                    {#if selectedFilter === "database"}
+                      <td class="checkbox-col">
+                        {#if !food.isCustom}
+                          <input
+                            type="checkbox"
+                            class="hide-checkbox"
+                            checked={$nutrientState.hiddenFoods.has(food.id)}
+                            on:change={() => toggleFoodHidden(food)}
+                            title={$nutrientState.hiddenFoods.has(food.id) ? "Unhide food" : "Hide food"}
+                          />
+                        {/if}
+                      </td>
+                    {/if}
+                    <td class="name-col">
+                      <div class="food-name-cell">
+                        <div class="food-name">{food.name}</div>
+                        <div class="food-measure">{getPrimaryMeasure(food).measure}</div>
+                      </div>
+                    </td>
+                    {#each displayedNutrients as nutrientId}
+                      {@const value = getNutrientValue(food, nutrientId)}
+                      {@const nutrient = getNutrientMetadata(nutrientId)}
+                      <td class="nutrient-col">
+                        {formatNutrientValue(value, nutrientId)}{nutrient?.unit || ''}
+                      </td>
+                    {/each}
+                    <td class="actions-col">
+                      {#if !food.isCustom}
+                        <button
+                          class="favorite-btn-table"
+                          class:favorite={$nutrientState.favorites.has(food.id)}
+                          on:click={() => toggleFavorite(food)}
+                          title={$nutrientState.favorites.has(food.id) ? "Remove from favorites" : "Add to favorites"}
+                        >
+                          <span class="material-icons">
+                            {$nutrientState.favorites.has(food.id) ? "star" : "star_border"}
+                          </span>
+                        </button>
+                      {:else if selectedFilter !== "database"}
+                        <button
+                          class="delete-btn-table"
+                          on:click={() => confirmDeleteFood(food)}
+                          title="Delete custom food"
+                        >
+                          <span class="material-icons">delete</span>
+                        </button>
+                      {/if}
+                    </td>
+                  </tr>
+                {/each}
+              </tbody>
+            </table>
           </div>
         {:else}
+          <!-- Mobile: Card View -->
+          {#each filteredFoods as food}
+            <div
+              class="food-card"
+              class:custom={food.isCustom}
+            >
+              {#if selectedFilter === "database" && !food.isCustom}
+                <div class="hide-checkbox-container">
+                  <input
+                    type="checkbox"
+                    class="hide-checkbox"
+                    checked={$nutrientState.hiddenFoods.has(food.id)}
+                    on:change={() => toggleFoodHidden(food)}
+                    title={$nutrientState.hiddenFoods.has(food.id) ? "Unhide food" : "Hide food"}
+                  />
+                </div>
+              {:else if selectedFilter === "available" && !food.isCustom}
+                <div class="docs-link-container">
+                  <button
+                    class="docs-link-btn"
+                    on:click={() => openFoodDocs(food)}
+                    title="View in database documentation"
+                  >
+                    <span class="material-icons">open_in_new</span>
+                  </button>
+                </div>
+              {/if}
+              <div class="food-info">
+                <div class="food-name">
+                  {food.name}
+                  {#if food.isCustom && food.sourceMetadata}
+                    <SourceIndicator {food} size="small" clickable={true} on:click={() => handleInfoClick(food)} />
+                  {/if}
+                </div>
+                <div class="food-measure">
+                  {getPrimaryMeasure(food).measure}
+                  {#if hasMultipleMeasures(food)}
+                    <span class="measure-count">({getAllMeasures(food).length} servings)</span>
+                  {/if}
+                </div>
+                <div class="food-nutrients">
+                  {#each displayedNutrients as nutrientId, idx}
+                    {@const value = getNutrientValue(food, nutrientId)}
+                    {@const nutrient = getNutrientMetadata(nutrientId)}
+                    {#if nutrient}
+                      <span class="nutrient-value">
+                        {formatNutrientValue(value, nutrientId)}{nutrient.unit} {nutrient.label}
+                      </span>
+                      {#if idx < displayedNutrients.length - 1}
+                        <span class="nutrient-separator"> | </span>
+                      {/if}
+                    {/if}
+                  {/each}
+                </div>
+              </div>
+              {#if !food.isCustom}
+                <button
+                  class="favorite-btn"
+                  class:favorite={$nutrientState.favorites.has(food.id)}
+                  on:click={() => toggleFavorite(food)}
+                  title={$nutrientState.favorites.has(food.id) ? "Remove from favorites" : "Add to favorites"}
+                >
+                  <span class="material-icons">
+                    {$nutrientState.favorites.has(food.id) ? "star" : "star_border"}
+                  </span>
+                </button>
+              {:else if selectedFilter !== "database"}
+                <button
+                  class="delete-btn"
+                  on:click={() => confirmDeleteFood(food)}
+                  title="Delete custom food"
+                >
+                  <span class="material-icons">delete</span>
+                </button>
+              {/if}
+            </div>
+          {/each}
+        {/if}
+        {#if filteredFoods.length === 0}
           <div class="empty-state">
             <div class="empty-icon">🔍</div>
             <div class="empty-text">
@@ -917,7 +998,7 @@
               <p>Try adjusting your search or filter</p>
             </div>
           </div>
-        {/each}
+        {/if}
       </div>
     {/if}
   </div>
