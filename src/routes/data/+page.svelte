@@ -40,6 +40,7 @@
   let nutrientSettings = null;
   let displayedNutrients = ['protein', 'calcium', 'fiber', 'vitaminD']; // Default
   let windowWidth = 1024; // Default to desktop view
+  let selectedNutrientForControls = 'calcium'; // Which nutrient to use for sort/filter
 
   // Calcium filter state
   let calciumFilter = {
@@ -137,6 +138,12 @@
     try {
       nutrientSettings = await nutrientService.getNutrientSettings();
       displayedNutrients = nutrientSettings.displayedNutrients || ['protein', 'calcium', 'fiber', 'vitaminD'];
+      // Set default nutrient for controls to first displayed nutrient
+      selectedNutrientForControls = displayedNutrients[0] || 'calcium';
+      // Update sortBy to match if currently on default
+      if (sortBy === 'calcium' && selectedNutrientForControls !== 'calcium') {
+        sortBy = selectedNutrientForControls;
+      }
     } catch (error) {
       console.error('Error loading nutrient settings:', error);
     }
@@ -552,7 +559,7 @@
         <p>Loading food database...</p>
       </div>
     {:else}
-      <!-- Search and Calcium Filter Row -->
+      <!-- Search and Nutrient Controls Row -->
       <div class="search-row">
         <div class="search-container">
           <input
@@ -570,7 +577,25 @@
           {/if}
         </div>
 
-        <!-- Calcium Filter Button with Dropdown -->
+        <!-- Nutrient Selector for Sort/Filter -->
+        <div class="nutrient-selector-container">
+          <label for="nutrient-selector" class="selector-label">Nutrient:</label>
+          <select
+            id="nutrient-selector"
+            class="nutrient-selector"
+            bind:value={selectedNutrientForControls}
+            title="Select nutrient for sorting and filtering"
+          >
+            {#each displayedNutrients as nutrientId}
+              {@const nutrient = getNutrientMetadata(nutrientId)}
+              {#if nutrient}
+                <option value={nutrientId}>{nutrient.label}</option>
+              {/if}
+            {/each}
+          </select>
+        </div>
+
+        <!-- Nutrient Filter Button with Dropdown -->
         <div class="calcium-filter-container">
           <button
             class="calcium-filter-btn"
@@ -797,23 +822,20 @@
             <span>Name</span>
             <span class="material-icons sort-icon">{getSortIcon("name")}</span>
           </div>
-          {#each displayedNutrients as nutrientId}
-            {@const nutrient = getNutrientMetadata(nutrientId)}
-            {#if nutrient}
-              <div
-                class="sort-option"
-                class:active={sortBy === nutrientId}
-                on:click={() => handleSortClick(nutrientId)}
-                on:keydown={(e) => handleSortKeydown(e, nutrientId)}
-                role="button"
-                tabindex="0"
-              >
-                <span class="material-icons">science</span>
-                <span>{nutrient.shortLabel || nutrient.label}</span>
-                <span class="material-icons sort-icon">{getSortIcon(nutrientId)}</span>
-              </div>
-            {/if}
-          {/each}
+          {@const activeNutrient = getNutrientMetadata(selectedNutrientForControls)}
+          <div
+            class="sort-option"
+            class:active={sortBy === selectedNutrientForControls}
+            on:click={() => handleSortClick(selectedNutrientForControls)}
+            on:keydown={(e) => handleSortKeydown(e, selectedNutrientForControls)}
+            role="button"
+            tabindex="0"
+            title="Sort by {activeNutrient?.label || 'nutrient'}"
+          >
+            <span class="material-icons">science</span>
+            <span>{activeNutrient?.shortLabel || activeNutrient?.label || 'Nutrient'}</span>
+            <span class="material-icons sort-icon">{getSortIcon(selectedNutrientForControls)}</span>
+          </div>
           <div
             class="sort-option"
             class:active={sortBy === "type"}
@@ -1136,6 +1158,41 @@
 
   .clear-search-btn .material-icons {
     font-size: 18px;
+  }
+
+  /* Nutrient Selector */
+  .nutrient-selector-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+  }
+
+  .selector-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .nutrient-selector {
+    padding: 0.5rem;
+    border: 1px solid var(--divider);
+    border-radius: 6px;
+    background-color: var(--surface);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .nutrient-selector:hover {
+    border-color: var(--primary-color);
+  }
+
+  .nutrient-selector:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-alpha-10);
   }
 
   .data-filter-controls,
