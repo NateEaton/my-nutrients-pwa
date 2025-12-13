@@ -98,10 +98,10 @@ export default defineConfig(({ mode }) => {
         },
         includeAssets: ["favicon.ico", "index.html"],
         manifest: {
-          name: "My Calcium",
-          short_name: "Calcium",
+          name: "My Nutrients",
+          short_name: "Nutrients",
           description:
-            "A simple, privacy-focused app to help you track your daily calcium intake.",
+            "A simple, privacy-focused app to help you track essential nutrients for better health.",
           theme_color: "#1976D2",
           background_color: "#ffffff",
           display: "standalone",
