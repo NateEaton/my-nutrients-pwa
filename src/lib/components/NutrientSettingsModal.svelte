@@ -18,7 +18,7 @@
 
 <script>
   import { createEventDispatcher } from "svelte";
-  import { nutrientService } from "$lib/stores/calcium";
+  import { nutrientService } from "$lib/stores/nutrients";
   import { NUTRIENT_METADATA, DEFAULT_NUTRIENT_GOALS } from "$lib/config/nutrientDefaults";
 
   export let show = false;
