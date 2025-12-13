@@ -145,7 +145,7 @@
 
 {#if show}
   <div class="modal-overlay" on:click={handleBackdropClick}>
-    <div class="modal-content nutrient-settings-modal" on:click|stopPropagation>
+    <div class="modal-content" on:click|stopPropagation>
       <div class="modal-header">
         <button
           class="back-btn"
@@ -244,36 +244,33 @@
 {/if}
 
 <style>
+  /* Full-screen modal backdrop */
   .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--modal-backdrop);
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
-    padding: 1rem;
     touch-action: none; /* Prevent touch scrolling on backdrop */
     overscroll-behavior: contain; /* Prevent scroll chaining to background */
   }
 
+  /* Full-screen modal container */
   .modal-content {
-    background-color: var(--surface);
-    border-radius: 12px;
-    max-width: 600px;
     width: 100%;
-    max-height: 90vh;
+    height: 100%;
+    max-width: 480px; /* Match app container width */
+    background-color: var(--surface);
+    border-radius: 0;
+    margin: 0;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    overflow: hidden; /* Prevent content from overflowing rounded corners */
-  }
-
-  .nutrient-settings-modal {
-    max-width: 700px;
+    overflow: hidden;
   }
 
   .modal-form {
@@ -284,15 +281,16 @@
     min-height: 0; /* Allow flexbox to shrink */
   }
 
+  /* Modal header */
   .modal-header {
     display: grid;
-    grid-template-columns: 48px 1fr 48px;
+    grid-template-columns: var(--touch-target-min) 1fr var(--touch-target-min);
     align-items: center;
     padding: var(--spacing-lg);
     background-color: var(--primary-color);
     color: white;
-    min-height: 64px;
-    flex-shrink: 0; /* Keep header fixed size */
+    min-height: var(--header-height);
+    flex-shrink: 0;
   }
 
   .back-btn {
@@ -306,8 +304,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 48px;
-    min-height: 48px;
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
   }
 
   .back-btn:hover {
@@ -330,10 +328,11 @@
     /* Balances the back button */
   }
 
+  /* Modal content */
   .modal-body {
-    padding: 1.5rem;
-    overflow-y: auto;
     flex: 1;
+    padding: var(--spacing-xl);
+    overflow-y: auto;
     min-height: 0; /* Allow flexbox to shrink below content size */
   }
 
@@ -509,18 +508,8 @@
     cursor: not-allowed;
   }
 
+  /* Mobile adjustments */
   @media (max-width: 640px) {
-    .modal-overlay {
-      padding: 0; /* Full screen on mobile */
-    }
-
-    .modal-content {
-      max-width: 100%;
-      max-height: 100vh;
-      height: 100vh; /* Full viewport height on mobile */
-      border-radius: 0;
-    }
-
     .nutrient-item {
       flex-direction: column;
       align-items: flex-start;
