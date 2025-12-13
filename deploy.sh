@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# My Calcium PWA - Multi-Environment Build & Deploy Script
+# My Nutrients PWA - Multi-Environment Build & Deploy Script
 set -e # Exit on any error
 
 # --- Load environment variables needed within this script if .env exists ---
@@ -33,9 +33,9 @@ if [ -z "$ENVIRONMENT" ]; then
 fi
 
 if [ "$ENVIRONMENT" = "test" ]; then
-    echo "🧪 Building My Calcium PWA for testing with preview server..."
+    echo "🧪 Building My Nutrients PWA for testing with preview server..."
 else
-    echo "🔨 Building My Calcium PWA for '$ENVIRONMENT' environment..."
+    echo "🔨 Building My Nutrients PWA for '$ENVIRONMENT' environment..."
 fi
 
 # --- Build ID Generation ---
@@ -82,7 +82,7 @@ if [ "$ENVIRONMENT" = "prod" ]; then
     export BASE_PATH="" # Production serves at root path
 elif [ "$ENVIRONMENT" = "dev" ]; then
     DEPLOY_DIR="$DEV_DEPLOY_DIR"
-    export BASE_PATH="/Ca-pwa-dev" # Set for development
+    export BASE_PATH="/nutrients-dev" # Set for development
 elif [ "$ENVIRONMENT" = "test" ]; then
     # Test mode - no deployment directory needed
     export BASE_PATH="" # Test serves at root path
