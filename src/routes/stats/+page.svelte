@@ -1261,7 +1261,7 @@
   }
 
   .nutrient-selector-container {
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-sm);
     background-color: var(--surface);
     border-radius: var(--spacing-sm);
     padding: var(--spacing-md);
@@ -1354,7 +1354,7 @@
   .stats-summary-card {
     background-color: var(--surface);
     border-radius: var(--spacing-md);
-    padding: var(--spacing-md) var(--spacing-xl);
+    padding: var(--spacing-sm) var(--spacing-xl);
     margin-bottom: var(--spacing-sm);
     box-shadow: var(--shadow);
     border: 1px solid var(--divider);
@@ -1373,7 +1373,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
   }
 
   .stats-period-wrapper {
@@ -1575,7 +1575,7 @@
     align-items: baseline;
     justify-content: center;
     gap: var(--spacing-xs);
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
   }
 
   .stats-value {
@@ -1632,7 +1632,7 @@
 
   .chart-area {
     position: relative;
-    height: 16.25rem; /* 260px - same as chart-scroll-wrapper */
+    height: 14.625rem; /* 234px - reduced by 10% from 260px */
   }
 
   .goal-line-container {
@@ -1800,7 +1800,7 @@
   .stat-card {
     background-color: var(--surface);
     border-radius: var(--spacing-sm);
-    padding: var(--spacing-lg) var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-sm);
     text-align: center;
     border: 1px solid var(--divider);
     transition: all 0.2s ease;
@@ -1812,23 +1812,23 @@
   }
 
   .stat-icon {
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
   }
 
   .stat-icon .material-icons {
-    font-size: var(--icon-size-lg);
+    font-size: var(--icon-size-md);
     color: var(--primary-color);
   }
 
   .stat-value {
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-base);
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: var(--spacing-xs);
+    margin-bottom: 0.125rem;
   }
 
   .stat-label {
-    font-size: var(--font-size-xs);
+    font-size: 0.625rem; /* ~10px, reduced from xs */
     font-weight: 500;
     color: var(--text-secondary);
     text-transform: uppercase;
@@ -1870,7 +1870,7 @@
     }
 
     .stats-summary-card {
-      padding: var(--spacing-md) var(--spacing-lg);
+      padding: var(--spacing-sm) var(--spacing-md);
     }
 
     .stats-value {
