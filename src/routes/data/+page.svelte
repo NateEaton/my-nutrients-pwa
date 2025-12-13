@@ -20,6 +20,7 @@
   import { onMount, onDestroy } from "svelte";
   import { nutrientState, showToast, nutrientService } from "$lib/stores/nutrients";
   import { DEFAULT_FOOD_DATABASE, getPrimaryMeasure, getAllMeasures, hasMultipleMeasures, formatCalcium } from "$lib/data/foodDatabase";
+  import { NUTRIENT_METADATA } from "$lib/config/nutrientDefaults";
   import { SearchService } from "$lib/services/SearchService";
   import { goto } from "$app/navigation";
   import SourceIndicator from "$lib/components/SourceIndicator.svelte";
@@ -34,6 +35,11 @@
   let typeSortRotation = 0; // 0, 1, 2 for three-way type rotation
   const foodDatabase = DEFAULT_FOOD_DATABASE;
   let isDatabaseLoading = false; // No loading needed
+
+  // Multi-nutrient support
+  let nutrientSettings = null;
+  let displayedNutrients = ['protein', 'calcium', 'fiber', 'vitaminD']; // Default
+  let windowWidth = 1024; // Default to desktop view
 
   // Calcium filter state
   let calciumFilter = {
@@ -93,10 +99,56 @@
     return 0; // User filter doesn't need rotation (all custom)
   }
 
+  // Helper functions for multi-nutrient display
+  function getNutrientMetadata(nutrientId) {
+    return NUTRIENT_METADATA.find(n => n.id === nutrientId);
+  }
+
+  function getNutrientValue(food, nutrientId) {
+    const measure = getPrimaryMeasure(food);
+    // Support both new (nutrients object) and legacy (direct calcium property) formats
+    const value = measure.nutrients?.[nutrientId] ?? measure[nutrientId] ?? 0;
+    return value;
+  }
+
+  function formatNutrientValue(value, nutrientId) {
+    const metadata = getNutrientMetadata(nutrientId);
+    if (!metadata) return `${value.toFixed(1)}`;
+
+    // Format based on unit and typical ranges
+    if (metadata.unit === 'mcg' || value < 1) {
+      return value.toFixed(1);
+    } else if (value < 10) {
+      return value.toFixed(1);
+    } else {
+      return Math.round(value).toString();
+    }
+  }
+
+  // Window resize handler for responsive layout
+  function handleResize() {
+    windowWidth = window.innerWidth;
+  }
+
   // Initialize component on mount
   onMount(async () => {
     // Database is already available via static import
-    // No additional initialization needed
+    // Load nutrient settings
+    try {
+      nutrientSettings = await nutrientService.getNutrientSettings();
+      displayedNutrients = nutrientSettings.displayedNutrients || ['protein', 'calcium', 'fiber', 'vitaminD'];
+    } catch (error) {
+      console.error('Error loading nutrient settings:', error);
+    }
+
+    // Set initial window width and listen for resize
+    windowWidth = window.innerWidth;
+    window.addEventListener('resize', handleResize);
+  });
+
+  // Cleanup on destroy
+  onDestroy(() => {
+    window.removeEventListener('resize', handleResize);
   });
 
   // Filter and sort foods
@@ -148,9 +200,6 @@
         case "name":
           comparison = a.name.localeCompare(b.name);
           break;
-        case "calcium":
-          comparison = getPrimaryMeasure(a).calcium - getPrimaryMeasure(b).calcium;
-          break;
         case "type":
           const aPriority = getTypeSortPriority(a);
           const bPriority = getTypeSortPriority(b);
@@ -161,6 +210,12 @@
           }
           // For type sort, ignore sortOrder for the secondary name sorting
           return comparison;
+          break;
+        default:
+          // Sort by nutrient value (supports any nutrient ID including 'calcium')
+          const aValue = getNutrientValue(a, sortBy);
+          const bValue = getNutrientValue(b, sortBy);
+          comparison = aValue - bValue;
           break;
       }
 
