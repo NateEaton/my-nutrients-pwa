@@ -21,6 +21,14 @@
   import { goto } from "$app/navigation";
   import { calciumState, calciumService } from "$lib/stores/calcium";
   import { DATABASE_METADATA } from "$lib/data/foodDatabase";
+  import { NUTRIENT_METADATA, getNutrientLabel, getNutrientUnit, getDefaultDisplayedNutrients } from "$lib/config/nutrientDefaults";
+
+  // Nutrient selection state
+  let selectedNutrient = 'calcium';
+  let nutrientSettings = {
+    nutrientGoals: {},
+    displayedNutrients: getDefaultDisplayedNutrients()
+  };
 
   let reportData = null;
   let isLoading = true;
@@ -38,9 +46,10 @@
           month: "long",
           day: "numeric",
         }),
-        dailyGoal:
-          $calciumState.dailyGoal || $calciumState.settings?.dailyGoal || 1000,
-        appVersion: "My Calcium v1.0",
+        dailyGoal: nutrientSettings.nutrientGoals?.[selectedNutrient] || 0,
+        appVersion: "My Nutrients v1.0",
+        nutrient: getNutrientLabel(selectedNutrient),
+        unit: getNutrientUnit(selectedNutrient),
       },
       summary: await generateSummary(allData, dates),
       yearlyChart: await generateYearlyChartData(allData),
@@ -66,7 +75,10 @@
 
     const dailyTotals = dates.map((date) => {
       const foods = allData[date];
-      const total = foods.reduce((sum, food) => sum + food.calcium, 0);
+      const total = foods.reduce((sum, food) => {
+        const nutrientValue = food.nutrients?.[selectedNutrient] ?? food[selectedNutrient] ?? 0;
+        return sum + nutrientValue;
+      }, 0);
       return { date, total };
     });
 
@@ -75,8 +87,7 @@
       totals.reduce((sum, total) => sum + total, 0) / totals.length
     );
 
-    const dailyGoal =
-      $calciumState.dailyGoal || $calciumState.settings?.dailyGoal || 1000;
+    const dailyGoal = nutrientSettings.nutrientGoals?.[selectedNutrient] || 0;
     const daysAtGoal = dailyTotals.filter((d) => d.total >= dailyGoal).length;
     const goalPercentage = Math.round((daysAtGoal / dates.length) * 100);
 
@@ -109,17 +120,19 @@
         String(date.getDate()).padStart(2, "0");
 
       const foods = allData[dateStr] || [];
-      const totalCalcium = foods.reduce((sum, food) => sum + food.calcium, 0);
-      const dailyGoal =
-        $calciumState.dailyGoal || $calciumState.settings?.dailyGoal || 1000;
-      const goalMet = totalCalcium >= dailyGoal;
+      const totalNutrient = foods.reduce((sum, food) => {
+        const nutrientValue = food.nutrients?.[selectedNutrient] ?? food[selectedNutrient] ?? 0;
+        return sum + nutrientValue;
+      }, 0);
+      const dailyGoal = nutrientSettings.nutrientGoals?.[selectedNutrient] || 0;
+      const goalMet = totalNutrient >= dailyGoal;
 
       weekData.push({
         date: formatDateForReport(dateStr),
         dayName: new Date(dateStr + "T00:00:00").toLocaleDateString("en-US", {
           weekday: "short",
         }),
-        totalCalcium,
+        totalNutrient,
         goalMet,
       });
     }
@@ -163,11 +176,13 @@
       if (monthDays.length > 0 && !isFutureMonth) {
         const monthTotal = monthDays.reduce((sum, dateStr) => {
           const foods = allData[dateStr];
-          return sum + foods.reduce((daySum, food) => daySum + food.calcium, 0);
+          return sum + foods.reduce((daySum, food) => {
+            const nutrientValue = food.nutrients?.[selectedNutrient] ?? food[selectedNutrient] ?? 0;
+            return daySum + nutrientValue;
+          }, 0);
         }, 0);
         averageDaily = Math.round(monthTotal / monthDays.length);
-        const dailyGoal =
-          $calciumState.dailyGoal || $calciumState.settings?.dailyGoal || 1000;
+        const dailyGoal = nutrientSettings.nutrientGoals?.[selectedNutrient] || 0;
         goalMet = averageDaily >= dailyGoal;
       }
 
@@ -210,10 +225,12 @@
       const isFuture = date > today;
 
       const foods = allData[dateStr] || [];
-      const totalCalcium = foods.reduce((sum, food) => sum + food.calcium, 0);
-      const dailyGoal =
-        $calciumState.dailyGoal || $calciumState.settings?.dailyGoal || 1000;
-      const goalMet = totalCalcium >= dailyGoal;
+      const totalNutrient = foods.reduce((sum, food) => {
+        const nutrientValue = food.nutrients?.[selectedNutrient] ?? food[selectedNutrient] ?? 0;
+        return sum + nutrientValue;
+      }, 0);
+      const dailyGoal = nutrientSettings.nutrientGoals?.[selectedNutrient] || 0;
+      const goalMet = totalNutrient >= dailyGoal;
 
       monthlyData.push({
         date: dateStr,
@@ -222,7 +239,7 @@
           month: "short",
           day: "numeric",
         }),
-        value: totalCalcium,
+        value: totalNutrient,
         goalMet,
         isToday,
         isFuture,
@@ -280,7 +297,7 @@
         return {
           heightPercent,
           barClass,
-          title: `${month.fullMonth}: ${month.value}mg avg (${month.daysTracked} days)`,
+          title: `${month.fullMonth}: ${month.value}${getNutrientUnit(selectedNutrient)} avg (${month.daysTracked} days)`,
         };
       }),
     };
@@ -317,7 +334,7 @@
         return {
           heightPercent,
           barClass: barClass + todayClass,
-          title: `${day.fullDate}: ${day.value}mg`,
+          title: `${day.fullDate}: ${day.value}${getNutrientUnit(selectedNutrient)}`,
         };
       }),
     };
@@ -329,6 +346,14 @@
 
   onMount(async () => {
     try {
+      // Load nutrient settings first
+      nutrientSettings = await calciumService.getNutrientSettings();
+      // Default to first displayed nutrient
+      if (nutrientSettings.displayedNutrients && nutrientSettings.displayedNutrients.length > 0) {
+        selectedNutrient = nutrientSettings.displayedNutrients[0];
+      }
+
+      // Then generate report data
       reportData = await generateReportData();
     } catch (error) {
       console.error("Error generating report:", error);
@@ -338,6 +363,18 @@
 
     // No keyboard event listeners needed
   });
+
+  // Regenerate report when nutrient selection changes
+  async function handleNutrientChange() {
+    isLoading = true;
+    try {
+      reportData = await generateReportData();
+    } catch (error) {
+      console.error("Error regenerating report:", error);
+    } finally {
+      isLoading = false;
+    }
+  }
 
   $: yearlyChartData = reportData
     ? getYearlyChartData(reportData.yearlyChart, reportData.metadata.dailyGoal)
@@ -351,11 +388,38 @@
 </script>
 
 <svelte:head>
-  <title>Report - My Calcium</title>
+  <title>Report - My Nutrients</title>
 </svelte:head>
 
 <div class="report-page">
   <div class="report-content">
+    <!-- Nutrient Selector -->
+    <div class="nutrient-selector-container">
+      <label for="nutrient-select" class="nutrient-selector-label">
+        <span class="material-icons">science</span>
+        Select Nutrient
+      </label>
+      <select
+        id="nutrient-select"
+        bind:value={selectedNutrient}
+        on:change={handleNutrientChange}
+        class="nutrient-select"
+      >
+        <!-- Displayed Nutrients (starred) -->
+        <optgroup label="⭐ Tracked Nutrients">
+          {#each NUTRIENT_METADATA.filter(n => nutrientSettings.displayedNutrients.includes(n.id)) as nutrient}
+            <option value={nutrient.id}>{nutrient.label} ({nutrient.unit})</option>
+          {/each}
+        </optgroup>
+        <!-- All Other Nutrients -->
+        <optgroup label="All Nutrients">
+          {#each NUTRIENT_METADATA.filter(n => !nutrientSettings.displayedNutrients.includes(n.id)) as nutrient}
+            <option value={nutrient.id}>{nutrient.label} ({nutrient.unit})</option>
+          {/each}
+        </optgroup>
+      </select>
+    </div>
+
     {#if isLoading}
       <div class="loading">
         <div class="loading-spinner">
@@ -366,10 +430,10 @@
     {:else if reportData}
       <!-- Report Header -->
       <div class="report-header">
-        <h2>Calcium Intake Health Report</h2>
+        <h2>{reportData.metadata.nutrient} Intake Health Report</h2>
         <p class="report-date">Generated: {reportData.metadata.reportDate}</p>
         <p class="daily-goal">
-          Daily Goal: {reportData.metadata.dailyGoal}mg calcium
+          Daily Goal: {reportData.metadata.dailyGoal}{reportData.metadata.unit} {reportData.metadata.nutrient}
         </p>
       </div>
 
@@ -388,7 +452,7 @@
             </div>
             <div class="summary-card">
               <div class="summary-value">
-                {reportData.summary.averageDaily}mg
+                {reportData.summary.averageDaily}{reportData.metadata.unit}
               </div>
               <div class="summary-label">Average Daily</div>
             </div>
@@ -416,7 +480,7 @@
                   style="top: {100 - yearlyChartData.goalLineHeight}%;"
                 >
                   <span class="goal-label"
-                    >Goal: {reportData.metadata.dailyGoal}mg</span
+                    >Goal: {reportData.metadata.dailyGoal}{reportData.metadata.unit}</span
                   >
                 </div>
                 {#each yearlyChartData.bars as bar}
@@ -447,7 +511,7 @@
                   style="top: {100 - monthlyChartData.goalLineHeight}%;"
                 >
                   <span class="goal-label"
-                    >Goal: {reportData.metadata.dailyGoal}mg</span
+                    >Goal: {reportData.metadata.dailyGoal}{reportData.metadata.unit}</span
                   >
                 </div>
                 {#each monthlyChartData.bars as bar}
@@ -475,7 +539,7 @@
               <tr>
                 <th>Date</th>
                 <th>Day</th>
-                <th>Calcium</th>
+                <th>{reportData.metadata.nutrient}</th>
                 <th>Goal Status</th>
               </tr>
             </thead>
@@ -484,7 +548,7 @@
                 <tr>
                   <td>{day.date}</td>
                   <td>{day.dayName}</td>
-                  <td>{day.totalCalcium.toFixed(2)}mg</td>
+                  <td>{day.totalNutrient.toFixed(2)}{reportData.metadata.unit}</td>
                   <td class={day.goalMet ? "goal-met" : "goal-not-met"}>
                     {day.goalMet ? "✓ Goal Met" : "✗ Below Goal"}
                   </td>
@@ -497,7 +561,7 @@
 
       <!-- Report Footer -->
       <div class="report-footer">
-        <p><strong>Report generated by My Calcium</strong></p>
+        <p><strong>Report generated by My Nutrients</strong></p>
         <p>
           This report is intended for sharing with healthcare professionals.
         </p>
@@ -527,6 +591,51 @@
     background-color: var(--background);
     display: flex;
     flex-direction: column;
+  }
+
+  .nutrient-selector-container {
+    margin-bottom: var(--spacing-md);
+    background-color: var(--surface);
+    border-radius: var(--spacing-sm);
+    padding: var(--spacing-md);
+    border: 1px solid var(--divider);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+
+  .nutrient-selector-label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  .nutrient-selector-label .material-icons {
+    font-size: var(--icon-size-md);
+    color: var(--primary-color);
+  }
+
+  .nutrient-select {
+    flex: 1;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--divider);
+    border-radius: var(--spacing-xs);
+    background: var(--background);
+    color: var(--text-primary);
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    cursor: pointer;
+    min-height: var(--touch-target-min);
+  }
+
+  .nutrient-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-alpha-10);
   }
 
   /* Floating Action Button Container */
