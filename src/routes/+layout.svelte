@@ -119,13 +119,13 @@
   }
 
   function initializeTheme() {
-    const savedTheme = localStorage.getItem("calcium_theme") || "auto";
+    const savedTheme = localStorage.getItem("nutrient_theme") || "auto";
     applyTheme(savedTheme);
 
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
     prefersDark.addEventListener("change", (e) => {
       const currentThemeSetting =
-        localStorage.getItem("calcium_theme") || "auto";
+        localStorage.getItem("nutrient_theme") || "auto";
       if (currentThemeSetting === "auto") {
         document.documentElement.setAttribute(
           "data-theme",

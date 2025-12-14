@@ -17,11 +17,22 @@
 -->
 
 <script>
-  import { DATABASE_METADATA } from "$lib/data/foodDatabase";
+  import { onMount } from "svelte";
+  import { getDatabaseMetadata } from "$lib/data/foodDatabase";
   
   export let show = false;
   
   let notesExpanded = false;
+  let metadata = null;
+
+  onMount(async () => {
+    // Load metadata asynchronously to ensure it's populated
+    try {
+      metadata = await getDatabaseMetadata();
+    } catch (error) {
+      console.warn("Failed to load database metadata", error);
+    }
+  });
 
   function handleClose() {
     show = false;
@@ -77,66 +88,74 @@
       
       <!-- Modal Content -->
       <div class="modal-content">
-        <div class="database-info-content">
-          <div class="source-info">
-            <h3 class="database-name">{DATABASE_METADATA.name}</h3>
-            <p class="database-description">
-              {DATABASE_METADATA.description}
-            </p>
-          </div>
-          
-          <div class="metadata-section">
-            <h4>Source Details</h4>
-            <div class="metadata-grid">
-              <div class="metadata-item">
-                <span class="metadata-label">Source:</span>
-                <span class="metadata-value">{DATABASE_METADATA.label}</span>
+        {#if metadata}
+          <div class="database-info-content">
+            <div class="source-info">
+              <h3 class="database-name">{metadata.name}</h3>
+              <p class="database-description">
+                {metadata.description}
+              </p>
+            </div>
+            
+            <div class="metadata-section">
+              <h4>Source Details</h4>
+              <div class="metadata-grid">
+                <div class="metadata-item">
+                  <span class="metadata-label">Source:</span>
+                  <span class="metadata-value">{metadata.label}</span>
+                </div>
+                <div class="metadata-item">
+                  <span class="metadata-label">Version:</span>
+                  <span class="metadata-value">{metadata.version}</span>
+                </div>
+                <div class="metadata-item">
+                  <span class="metadata-label">Record Count:</span>
+                  <!-- Safe navigation for recordCount -->
+                  <span class="metadata-value">{(metadata.recordCount || 0).toLocaleString()}</span>
+                </div>
+                <div class="metadata-item">
+                  <span class="metadata-label">Last Updated:</span>
+                  <span class="metadata-value">{metadata.created}</span>
+                </div>
+                <div class="metadata-item">
+                  <span class="metadata-label">Author:</span>
+                  <span class="metadata-value">{metadata.author}</span>
+                </div>
               </div>
-              <div class="metadata-item">
-                <span class="metadata-label">Version:</span>
-                <span class="metadata-value">{DATABASE_METADATA.version}</span>
+            </div>
+            
+            <div class="notes-section">
+              <h4>Processing Notes</h4>
+              <div class="notes-text">
+                {#if notesExpanded}
+                  {@html formatTextWithLineBreaks(metadata.notes)}
+                {:else}
+                  {@html formatTextWithLineBreaks(getNotesPreview(metadata.notes))}
+                {/if}
               </div>
-              <div class="metadata-item">
-                <span class="metadata-label">Record Count:</span>
-                <span class="metadata-value">{DATABASE_METADATA.recordCount.toLocaleString()}</span>
-              </div>
-              <div class="metadata-item">
-                <span class="metadata-label">Last Updated:</span>
-                <span class="metadata-value">{DATABASE_METADATA.created}</span>
-              </div>
-              <div class="metadata-item">
-                <span class="metadata-label">Author:</span>
-                <span class="metadata-value">{DATABASE_METADATA.author}</span>
+              <button class="toggle-notes-btn" on:click={toggleNotes}>
+                {notesExpanded ? 'Show less' : 'Read more'}
+              </button>
+            </div>
+            
+            <div class="source-link-section">
+              <h4>Original Sources</h4>
+              <div class="source-links">
+                {#each metadata.sourceUrls as source}
+                  <a href={source.url} target="_blank" rel="noopener noreferrer" class="source-link">
+                    <span class="material-icons">open_in_new</span>
+                    {source.name}
+                  </a>
+                {/each}
               </div>
             </div>
           </div>
-          
-          <div class="notes-section">
-            <h4>Processing Notes</h4>
-            <div class="notes-text">
-              {#if notesExpanded}
-                {@html formatTextWithLineBreaks(DATABASE_METADATA.notes)}
-              {:else}
-                {@html formatTextWithLineBreaks(getNotesPreview(DATABASE_METADATA.notes))}
-              {/if}
-            </div>
-            <button class="toggle-notes-btn" on:click={toggleNotes}>
-              {notesExpanded ? 'Show less' : 'Read more'}
-            </button>
+        {:else}
+          <div class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Loading metadata...</p>
           </div>
-          
-          <div class="source-link-section">
-            <h4>Original Sources</h4>
-            <div class="source-links">
-              {#each DATABASE_METADATA.sourceUrls as source}
-                <a href={source.url} target="_blank" rel="noopener noreferrer" class="source-link">
-                  <span class="material-icons">open_in_new</span>
-                  {source.name}
-                </a>
-              {/each}
-            </div>
-          </div>
-        </div>
+        {/if}
       </div>
     </div>
   </div>
@@ -327,10 +346,34 @@
     font-size: var(--icon-size-sm);
   }
 
+  .loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl);
+    color: var(--text-secondary);
+    height: 100%;
+  }
+
+  .loading-spinner {
+    width: 2rem;
+    height: 2rem;
+    border: 2px solid var(--divider);
+    border-top: 2px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: var(--spacing-md);
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
   /* Mobile responsive */
   @media (max-width: 480px) {
     .modal-backdrop.full-screen {
-      /* Prevent touch scrolling on backdrop */
       touch-action: none;
     }
     
@@ -338,7 +381,6 @@
       width: 100vw;
       height: 100vh;
       max-width: none;
-      /* Re-enable touch scrolling inside modal content */
       touch-action: auto;
     }
 

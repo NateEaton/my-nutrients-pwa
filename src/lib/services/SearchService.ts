@@ -70,8 +70,7 @@ export class SearchService {
     NAME_START_BONUS: 15,
     FAVORITE_BONUS: 10000,
     CUSTOM_FOOD_BONUS: 5000,
-    PARTIAL_WORD_PENALTY: -200,
-    CALCIUM_BONUS_MULTIPLIER: 0.5
+    PARTIAL_WORD_PENALTY: -200
   };
 
   /**
@@ -225,12 +224,6 @@ export class SearchService {
     if (food.isCustom) {
       score += this.SCORING.CUSTOM_FOOD_BONUS;
     }
-
-    // Boost score for foods with higher calcium content (use primary measure for compatibility)
-    const primaryMeasure = getPrimaryMeasure(food);
-    // Handle both legacy format (measure.calcium) and new format (measure.nutrients.calcium)
-    const calciumValue = primaryMeasure.nutrients?.calcium ?? primaryMeasure.calcium ?? 0;
-    score += Math.log(calciumValue + 1) * this.SCORING.CALCIUM_BONUS_MULTIPLIER;
 
     return score;
   }

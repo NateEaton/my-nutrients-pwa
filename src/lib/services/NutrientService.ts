@@ -592,8 +592,8 @@ export class NutrientService {
   async getNutrientSettings(): Promise<NutrientSettings> {
     const storedGoals = localStorage.getItem('nutrient_goals');
     const storedDisplayed = localStorage.getItem('nutrient_displayed');
-    const theme = localStorage.getItem('calcium_theme') || 'auto';
-    const colorScheme = localStorage.getItem('calcium_color_scheme') || 'blue';
+    const theme = localStorage.getItem('nutient_theme') || 'auto';
+    const colorScheme = localStorage.getItem('nutrient_color_scheme') || 'blue';
 
     const nutrientGoals = storedGoals ? JSON.parse(storedGoals) : DEFAULT_NUTRIENT_GOALS;
     const displayedNutrients = storedDisplayed ? JSON.parse(storedDisplayed) : getDefaultDisplayedNutrients();
@@ -626,10 +626,10 @@ export class NutrientService {
       localStorage.setItem('nutrient_displayed', JSON.stringify(updatedSettings.displayedNutrients));
     }
     if (updatedSettings.theme) {
-      localStorage.setItem('calcium_theme', updatedSettings.theme);
+      localStorage.setItem('nutrient_theme', updatedSettings.theme);
     }
     if (updatedSettings.colorScheme) {
-      localStorage.setItem('calcium_color_scheme', updatedSettings.colorScheme);
+      localStorage.setItem('nutrient_color_scheme', updatedSettings.colorScheme);
     }
 
     // Trigger smart sync for persistent data change (settings)
@@ -760,7 +760,7 @@ export class NutrientService {
   private async loadSettings(): Promise<void> {
     const dailyGoal = localStorage.getItem('calcium_goal');
     const sortSettings = localStorage.getItem('calcium_sort_settings');
-    const theme = localStorage.getItem('calcium_theme');
+    const theme = localStorage.getItem('nutrient_theme');
 
     const settings: CalciumSettings = {
       dailyGoal: dailyGoal ? parseInt(dailyGoal) : 1000,
@@ -779,7 +779,7 @@ export class NutrientService {
     localStorage.setItem('calcium_goal', state.settings.dailyGoal.toString());
 
     if (state.settings.theme) {
-      localStorage.setItem('calcium_theme', state.settings.theme);
+      localStorage.setItem('nutrient_theme', state.settings.theme);
     }
 
     const sortSettings = {
