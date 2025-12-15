@@ -95,6 +95,8 @@
         return "Statistics";
       case "/data":
         return "Database";
+      case "/data/food/[id]":
+        return "Food Details";
       case "/report":
         return "Report";
       case "/settings":

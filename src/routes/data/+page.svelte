@@ -25,15 +25,16 @@
   import { goto } from "$app/navigation";
   import SourceIndicator from "$lib/components/SourceIndicator.svelte";
   import MetadataPopup from "$lib/components/MetadataPopup.svelte";
+  import { databaseViewState } from "$lib/stores/uiState";
 
   // --- State Variables ---
-  let searchQuery = "";
-  let selectedFilter = "available"; // 'available', 'database', 'user'
-  let sortBy = "calcium";
-  let sortOrder = "desc";
+  let searchQuery = $databaseViewState.searchQuery;
+  let selectedFilter = $databaseViewState.selectedFilter;
+  let sortBy = $databaseViewState.sortBy;
+  let sortOrder = $databaseViewState.sortOrder;
   let filteredFoods = [];
   let isBulkOperationInProgress = false;
-  let typeSortRotation = 0; // 0, 1, 2 for three-way type rotation
+  let typeSortRotation = $databaseViewState.typeSortRotation;
   const foodDatabase = DEFAULT_FOOD_DATABASE;
   let isDatabaseLoading = false;
 
@@ -41,15 +42,8 @@
   let nutrientSettings = null;
   let displayedNutrients = ['protein', 'calcium', 'fiber', 'vitaminD'];
   let windowWidth = 1024;
-  let selectedNutrientForControls = 'calcium'; // Which nutrient to use for sort/filter
-
-  // Nutrient filter state (Generic)
-  let nutrientFilter = {
-    type: "all", // 'all', 'preset', 'custom'
-    preset: null, // 'zero'
-    min: null,
-    max: null,
-  };
+  let selectedNutrientForControls = $databaseViewState.selectedNutrientForControls;
+  let nutrientFilter = $databaseViewState.nutrientFilter;
   let showFilterDropdown = false;
 
   // Modal states
@@ -209,18 +203,40 @@
     return true;
   }
 
+  // --- Sync State to Store ---
+  // Whenever any of these variables change, update the store
+  $: {
+    databaseViewState.set({
+      searchQuery,
+      selectedFilter,
+      sortBy,
+      sortOrder,
+      typeSortRotation,
+      selectedNutrientForControls,
+      nutrientFilter
+    });
+  }
+
   // --- Lifecycle ---
 
   onMount(async () => {
     try {
       nutrientSettings = await nutrientService.getNutrientSettings();
       displayedNutrients = nutrientSettings.displayedNutrients || ['protein', 'calcium', 'fiber', 'vitaminD'];
-      selectedNutrientForControls = displayedNutrients[0] || 'calcium';
       
-      // Sync initial sort
-      if (sortBy === 'calcium' && selectedNutrientForControls !== 'calcium') {
-        sortBy = selectedNutrientForControls;
+      // LOGIC UPDATE:
+      // Only reset the selected nutrient if the stored one is no longer in the displayed list
+      // or if it's the generic default 'calcium' and we want to sync with settings.
+      const isValidSelection = displayedNutrients.includes(selectedNutrientForControls);
+      
+      if (!isValidSelection && displayedNutrients.length > 0) {
+         selectedNutrientForControls = displayedNutrients[0];
       }
+      
+      // Logic for initial sort sync (legacy) can remain, but check if we should override
+      // if (sortBy === 'calcium' && selectedNutrientForControls !== 'calcium') {
+      //   sortBy = selectedNutrientForControls;
+      // }
     } catch (error) {
       console.error('Error loading nutrient settings:', error);
     }
@@ -352,13 +368,8 @@
   let docsWindowRef = null;
 
   function openFoodDocs(food) {
-    const docsUrl = `/database-docs.html#food-${food.id}`;
-    if (docsWindowRef && !docsWindowRef.closed) {
-      docsWindowRef.location.href = docsUrl;
-      docsWindowRef.focus();
-    } else {
-      docsWindowRef = window.open(docsUrl, "calcium_database_docs");
-    }
+    // Navigate to the new in-app detail page
+    goto(`/data/food/${food.id}`);
   }
 
   async function toggleFoodHidden(food) {
@@ -756,7 +767,7 @@
                       <th class="nutrient-col">{nutrient.label} ({nutrient.unit})</th>
                     {/if}
                   {/each}
-                  <th class="actions-col">Actions</th>
+                  <th class="actions-col sticky-col">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -776,9 +787,20 @@
                       </td>
                     {/if}
                     <td class="name-col">
-                      <div class="food-name-cell">
-                        <div class="food-name">{food.name}</div>
-                        <div class="food-measure">{getPrimaryMeasure(food).measure}</div>
+                      <div class="food-name-wrapper">
+                        {#if !food.isCustom}
+                          <button 
+                            class="detail-link-btn" 
+                            on:click|stopPropagation={() => openFoodDocs(food)}
+                            title="View source details"
+                          >
+                            <span class="material-icons">info</span>
+                          </button>
+                        {/if}
+                        <div class="food-name-cell">
+                          <div class="food-name">{food.name}</div>
+                          <div class="food-measure">{getPrimaryMeasure(food).measure}</div>
+                        </div>
                       </div>
                     </td>
                     {#each displayedNutrients as nutrientId}
@@ -788,7 +810,7 @@
                         {formatNutrientValue(value, nutrientId)}{nutrient?.unit || ''}
                       </td>
                     {/each}
-                    <td class="actions-col">
+                    <td class="actions-col sticky-col">
                       {#if !food.isCustom}
                         <button
                           class="favorite-btn-table"
@@ -1419,6 +1441,61 @@
 
   .empty-icon { font-size: 4rem; margin-bottom: 1.5rem; opacity: 0.7; }
   .empty-text h3 { margin: 0 0 0.75rem 0; font-size: 1.25rem; font-weight: 600; color: var(--text-primary); }
+
+  /* New wrapper for name cell */
+  .food-name-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  /* Detail link button style */
+  .detail-link-btn {
+    background: none;
+    border: none;
+    padding: 2px;
+    color: var(--primary-color);
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .detail-link-btn:hover {
+    opacity: 1;
+    background-color: var(--primary-alpha-10);
+    border-radius: 50%;
+  }
+
+  .detail-link-btn .material-icons {
+    font-size: 18px;
+  }
+
+  /* Sticky Column Logic */
+  .sticky-col {
+    position: sticky;
+    right: 0;
+    background-color: var(--surface); /* Must set background to hide content scrolling behind */
+    z-index: 10;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.05); /* Subtle shadow to indicate scroll depth */
+  }
+
+  .food-table th.sticky-col {
+    background-color: var(--surface-variant); /* Match header background */
+  }
+
+  .food-table tr:hover .sticky-col {
+    background-color: var(--hover-overlay); /* Maintain hover effect */
+    /* Note: mixing backgrounds for sticky hover is tricky in pure CSS, 
+      simplest is to just set it to the hover color explicitly */
+    background-color: #f5f5f5; /* Adjust based on your theme vars if needed */
+  }
+
+  /* Dark mode override for sticky hover if needed */
+  :global([data-theme="dark"]) .food-table tr:hover .sticky-col {
+    background-color: #2d2d2d;
+  }
 
   /* Mobile Responsive */
   @media (max-width: 30rem) {
