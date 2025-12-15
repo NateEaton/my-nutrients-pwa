@@ -221,6 +221,9 @@
     flex: 1;
     padding: var(--spacing-xl);
     overflow-y: auto;
+    /* Add safe area padding and dynamic scroll behavior */
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: calc(var(--spacing-2xl) + env(safe-area-inset-bottom, 20px));
   }
 
   .about-content {
@@ -301,6 +304,7 @@
     .modal-container.full-screen {
       width: 100vw;
       height: 100vh;
+      height: 100dvh; 
       max-width: none;
       /* Re-enable touch scrolling inside modal content */
       touch-action: auto;

@@ -154,7 +154,7 @@
   async function initializeColorScheme() {
     try {
       const settings = await nutrientService.getSettings();
-      const colorScheme = settings.colorScheme || (__APP_ENV__ === 'development' ? 'orange' : 'blue');
+      const colorScheme = settings.colorScheme || 'blue';
       applyColorScheme(colorScheme);
     } catch (error) {
       console.error("Error loading color scheme:", error);
@@ -245,6 +245,7 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    min-height: 100dvh;
     background-color: var(--surface);
     position: relative;
     box-shadow: var(--shadow);

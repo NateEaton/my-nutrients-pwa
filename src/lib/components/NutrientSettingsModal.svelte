@@ -531,5 +531,10 @@
     .btn {
       width: 100%;
     }
+
+    .modal-content {
+      height: 100dvh; /* FIX: Force dvh on mobile */
+      border-radius: 0;
+    }    
   }
 </style>

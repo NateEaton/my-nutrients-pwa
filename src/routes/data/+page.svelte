@@ -39,7 +39,7 @@
   // Local state
   let filteredFoods = [];
   let isBulkOperationInProgress = false;
-  let typeSortRotationState = 0; 
+  // let typeSortRotationState = 0; // Unused local var removed
   const foodDatabase = DEFAULT_FOOD_DATABASE;
   let isDatabaseLoading = false;
 
@@ -105,7 +105,6 @@
 
   function getTypeSortPriority(food) {
     const type = getFoodTypeForSort(food);
-    // Use store value for rotation
     const rotation = typeSortRotation; 
 
     if (selectedFilter === "available") {
@@ -128,7 +127,6 @@
 
   // --- Event Handlers ---
 
-  // Sync state to store whenever variables change
   $: {
     databaseViewState.set({
       searchQuery,
@@ -226,11 +224,9 @@
   // --- Reactivity (Data Filtering) ---
 
   $: {
-    // Re-run whenever these change
     typeSortRotation; nutrientFilter; selectedNutrientForControls; 
     let foods = [];
 
-    // 1. Initial view selection
     if (selectedFilter === "available") {
       foods = [...foodDatabase, ...$nutrientState.customFoods];
     } else if (selectedFilter === "database") {
@@ -239,7 +235,6 @@
       foods = [...$nutrientState.customFoods];
     }
 
-    // 2. Search
     if (searchQuery.trim()) {
       const hiddenFoodsForSearch = selectedFilter === "database" ? new Set() : $nutrientState.hiddenFoods;
       const results = SearchService.searchFoods(searchQuery, foods, {
@@ -255,12 +250,10 @@
       }
     }
 
-    // 3. Filter
     if (nutrientFilter.type !== "all") {
       foods = foods.filter((food) => passesNutrientFilter(food));
     }
 
-    // 4. Sort
     foods.sort((a, b) => {
       let comparison = 0;
       switch (sortBy) {
@@ -478,7 +471,7 @@
         </div>
       </div>
 
-      <!-- 2. Nutrient Controls Row: Label, Selector, Filter -->
+      <!-- 2. Nutrient Controls Row -->
       <div class="nutrient-controls-row">
         <label for="nutrient-selector" class="nutrient-label">Sort & Filter by:</label>
         
@@ -605,13 +598,12 @@
               indeterminate={someNonFavoritesHidden && !allNonFavoritesHidden}
               on:change={handleBulkToggle}
               disabled={isBulkOperationInProgress}
-              aria-describedby="bulk-description"
             />
             <label for="bulk-select" class="bulk-label">
               {isBulkOperationInProgress ? "Processing..." : bulkActionText}
             </label>
             {#if favoriteCount > 0}
-              <span class="bulk-skip-note" id="bulk-description">
+              <span class="bulk-skip-note">
                 (skipping {favoriteCount} favorite{favoriteCount === 1 ? "" : "s"})
               </span>
             {/if}
@@ -710,9 +702,10 @@
       <div class="results-container">
         {#each filteredFoods as food}
           <div class="food-card" class:custom={food.isCustom}>
-            <!-- Database Management Checkbox -->
-            {#if selectedFilter === "database" && !food.isCustom}
-              <div class="hide-checkbox-container">
+            
+            <!-- Left Column: Checkbox OR Info Icon -->
+            <div class="card-left-col">
+              {#if selectedFilter === "database" && !food.isCustom}
                 <input
                   type="checkbox"
                   class="hide-checkbox"
@@ -720,30 +713,26 @@
                   on:change={() => toggleFoodHidden(food)}
                   title={$nutrientState.hiddenFoods.has(food.id) ? "Unhide food" : "Hide food"}
                 />
-              </div>
-            {/if}
+              {:else if !food.isCustom}
+                <button 
+                  class="detail-link-btn" 
+                  on:click|stopPropagation={() => openFoodDocs(food)}
+                  title="View source details"
+                >
+                  <span class="material-icons">info</span>
+                </button>
+              {/if}
+            </div>
 
+            <!-- Middle Column: Content -->
             <div class="food-info">
-              <!-- Row 1: Title and Icon -->
-              <div class="food-name-row">
-                {#if !food.isCustom}
-                  <button 
-                    class="detail-link-btn" 
-                    on:click|stopPropagation={() => openFoodDocs(food)}
-                    title="View source details"
-                  >
-                    <span class="material-icons">info</span>
-                  </button>
+              <div class="food-name">
+                {food.name}
+                {#if food.isCustom && food.sourceMetadata}
+                  <SourceIndicator {food} size="small" clickable={true} on:click={() => handleInfoClick(food)} />
                 {/if}
-                <div class="food-name">
-                  {food.name}
-                  {#if food.isCustom && food.sourceMetadata}
-                    <SourceIndicator {food} size="small" clickable={true} on:click={() => handleInfoClick(food)} />
-                  {/if}
-                </div>
               </div>
 
-              <!-- Row 2: Measure -->
               <div class="food-measure">
                 {getPrimaryMeasure(food).measure}
                 {#if hasMultipleMeasures(food)}
@@ -751,7 +740,6 @@
                 {/if}
               </div>
 
-              <!-- Row 3: Nutrients (Pipe Separated) -->
               <div class="food-nutrients">
                 {#each displayedNutrients as nutrientId, idx}
                   {@const value = getNutrientValue(food, nutrientId)}
@@ -768,7 +756,7 @@
               </div>
             </div>
 
-            <!-- Action Button -->
+            <!-- Right Column: Actions -->
             <div class="food-actions">
               {#if !food.isCustom}
                 <button
@@ -1128,7 +1116,7 @@
     font-size: 16px;
   }
 
-  /* Food Item Styles (Card Layout) */
+  /* Food Item Styles (Unified Card Layout) */
   .results-container {
     margin-top: 16px;
     display: flex;
@@ -1152,18 +1140,22 @@
     background-color: var(--custom-food-bg);
   }
 
+  /* Left Column (Checkbox or Info Icon) */
+  .card-left-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px; /* Fixed width for alignment */
+    flex-shrink: 0;
+  }
+
+  /* Middle Column (Content) */
   .food-info {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 4px;
     min-width: 0; /* Enable truncation inside flex item */
-  }
-
-  .food-name-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
   }
 
   .food-name {
@@ -1179,12 +1171,11 @@
   .detail-link-btn {
     background: none;
     border: none;
-    padding: 4px;
+    padding: 2px;
     color: var(--primary-color);
     cursor: pointer;
     opacity: 0.7;
     transition: opacity 0.2s;
-    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1228,7 +1219,7 @@
     margin: 0 4px;
   }
 
-  /* Action Buttons */
+  /* Right Column (Actions) */
   .food-actions {
     flex-shrink: 0;
     display: flex;
@@ -1254,13 +1245,6 @@
 
   .favorite-btn .material-icons, .delete-btn .material-icons {
     font-size: 24px;
-  }
-
-  .hide-checkbox-container {
-    margin-right: 8px;
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
   }
 
   .hide-checkbox {

@@ -127,7 +127,11 @@
 
   <!-- Sort Controls -->
   {#if $foods.length > 1}
-    <SortControls on:sortChange={handleSortChange} />
+    <!-- UPDATED: Pass displayedNutrients instead of primaryNutrient -->
+    <SortControls 
+      displayedNutrients={nutrientSettings.displayedNutrients}
+      on:sortChange={handleSortChange} 
+    />
   {/if}
 
   <!-- Foods List -->

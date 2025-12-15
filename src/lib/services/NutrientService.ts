@@ -67,7 +67,7 @@ export class NutrientService {
 
   private async initializeIndexedDB(): Promise<void> {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open('CalciumTracker', 7);
+      const request = indexedDB.open('NutrientTracker', 1);
 
       request.onerror = () => reject(request.error);
       request.onsuccess = () => {
@@ -409,19 +409,34 @@ export class NutrientService {
     const sortedFoods = [...state.foods].sort((a, b) => {
       let comparison = 0;
 
-      switch (state.settings.sortBy) {
-        case 'time':
-          comparison = new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
-          break;
-        case 'name':
-          comparison = a.name.localeCompare(b.name);
-          break;
-        case 'calcium':
-          // Use getPrimaryMeasure for compatibility with both formats
-          const aPrimary = getPrimaryMeasure(a);
-          const bPrimary = getPrimaryMeasure(b);
-          comparison = aPrimary.calcium - bPrimary.calcium;
-          break;
+      if (state.settings.sortBy === 'time') {
+        // Sort by timestamp
+        comparison = new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
+      } else if (state.settings.sortBy === 'name') {
+        // Sort by name
+        comparison = a.name.localeCompare(b.name);
+      } else {
+        // Sort by Nutrient (Dynamic)
+        // This handles 'protein', 'fiber', 'vitaminD', etc.
+        const nutrientKey = state.settings.sortBy;
+
+        // Helper to safely get value from either structure
+        const getValue = (food: any) => {
+          // 1. Try modern nutrients object
+          if (food.nutrients && typeof food.nutrients[nutrientKey] === 'number') {
+            return food.nutrients[nutrientKey];
+          }
+          // 2. Legacy fallback specifically for calcium
+          if (nutrientKey === 'calcium') {
+            const primary = getPrimaryMeasure(food);
+            return primary.calcium || 0;
+          }
+          return 0;
+        };
+
+        const valA = getValue(a);
+        const valB = getValue(b);
+        comparison = valA - valB;
       }
 
       return state.settings.sortOrder === 'asc' ? comparison : -comparison;
