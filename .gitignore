@@ -63,6 +63,11 @@ source_data/nutrientsearchresults_1087_SR\ Legacy.csv
 source_data/nutrientsearchresults_1087_Survey\ \(FNDDS\).csv
 source_data/sr_legacy_foundation_download.csv
 source_data/mastered-sr_legacy_foundation_download.json
+source_data/*.zip
+source_data/FoodData_Central_*_food_csv_*/
+source_data/FoodData_Central_*_food_json_*.json
+source_data/*.sav
+source_data/*nutrient*.json
 
 # Cloudflare Workers secrets
 worker/wrangler.toml

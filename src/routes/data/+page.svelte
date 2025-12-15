@@ -25,28 +25,32 @@
   import { goto } from "$app/navigation";
   import SourceIndicator from "$lib/components/SourceIndicator.svelte";
   import MetadataPopup from "$lib/components/MetadataPopup.svelte";
-  import { databaseViewState } from "$lib/stores/uiState";
+  import { databaseViewState } from "$lib/stores/uiState"; 
 
-  // --- State Variables ---
+  // --- State Variables (Initialized from Store) ---
   let searchQuery = $databaseViewState.searchQuery;
   let selectedFilter = $databaseViewState.selectedFilter;
   let sortBy = $databaseViewState.sortBy;
   let sortOrder = $databaseViewState.sortOrder;
+  let typeSortRotation = $databaseViewState.typeSortRotation;
+  let selectedNutrientForControls = $databaseViewState.selectedNutrientForControls;
+  let nutrientFilter = $databaseViewState.nutrientFilter;
+
+  // Local state
   let filteredFoods = [];
   let isBulkOperationInProgress = false;
-  let typeSortRotation = $databaseViewState.typeSortRotation;
+  let typeSortRotationState = 0; 
   const foodDatabase = DEFAULT_FOOD_DATABASE;
   let isDatabaseLoading = false;
 
   // Multi-nutrient support
   let nutrientSettings = null;
   let displayedNutrients = ['protein', 'calcium', 'fiber', 'vitaminD'];
-  let windowWidth = 1024;
-  let selectedNutrientForControls = $databaseViewState.selectedNutrientForControls;
-  let nutrientFilter = $databaseViewState.nutrientFilter;
+
+  // Nutrient filter dropdown
   let showFilterDropdown = false;
 
-  // Modal states
+  // Modals
   let showDeleteModal = false;
   let foodToDelete = null;
   let showMetadataPopup = false;
@@ -58,7 +62,6 @@
     return NUTRIENT_METADATA.find(n => n.id === nutrientId);
   }
 
-  // Reactive helper for current nutrient metadata
   $: currentNutrientMeta = getNutrientMetadata(selectedNutrientForControls) || { label: 'Nutrient', unit: '' };
 
   function getNutrientValue(food, nutrientId) {
@@ -102,6 +105,8 @@
 
   function getTypeSortPriority(food) {
     const type = getFoodTypeForSort(food);
+    // Use store value for rotation
+    const rotation = typeSortRotation; 
 
     if (selectedFilter === "available") {
       const priorities = [
@@ -109,41 +114,44 @@
         { Favorite: 0, Database: 1, Custom: 2 },
         { Database: 0, Custom: 1, Favorite: 2 },
       ];
-      return priorities[typeSortRotation][type] || 999;
+      return priorities[rotation][type] || 999;
     } else if (selectedFilter === "database") {
       const priorities = [
         { Favorite: 0, Hidden: 1, Database: 2 },
         { Hidden: 0, Database: 1, Favorite: 2 },
         { Database: 0, Favorite: 1, Hidden: 2 },
       ];
-      return priorities[typeSortRotation][type] || 999;
+      return priorities[rotation][type] || 999;
     }
     return 0;
   }
 
   // --- Event Handlers ---
 
-  function handleResize() {
-    windowWidth = window.innerWidth;
+  // Sync state to store whenever variables change
+  $: {
+    databaseViewState.set({
+      searchQuery,
+      selectedFilter,
+      sortBy,
+      sortOrder,
+      typeSortRotation,
+      selectedNutrientForControls,
+      nutrientFilter
+    });
   }
 
-  // Sync sort when nutrient selector changes
   function handleNutrientChange(event) {
     const newNutrient = event.target.value;
-    
-    // If we are currently sorting by the nutrient that was just selected,
-    // update the sort to track the NEW nutrient.
     if (sortBy === selectedNutrientForControls) {
       sortBy = newNutrient;
     }
-    
     selectedNutrientForControls = newNutrient;
   }
 
   function handleFilterClick(filter) {
     selectedFilter = filter;
     if (filter === "user" && sortBy === "type") {
-      // User view only has one type, so switch to nutrient sort
       sortBy = selectedNutrientForControls; 
       sortOrder = "desc";
     }
@@ -185,36 +193,18 @@
 
   function passesNutrientFilter(food) {
     if (nutrientFilter.type === "all") return true;
-
     const val = getNutrientValue(food, selectedNutrientForControls);
-
     if (nutrientFilter.type === "preset") {
       if (nutrientFilter.preset === "zero") {
         return val === 0;
       }
     }
-
     if (nutrientFilter.type === "custom") {
       const min = nutrientFilter.min || 0;
       const max = nutrientFilter.max || Infinity;
       return val >= min && val <= max;
     }
-
     return true;
-  }
-
-  // --- Sync State to Store ---
-  // Whenever any of these variables change, update the store
-  $: {
-    databaseViewState.set({
-      searchQuery,
-      selectedFilter,
-      sortBy,
-      sortOrder,
-      typeSortRotation,
-      selectedNutrientForControls,
-      nutrientFilter
-    });
   }
 
   // --- Lifecycle ---
@@ -224,40 +214,23 @@
       nutrientSettings = await nutrientService.getNutrientSettings();
       displayedNutrients = nutrientSettings.displayedNutrients || ['protein', 'calcium', 'fiber', 'vitaminD'];
       
-      // LOGIC UPDATE:
-      // Only reset the selected nutrient if the stored one is no longer in the displayed list
-      // or if it's the generic default 'calcium' and we want to sync with settings.
       const isValidSelection = displayedNutrients.includes(selectedNutrientForControls);
-      
       if (!isValidSelection && displayedNutrients.length > 0) {
          selectedNutrientForControls = displayedNutrients[0];
       }
-      
-      // Logic for initial sort sync (legacy) can remain, but check if we should override
-      // if (sortBy === 'calcium' && selectedNutrientForControls !== 'calcium') {
-      //   sortBy = selectedNutrientForControls;
-      // }
     } catch (error) {
       console.error('Error loading nutrient settings:', error);
     }
-    windowWidth = window.innerWidth;
-    window.addEventListener('resize', handleResize);
   });
 
-  onDestroy(() => {
-    window.removeEventListener('resize', handleResize);
-  });
+  // --- Reactivity (Data Filtering) ---
 
-  // --- Reactivity ---
-
-  // Main list filtering and sorting
   $: {
-    typeSortRotation;
-    nutrientFilter; // Reactive to filter changes
-    selectedNutrientForControls; // Reactive to selector changes
+    // Re-run whenever these change
+    typeSortRotation; nutrientFilter; selectedNutrientForControls; 
     let foods = [];
 
-    // 1. Initial selection based on view mode
+    // 1. Initial view selection
     if (selectedFilter === "available") {
       foods = [...foodDatabase, ...$nutrientState.customFoods];
     } else if (selectedFilter === "database") {
@@ -266,7 +239,7 @@
       foods = [...$nutrientState.customFoods];
     }
 
-    // 2. Apply Search (SearchService handles hidden logic based on mode)
+    // 2. Search
     if (searchQuery.trim()) {
       const hiddenFoodsForSearch = selectedFilter === "database" ? new Set() : $nutrientState.hiddenFoods;
       const results = SearchService.searchFoods(searchQuery, foods, {
@@ -277,18 +250,17 @@
       });
       foods = results.map((result) => result.food);
     } else {
-      // If not searching, filter available view manually
       if (selectedFilter === "available") {
         foods = foods.filter((food) => food.isCustom || !$nutrientState.hiddenFoods.has(food.id));
       }
     }
 
-    // 3. Apply Nutrient Filter
+    // 3. Filter
     if (nutrientFilter.type !== "all") {
       foods = foods.filter((food) => passesNutrientFilter(food));
     }
 
-    // 4. Apply Sort
+    // 4. Sort
     foods.sort((a, b) => {
       let comparison = 0;
       switch (sortBy) {
@@ -302,7 +274,6 @@
           if (comparison === 0) comparison = a.name.localeCompare(b.name);
           return comparison;
         default:
-          // Sort by nutrient value (supports any nutrient ID)
           const aValue = getNutrientValue(a, sortBy);
           const bValue = getNutrientValue(b, sortBy);
           comparison = aValue - bValue;
@@ -314,29 +285,23 @@
     filteredFoods = foods;
   }
 
-  // Helper variables for UI state
+  // --- UI Helpers ---
+
   $: eligibleFoodsForBulk = filteredFoods.filter(
     (food) => !food.isCustom && !$nutrientState.favorites.has(food.id)
   );
-
   $: hiddenEligibleFoods = eligibleFoodsForBulk.filter((food) =>
     $nutrientState.hiddenFoods.has(food.id)
   );
-
-  $: allNonFavoritesHidden =
-    eligibleFoodsForBulk.length > 0 &&
+  $: allNonFavoritesHidden = eligibleFoodsForBulk.length > 0 &&
     hiddenEligibleFoods.length === eligibleFoodsForBulk.length;
-
   $: someNonFavoritesHidden = hiddenEligibleFoods.length > 0;
-
   $: favoriteCount = filteredFoods.filter(
     (food) => !food.isCustom && $nutrientState.favorites.has(food.id)
   ).length;
-
   $: bulkActionText = allNonFavoritesHidden
     ? `Unhide all ${eligibleFoodsForBulk.length} foods`
     : `Hide all ${eligibleFoodsForBulk.length} foods`;
-
   $: showBulkActions =
     selectedFilter === "database" &&
     (searchQuery.trim() || nutrientFilter.type !== "all") &&
@@ -363,12 +328,9 @@
     }
   })();
 
-  // --- Interaction Handlers ---
-
-  let docsWindowRef = null;
+  // --- Actions ---
 
   function openFoodDocs(food) {
-    // Navigate to the new in-app detail page
     goto(`/data/food/${food.id}`);
   }
 
@@ -465,7 +427,6 @@
     }
   }
 
-  // Keyboard accessibility
   function handleFilterKeydown(event, filter) {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
@@ -487,10 +448,6 @@
     }
   }
 </script>
-
-<svelte:head>
-  <title>Database - My Nutrients</title>
-</svelte:head>
 
 <div class="data-page">
   <div class="content">
@@ -749,147 +706,70 @@
         </div>
       </div>
 
-      <!-- Results Table/Cards -->
+      <!-- Results Container (Unified Card Layout) -->
       <div class="results-container">
-        {#if windowWidth >= 768}
-          <!-- Desktop: Table View -->
-          <div class="food-table-container">
-            <table class="food-table">
-              <thead>
-                <tr>
-                  {#if selectedFilter === "database"}
-                    <th class="checkbox-col">Show</th>
-                  {/if}
-                  <th class="name-col">Food Name</th>
-                  {#each displayedNutrients as nutrientId}
-                    {@const nutrient = getNutrientMetadata(nutrientId)}
-                    {#if nutrient}
-                      <th class="nutrient-col">{nutrient.label} ({nutrient.unit})</th>
-                    {/if}
-                  {/each}
-                  <th class="actions-col sticky-col">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {#each filteredFoods as food}
-                  <tr class:custom={food.isCustom}>
-                    {#if selectedFilter === "database"}
-                      <td class="checkbox-col">
-                        {#if !food.isCustom}
-                          <input
-                            type="checkbox"
-                            class="hide-checkbox"
-                            checked={$nutrientState.hiddenFoods.has(food.id)}
-                            on:change={() => toggleFoodHidden(food)}
-                            title={$nutrientState.hiddenFoods.has(food.id) ? "Unhide food" : "Hide food"}
-                          />
-                        {/if}
-                      </td>
-                    {/if}
-                    <td class="name-col">
-                      <div class="food-name-wrapper">
-                        {#if !food.isCustom}
-                          <button 
-                            class="detail-link-btn" 
-                            on:click|stopPropagation={() => openFoodDocs(food)}
-                            title="View source details"
-                          >
-                            <span class="material-icons">info</span>
-                          </button>
-                        {/if}
-                        <div class="food-name-cell">
-                          <div class="food-name">{food.name}</div>
-                          <div class="food-measure">{getPrimaryMeasure(food).measure}</div>
-                        </div>
-                      </div>
-                    </td>
-                    {#each displayedNutrients as nutrientId}
-                      {@const value = getNutrientValue(food, nutrientId)}
-                      {@const nutrient = getNutrientMetadata(nutrientId)}
-                      <td class="nutrient-col">
-                        {formatNutrientValue(value, nutrientId)}{nutrient?.unit || ''}
-                      </td>
-                    {/each}
-                    <td class="actions-col sticky-col">
-                      {#if !food.isCustom}
-                        <button
-                          class="favorite-btn-table"
-                          class:favorite={$nutrientState.favorites.has(food.id)}
-                          on:click={() => toggleFavorite(food)}
-                          title={$nutrientState.favorites.has(food.id) ? "Remove from favorites" : "Add to favorites"}
-                        >
-                          <span class="material-icons">
-                            {$nutrientState.favorites.has(food.id) ? "star" : "star_border"}
-                          </span>
-                        </button>
-                      {:else if selectedFilter !== "database"}
-                        <button
-                          class="delete-btn-table"
-                          on:click={() => confirmDeleteFood(food)}
-                          title="Delete custom food"
-                        >
-                          <span class="material-icons">delete</span>
-                        </button>
-                      {/if}
-                    </td>
-                  </tr>
-                {/each}
-              </tbody>
-            </table>
-          </div>
-        {:else}
-          <!-- Mobile: Card View -->
-          {#each filteredFoods as food}
-            <div class="food-card" class:custom={food.isCustom}>
-              {#if selectedFilter === "database" && !food.isCustom}
-                <div class="hide-checkbox-container">
-                  <input
-                    type="checkbox"
-                    class="hide-checkbox"
-                    checked={$nutrientState.hiddenFoods.has(food.id)}
-                    on:change={() => toggleFoodHidden(food)}
-                    title={$nutrientState.hiddenFoods.has(food.id) ? "Unhide food" : "Hide food"}
-                  />
-                </div>
-              {:else if selectedFilter === "available" && !food.isCustom}
-                <div class="docs-link-container">
-                  <button
-                    class="docs-link-btn"
-                    on:click={() => openFoodDocs(food)}
-                    title="View in database documentation"
+        {#each filteredFoods as food}
+          <div class="food-card" class:custom={food.isCustom}>
+            <!-- Database Management Checkbox -->
+            {#if selectedFilter === "database" && !food.isCustom}
+              <div class="hide-checkbox-container">
+                <input
+                  type="checkbox"
+                  class="hide-checkbox"
+                  checked={$nutrientState.hiddenFoods.has(food.id)}
+                  on:change={() => toggleFoodHidden(food)}
+                  title={$nutrientState.hiddenFoods.has(food.id) ? "Unhide food" : "Hide food"}
+                />
+              </div>
+            {/if}
+
+            <div class="food-info">
+              <!-- Row 1: Title and Icon -->
+              <div class="food-name-row">
+                {#if !food.isCustom}
+                  <button 
+                    class="detail-link-btn" 
+                    on:click|stopPropagation={() => openFoodDocs(food)}
+                    title="View source details"
                   >
-                    <span class="material-icons">open_in_new</span>
+                    <span class="material-icons">info</span>
                   </button>
-                </div>
-              {/if}
-              <div class="food-info">
+                {/if}
                 <div class="food-name">
                   {food.name}
                   {#if food.isCustom && food.sourceMetadata}
                     <SourceIndicator {food} size="small" clickable={true} on:click={() => handleInfoClick(food)} />
                   {/if}
                 </div>
-                <div class="food-measure">
-                  {getPrimaryMeasure(food).measure}
-                  {#if hasMultipleMeasures(food)}
-                    <span class="measure-count">({getAllMeasures(food).length} servings)</span>
-                  {/if}
-                </div>
-                <div class="food-nutrients">
-                  {#each displayedNutrients as nutrientId, idx}
-                    {@const value = getNutrientValue(food, nutrientId)}
-                    {@const nutrient = getNutrientMetadata(nutrientId)}
-                    {#if nutrient}
-                      <span class="nutrient-value">
-                        {formatNutrientValue(value, nutrientId)}{nutrient.unit} {nutrient.label}
-                      </span>
-                      {#if idx < displayedNutrients.length - 1}
-                        <span class="nutrient-separator"> | </span>
-                      {/if}
-                    {/if}
-                  {/each}
-                </div>
               </div>
+
+              <!-- Row 2: Measure -->
+              <div class="food-measure">
+                {getPrimaryMeasure(food).measure}
+                {#if hasMultipleMeasures(food)}
+                  <span class="measure-count">({getAllMeasures(food).length} servings)</span>
+                {/if}
+              </div>
+
+              <!-- Row 3: Nutrients (Pipe Separated) -->
+              <div class="food-nutrients">
+                {#each displayedNutrients as nutrientId, idx}
+                  {@const value = getNutrientValue(food, nutrientId)}
+                  {@const nutrient = getNutrientMetadata(nutrientId)}
+                  {#if nutrient}
+                    <span class="nutrient-value">
+                      {formatNutrientValue(value, nutrientId)}{nutrient.unit} {nutrient.label}
+                    </span>
+                    {#if idx < displayedNutrients.length - 1}
+                      <span class="nutrient-separator"> | </span>
+                    {/if}
+                  {/if}
+                {/each}
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <div class="food-actions">
               {#if !food.isCustom}
                 <button
                   class="favorite-btn"
@@ -911,9 +791,8 @@
                 </button>
               {/if}
             </div>
-          {/each}
-        {/if}
-        {#if filteredFoods.length === 0}
+          </div>
+        {:else}
           <div class="empty-state">
             <div class="empty-icon">🔍</div>
             <div class="empty-text">
@@ -921,7 +800,7 @@
               <p>Try adjusting your search or filter</p>
             </div>
           </div>
-        {/if}
+        {/each}
       </div>
     {/if}
   </div>
@@ -981,13 +860,13 @@
     gap: var(--spacing-sm);
     align-items: center;
     margin-bottom: var(--spacing-sm);
-    flex-wrap: wrap; /* Allow wrapping on very small screens */
+    flex-wrap: wrap;
   }
 
   .search-container {
     position: relative;
-    flex: 1; /* Take remaining space */
-    min-width: 200px; /* Don't squash too small */
+    flex: 1;
+    min-width: 200px;
   }
 
   .data-search {
@@ -1057,7 +936,7 @@
 
   .nutrient-selector-wrapper {
     flex: 1;
-    min-width: 0; /* Allow shrinking */
+    min-width: 0;
   }
 
   .nutrient-selector {
@@ -1249,9 +1128,12 @@
     font-size: 16px;
   }
 
-  /* Food Item Styles */
+  /* Food Item Styles (Card Layout) */
   .results-container {
     margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 
   .food-card {
@@ -1259,11 +1141,10 @@
     border: 1px solid var(--divider);
     border-radius: 8px;
     padding: 12px 16px;
-    margin-bottom: 8px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     position: relative;
+    gap: 12px;
   }
 
   .food-card.custom {
@@ -1273,40 +1154,73 @@
 
   .food-info {
     flex: 1;
-    margin-right: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0; /* Enable truncation inside flex item */
+  }
+
+  .food-name-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
   .food-name {
-    font-weight: 500;
+    font-weight: 600; /* Bold title */
     color: var(--text-primary);
-    margin-bottom: 4px;
-    line-height: 1.4;
+    line-height: 1.3;
+    font-size: 1rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
   }
 
+  .detail-link-btn {
+    background: none;
+    border: none;
+    padding: 4px;
+    color: var(--primary-color);
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .detail-link-btn:hover {
+    opacity: 1;
+    background-color: var(--primary-alpha-10);
+    border-radius: 50%;
+  }
+
+  .detail-link-btn .material-icons {
+    font-size: 20px;
+  }
+
   .food-measure {
-    font-size: 0.875rem;
+    font-size: 0.9rem;
     color: var(--text-secondary);
   }
 
   .measure-count {
     color: var(--text-tertiary);
-    font-size: var(--font-size-xs);
+    font-size: 0.8rem;
     font-style: italic;
-    margin-left: var(--spacing-xs);
+    margin-left: 4px;
   }
 
   .food-nutrients {
-    font-size: 0.875rem;
+    font-size: 0.9rem;
     color: var(--text-secondary);
-    margin-top: 6px;
-    line-height: 1.5;
+    line-height: 1.4;
+    white-space: normal;
   }
 
   .nutrient-value {
-    white-space: nowrap;
+    color: var(--text-primary);
   }
 
   .nutrient-separator {
@@ -1315,12 +1229,18 @@
   }
 
   /* Action Buttons */
-  .favorite-btn, .delete-btn, .docs-link-btn {
+  .food-actions {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .favorite-btn, .delete-btn {
     background: none;
     border: none;
     color: var(--text-secondary);
     cursor: pointer;
-    padding: 4px;
+    padding: 8px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -1331,54 +1251,25 @@
   .favorite-btn:hover { background-color: var(--divider); color: var(--primary-color); }
   .favorite-btn.favorite { color: var(--primary-color); }
   .delete-btn:hover { background-color: var(--divider); color: var(--error-color); }
-  .docs-link-btn:hover { background: var(--primary-alpha-10); color: var(--primary-color); }
 
-  /* Table Styles */
-  .food-table-container {
-    overflow-x: auto;
-    border-radius: 8px;
-    border: 1px solid var(--divider);
-    background-color: var(--surface);
+  .favorite-btn .material-icons, .delete-btn .material-icons {
+    font-size: 24px;
   }
-
-  .food-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.875rem;
-  }
-
-  .food-table th {
-    background-color: var(--surface-variant);
-    padding: 12px 16px;
-    text-align: left;
-    font-weight: 600;
-    color: var(--text-primary);
-    white-space: nowrap;
-    border-bottom: 2px solid var(--divider);
-  }
-
-  .food-table td {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--divider);
-    color: var(--text-secondary);
-  }
-
-  .food-table tr:hover { background-color: var(--hover-overlay); }
-  .food-table tr.custom { background-color: var(--custom-food-bg); border-left: 3px solid var(--secondary-color); }
 
   .hide-checkbox-container {
-    margin-right: var(--spacing-md);
+    margin-right: 8px;
     display: flex;
     align-items: center;
+    flex-shrink: 0;
   }
 
   .hide-checkbox {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     margin: 0;
     cursor: pointer;
     border: 2px solid var(--divider);
-    border-radius: 3px;
+    border-radius: 4px;
     appearance: none;
     background-color: var(--surface);
     position: relative;
@@ -1396,7 +1287,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
   }
 
@@ -1441,61 +1332,6 @@
 
   .empty-icon { font-size: 4rem; margin-bottom: 1.5rem; opacity: 0.7; }
   .empty-text h3 { margin: 0 0 0.75rem 0; font-size: 1.25rem; font-weight: 600; color: var(--text-primary); }
-
-  /* New wrapper for name cell */
-  .food-name-wrapper {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  /* Detail link button style */
-  .detail-link-btn {
-    background: none;
-    border: none;
-    padding: 2px;
-    color: var(--primary-color);
-    cursor: pointer;
-    opacity: 0.7;
-    transition: opacity 0.2s;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
-  .detail-link-btn:hover {
-    opacity: 1;
-    background-color: var(--primary-alpha-10);
-    border-radius: 50%;
-  }
-
-  .detail-link-btn .material-icons {
-    font-size: 18px;
-  }
-
-  /* Sticky Column Logic */
-  .sticky-col {
-    position: sticky;
-    right: 0;
-    background-color: var(--surface); /* Must set background to hide content scrolling behind */
-    z-index: 10;
-    box-shadow: -2px 0 5px rgba(0,0,0,0.05); /* Subtle shadow to indicate scroll depth */
-  }
-
-  .food-table th.sticky-col {
-    background-color: var(--surface-variant); /* Match header background */
-  }
-
-  .food-table tr:hover .sticky-col {
-    background-color: var(--hover-overlay); /* Maintain hover effect */
-    /* Note: mixing backgrounds for sticky hover is tricky in pure CSS, 
-      simplest is to just set it to the hover color explicitly */
-    background-color: #f5f5f5; /* Adjust based on your theme vars if needed */
-  }
-
-  /* Dark mode override for sticky hover if needed */
-  :global([data-theme="dark"]) .food-table tr:hover .sticky-col {
-    background-color: #2d2d2d;
-  }
 
   /* Mobile Responsive */
   @media (max-width: 30rem) {
@@ -1544,6 +1380,11 @@
     .data-filter-controls .sort-option .material-icons,
     .data-sort-controls .sort-option .material-icons {
       margin: 0;
+    }
+
+    .food-card {
+      padding: 12px;
+      gap: 8px;
     }
   }
 
