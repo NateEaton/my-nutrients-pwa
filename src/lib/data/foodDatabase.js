@@ -169,6 +169,15 @@ export async function getDatabaseMetadata() {
   if (!_metadataCache) {
     await loadFoodDatabase();
   }
+
+  // Add recordCount dynamically from the loaded database
+  if (_metadataCache && !_metadataCache.recordCount) {
+    return {
+      ..._metadataCache,
+      recordCount: _databaseCache ? _databaseCache.length : 0
+    };
+  }
+
   return _metadataCache;
 }
 
