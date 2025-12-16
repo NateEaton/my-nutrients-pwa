@@ -1,48 +1,72 @@
 # My Nutrients - Completion Plan
 
-**Version**: 1.0
-**Date**: December 13, 2025
-**Status**: Post-Phase 5 Analysis
+**Version**: 2.0
+**Date**: December 16, 2025
+**Status**: Post-Refactoring Update
 
 ---
 
 ## Executive Summary
 
-This document outlines the remaining work to complete the My Nutrients PWA. The application has successfully transitioned from single-nutrient (calcium) tracking to comprehensive multi-nutrient tracking with 25+ supported nutrients. **Phases 1-3 and Phase 5 are complete. Phase 4 was intentionally skipped** as the proposed nutrient analysis page was deemed redundant with the existing stats page.
+This document outlines the remaining work to complete the My Nutrients PWA. The application has successfully transitioned from single-nutrient (calcium) tracking to comprehensive multi-nutrient tracking with 24+ supported nutrients.
 
-### Current State
+### Current State (as of December 16, 2025)
 
-**✅ Completed**:
-- Multi-nutrient data layer with 25 nutrients
-- IndexedDB schema supporting `NutrientValues` interface
-- Service layer (CalciumService) fully multi-nutrient capable
-- UI components displaying up to 4 selected nutrients
-- Nutrient settings modal for selection and goal management
-- Stats page with nutrient selector
-- Reports page with nutrient selector
-- Backup/restore with multi-nutrient format
-- PWA capabilities (offline, installable)
-- Cross-device sync (feature-flagged)
+**✅ Completed (Core Implementation)**:
+- ✅ Multi-nutrient data layer with 24 nutrients
+- ✅ IndexedDB schema supporting `NutrientValues` interface
+- ✅ Service layer fully multi-nutrient capable
+- ✅ UI components displaying up to 4 selected nutrients
+- ✅ Nutrient settings modal for selection and goal management
+- ✅ Stats page with nutrient selector
+- ✅ Reports page with nutrient selector
+- ✅ Backup/restore with multi-nutrient format
+- ✅ PWA capabilities (offline, installable)
+- ✅ Cross-device sync (feature-flagged)
+- ✅ Food database with multi-nutrient support
+- ✅ Database page with food browser and source provenance
 
-**⚠️ Issues Identified**:
-1. Branding inconsistency ("My Calcium" hardcoded throughout)
+**✅ Recently Completed (December 13-16, 2025)**:
+- ✅ Type system consolidation (deleted `calcium.ts`, unified to `nutrients.ts`)
+- ✅ localStorage key migration (`calcium_*` → `nutrient_*` with backward compatibility)
+- ✅ Service/store renaming (`CalciumService` → `NutrientService`, `CalciumState` → `NutrientState`)
+- ✅ Migration logic removal (~270 lines of legacy code removed)
+- ✅ Database kept at version 1 (clean start approach)
+- ✅ Base path routing fixes for food detail pages
+- ✅ Database info dialog improvements (removed JSON from title, simplified source links)
+- ✅ Food detail page theme support (tabs now respect dark/light themes)
+- ✅ Sources tab loading fix (base path support)
+- ✅ recordCount display fix in database info dialog
+
+**⚠️ Known Issues Identified**:
+1. ~~Branding inconsistency ("My Calcium" hardcoded throughout)~~ - MOSTLY FIXED, see remaining items below
 2. Nutrient selection modal UX bug (can't select new nutrient after unchecking)
 3. Nutrient selector too tall on mobile (stats/reports pages)
-4. Database page calcium-focused (needs multi-nutrient redesign)
-5. Tracking page sorting limited to calcium (needs multi-nutrient support)
-6. HTML documentation generation concerns (size, relevance)
+4. Database page needs multi-nutrient display improvements
+5. Tracking page sorting needs multi-nutrient support enhancement
 
 ---
 
-## Remaining Work Breakdown
+## Remaining Work Summary
 
-### Phase 6: Critical Fixes & UX Improvements
+The major refactoring work (Documents #2-4) is **complete**. The remaining work focuses on:
+
+1. **Critical UX fixes** (nutrient selection modal bug, mobile selector height)
+2. **UI enhancements** (database page multi-nutrient display, tracking sort improvements)
+3. **Final branding cleanup** (a few remaining "My Calcium" references)
+4. **Polish and testing** (cross-browser, accessibility, documentation updates)
+
+**Estimated Time**: 5-7 days of focused work
+
+---
+
+## Phase 6: Critical Fixes & Final Polish
 
 **Duration**: 2-3 days
 **Priority**: High
-**Goal**: Fix blocking UX issues and branding inconsistencies
+**Goal**: Fix blocking UX issues and complete branding
 
-#### Task 6.1: Fix Nutrient Selection Modal Bug
+### Task 6.1: Fix Nutrient Selection Modal Bug
 
 **Issue**: When a user unchecks a nutrient (reducing from 4 to 3 selected), they cannot select a different nutrient until they save and re-enter the modal.
 
@@ -73,11 +97,11 @@ $: canSelectMore = settings.displayedNutrients.length < MAX_DISPLAYED;
 
 ---
 
-#### Task 6.2: Simplify Nutrient Selector on Stats/Reports Pages
+### Task 6.2: Simplify Nutrient Selector on Stats/Reports Pages
 
-**Issue**: The nutrient dropdown shows ALL 25 nutrients in two optgroups ("Tracked" and "All"), making it excessively tall on mobile devices and causing full-screen takeover.
+**Issue**: The nutrient dropdown shows ALL 24 nutrients in two optgroups ("Tracked" and "All"), making it excessively tall on mobile devices.
 
-**Solution**: For now, show only the 1-4 selected nutrients in the dropdown. This addresses mobile usability while we can revisit a more sophisticated selector later.
+**Recommendation**: Show only the 1-4 selected nutrients in the dropdown for mobile usability.
 
 **Implementation**:
 ```svelte
@@ -92,624 +116,162 @@ $: canSelectMore = settings.displayedNutrients.length < MAX_DISPLAYED;
 </select>
 ```
 
-**Alternative (if user wants access to all nutrients)**:
-- Add a small "+" button next to selector
-- Opens modal/sheet to select from all nutrients
+**Alternative** (if user wants access to all nutrients):
+- Add a "+" button next to selector that opens modal to select from all nutrients
 - Selected nutrient becomes temporarily active for viewing
 
-**Decision Point**: Does the user want stats/reports limited to tracked nutrients only, or should there be a way to view stats for any nutrient?
-
 **Files**:
-- `src/routes/stats/+page.svelte` (lines 1027-1046)
-- `src/routes/report/+page.svelte` (similar section)
+- `src/routes/stats/+page.svelte`
+- `src/routes/report/+page.svelte`
 
 ---
 
-#### Task 6.3: Backup Filename Update
+### Task 6.3: Complete Branding Cleanup
 
-**File**: `src/lib/components/BackupModal.svelte`
+**Remaining Locations**:
 
-**Change** (line 121):
-```javascript
-// Old
-const filename = `calcium-tracker-backup-${dateStr}.json`;
-
-// New
-const filename = `nutrients-tracker-backup-${dateStr}.json`;
-```
-
-**Impact**: All future backups will use the new filename. Existing backups with old filenames will still restore correctly.
-
----
-
-#### Task 6.4: Global Branding Update (My Calcium → My Nutrients)
-
-**Issue**: "My Calcium" branding appears in 60+ locations throughout the codebase, creating confusion and inconsistency.
-
-**Locations to Update**:
-
-1. **HTML/Title**:
-   - `src/app.html` line 12: `<title>My Calcium</title>` → `<title>My Nutrients</title>`
+1. **App Title** (if not already done):
+   - `src/app.html` line 12: Verify says `<title>My Nutrients</title>`
 
 2. **PWA Manifest** (vite.config.js):
-   - Line 101+: `name: "My Calcium"` → `name: "My Nutrients"`
-   - `short_name: "Calcium"` → `short_name: "Nutrients"`
-   - `description: "Track calcium..."` → `description: "Track essential nutrients..."`
+   - Verify: `name: "My Nutrients"`, `short_name: "Nutrients"`, updated description
 
-3. **File Headers** (comment blocks):
-   - All `*.svelte` files: "My Calcium Tracker PWA" → "My Nutrients Tracker PWA"
-   - All `*.ts` files: Same update
-   - Estimated 40+ files
+3. **User Guide**:
+   - `src/routes/guide/+page.svelte`: Verify all content references "nutrients" not just "calcium"
 
-4. **LocalStorage Keys** (optional - backward compatible):
-   - Current: `calcium_theme`, `calcium_goal`, etc.
-   - Consider: `nutrient_theme`, `nutrient_goals` (requires migration)
-   - **Recommendation**: Keep current keys for backward compatibility, only update in comments
+4. **About Dialog**:
+   - `src/lib/components/AboutDialog.svelte`: Verify app name and description
 
-5. **Service/Store Names** (optional - breaking change):
-   - `CalciumService` → `NutrientService`
-   - `calciumState` → `nutrientState`
-   - **Recommendation**: Rename in Phase 7 (refactoring) to avoid scope creep
+5. **Landing Page**:
+   - `docs/index.html`: Complete rewrite from "My Calcium" to "My Nutrients"
+   - Update title, meta description, header, features, benefits
 
-6. **Backup Filename**:
-   - `src/lib/components/BackupModal.svelte` line 121:
-   - `calcium-tracker-backup-${dateStr}.json` → `nutrients-tracker-backup-${dateStr}.json`
+6. **README.md**:
+   - Final polish and consistency check
 
-7. **User-Facing Strings**:
-   - Settings page headers
-   - Menu labels
-   - Empty states
-   - Toast messages
-
-8. **Documentation Files**:
-   - `docs/index.html`: Complete rewrite (currently says "My Calcium - Calcium Tracker")
-   - `README.md`: Polish and finalize (already has My Nutrients sections but needs consistency check)
-   - `src/routes/guide/+page.svelte`: Update user guide to reference nutrients, not just calcium
-   - `src/lib/components/AboutDialog.svelte`: Update app name and description
-
-**Automated Approach**:
-```bash
-# Find all references
-grep -r "My Calcium" src/ --include="*.svelte" --include="*.ts" --include="*.js" --include="*.html"
-
-# Careful manual replacement (don't break code logic)
-# Focus on:
-# - Comments
-# - UI strings
-# - Titles
-# - Descriptions
-```
-
-**Files** (primary):
+**Files**:
 - `src/app.html`
 - `vite.config.js`
-- All component headers (40+ files)
-- `src/lib/components/Header.svelte` (menu title)
-- `src/lib/components/AboutDialog.svelte` (app name, description)
-- `src/lib/components/BackupModal.svelte` (backup filename)
-- `src/routes/settings/+page.svelte` (page title)
-- `src/routes/guide/+page.svelte` (user guide content)
-- `docs/index.html` (landing page - full rewrite needed)
-- `README.md` (polish and finalize)
+- `src/routes/guide/+page.svelte`
+- `src/lib/components/AboutDialog.svelte`
+- `docs/index.html`
+- `README.md`
 
 ---
 
-### Phase 7: Database Page Redesign
+## Phase 7: Database Page Multi-Nutrient Display (Optional Enhancement)
 
-**Duration**: 3-4 days
-**Priority**: High
-**Goal**: Redesign database browser to support multi-nutrient display and filtering
+**Duration**: 2-3 days
+**Priority**: Medium
+**Goal**: Improve database page to show all tracked nutrients
 
-#### Current State Analysis
+### Current State
 
 **What Works**:
-- Search functionality (nutrient-agnostic)
-- Food type filtering (Available/Database/User)
+- Search functionality
+- Food type filtering
 - Sorting by name and type
-- Bulk operations (hide, favorite, delete)
-- Metadata display with source indicators
+- Bulk operations
+- Source indicators
 
-**What's Calcium-Specific**:
-- Calcium value column (only nutrient shown)
-- "Ca" sort button (hardcoded to calcium)
-- Calcium range filter (0mg, 1-50mg, 51-200mg, etc.)
-- Display format: shows only calcium per serving
+**What Could Be Enhanced**:
+- Currently shows nutrients inline (works, but could be more structured)
+- Sorting is flexible but could have clearer UI for nutrient-based sorting
+- Filtering by nutrient ranges could be added
 
-#### Design Recommendations
+### Recommended Approach: Hybrid Display
 
-**Option A: Compact Multi-Column Display** (Recommended for Desktop)
+**Mobile (<768px)**: Current stacked cards with inline nutrients (already works well)
+**Desktop (≥768px)**: Could optionally add multi-column table view
 
-Show selected nutrients as compact columns (similar to FoodEntry cards):
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ Search: [..................] Filter: [Available ▼]  Sort ▼  │
-├─────────────────────────────────────────────────────────────┤
-│ Food Name                    | Pro | Ca  | Fiber | Vit D    │
-├─────────────────────────────────────────────────────────────┤
-│ Milk, whole (1 cup)          | 8g  |276mg|  0g   | 2.5mcg   │
-│ Greek yogurt, plain (1 cup)  | 17g |187mg|  0g   |  0mcg    │
-│ Broccoli, cooked (1 cup)     | 4g  | 62mg| 5.1g  |  0mcg    │
-└─────────────────────────────────────────────────────────────┘
-```
-
-**Pros**:
-- Shows all tracked nutrients at once
-- Easy to compare foods across nutrients
-- Familiar spreadsheet-like interface
-
-**Cons**:
-- Limited horizontal space on mobile
-- More columns = narrower cells
-- May need horizontal scroll on small screens
+**Note**: This is an **optional enhancement**. The current implementation works fine and displays all tracked nutrients. Only pursue if you want a more structured table view on desktop.
 
 ---
 
-**Option B: Mobile-First Stacked Cards** (Recommended for Mobile)
-
-Show each food as a card with nutrients inline:
-
-```
-┌──────────────────────────────────────┐
-│ Milk, whole                      [⋮] │
-│ 1 cup (244g)                         │
-│ 8g Pro | 276mg Ca | 0g Fiber | 2.5mcg Vit D │
-│ Source: USDA Database                │
-└──────────────────────────────────────┘
-```
-
-**Pros**:
-- Works perfectly on mobile
-- Consistent with FoodEntry display
-- No horizontal scrolling
-- Room for metadata badges
-
-**Cons**:
-- Takes more vertical space
-- Harder to scan/compare across foods
-
----
-
-**Recommended Hybrid Approach**:
-
-**Mobile (<768px)**: Stacked cards with inline nutrients
-**Desktop (≥768px)**: Multi-column table view
-
-```svelte
-<!-- Responsive table/card view -->
-{#if windowWidth < 768}
-  <!-- Mobile: Cards -->
-  {#each filteredFoods as food}
-    <div class="food-card">
-      <div class="food-name">{food.name}</div>
-      <div class="food-measure">{getPrimaryMeasure(food).measure}</div>
-      <div class="food-nutrients">
-        {#each displayedNutrients as nutrientId}
-          {@const value = getPrimaryMeasure(food).nutrients?.[nutrientId] ?? 0}
-          <span>{value.toFixed(1)}{getNutrientUnit(nutrientId)} {getNutrientLabel(nutrientId)}</span>
-          {#if !$last} | {/if}
-        {/each}
-      </div>
-      <div class="food-actions">...</div>
-    </div>
-  {/each}
-{:else}
-  <!-- Desktop: Table -->
-  <table class="food-table">
-    <thead>
-      <tr>
-        <th on:click={() => sortBy = 'name'}>Food Name</th>
-        {#each displayedNutrients as nutrientId}
-          <th on:click={() => sortByNutrient(nutrientId)}>
-            {getNutrientLabel(nutrientId)} ({getNutrientUnit(nutrientId)})
-          </th>
-        {/each}
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {#each filteredFoods as food}
-        <tr>
-          <td>{food.name}<br/><small>{getPrimaryMeasure(food).measure}</small></td>
-          {#each displayedNutrients as nutrientId}
-            <td>{(getPrimaryMeasure(food).nutrients?.[nutrientId] ?? 0).toFixed(1)}</td>
-          {/each}
-          <td>...</td>
-        </tr>
-      {/each}
-    </tbody>
-  </table>
-{/if}
-```
-
----
-
-#### Sorting Redesign
-
-**Current**: Three-way rotation on "Ca" button (calcium ascending/descending/type)
-
-**Proposed**: Dynamic nutrient sorting with clearer UI
-
-**Mobile Approach**:
-```
-Sort by: [Name ▼] [Protein ▼] [Calcium ▼] [Fiber ▼] [Vitamin D ▼] [Type ▼]
-```
-- Show one sort button per displayed nutrient (max 4)
-- Each button cycles: asc → desc → inactive
-- Visual indicator (↑ ↓) for direction
-
-**Desktop Approach**:
-- Clickable column headers (standard table sorting)
-- Arrow indicators in headers
-- Multi-column sort (shift+click for secondary sort)
-
-**Implementation**:
-```javascript
-let currentSort = {
-  column: 'name',        // 'name', 'type', or nutrient ID
-  direction: 'asc',      // 'asc' or 'desc'
-  secondary: null        // Optional secondary sort
-};
-
-function sortByNutrient(nutrientId) {
-  if (currentSort.column === nutrientId) {
-    // Toggle direction
-    currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
-  } else {
-    // New column, default to descending (highest first)
-    currentSort = { column: nutrientId, direction: 'desc', secondary: null };
-  }
-  applySorting();
-}
-
-function applySorting() {
-  filteredFoods.sort((a, b) => {
-    let comparison = 0;
-
-    if (currentSort.column === 'name') {
-      comparison = a.name.localeCompare(b.name);
-    } else if (currentSort.column === 'type') {
-      comparison = getTypeSortPriority(a) - getTypeSortPriority(b);
-    } else {
-      // Sort by nutrient value
-      const aValue = getPrimaryMeasure(a).nutrients?.[currentSort.column] ?? 0;
-      const bValue = getPrimaryMeasure(b).nutrients?.[currentSort.column] ?? 0;
-      comparison = aValue - bValue;
-    }
-
-    return currentSort.direction === 'asc' ? comparison : -comparison;
-  });
-}
-```
-
----
-
-#### Filtering Redesign
-
-**Current**: Calcium range filter (preset ranges like "201-500mg")
-
-**Proposed**: Generic nutrient filter with dynamic ranges
-
-**UI Design**:
-```
-Filter by nutrient: [Select nutrient ▼] [Range ▼]
-
-Ranges adjust based on selected nutrient:
-- Protein: None | Low (<5g) | Medium (5-15g) | High (15-30g) | Very High (30g+)
-- Calcium: None | Low (<50mg) | Medium (50-200mg) | High (200-500mg) | Very High (500mg+)
-- Fiber: None | Low (<2g) | Medium (2-5g) | High (5-10g) | Very High (10g+)
-```
-
-**Implementation**:
-```javascript
-// Define ranges per nutrient
-const NUTRIENT_RANGES = {
-  protein: [
-    { label: 'Low (<5g)', min: 0, max: 5 },
-    { label: 'Medium (5-15g)', min: 5, max: 15 },
-    { label: 'High (15-30g)', min: 15, max: 30 },
-    { label: 'Very High (30g+)', min: 30, max: Infinity }
-  ],
-  calcium: [
-    { label: 'Low (<50mg)', min: 0, max: 50 },
-    { label: 'Medium (50-200mg)', min: 50, max: 200 },
-    { label: 'High (200-500mg)', min: 200, max: 500 },
-    { label: 'Very High (500mg+)', min: 500, max: Infinity }
-  ],
-  fiber: [
-    { label: 'Low (<2g)', min: 0, max: 2 },
-    { label: 'Medium (2-5g)', min: 2, max: 5 },
-    { label: 'High (5-10g)', min: 5, max: 10 },
-    { label: 'Very High (10g+)', min: 10, max: Infinity }
-  ],
-  // ... define for all nutrients
-};
-
-let nutrientFilter = {
-  nutrient: 'calcium',  // Which nutrient to filter by
-  range: null           // Selected range object
-};
-
-function passesNutrientFilter(food) {
-  if (!nutrientFilter.range) return true;
-
-  const value = getPrimaryMeasure(food).nutrients?.[nutrientFilter.nutrient] ?? 0;
-  return value >= nutrientFilter.range.min && value <= nutrientFilter.range.max;
-}
-```
-
-**Simplified Alternative** (if ranges are too complex):
-- Single "Minimum value" input field
-- Show only foods with nutrient value >= minimum
-- Simpler UI, less overwhelming
-
----
-
-#### Files to Modify
-
-- `src/routes/data/+page.svelte` (main database page)
-- `src/lib/config/nutrientDefaults.ts` (add NUTRIENT_RANGES constant)
-- `src/lib/data/foodDatabase.js` (helper functions if needed)
-
----
-
-### Phase 8: Tracking Page Sorting Improvements
-
-**Duration**: 1-2 days
-**Priority**: Medium
-**Goal**: Allow sorting by any displayed nutrient, not just calcium
-
-#### Current State
-
-The tracking page (main food journal) has `SortControls.svelte` with three buttons:
-- Added (time-based)
-- Name (alphabetical)
-- Ca (calcium value)
-
-**Issue**: The "Ca" button is hardcoded to calcium and doesn't adapt to user's selected nutrients.
-
-#### Design Recommendations
-
-**Option A: Dynamic Nutrient Button** (Simplest)
-
-Replace "Ca" button with a dynamic button that cycles through displayed nutrients:
-
-```
-Sort: [Added] [Name] [Protein] → [Calcium] → [Fiber] → [Vit D] → back to [Protein]
-```
-
-**Pros**:
-- Minimal UI changes
-- Consistent button count (3)
-- Discoverable (tap to cycle through nutrients)
-
-**Cons**:
-- Not obvious that it cycles
-- Takes multiple taps to reach desired nutrient
-- Icon/label changes on each cycle (could be confusing)
-
-**Implementation**:
-```javascript
-// In SortControls.svelte or parent page
-let nutrientSortIndex = 0;
-$: currentNutrientSort = displayedNutrients[nutrientSortIndex];
-
-function cycleNutrientSort() {
-  nutrientSortIndex = (nutrientSortIndex + 1) % displayedNutrients.length;
-  dispatch('sortChange', { sortBy: currentNutrientSort });
-}
-```
-
-```svelte
-<button on:click={cycleNutrientSort}>
-  <span class="material-icons">science</span>
-  <span>{getNutrientLabel(currentNutrientSort)}</span>
-  <span class="material-icons">
-    {sortOrder === 'asc' ? 'expand_less' : 'expand_more'}
-  </span>
-</button>
-```
-
----
-
-**Option B: Expandable Nutrient Menu** (More Discoverable)
-
-Show a dropdown/menu when tapping the nutrient sort button:
-
-```
-Sort: [Added] [Name] [Nutrients ▼]
-                      ↓
-            [✓ Protein]
-            [  Calcium]
-            [  Fiber]
-            [  Vitamin D]
-```
-
-**Pros**:
-- Clear which nutrient is active
-- All nutrients visible at once
-- Familiar dropdown pattern
-
-**Cons**:
-- Adds complexity (menu state management)
-- Takes up more screen space when open
-- Extra tap to select (tap button → tap nutrient)
-
-**Implementation**:
-```svelte
-<div class="nutrient-sort-container">
-  <button on:click={() => showNutrientMenu = !showNutrientMenu}>
-    <span class="material-icons">science</span>
-    <span>{getNutrientLabel(currentNutrientSort)}</span>
-    <span class="material-icons">expand_more</span>
-  </button>
-
-  {#if showNutrientMenu}
-    <div class="nutrient-menu">
-      {#each displayedNutrients as nutrientId}
-        <button
-          class:active={currentNutrientSort === nutrientId}
-          on:click={() => selectNutrientSort(nutrientId)}
-        >
-          {#if currentNutrientSort === nutrientId}✓{/if}
-          {getNutrientLabel(nutrientId)}
-        </button>
-      {/each}
-    </div>
-  {/if}
-</div>
-```
-
----
-
-**Option C: Gesture-Based Cycling** (Most Space-Efficient)
-
-Keep "Ca" label but make it dynamic, cycle with **long-press** or **swipe**:
-
-```
-Sort: [Added] [Name] [Pro] ← shows current, long-press/swipe to change
-```
-
-**Pros**:
-- Cleanest UI (no extra buttons or menus)
-- Power-user friendly
-- Maintains 3-button layout
-
-**Cons**:
-- Discoverability issue (users won't know to long-press)
-- Need tooltip/hint on first use
-- More complex gesture handling
-
----
-
-**Recommendation**: **Option A (Dynamic Cycling)** for Phase 8, **Option B (Dropdown)** as a stretch goal if time permits.
-
-**Why Option A**:
-- Simplest implementation
-- Consistent with current 3-button layout
-- Users can tap multiple times quickly to reach desired nutrient
-- Label updates provide clear feedback
-
-**Enhancement**: Add a tooltip on first use: "Tap to cycle through nutrients"
-
----
-
-#### Files to Modify
-
-- `src/lib/components/SortControls.svelte` (update Ca button to be dynamic)
-- `src/routes/+page.svelte` (pass displayedNutrients to SortControls)
-- `src/lib/stores/calcium.ts` (update sorting logic to handle any nutrient)
-
----
-
-### Phase 9: HTML Documentation Generation Review
+## Phase 8: Tracking Page Sorting Enhancement (Optional)
 
 **Duration**: 1 day
 **Priority**: Low
-**Goal**: Evaluate and improve database documentation generation
+**Goal**: Make nutrient sorting more discoverable
 
-#### Current State
+### Current State
 
-The `source_data/html-docs-generator.cjs` script generates `static/database-docs.html` showing:
-- All foods in the curated database
-- Collapsed foods (USDA entries merged into curated entries)
-- Nutrient values per serving
+The tracking page has `SortControls.svelte` with dynamic nutrient sorting that cycles through displayed nutrients. This **already works** but could be enhanced with:
 
-**In My Calcium**: This was useful to see which USDA foods were hidden/merged.
+**Option A: Keep Current** (Cycling)
+- Current implementation cycles through nutrients
+- Works well, just needs clear visual feedback
 
-**Concerns for My Nutrients**:
-1. **File Size**: Showing 25 nutrients per food × 4,000+ foods could create a massive HTML file (5-10MB+)
-2. **Readability**: A full nutrient table per serving is overwhelming
-3. **Purpose**: Is the collapsed food list still valuable to users?
+**Option B: Add Dropdown Menu**
+- More discoverable
+- Shows all tracked nutrients at once
+- Requires additional UI complexity
 
-#### Options
-
-**Option A: Keep Full Nutrient Display**
-- Show all nutrients in a scrollable table
-- Pros: Complete information
-- Cons: Very large file, hard to navigate
-
-**Option B: Show Only Displayed Nutrients**
-- Only show user's 4 selected nutrients (default: protein, calcium, fiber, vitamin D)
-- Pros: Smaller file, more focused
-- Cons: Incomplete information, not configurable
-
-**Option C: Collapsible Nutrient Sections**
-- Show primary nutrients (protein, calcium) by default
-- "Show all nutrients" button per food
-- Pros: Best of both worlds
-- Cons: Requires JavaScript in static HTML
-
-**Option D: Remove HTML Documentation**
-- Don't generate HTML docs
-- Provide database browser in-app (already exists)
-- Pros: No maintenance, users already have better UI in app
-- Cons: Can't reference docs externally
-
-**Option E: Generate CSV Instead**
-- Export database to CSV format
-- Users can open in Excel/Sheets for analysis
-- Pros: Better tool for data exploration
-- Cons: Less user-friendly for casual browsing
+**Recommendation**: Keep current implementation. It works well and is space-efficient.
 
 ---
 
-**Important Clarification**: The database docs HTML is **static** - it's generated once by the build pipeline and committed to the repo. It **cannot** dynamically show different nutrients based on user settings (since those are stored in browser localStorage).
-
-**Viable Options**:
-- **Option A**: Show a fixed set of 4 "most popular" nutrients (protein, calcium, fiber, vitamin D)
-- **Option B**: Show all 25 nutrients (large file, ~10-15MB estimated)
-- **Option C**: Remove HTML docs entirely, direct users to in-app database browser
-- **Option D**: Generate CSV export instead of HTML
-
-**Recommendation**: **Option A (Fixed 4 Nutrients)** - protein, calcium, fiber, vitamin D - with prominent note at top: "For complete nutrient information, use the Database page in the app."
-
-**Rationale**:
-- The database browser page (in-app) is superior for exploration
-- HTML docs serve as a static reference, not interactive tool
-- Showing 4 fixed nutrients keeps file size manageable (~2-3MB)
-- Users who need detailed analysis can use the in-app browser or export to CSV
-- These 4 nutrients are the default displayedNutrients, so they're most relevant
-
-**Alternative**: Defer this to post-launch. The HTML docs aren't critical functionality.
-
----
-
-#### Files to Modify (if implemented)
-
-- `source_data/html-docs-generator.cjs` (update to show limited nutrients)
-- Add comment in HTML: "For full nutrient details, use the Database page in the app"
-
----
-
-### Phase 10: Final Polish & Testing
+## Phase 9: Documentation & Final Polish
 
 **Duration**: 2-3 days
 **Priority**: High
 **Goal**: Production-ready release
 
-#### Task 10.1: Code Cleanup & Consolidation
+### Task 9.1: Update User Documentation
 
-**Type System Unification**:
-- Currently two type files: `calcium.ts` (legacy) and `nutrients.ts` (modern)
-- Consolidate into `nutrients.ts` only
-- Update all imports throughout codebase
+**Files to Update**:
 
-**Service Renaming** (optional):
-- `CalciumService` → `NutrientService`
-- `calciumState` → `nutrientState`
-- This is a large refactor; may defer to v1.1
+1. **User Guide** (`src/routes/guide/+page.svelte`):
+   - Add section on nutrient selection
+   - Explain how to change displayed nutrients
+   - Document nutrient goals
 
-**Remove Dead Code**:
-- Remove unused imports
-- Clean up commented-out code
-- Remove debug console.logs
+2. **About Dialog** (`src/lib/components/AboutDialog.svelte`):
+   - Verify app description
+   - Update version number if needed
+
+3. **Landing Page** (`docs/index.html`):
+   - Complete rewrite from calcium focus to multi-nutrient
+   - Update title: "My Nutrients - Essential Nutrient Tracker"
+   - Update features list
+   - Update benefits section
+   - Update meta description for SEO
+
+4. **README.md**:
+   - Final consistency check
+   - Update screenshots if needed
+   - Verify all links work
+
+5. **CLAUDE.md**:
+   - Update project overview
+   - Update completed phases
+   - Document current architecture
 
 ---
 
-#### Task 10.2: Cross-Browser Testing
+### Task 9.2: Developer Documentation
 
-**Browsers**:
+**Files to Update**:
+
+1. **_notes/IMPLEMENTATION_PLAN.md**:
+   - Mark phases 1-3 as complete
+   - Update actual completion dates
+   - Document any deviations
+
+2. **_notes/AISTUDIO_MOD_SUGGESTIONS.md**:
+   - Mark Documents #2-4 as complete
+   - Add completion notes
+
+3. **_notes/DECISIONS.md** (if exists):
+   - Document key architectural decisions made during refactor
+   - Note: keeping IndexedDB at version 1 (clean start approach)
+   - Note: backward compatibility maintained in localStorage
+
+---
+
+### Task 9.3: Cross-Browser Testing
+
+**Browsers to Test**:
 - Chrome/Edge (latest)
 - Firefox (latest)
 - Safari iOS (latest)
@@ -724,254 +286,196 @@ The `source_data/html-docs-generator.cjs` script generates `static/database-docs
 6. Sort by different nutrients
 7. Backup and restore
 8. Offline mode
+9. Theme switching (light/dark)
+10. Food detail page navigation and sources tab
 
 ---
 
-#### Task 10.3: Accessibility Audit
+### Task 9.4: Accessibility Check
 
-**Checks**:
+**Quick Checks**:
 - Keyboard navigation (tab through all interactive elements)
-- Screen reader compatibility (NVDA/VoiceOver)
-- Color contrast (4.5:1 minimum)
+- Color contrast in both themes
 - Touch targets (44px minimum)
 - Focus indicators visible
+- Screen reader announces buttons properly
 
 **Tools**:
 - Lighthouse accessibility audit
-- axe DevTools
-- Manual testing with screen reader
+- Browser DevTools accessibility inspector
 
 ---
 
-#### Task 10.4: Performance Optimization
+### Task 9.5: Performance Check
 
-**Metrics to Check**:
+**Metrics to Verify**:
 - Initial load time (<3s)
 - Food search response (<500ms)
-- Database page rendering (<1s for 4,000 foods)
+- Database page rendering (<1s for 7,793 foods)
 - Stats chart rendering (<1s)
 
-**Optimizations**:
-- Lazy load stats charts
-- Virtualize long food lists
-- Debounce search input
-- Cache computed values
+**Current Optimizations**:
+- Minified database (2.7MB)
+- Lazy loading for pages
+- Efficient search indexing
+- PWA caching
 
 ---
 
-#### Task 10.5: Documentation Updates
+## Summary of Remaining Work
 
-**User-Facing**:
-- Update guide page (`src/routes/guide/+page.svelte`) with nutrient selection instructions
-- Add FAQ: "How do I change which nutrients are displayed?"
-- Update about dialog (`src/lib/components/AboutDialog.svelte`) with app description
-- Update landing page (`docs/index.html`) - see detailed task below
-- Polish README.md for final release (already mostly updated)
+### Critical Path (Must-Do for v1.0)
 
-**Landing Page Rewrite** (`docs/index.html`):
-Current state: "My Calcium - Calcium Tracker" with calcium-focused description
-Required changes:
-- Title: "My Nutrients - Essential Nutrient Tracker"
-- Meta description: Update from calcium-only to multi-nutrient tracking
-- Header: "My Nutrients" instead of "My Calcium"
-- Subtitle: From "Track Your Daily Calcium Intake" to "Track Essential Nutrients for Better Health"
-- Benefits section: Update from calcium benefits to comprehensive nutrition benefits
-- Features list: Update to mention multi-nutrient tracking, nutrient selection
-- Call-to-action: Keep launch app button, update surrounding text
-- Disclaimer: Update any calcium-specific medical advice to general nutrition tracking disclaimer
+| Task | Priority | Estimated Time | Status |
+|------|----------|---------------|--------|
+| Fix nutrient selection modal bug | High | 1-2 hours | ⏳ Pending |
+| Simplify mobile nutrient selector | High | 2-3 hours | ⏳ Pending |
+| Complete branding cleanup | High | 3-4 hours | ⏳ Pending |
+| Update documentation | High | 1 day | ⏳ Pending |
+| Cross-browser testing | High | 4-6 hours | ⏳ Pending |
 
-**Developer-Facing**:
-- Update `CLAUDE.md` with new branding
-- Update `README.md`
-- Update implementation plan with actual completion status
-- Document any deviations from original plan
+**Total Critical Path**: ~2-3 days
 
 ---
 
-### Phase 11: Deployment & Migration
+### Optional Enhancements (Nice-to-Have)
 
-**Duration**: 1 day
-**Priority**: High
-**Goal**: Deploy to production, migrate user data
-
-#### Task 11.1: Production Build
-
-```bash
-npm run build
-```
-
-**Verify**:
-- Build succeeds without errors
-- Bundle size reasonable (~3-4MB with database)
-- Service worker registers
-- Manifest generated correctly
+| Task | Priority | Estimated Time | Status |
+|------|----------|---------------|--------|
+| Database page table view | Medium | 2-3 days | ⏳ Optional |
+| Tracking sort dropdown | Low | 1 day | ⏳ Optional |
+| HTML docs regeneration | Low | 1 day | ⏳ Optional |
 
 ---
 
-#### Task 11.2: Update Deployment
+## Deployment Readiness Checklist
 
-**Files to Deploy**:
-- Entire `build/` directory
-- Updated manifest
-- New service worker
+Before deploying to production:
 
-**Post-Deployment Checks**:
-- PWA installs correctly
-- Offline mode works
-- All routes load
-- No console errors
-
----
-
-#### Task 11.3: Data Migration (if needed)
-
-If user has existing My Calcium data:
-
-1. **Backup Current Data**
-   - Export backup from My Calcium app
-   - Save to multiple locations
-
-2. **Run Migration Script**
-   ```bash
-   node source_data/migrate-calcium-to-nutrients.cjs \
-     --input calcium-backup.json \
-     --output nutrients-backup.json
-   ```
-
-3. **Import to My Nutrients**
-   - Open My Nutrients app
-   - Go to Settings → Restore
-   - Import migrated backup
-   - Verify all data present
-
-4. **Set Up Sync**
-   - Generate new sync doc ID (old My Calcium sync won't work)
-   - Pair devices
-   - Test synchronization
+- [ ] All critical path tasks complete
+- [ ] Nutrient selection modal bug fixed
+- [ ] Mobile selector height issue fixed
+- [ ] All "My Calcium" references updated to "My Nutrients"
+- [ ] Documentation updated (guide, about, landing page, README)
+- [ ] Cross-browser testing passed
+- [ ] Accessibility check passed
+- [ ] Performance metrics acceptable
+- [ ] Build succeeds without errors
+- [ ] PWA installs correctly
+- [ ] Offline mode works
+- [ ] Service worker registers
+- [ ] Backup/restore tested
+- [ ] Dark theme works correctly
+- [ ] Base path routing works in dev environment
 
 ---
 
-## Summary of Phases
+## Migration Notes
 
-| Phase | Name | Duration | Priority | Status |
-|-------|------|----------|----------|--------|
-| 6 | Critical Fixes & UX | 2-3 days | High | ⏳ Pending |
-| 7 | Database Page Redesign | 3-4 days | High | ⏳ Pending |
-| 8 | Tracking Page Sorting | 1-2 days | Medium | ⏳ Pending |
-| 9 | HTML Docs Review | 1 day | Low | ⏳ Pending |
-| 10 | Final Polish & Testing | 2-3 days | High | ⏳ Pending |
-| 11 | Deployment & Migration | 1 day | High | ⏳ Pending |
+**For Single User Migration**:
+1. Export backup from My Calcium
+2. Use migration script in `migration/` folder to transform data
+3. Import into My Nutrients using Restore feature
+4. Verify all foods and history present
+5. Verify nutrient goals set correctly
+6. Re-pair sync if using cross-device sync
 
-**Total Estimated Time**: 10-15 days
-
----
-
-## Discussion Points
-
-Before proceeding, please provide feedback on the following:
-
-### 1. Nutrient Selector Scope (Task 6.2)
-
-Should the stats/reports pages:
-- **Option A**: Show only the 1-4 displayed nutrients in dropdown (simpler, mobile-friendly)
-- **Option B**: Show all nutrients with displayed ones at the top (current behavior, but tall)
-- **Option C**: Show displayed nutrients + "View all" button that opens modal
-
-**Your preference**: _______
-
----
-
-### 2. Database Page Design (Phase 7)
-
-Which display approach do you prefer:
-- **Option A**: Multi-column table (desktop), stacked cards (mobile) - **Recommended**
-- **Option B**: Always use stacked cards (simpler, consistent across devices)
-- **Option C**: Always use table with horizontal scroll
-
-**Your preference**: _______
-
----
-
-### 3. Database Page Sorting (Phase 7)
-
-How should nutrient sorting work:
-- **Option A**: Show sort buttons for each displayed nutrient (max 4 buttons)
-- **Option B**: Single "Nutrient" button that opens dropdown menu
-- **Option C**: Clickable column headers (desktop only), dropdown (mobile)
-
-**Your preference**: _______
-
----
-
-### 4. Tracking Page Sorting (Phase 8)
-
-How should the nutrient sort button work:
-- **Option A**: Cycle through displayed nutrients on each tap - **Recommended**
-- **Option B**: Open dropdown menu to select nutrient
-- **Option C**: Long-press/swipe to cycle (gesture-based)
-
-**Your preference**: _______
-
----
-
-### 5. HTML Documentation (Phase 9)
-
-What should we do with database documentation:
-- **Option A**: Show only displayed nutrients (4 nutrients) - **Recommended**
-- **Option B**: Show all 25 nutrients (large file)
-- **Option C**: Remove HTML docs entirely, use in-app browser only
-- **Option D**: Generate CSV export instead
-
-**Your preference**: _______
-
----
-
-### 6. Service/Store Renaming
-
-Should we rename `CalciumService` and `calciumState` in Phase 10:
-- **Yes**: Clean up naming to reflect multi-nutrient architecture (more refactoring)
-- **No**: Keep current names for backward compatibility (simpler, less risk)
-
-**Your preference**: _______
-
----
-
-## Next Steps
-
-1. **Review this plan** and provide feedback on discussion points
-2. **Approve or adjust** the proposed phases
-3. **Begin Phase 6** with critical fixes
-4. **Iterate** based on testing and user feedback
+**Database Schema**:
+- Version remains at 1 (clean start)
+- No in-app migration logic (removed in Document #4)
+- External migration handles transformation
 
 ---
 
 ## Open Questions
 
-1. **Migration timing**: When should existing My Calcium users migrate? Immediately or gradual rollout?
-2. **Version numbering**: Is this v1.0 or v2.0 (since it's a major feature expansion)?
-3. **Sync compatibility**: Should My Nutrients sync be backward compatible with My Calcium sync docs, or fresh start?
-4. **Analytics**: Any interest in adding privacy-respecting analytics (local only) to track which nutrients users select most?
+1. **Nutrient selector scope**: Show only tracked nutrients or provide access to all?
+   - **Recommendation**: Show only tracked (simpler, more focused)
+
+2. **Database page display**: Keep current or add table view?
+   - **Recommendation**: Keep current (works well, mobile-friendly)
+
+3. **HTML documentation**: Regenerate or skip?
+   - **Recommendation**: Skip for now (in-app browser is better)
+
+4. **Version number**: v1.0 or v2.0?
+   - **Recommendation**: v2.0 (major feature expansion from My Calcium)
 
 ---
 
 ## Success Criteria
 
-The project is complete when:
+The project is complete and ready for production when:
 
-- ✅ All user-facing strings say "My Nutrients" (not "My Calcium")
-- ✅ Nutrient selection modal works smoothly (no bugs)
-- ✅ Stats/Reports nutrient selector is mobile-friendly
-- ✅ Database page supports multi-nutrient display and sorting
-- ✅ Tracking page can sort by any displayed nutrient
-- ✅ All documentation updated
-- ✅ Cross-browser testing passed
-- ✅ Accessibility audit passed
-- ✅ Production deployment successful
-- ✅ User data migrated without loss
+- ✅ Type system unified (calcium.ts removed)
+- ✅ localStorage keys migrated (nutrient_* prefix)
+- ✅ Services renamed (NutrientService, NutrientState)
+- ✅ Migration logic removed (clean start)
+- ✅ Base path routing works correctly
+- ✅ Database info dialog polished
+- ✅ Food detail page themes correctly
+- ⏳ All user-facing strings say "My Nutrients"
+- ⏳ Nutrient selection modal works smoothly
+- ⏳ Stats/Reports selector is mobile-friendly
+- ⏳ All documentation updated
+- ⏳ Cross-browser testing passed
+- ⏳ Production deployment successful
 
 ---
 
-**Document Version**: 1.0
-**Last Updated**: December 13, 2025
-**Author**: Claude (AI Assistant)
+## Recent Accomplishments (December 13-16, 2025)
+
+### Document #2: Type System Consolidation
+- Deleted `src/lib/types/calcium.ts`
+- Added sortBy/sortOrder fields to NutrientSettings
+- Updated all CalciumSettings → NutrientSettings
+- Updated all CalciumState → NutrientState
+- Updated imports throughout codebase
+- Build verified successful
+
+### Document #3: Renaming Guide
+- Renamed localStorage keys: `calcium_*` → `nutrient_*`
+- Maintained backward compatibility (fallback to old keys)
+- Updated comments and documentation strings
+- Updated NutrientService load/save logic
+
+### Document #4: Migration Logic Cleanup
+- Removed ~270 lines of migration code
+- Simplified initializeIndexedDB() (no migration checks)
+- Removed legacy object stores
+- Kept database at version 1 (clean start)
+- Removed legacy rehydration fallbacks from foodDatabase.js
+
+### Bug Fixes
+- Fixed base path routing for food detail navigation
+- Fixed empty recordCount in database info dialog
+- Removed "(JSON)" from database name
+- Simplified source links (single USDA FDC link)
+- Fixed tabs background to respect theme
+- Fixed Sources tab not loading (base path issue)
+
+### Code Quality
+- Removed dead code and unused migrations
+- Cleaned up imports
+- Improved type safety
+- Maintained backward compatibility where needed
+
+---
+
+**Document Version**: 2.0
+**Last Updated**: December 16, 2025
 **Maintained By**: Nathan A. Eaton Jr.
+**Status**: Ready for final polish and deployment
+
+---
+
+## Next Session Focus
+
+For your next chat session, prioritize:
+
+1. **Fix nutrient selection modal bug** (1-2 hours) - Critical UX issue
+2. **Simplify mobile nutrient selector** (2-3 hours) - Mobile usability
+3. **Complete branding cleanup** (3-4 hours) - Professional polish
+4. **Update documentation** (1 day) - User-facing and landing page
+
+These four tasks will complete the critical path to production readiness.
