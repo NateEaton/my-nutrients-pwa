@@ -98,7 +98,7 @@
             <h4>Features</h4>
             <ul class="features-list">
               <li>
-                Track 24+ nutrients from 7,700+ curated USDA foods
+                Track 24+ nutrients from thousands of curated USDA foods
               </li>
               <li>Smart Scan: Add foods via UPC barcode scanning</li>
               <li>Add custom foods with your own nutrient values</li>

@@ -42,7 +42,7 @@ This application is designed with a "local-first" approach but uses a cloud back
 ## Core Features
 
 ### Tracking & Data Entry
--   **Curated Food Database**: Log entries from a comprehensive database of 7,700+ USDA-sourced foods, intelligently curated for relevance and usability. Browse the in-app database page to explore available foods and their complete nutrient profiles.
+-   **Curated Food Database**: Log entries from a comprehensive database of thousands of USDA-sourced foods, intelligently curated for relevance and usability. The database can be extended through UPC scans of USDA and OpenFoodFacts databases and the ability to add custom foods. Browse the in-app database page to explore available foods and their complete nutrient profiles.
 -   **Smart Scan**: Add foods quickly using your device's camera to scan UPC/EAN barcodes. Supports both USDA FoodData Central and OpenFoodFacts databases, with manual barcode entry option for quick lookup.
 -   **Custom Foods**: Add and manage your own food items with detailed nutrient information. Custom foods support the same features as database foods, including serving memory and favorites.
 -   **Multi-Measure Support**: Many foods offer multiple serving options (cups, ounces, pieces, etc.). The app remembers both your preferred serving size and measurement unit for each food.
@@ -115,7 +115,7 @@ The My Nutrients Tracker is a modern, local-first Progressive Web App with a ser
 
 ## Food Database Curation
 
-The food database is a core feature containing **7,700+ curated foods** from **USDA FoodData Central**, processed through a custom data pipeline located in the `source_data/` directory. This pipeline transforms raw USDA data into a user-friendly database optimized for practical nutrient tracking.
+The food database is a core feature containing **thousands of curated foods** from **USDA FoodData Central**, processed through a custom data pipeline located in the `source_data/` directory. This pipeline transforms raw USDA data into a user-friendly database optimized for practical nutrient tracking.
 
 ### Curation Pipeline
 
