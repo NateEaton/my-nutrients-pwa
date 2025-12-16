@@ -22,19 +22,18 @@
  */
 
 import { writable, derived, get } from 'svelte/store';
-import type { CalciumSettings } from '$lib/types/calcium';
-import type { FoodEntry, CustomFood, UserServingPreference } from '$lib/types/nutrients';
+import type { FoodEntry, CustomFood, UserServingPreference, NutrientSettings } from '$lib/types/nutrients';
 import { NutrientService } from '$lib/services/NutrientService';
 
-// CalciumState interface (kept here for backward compatibility)
-interface CalciumState {
+// NutrientState interface for application state
+interface NutrientState {
   currentDate: string;
   foods: FoodEntry[];
   customFoods: CustomFood[];
   favorites: Set<number>;
   hiddenFoods: Set<number>;
   servingPreferences: Map<number, UserServingPreference>;
-  settings: CalciumSettings;
+  settings: NutrientSettings;
   isLoading: boolean;
 }
 
@@ -57,7 +56,7 @@ function getTodayString(): string {
 }
 
 // Main application state
-export const nutrientState = writable<CalciumState>({
+export const nutrientState = writable<NutrientState>({
   currentDate: getTodayString(),
   foods: [], // This array will be sorted in-place by NutrientService
   customFoods: [],
@@ -65,7 +64,8 @@ export const nutrientState = writable<CalciumState>({
   hiddenFoods: new Set<number>(),
   servingPreferences: new Map<number, UserServingPreference>(),
   settings: {
-    dailyGoal: 1000,
+    nutrientGoals: { calcium: 1000 },
+    displayedNutrients: ['protein', 'calcium', 'fiber', 'vitaminD'],
     sortBy: 'time',
     sortOrder: 'desc',
     theme: 'auto'

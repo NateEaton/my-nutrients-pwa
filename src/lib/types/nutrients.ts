@@ -113,6 +113,9 @@ export interface NutrientSettings {
   displayedNutrients: string[]; // Max 4 nutrients to display
   theme?: 'auto' | 'light' | 'dark';
   colorScheme?: 'blue' | 'purple' | 'green' | 'orange' | 'red' | 'teal';
+  // Sorting preferences for tracking page
+  sortBy?: 'time' | 'name' | string; // 'string' allows nutrient IDs
+  sortOrder?: 'asc' | 'desc';
 }
 
 export interface BackupData {

@@ -18,7 +18,6 @@
 
 import { get } from 'svelte/store';
 import { nutrientState, showToast } from '$lib/stores/nutrients';
-import type { CalciumSettings } from '$lib/types/calcium';
 import type { FoodEntry, CustomFood, UserServingPreference, NutrientSettings, NutrientValues } from '$lib/types/nutrients';
 import { DEFAULT_FOOD_DATABASE, getPrimaryMeasure } from '$lib/data/foodDatabase';
 import { SyncService } from '$lib/services/SyncService';
@@ -579,7 +578,7 @@ export class NutrientService {
    * Gets the current settings.
    * @returns Promise resolving to the current settings
    */
-  async getSettings(): Promise<CalciumSettings> {
+  async getSettings(): Promise<NutrientSettings> {
     const state = get(nutrientState);
     return state.settings;
   }
@@ -588,7 +587,7 @@ export class NutrientService {
    * Updates the settings with new values.
    * @param newSettings Partial settings object with values to update
    */
-  async updateSettings(newSettings: Partial<CalciumSettings>): Promise<void> {
+  async updateSettings(newSettings: Partial<NutrientSettings>): Promise<void> {
     nutrientState.update(state => ({
       ...state,
       settings: { ...state.settings, ...newSettings }
@@ -777,8 +776,9 @@ export class NutrientService {
     const sortSettings = localStorage.getItem('calcium_sort_settings');
     const theme = localStorage.getItem('nutrient_theme');
 
-    const settings: CalciumSettings = {
-      dailyGoal: dailyGoal ? parseInt(dailyGoal) : 1000,
+    const settings: NutrientSettings = {
+      nutrientGoals: { calcium: dailyGoal ? parseInt(dailyGoal) : 1000 },
+      displayedNutrients: getDefaultDisplayedNutrients(),
       sortBy: 'time',
       sortOrder: 'desc',
       theme: theme || 'auto',
