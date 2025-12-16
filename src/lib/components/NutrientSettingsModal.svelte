@@ -68,11 +68,17 @@
 
     if (index > -1) {
       // Remove from displayed nutrients
-      settings.displayedNutrients = settings.displayedNutrients.filter(id => id !== nutrientId);
+      settings = {
+        ...settings,
+        displayedNutrients: settings.displayedNutrients.filter(id => id !== nutrientId)
+      };
     } else {
       // Add to displayed nutrients if under limit
       if (settings.displayedNutrients.length < MAX_DISPLAYED) {
-        settings.displayedNutrients = [...settings.displayedNutrients, nutrientId];
+        settings = {
+          ...settings,
+          displayedNutrients: [...settings.displayedNutrients, nutrientId]
+        };
       } else {
         errorMessage = `You can only display up to ${MAX_DISPLAYED} nutrients at once`;
         setTimeout(() => errorMessage = "", 3000);

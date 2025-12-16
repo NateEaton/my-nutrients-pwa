@@ -115,7 +115,7 @@ The My Nutrients Tracker is a modern, local-first Progressive Web App with a ser
     -   Fallback option when USDA data is unavailable
 
 #### Nutrition Label OCR (Optional)
--   **OCR.space API**: Optical character recognition for extracting calcium values from nutrition label photos
+-   **OCR.space API**: Optical character recognition for extracting nutrient values from nutrition label photos
     -   Requires: `VITE_OCR_API_KEY` environment variable
     -   Free and paid tiers available at [OCR.space](https://ocr.space/ocrapi)
     -   When enabled, adds OCR tab to Smart Scan modal

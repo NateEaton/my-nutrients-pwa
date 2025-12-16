@@ -98,13 +98,13 @@
             <h4>Features</h4>
             <ul class="features-list">
               <li>
-                Track calcium intake from 3,876+ curated USDA foods
+                Track 24+ nutrients from 7,000+ curated USDA foods
               </li>
               <li>Smart Scan: Add foods via UPC barcode scanning</li>
               {#if FEATURES.OCR_ENABLED}
-                <li>OCR: Extract calcium from nutrition label photos</li>
+                <li>OCR: Extract nutrients from nutrition label photos</li>
               {/if}
-              <li>Add custom foods with your own calcium values</li>
+              <li>Add custom foods with your own nutrient values</li>
               <li>Favorites and serving memory for faster tracking</li>
               <li>Interactive statistics with daily, weekly, monthly charts</li>
               <li>Generate printable reports for healthcare providers</li>
@@ -112,7 +112,7 @@
               {#if FEATURES.SYNC_ENABLED}
                 <li>Cross-device sync with end-to-end encryption</li>
               {/if}
-              <li>Set personalized daily calcium goals</li>
+              <li>Set personalized daily goals for each nutrient</li>
               {#if FEATURES.SYNC_ENABLED}
                 <li>Your data stays private with encryption</li>
               {:else}
