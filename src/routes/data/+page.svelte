@@ -23,6 +23,7 @@
   import { NUTRIENT_METADATA } from "$lib/config/nutrientDefaults";
   import { SearchService } from "$lib/services/SearchService";
   import { goto } from "$app/navigation";
+  import { base } from "$app/paths";
   import SourceIndicator from "$lib/components/SourceIndicator.svelte";
   import MetadataPopup from "$lib/components/MetadataPopup.svelte";
   import { databaseViewState } from "$lib/stores/uiState"; 
@@ -342,7 +343,7 @@
   // --- Actions ---
 
   function openFoodDocs(food) {
-    goto(`/data/food/${food.id}`);
+    goto(`${base}/data/food/${food.id}`);
   }
 
   async function toggleFoodHidden(food) {
