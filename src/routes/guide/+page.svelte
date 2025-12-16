@@ -89,27 +89,11 @@
           and nutrient values.
         </li>
         <li>
-          <strong>Smart Scan Dialog:</strong> Tap the 
-           <span class="material-icons inline-icon">photo_camera</span> icon to add food 
-           using your device's camera. 
-           <ul>
-              <li>
-                <strong>Scan a Barcode:</strong> The app defaults to the Barcode tab which opens 
-                actively scanning for 
-                a product's UPC/EAN barcode. Choose between USDA or OpenFoodFacts databases
-                for lookup. Use the flashlight icon to enable your camera flash in low light,
-                or tap the keyboard icon to manually enter a barcode number.
-              </li>
-              {#if FEATURES.OCR_ENABLED}
-                <li>
-                  <strong>Scan a Nutrition Label:</strong> Switch to the
-                  Nutrition Label tab to capture nutrient content directly from food packaging.
-                  This feature uses optical character recognition to read the nutrition facts panel. Use the
-                  flashlight icon for better visibility in low light, and ensure the entire nutrition
-                  label is visible and in focus within the camera frame.
-                </li>
-              {/if}
-            <ul>
+          <strong>Smart Scan:</strong> Tap the
+           <span class="material-icons inline-icon">photo_camera</span> icon to scan
+           a product's UPC/EAN barcode using your device's camera. Choose between USDA or
+           OpenFoodFacts databases for lookup. Use the flashlight icon to enable your
+           camera flash in low light, or tap the keyboard icon to manually enter a barcode number.
         </li>
         <li>
           <strong>Edit or Delete:</strong> To change an entry, simply tap it on the
@@ -126,11 +110,10 @@
 
       <h4>Food Source Icons</h4>
       <p>
-        Each entry displays a small icon indicating its source: a pencil 
-        <span class="material-icons inline-icon">edit</span> for manually added foods, 
-        a barcode scanner <span class="material-icons inline-icon">qr_code_scanner</span> 
-        for UPC-scanned items{#if FEATURES.OCR_ENABLED}, or a camera <span class="material-icons inline-icon">photo_camera</span> 
-        for nutrition label scans{/if}. 
+        Each entry displays a small icon indicating its source: a pencil
+        <span class="material-icons inline-icon">edit</span> for manually added foods
+        or a barcode scanner <span class="material-icons inline-icon">qr_code_scanner</span>
+        for UPC-scanned items.
       </p>
 
       <h4>Serving Sizes & Favorites</h4>

@@ -42,9 +42,8 @@ This application is designed with a "local-first" approach but uses a cloud back
 ## Core Features
 
 ### Tracking & Data Entry
--   **Curated Food Database**: Log entries from a comprehensive database of 3,876+ USDA-sourced foods, intelligently curated for relevance and usability. [Browse the public database documentation](https://ca-pwa.vercel.app/database-docs.html) to explore available foods.
+-   **Curated Food Database**: Log entries from a comprehensive database of 7,700+ USDA-sourced foods, intelligently curated for relevance and usability. Browse the in-app database page to explore available foods and their complete nutrient profiles.
 -   **Smart Scan**: Add foods quickly using your device's camera to scan UPC/EAN barcodes. Supports both USDA FoodData Central and OpenFoodFacts databases, with manual barcode entry option for quick lookup.
--   **Nutrition Label OCR** *(Optional)*: Capture nutrient information directly from food packaging using optical character recognition. Requires API key configuration.
 -   **Custom Foods**: Add and manage your own food items with detailed nutrient information. Custom foods support the same features as database foods, including serving memory and favorites.
 -   **Multi-Measure Support**: Many foods offer multiple serving options (cups, ounces, pieces, etc.). The app remembers both your preferred serving size and measurement unit for each food.
 -   **Favorites & Serving Memory**: Mark foods as favorites for quick access. The app remembers your preferred serving sizes and measure selections, making repeat entries effortless.
@@ -114,15 +113,9 @@ The My Nutrients Tracker is a modern, local-first Progressive Web App with a ser
     -   Requires: No API key needed (public API)
     -   Fallback option when USDA data is unavailable
 
-#### Nutrition Label OCR (Optional)
--   **OCR.space API**: Optical character recognition for extracting nutrient values from nutrition label photos
-    -   Requires: `VITE_OCR_API_KEY` environment variable
-    -   Free and paid tiers available at [OCR.space](https://ocr.space/ocrapi)
-    -   When enabled, adds OCR tab to Smart Scan modal
-
 ## Food Database Curation
 
-The food database is a core feature containing **3,876+ curated foods** from **USDA FoodData Central**, processed through a custom data pipeline located in the `source_data/` directory. This pipeline transforms raw USDA data into a user-friendly database optimized for practical nutrient tracking.
+The food database is a core feature containing **7,700+ curated foods** from **USDA FoodData Central**, processed through a custom data pipeline located in the `source_data/` directory. This pipeline transforms raw USDA data into a user-friendly database optimized for practical nutrient tracking.
 
 ### Curation Pipeline
 
@@ -176,7 +169,6 @@ The application supports flexible deployment with optional features controlled b
 
 **Optional Features:**
 - **Smart Scan UPC Lookup**: Enabled by default with DEMO_KEY, enhanced with `VITE_FDC_API_KEY`
-- **OCR Nutrition Label Scanning**: Enabled when `VITE_OCR_API_KEY` is configured
 
 ### Environment Variables
 
@@ -186,11 +178,9 @@ Create a `.env` file in the project root (see `.env.example` for template):
 |----------|----------|---------|
 | `VITE_WORKER_URL` | No | Cloudflare Worker URL for sync. Omit for standalone mode. |
 | `VITE_FDC_API_KEY` | No | USDA FoodData Central API key. Falls back to rate-limited DEMO_KEY. |
-| `VITE_OCR_API_KEY` | No | OCR.space API key. Enables nutrition label scanning feature. |
 
 **Getting API Keys:**
 - **USDA FoodData Central**: Free key at [fdc.nal.usda.gov/api-guide.html](https://fdc.nal.usda.gov/api-guide.html)
-- **OCR.space**: Free and paid tiers at [ocr.space/ocrapi](https://ocr.space/ocrapi)
 
 ### Deployment Steps
 
@@ -215,7 +205,6 @@ Deploying involves two main steps: setting up the sync worker (optional) and dep
     Configure the variables based on your deployment needs:
     - `VITE_WORKER_URL`: Your Cloudflare Worker URL (if using sync)
     - `VITE_FDC_API_KEY`: Your USDA FoodData Central API key (optional)
-    - `VITE_OCR_API_KEY`: Your OCR.space API key (optional)
 
 2.  **Build the Application**: Use the included `deploy.sh` script or build manually:
     ```bash
@@ -280,6 +269,8 @@ This project is open source and welcomes contributions. Development setup instru
 ### Development Acknowledgments
 
 This project was developed with assistance from AI tools following best practices in modern web development. The underlying concept, architecture decisions, implementation and testing were performed by the developer.
+
+**My Nutrients** was built by comprehensively refactoring the [My Calcium tracker](https://github.com/NateEaton/Ca-pwa), expanding it from single-nutrient tracking to a full multi-nutrient system supporting 24+ essential nutrients. The core architecture, PWA infrastructure, and user interface patterns were adapted from the original My Calcium application.
 
 ## License
 
