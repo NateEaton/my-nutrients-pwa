@@ -34,8 +34,8 @@
       <h4>Welcome to My Nutrients!</h4>
       <p>
         My Nutrients helps you track essential nutrients (protein, calcium, fiber, vitamins, and more)
-        to support your health and meet nutritional goals. All your data stays private on your device,
-        and you can use the app offline.
+        to support your health and meet nutritional goals. Your data is stored locally on your device
+        for offline access, or encrypted on the server when using cross-device sync.
       </p>
 
       <h4>First Steps</h4>
@@ -148,6 +148,58 @@
 
   <details class="guide-section">
     <summary>
+      <span class="material-icons">science</span>
+      Managing Nutrients
+    </summary>
+    <div class="section-content">
+      <h4>Choosing Which Nutrients to Track</h4>
+      <p>
+        My Nutrients supports tracking 24+ essential nutrients. You can customize which nutrients
+        appear throughout the app:
+      </p>
+      <ul>
+        <li>
+          <strong>Nutrient Picks:</strong> In <strong>Settings > Nutrients</strong>, select up to
+          4 nutrients to display on your summary card, food entries, and throughout the app. The app
+          comes with sensible defaults (Protein, Calcium, Fiber, Vitamin D), but you can customize
+          based on your dietary needs.
+        </li>
+        <li>
+          <strong>Daily Goals:</strong> Also in <strong>Settings > Nutrients</strong>, set your
+          target intake for each nutrient. These goals appear as progress bars on the summary card
+          and determine when you've met your daily targets.
+        </li>
+      </ul>
+
+      <h4>Viewing Different Nutrients</h4>
+      <p>Beyond your selected nutrient picks, you can view any tracked nutrient:</p>
+      <ul>
+        <li>
+          <strong>Summary Card:</strong> The summary card displays your chosen nutrients with
+          progress bars. Swipe left/right or use arrow buttons to change dates.
+        </li>
+        <li>
+          <strong>Sort by Nutrient:</strong> On the main tracking page, <strong>long press</strong>
+          the nutrient sort button to choose a different nutrient for sorting your entries.
+        </li>
+        <li>
+          <strong>Statistics Page:</strong> Use the nutrient selector dropdown to view charts and
+          trends for any tracked nutrient across different time periods.
+        </li>
+        <li>
+          <strong>Report Page:</strong> Use the nutrient selector to choose which nutrient to include
+          in your printable report.
+        </li>
+        <li>
+          <strong>Database Page:</strong> Use the nutrient selector to sort and filter foods by any
+          nutrient. This helps you find foods high in specific nutrients you're targeting.
+        </li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="guide-section">
+    <summary>
       <span class="material-icons">apps</span>
       Other App Features
     </summary>
@@ -185,7 +237,7 @@
           are not available when adding a food item.
         </li>
         <li>
-          <strong>View Details:</strong> Tap the <span class="material-icons inline-icon">open_in_new</span>
+          <strong>View Details:</strong> Tap the <span class="material-icons inline-icon">info</span>
           icon on database foods to view detailed information in the food database documentation page.
         </li>
         <li>
