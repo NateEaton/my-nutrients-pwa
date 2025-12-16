@@ -82,53 +82,42 @@ The major refactoring work is **complete**. The remaining work focuses on:
 
 ---
 
-### Task 6.3: Complete Legacy Code Cleanup
+### Task 6.3: ✅ Complete Legacy Code Cleanup (COMPLETE)
 
-**Status**: Partially complete - functional analysis needed
+**Status**: Complete - all legacy branding and function names updated
 
-#### 6.3.1: Header Comments
+#### 6.3.1: ✅ Header Comments (COMPLETE)
 
-**Files with "Calcium Tracker" comments** (non-functional, safe to update):
-- `src/routes/+layout.svelte:70` - "For Calcium Tracker, we can defer..."
-- `src/lib/config/fdc.js:19` - "USDA FoodData Central API Configuration for Calcium Tracker PWA"
-- `src/lib/config/ocr.js:19` - "OCR Configuration for Calcium Tracker PWA"
-- `src/lib/config/openfoodfacts.js:19` - "OpenFoodFacts API Configuration for Calcium Tracker PWA"
-- `src/lib/components/SmartScanModal.svelte:20` - "Unified Smart Scan Modal for Calcium Tracker PWA"
+**Updated 5 files**:
+- ✅ `src/routes/+layout.svelte:70` - "For My Nutrients, we can defer..."
+- ✅ `src/lib/config/fdc.js:19` - "USDA FoodData Central API Configuration for My Nutrients PWA"
+- ✅ `src/lib/config/ocr.js:19` - "OCR Configuration for My Nutrients PWA"
+- ✅ `src/lib/config/openfoodfacts.js:19` - "OpenFoodFacts API Configuration for My Nutrients PWA"
+- ✅ `src/lib/components/SmartScanModal.svelte:20` - "Unified Smart Scan Modal for My Nutrients PWA"
 
-**Action**: Update all to "My Nutrients PWA" or "My Nutrients Tracker PWA"
+#### 6.3.2: ✅ Functional Code References (COMPLETE)
 
-#### 6.3.2: Functional Code References
+**Updated**:
+- ✅ USER_AGENT: `'MyNutrients/1.0 (nutrient tracking PWA)'`
+- ✅ Removed `formatCalcium()` function (was dead code - imported but never called)
+- ✅ Removed unused imports from 3 files
+- ✅ Updated UnitConverter.ts file comment: "nutrient tracking app"
+- ✅ Renamed `calculateCalciumForConvertedUnits()` → `calculateNutrientForConvertedUnits()`
+- ✅ Added `@deprecated` alias for backward compatibility
+- ✅ Updated caller in AddFoodModal.svelte
 
-**User Agent String** (functional, should update):
-- `src/lib/config/openfoodfacts.js:26`
-  ```javascript
-  USER_AGENT: 'CalciumTracker/1.0 (https://calcium-dev.eatonfamily.net)'
-  ```
-  **Action**: Update to `'MyNutrients/1.0 (https://[production-url])'`
+#### 6.3.3: Legitimate Calcium References (Preserved)
 
-**Legacy Function Names** (functional, consider renaming):
-- `src/lib/data/foodDatabase.js` - `formatCalcium()` function
-  - Used in src/routes/data/+page.svelte:21
-  - **Action**: Rename to `formatNutrient()` or remove if obsolete
-
-#### 6.3.3: Legitimate Calcium References (DO NOT CHANGE)
-
-**These are functional, not branding:**
+**These are functional, not branding - correctly preserved:**
 - `src/lib/config/nutrientDefaults.ts` - Calcium nutrient definitions and defaults
 - `src/lib/config/openfoodfacts.js:54-60` - Comments about OpenFoodFacts API calcium data quirk
-  - These document a real API issue: "OpenFoodFacts has inconsistent calcium units!"
-  - Keep as-is for developer reference
+- `src/lib/types/nutrients.ts` - calcium field in NutrientValues interface
+- Service files - calcium fields for API compatibility and backward compatibility
+- OCR/FDC/OpenFoodFacts services - parse "Calcium" from nutrition labels (correct)
 
 **All files in**:
-- `migration/` - Historical migration scripts (keep for reference)
-- `_notes/` - Documentation of migration process (keep for reference)
-- `worker/` - May reference calcium in comments (review if needed)
-
-**Action for Task 6.3**:
-1. Search for and update header comments (6.3.1)
-2. Update USER_AGENT string (6.3.2)
-3. Review and rename/remove `formatCalcium()` function (6.3.2)
-4. Verify no other functional calcium-specific code exists
+- `migration/` - Historical migration scripts (kept for reference)
+- `_notes/` - Documentation of migration process (kept for reference)
 
 ---
 
@@ -298,13 +287,13 @@ The major refactoring work is **complete**. The remaining work focuses on:
 
 | Task | Priority | Estimated Time | Status |
 |------|----------|---------------|--------|
-| Complete legacy code cleanup (6.3) | High | 2-3 hours | ⏳ Pending |
+| Complete legacy code cleanup (6.3) | High | 2-3 hours | ✅ Complete |
 | Update user documentation (9.1) | High | 4-6 hours | ⏳ Pending |
 | Cross-browser testing (9.3) | High | 4-6 hours | ⏳ In Progress |
 | Accessibility check (9.4) | High | 2-3 hours | ⏳ In Progress |
 | Performance check (9.5) | High | 2-3 hours | ⏳ In Progress |
 
-**Total Critical Path**: ~2-3 days
+**Total Critical Path**: ~1-2 days remaining
 
 ---
 
@@ -334,8 +323,8 @@ Before deploying to production:
 - [x] App title says "My Nutrients"
 - [x] PWA manifest updated to "My Nutrients"
 - [x] Landing page updated to "My Nutrients"
-- [ ] All legacy code comments updated
-- [ ] Legacy function names removed/renamed
+- [x] All legacy code comments updated
+- [x] Legacy function names removed/renamed
 - [ ] User documentation updated (guide, about)
 - [ ] README consistency check
 - [ ] Cross-browser testing passed
