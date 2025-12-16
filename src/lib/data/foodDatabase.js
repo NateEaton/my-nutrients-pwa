@@ -67,14 +67,6 @@ function rehydrateDatabase(minifiedData, keyMapping, measureKeyMapping) {
       }
     }
 
-    // Ensure backward compatibility: if no measures array, create from legacy fields
-    if (!rehydratedFood.measures && (rehydratedFood.measure || rehydratedFood.calcium)) {
-      rehydratedFood.measures = [{
-        measure: rehydratedFood.measure || "",
-        calcium: parseFloat(rehydratedFood.calcium || 0)
-      }];
-    }
-
     return rehydratedFood;
   });
 }
@@ -301,19 +293,10 @@ export function searchFoods(
  * @returns {Object} Object with { measure, calcium } for primary serving
  */
 export function getPrimaryMeasure(food) {
-  // New format: use first measure from array
-  if (food.measures && Array.isArray(food.measures) && food.measures.length > 0) {
-    return {
-      measure: food.measures[0].measure,
-      calcium: food.measures[0].calcium
-    };
+  if (food.measures && food.measures.length > 0) {
+    return food.measures[0];
   }
-  
-  // Legacy format: use direct properties
-  return {
-    measure: food.measure || "",
-    calcium: food.calcium || 0
-  };
+  return { measure: "", nutrients: {} };
 }
 
 /**
@@ -322,16 +305,10 @@ export function getPrimaryMeasure(food) {
  * @returns {Array} Array of { measure, calcium } objects
  */
 export function getAllMeasures(food) {
-  // New format: return measures array
   if (food.measures && Array.isArray(food.measures)) {
     return food.measures;
   }
-  
-  // Legacy format: convert to array
-  return [{
-    measure: food.measure || "",
-    calcium: food.calcium || 0
-  }];
+  return [];
 }
 
 /**

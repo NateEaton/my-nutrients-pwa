@@ -37,22 +37,13 @@ export class NutrientService {
   private nextCustomFoodId: number = -1;
 
   /**
-   * Initializes the service by setting up IndexedDB, running migrations, and loading all data.
+   * Initializes the service by setting up IndexedDB and loading all data.
    */
   async initialize(): Promise<void> {
     await this.initializeIndexedDB();
-    await this.migrateCustomFoodsIfNeeded();
-    await this.migrateFavoritesToIDsIfNeeded();
-
-    // Initialize negative ID counter after database setup
     await this.initializeCustomFoodIdCounter();
 
-    // Migrate existing positive ID custom foods to negative IDs
-    await this.migrateExistingCustomFoods();
-
-    // Migrate existing custom foods to include source metadata
-    await this.migrateCustomFoodsToSourceMetadata();
-
+    // Load all data
     await this.loadSettings();
     await this.loadDailyFoods();
     await this.loadCustomFoods();
@@ -76,29 +67,29 @@ export class NutrientService {
 
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;
-        const oldVersion = event.oldVersion;
 
+        // Create all stores fresh
         if (!db.objectStoreNames.contains('customFoods')) {
           const store = db.createObjectStore('customFoods', { keyPath: 'id', autoIncrement: true });
           store.createIndex('name', 'name', { unique: false });
-          store.createIndex('dateAdded', 'dateAdded', { unique: false });
         }
-        if (!db.objectStoreNames.contains('migrations')) {
-          db.createObjectStore('migrations', { keyPath: 'name' });
-        }
+
         if (!db.objectStoreNames.contains('favorites')) {
           db.createObjectStore('favorites', { keyPath: 'foodId' });
         }
+
+        if (!db.objectStoreNames.contains('hiddenFoods')) {
+          db.createObjectStore('hiddenFoods', { keyPath: 'foodId' });
+        }
+
         if (!db.objectStoreNames.contains('servingPreferences')) {
           db.createObjectStore('servingPreferences', { keyPath: 'foodId' });
         }
-        if (oldVersion < 6 && !db.objectStoreNames.contains('journalEntries')) {
+
+        if (!db.objectStoreNames.contains('journalEntries')) {
           const journalStore = db.createObjectStore('journalEntries', { keyPath: 'date' });
           journalStore.createIndex('lastModified', 'lastModified', { unique: false });
           journalStore.createIndex('syncStatus', 'syncStatus', { unique: false });
-        }
-        if (oldVersion < 7 && !db.objectStoreNames.contains('hiddenFoods')) {
-          db.createObjectStore('hiddenFoods', { keyPath: 'foodId' });
         }
       };
     });
@@ -125,280 +116,6 @@ export class NutrientService {
         console.error('Error initializing custom food ID counter:', request.error);
         resolve();
       };
-    });
-  }
-
-  private async migrateCustomFoodsIfNeeded(): Promise<void> {
-    if (!this.db) return;
-
-    const migrationStatus = await this.getMigrationStatus('customFoodsToIndexedDB');
-    if (migrationStatus) return;
-
-    try {
-      const legacyCustomFoods = this.getLegacyCustomFoods();
-
-      if (legacyCustomFoods.length > 0) {
-
-        for (const food of legacyCustomFoods) {
-          await this.saveCustomFoodToIndexedDB({
-            name: food.name,
-            calcium: food.calcium,
-            measure: food.measure || food.servingUnit || 'serving'
-          });
-        }
-
-        this.clearLegacyCustomFoods();
-      }
-
-      await this.setMigrationStatus('customFoodsToIndexedDB', true);
-    } catch (error) {
-      console.error('Custom foods migration failed:', error);
-    }
-  }
-
-  private async migrateFavoritesToIDsIfNeeded(): Promise<void> {
-    if (!this.db) return;
-
-    const migrationStatus = await this.getMigrationStatus('favoritesToIDs');
-    if (migrationStatus) return;
-
-    try {
-      const transaction = this.db.transaction(['favorites'], 'readonly');
-      const store = transaction.objectStore('favorites');
-      const request = store.getAll();
-
-      const legacyFavorites = await new Promise<any[]>((resolve, reject) => {
-        request.onsuccess = () => resolve(request.result || []);
-        request.onerror = () => reject(request.error);
-      });
-
-      if (legacyFavorites.length > 0) {
-        const favoriteFoodIds: number[] = [];
-
-        for (const favRecord of legacyFavorites) {
-          const foodName = favRecord.foodName;
-          const databaseFood = this.foodDatabase.find(food => food.name === foodName);
-          if (databaseFood) {
-            favoriteFoodIds.push(databaseFood.id);
-          }
-        }
-
-        if (favoriteFoodIds.length > 0) {
-          const writeTransaction = this.db.transaction(['favorites'], 'readwrite');
-          const writeStore = writeTransaction.objectStore('favorites');
-
-          await new Promise<void>((resolve, reject) => {
-            const clearRequest = writeStore.clear();
-            clearRequest.onsuccess = () => resolve();
-            clearRequest.onerror = () => reject(clearRequest.error);
-          });
-
-          for (const foodId of favoriteFoodIds) {
-            const favoriteData = {
-              foodId,
-              dateAdded: new Date().toISOString()
-            };
-
-            await new Promise<void>((resolve, reject) => {
-              const addRequest = writeStore.put(favoriteData);
-              addRequest.onsuccess = () => resolve();
-              addRequest.onerror = () => reject(addRequest.error);
-            });
-          }
-
-        }
-      }
-
-      await this.setMigrationStatus('favoritesToIDs', true);
-    } catch (error) {
-      console.error('Favorites migration failed:', error);
-    }
-  }
-
-  private async migrateExistingCustomFoods(): Promise<void> {
-    if (!this.db) return;
-
-    const migrationStatus = await this.getMigrationStatus('customFoodsToNegativeIDs');
-    if (migrationStatus) return;
-
-    try {
-      const transaction = this.db.transaction(['customFoods'], 'readonly');
-      const store = transaction.objectStore('customFoods');
-      const request = store.getAll();
-
-      const customFoods = await new Promise<any[]>((resolve, reject) => {
-        request.onsuccess = () => resolve(request.result || []);
-        request.onerror = () => reject(request.error);
-      });
-
-      const positiveFoods = customFoods.filter(f => f.id > 0);
-      
-      if (positiveFoods.length > 0) {
-        // Create mapping of old positive IDs to new negative IDs
-        const idMapping = new Map<number, number>();
-        positiveFoods.forEach((food, index) => {
-          const newId = this.nextCustomFoodId - index;
-          idMapping.set(food.id, newId);
-        });
-
-        // Update journal entries with the new ID mapping
-        await this.updateJournalEntriesCustomFoodIds(idMapping);
-
-        // Update custom foods with new negative IDs
-        for (const food of positiveFoods) {
-          const newId = idMapping.get(food.id)!;
-          const newFood = { ...food, id: newId };
-          await this.saveCustomFoodToIndexedDB(newFood);
-          await this.deleteCustomFoodFromIndexedDB(food.id);
-        }
-
-        // Update counter for next custom foods
-        this.nextCustomFoodId -= positiveFoods.length;
-      }
-
-      await this.setMigrationStatus('customFoodsToNegativeIDs', true);
-    } catch (error) {
-      console.error('Custom foods negative ID migration failed:', error);
-    }
-  }
-
-  /**
-   * Migrates existing custom foods to include source metadata with default values.
-   * This ensures backward compatibility when the sourceMetadata field is added.
-   */
-  private async migrateCustomFoodsToSourceMetadata(): Promise<void> {
-    if (!this.db) return;
-
-    const migrationStatus = await this.getMigrationStatus('customFoodsToSourceMetadata');
-    if (migrationStatus) return;
-
-    try {
-      const transaction = this.db.transaction(['customFoods'], 'readwrite');
-      const store = transaction.objectStore('customFoods');
-      const request = store.getAll();
-
-      const allCustomFoods = await new Promise<any[]>((resolve, reject) => {
-        request.onsuccess = () => resolve(request.result || []);
-        request.onerror = () => reject(request.error);
-      });
-
-      // Update each custom food that doesn't have sourceMetadata
-      for (const food of allCustomFoods) {
-        if (!food.sourceMetadata) {
-          const updatedFood = {
-            ...food,
-            sourceMetadata: {
-              sourceType: null // Unknown source for existing foods
-            }
-          };
-
-          const putTransaction = this.db.transaction(['customFoods'], 'readwrite');
-          const putStore = putTransaction.objectStore('customFoods');
-
-          await new Promise<void>((resolve, reject) => {
-            const putRequest = putStore.put(updatedFood);
-            putRequest.onsuccess = () => resolve();
-            putRequest.onerror = () => reject(putRequest.error);
-          });
-        }
-      }
-
-      await this.setMigrationStatus('customFoodsToSourceMetadata', true);
-    } catch (error) {
-      console.error('Custom foods source metadata migration failed:', error);
-    }
-  }
-
-  private async deleteCustomFoodFromIndexedDB(id: number): Promise<void> {
-    if (!this.db) return;
-
-    return new Promise((resolve, reject) => {
-      const transaction = this.db!.transaction(['customFoods'], 'readwrite');
-      const store = transaction.objectStore('customFoods');
-      const request = store.delete(id);
-
-      request.onsuccess = () => resolve();
-      request.onerror = () => reject(request.error);
-    });
-  }
-
-  private async updateJournalEntriesCustomFoodIds(idMapping: Map<number, number>): Promise<void> {
-    if (!this.db) return;
-
-    try {
-      const journalEntries = await this.getAllJournalEntries();
-      
-      for (const entry of journalEntries) {
-        let needsUpdate = false;
-        const updatedFoods = entry.foods.map((food: any) => {
-          if (food.isCustom && food.customFoodId && food.customFoodId > 0) {
-            const newId = idMapping.get(food.customFoodId);
-            if (newId) {
-              needsUpdate = true;
-              return {
-                ...food,
-                customFoodId: newId
-              };
-            }
-          }
-          return food;
-        });
-
-        if (needsUpdate) {
-          await this.saveFoodsForDate(entry.date, updatedFoods);
-        }
-      }
-    } catch (error) {
-      console.error('Error updating journal entries for custom food ID migration:', error);
-    }
-  }
-
-  private getLegacyCustomFoods(): any[] {
-    try {
-      const keys = ['calcium_custom_foods', 'customFoods', 'custom_foods'];
-
-      for (const key of keys) {
-        const stored = localStorage.getItem(key);
-        if (stored) {
-          return JSON.parse(stored);
-        }
-      }
-
-      return [];
-    } catch (error) {
-      console.error('Error reading legacy custom foods:', error);
-      return [];
-    }
-  }
-
-  private clearLegacyCustomFoods(): void {
-    const keys = ['calcium_custom_foods', 'customFoods', 'custom_foods'];
-    keys.forEach(key => localStorage.removeItem(key));
-  }
-
-  private async getMigrationStatus(name: string): Promise<boolean> {
-    if (!this.db) return false;
-
-    return new Promise((resolve) => {
-      const transaction = this.db!.transaction(['migrations'], 'readonly');
-      const store = transaction.objectStore('migrations');
-      const request = store.get(name);
-
-      request.onsuccess = () => resolve(!!request.result);
-      request.onerror = () => resolve(false);
-    });
-  }
-
-  private async setMigrationStatus(name: string, completed: boolean): Promise<void> {
-    if (!this.db) return;
-
-    return new Promise((resolve, reject) => {
-      const transaction = this.db!.transaction(['migrations'], 'readwrite');
-      const store = transaction.objectStore('migrations');
-      const request = store.put({ name, completed, date: new Date().toISOString() });
-
-      request.onsuccess = () => resolve();
-      request.onerror = () => reject(request.error);
     });
   }
 
