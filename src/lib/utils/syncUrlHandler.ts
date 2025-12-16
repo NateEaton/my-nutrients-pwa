@@ -54,7 +54,7 @@ export class SyncUrlHandler {
         return false;
       }
       
-      const stored = localStorage.getItem('calcium_sync_settings');
+      const stored = localStorage.getItem('nutrient_sync_settings');
       if (stored) {
         const settings = JSON.parse(stored);
         if (settings.docId === docId) {

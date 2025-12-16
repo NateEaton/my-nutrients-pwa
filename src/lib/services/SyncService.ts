@@ -82,7 +82,7 @@ export class SyncService {
     });
 
     try {
-      const storedSettings = localStorage.getItem('calcium_sync_settings');
+      const storedSettings = localStorage.getItem('nutrient_sync_settings');
       if (storedSettings) {
         logger.debug('SYNC INIT', 'Found stored sync settings, restoring...');
         const settings = JSON.parse(storedSettings);
@@ -135,7 +135,7 @@ export class SyncService {
       console.error('[SYNC INIT] ❌ Failed to initialize sync service:', error);
       setSyncError('Failed to initialize sync. Please check settings.');
       // Also remove potentially corrupt settings
-      localStorage.removeItem('calcium_sync_settings');
+      localStorage.removeItem('nutrient_sync_settings');
     }
   }
 
@@ -642,7 +642,7 @@ export class SyncService {
       documentState: this.settings.documentState
     };
 
-    localStorage.setItem('calcium_sync_settings', JSON.stringify(storageData));
+    localStorage.setItem('nutrient_sync_settings', JSON.stringify(storageData));
     logger.debug('SAVE SETTINGS', '✅ Settings saved successfully');
   }
 
@@ -1065,7 +1065,7 @@ export class SyncService {
       console.error('[JOIN SYNC] ❌ Failed to join sync doc:', error);
       setSyncError(`Failed to join sync: ${error instanceof Error ? error.message : 'Unknown error'}`);
 
-      localStorage.removeItem('calcium_sync_settings');
+      localStorage.removeItem('nutrient_sync_settings');
       this.settings = null;
       syncState.update(state => ({ ...state, isEnabled: false, docId: null, status: 'error' }));
       throw error;
@@ -1276,7 +1276,7 @@ export class SyncService {
 
     // Remove from localStorage
     logger.debug('DISCONNECT SYNC', 'Removing sync settings from localStorage...');
-    localStorage.removeItem('calcium_sync_settings');
+    localStorage.removeItem('nutrient_sync_settings');
 
     // Update sync state
     logger.debug('DISCONNECT SYNC', 'Updating sync state to offline...');

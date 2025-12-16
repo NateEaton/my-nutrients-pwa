@@ -18,7 +18,7 @@
 
 /**
  * @fileoverview Main application state management using Svelte stores.
- * Provides reactive stores for calcium tracking data, settings, and UI state.
+ * Provides reactive stores for nutrient tracking data, settings, and UI state.
  */
 
 import { writable, derived, get } from 'svelte/store';

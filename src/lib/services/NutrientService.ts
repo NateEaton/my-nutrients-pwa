@@ -28,7 +28,7 @@ import { logger } from '$lib/utils/logger';
 import { DEFAULT_NUTRIENT_GOALS, getDefaultDisplayedNutrients } from '$lib/config/nutrientDefaults';
 
 /**
- * Main service class for managing calcium tracking data including foods, settings, and IndexedDB operations.
+ * Main service class for managing nutrient tracking data including foods, settings, and IndexedDB operations.
  * Handles CRUD operations, data migration, favorites, and backup/restore functionality.
  */
 export class NutrientService {
@@ -772,17 +772,40 @@ export class NutrientService {
   }
 
   private async loadSettings(): Promise<void> {
-    const dailyGoal = localStorage.getItem('calcium_goal');
-    const sortSettings = localStorage.getItem('calcium_sort_settings');
+    // Load nutrient goals (with backward compatibility for old calcium_goal)
+    const nutrientGoalsJson = localStorage.getItem('nutrient_goals');
+    const oldCalciumGoal = localStorage.getItem('calcium_goal');
+    let nutrientGoals = DEFAULT_NUTRIENT_GOALS;
+    if (nutrientGoalsJson) {
+      nutrientGoals = JSON.parse(nutrientGoalsJson);
+    } else if (oldCalciumGoal) {
+      // Migrate old single calcium goal
+      nutrientGoals = { ...DEFAULT_NUTRIENT_GOALS, calcium: parseInt(oldCalciumGoal) };
+    }
+
+    // Load displayed nutrients
+    const displayedNutrientsJson = localStorage.getItem('nutrient_displayed');
+    const displayedNutrients = displayedNutrientsJson
+      ? JSON.parse(displayedNutrientsJson)
+      : getDefaultDisplayedNutrients();
+
+    // Load sort settings (with backward compatibility)
+    const sortSettingsJson = localStorage.getItem('nutrient_sort_settings')
+      || localStorage.getItem('calcium_sort_settings');
+    const sortSettings = sortSettingsJson ? JSON.parse(sortSettingsJson) : {};
+
+    // Load theme and color scheme
     const theme = localStorage.getItem('nutrient_theme');
+    const colorScheme = localStorage.getItem('nutrient_color_scheme');
 
     const settings: NutrientSettings = {
-      nutrientGoals: { calcium: dailyGoal ? parseInt(dailyGoal) : 1000 },
-      displayedNutrients: getDefaultDisplayedNutrients(),
+      nutrientGoals,
+      displayedNutrients,
       sortBy: 'time',
       sortOrder: 'desc',
       theme: theme || 'auto',
-      ...(sortSettings ? JSON.parse(sortSettings) : {})
+      ...(colorScheme && { colorScheme }),
+      ...sortSettings
     };
 
     nutrientState.update(state => ({ ...state, settings }));
@@ -791,17 +814,28 @@ export class NutrientService {
   async saveSettings(): Promise<void> {
     const state = get(nutrientState);
 
-    localStorage.setItem('calcium_goal', state.settings.dailyGoal.toString());
+    // Save nutrient goals as JSON
+    localStorage.setItem('nutrient_goals', JSON.stringify(state.settings.nutrientGoals));
 
+    // Save displayed nutrients as JSON
+    localStorage.setItem('nutrient_displayed', JSON.stringify(state.settings.displayedNutrients));
+
+    // Save theme
     if (state.settings.theme) {
       localStorage.setItem('nutrient_theme', state.settings.theme);
     }
 
+    // Save color scheme
+    if (state.settings.colorScheme) {
+      localStorage.setItem('nutrient_color_scheme', state.settings.colorScheme);
+    }
+
+    // Save sort settings as JSON
     const sortSettings = {
       sortBy: state.settings.sortBy,
       sortOrder: state.settings.sortOrder
     };
-    localStorage.setItem('calcium_sort_settings', JSON.stringify(sortSettings));
+    localStorage.setItem('nutrient_sort_settings', JSON.stringify(sortSettings));
   }
 
   async loadDailyFoods(): Promise<void> {
