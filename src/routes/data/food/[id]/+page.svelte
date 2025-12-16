@@ -5,6 +5,7 @@
   import { getFoodById } from '$lib/data/foodDatabase';
   import { NUTRIENT_METADATA, getNutrientLabel, getNutrientUnit } from '$lib/config/nutrientDefaults';
   import { goto } from '$app/navigation';
+  import { base } from '$app/paths';
   import { isOnline } from '$lib/stores/networkStatus';
 
   $: foodId = parseInt($page.params.id);
@@ -44,8 +45,8 @@
     try {
       // Calculate which chunk holds this food's data
       const chunkId = Math.abs(foodId % 20); // Matches CHUNK_COUNT in generator
-      
-      const res = await fetch(`/data/provenance/provenance_${chunkId}.json`);
+
+      const res = await fetch(`${base}/data/provenance/provenance_${chunkId}.json`);
       
       if (res.ok) {
         const data = await res.json();
@@ -71,7 +72,7 @@
       window.history.back();
     } else {
       // Fallback if accessed directly
-      goto('/data');
+      goto(`${base}/data`);
     }
   }
 
@@ -270,7 +271,7 @@
   /* TABS */
   .tabs {
     display: flex;
-    background: white;
+    background: var(--surface);
     border-bottom: 1px solid var(--divider);
     position: sticky;
     top: 3.5rem; /* Height of header */

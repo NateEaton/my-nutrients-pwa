@@ -46,7 +46,7 @@ export const __minified__ = true;
 export const DATABASE_METADATA = {
   "source": "USDA-FDC",
   "label": "USDA FoodData Central",
-  "name": "USDA FoodData Central - Foundation & SR Legacy (JSON)",
+  "name": "USDA FoodData Central - Foundation & SR Legacy",
   "description": "Comprehensive food database from USDA FoodData Central with multi-nutrient data for nutrition tracking",
   "version": "2025.3",
   "created": "2025-12-08",
@@ -55,14 +55,6 @@ export const DATABASE_METADATA = {
     {
       "name": "USDA FoodData Central",
       "url": "https://fdc.nal.usda.gov/download-datasets.html"
-    },
-    {
-      "name": "Foundation Foods JSON",
-      "url": "https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_foundation_food_json_2024-04-24.zip"
-    },
-    {
-      "name": "SR Legacy JSON",
-      "url": "https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_json_2018-04.zip"
     }
   ],
   "notes": "Curated from USDA FoodData Central with multi-nutrient support. Branded foods filtered, cooking methods collapsed, nutritionally similar foods merged.",
