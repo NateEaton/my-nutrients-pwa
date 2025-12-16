@@ -1,5 +1,5 @@
 <!--
- * My Calcium Tracker PWA
+ * My Nutrients Tracker PWA
  * Copyright (C) 2025 Nathan A. Eaton Jr.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import { syncState } from "$lib/stores/sync";
-  import { showToast } from "$lib/stores/calcium";
+  import { showToast } from "$lib/stores/nutrients";
   import { SyncService } from "$lib/services/SyncService";
   import ConfirmDialog from "$lib/components/ConfirmDialog.svelte";
   import QRCode from "qrcode";

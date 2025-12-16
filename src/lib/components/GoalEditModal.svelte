@@ -1,5 +1,5 @@
 <!--
- * My Calcium Tracker PWA
+ * My Nutrients Tracker PWA
  * Copyright (C) 2025 Nathan A. Eaton Jr.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
 <script>
   import { createEventDispatcher } from "svelte";
-  import { calciumState, calciumService } from "$lib/stores/calcium";
+  import { nutrientState, nutrientService } from "$lib/stores/nutrients";
 
   export let show = false;
   export let currentGoal = 1000;
@@ -67,7 +67,7 @@
 
     try {
       // Update goal via service
-      await calciumService.updateSettings({ dailyGoal: newGoal });
+      await nutrientService.updateSettings({ dailyGoal: newGoal });
       
       // Close modal and dispatch success
       show = false;

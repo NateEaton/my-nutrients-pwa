@@ -1,5 +1,5 @@
 <!--
- * My Calcium Tracker PWA
+ * My Nutrients Tracker PWA
  * Copyright (C) 2025 Nathan A. Eaton Jr.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@
   import { onMount } from "svelte";
   import { logBuildInfo } from "$lib/utils/buildInfo";
   import { page } from "$app/stores";
-  import { calciumState, calciumService, showToast } from "$lib/stores/calcium";
+  import { nutrientState, nutrientService, showToast } from "$lib/stores/nutrients";
   import { pwaUpdateAvailable, pwaUpdateFunction, pwaOfflineReady } from "$lib/stores/pwa";
   import Header from "$lib/components/Header.svelte";
   import Toast from "$lib/components/Toast.svelte";
@@ -36,7 +36,7 @@
   let syncService = null;
 
   onMount(async () => {
-    await calciumService.initialize();
+    await nutrientService.initialize();
 
     // Initialize network status first
     NetworkStatusService.getInstance().initialize();
@@ -95,6 +95,8 @@
         return "Statistics";
       case "/data":
         return "Database";
+      case "/data/food/[id]":
+        return "Food Details";
       case "/report":
         return "Report";
       case "/settings":
@@ -119,13 +121,13 @@
   }
 
   function initializeTheme() {
-    const savedTheme = localStorage.getItem("calcium_theme") || "auto";
+    const savedTheme = localStorage.getItem("nutrient_theme") || "auto";
     applyTheme(savedTheme);
 
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
     prefersDark.addEventListener("change", (e) => {
       const currentThemeSetting =
-        localStorage.getItem("calcium_theme") || "auto";
+        localStorage.getItem("nutrient_theme") || "auto";
       if (currentThemeSetting === "auto") {
         document.documentElement.setAttribute(
           "data-theme",
@@ -151,8 +153,8 @@
 
   async function initializeColorScheme() {
     try {
-      const settings = await calciumService.getSettings();
-      const colorScheme = settings.colorScheme || (__APP_ENV__ === 'development' ? 'orange' : 'blue');
+      const settings = await nutrientService.getSettings();
+      const colorScheme = settings.colorScheme || 'blue';
       applyColorScheme(colorScheme);
     } catch (error) {
       console.error("Error loading color scheme:", error);
@@ -217,7 +219,7 @@
       onAboutClick={openAboutDialog}
     />
     <main class="main-content">
-      {#if $calciumState.isLoading}
+      {#if $nutrientState.isLoading}
         <div class="loading">
           <div class="loading-spinner">
             <div class="spinner-container">
@@ -243,6 +245,7 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    min-height: 100dvh;
     background-color: var(--surface);
     position: relative;
     box-shadow: var(--shadow);

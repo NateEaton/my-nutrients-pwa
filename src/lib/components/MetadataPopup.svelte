@@ -1,5 +1,5 @@
 <!--
- * My Calcium Tracker PWA
+ * My Nutrients Tracker PWA
  * Copyright (C) 2025 Nathan A. Eaton Jr.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
 <script>
   import { createEventDispatcher } from "svelte";
-  import { calciumService } from "$lib/stores/calcium";
+  import { nutrientService } from "$lib/stores/nutrients";
   import SourceIndicator from "./SourceIndicator.svelte";
   import { logger } from '$lib/utils/logger';
 
@@ -103,8 +103,8 @@
           <div class="info-item">
             <span class="label">Source Type:</span>
             <span class="value">
-              {#if calciumService}
-                {calciumService.formatSourceMetadata(food)}
+              {#if nutrientService}
+                {nutrientService.formatSourceMetadata(food)}
               {:else}
                 Unknown
               {/if}

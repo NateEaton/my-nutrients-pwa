@@ -1,5 +1,5 @@
 /*
- * My Calcium Tracker PWA
+ * My Nutrients Tracker PWA
  * Copyright (C) 2025 Nathan A. Eaton Jr.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 import { get } from 'svelte/store';
 import { syncState, setSyncStatus, setSyncError } from '$lib/stores/sync';
 import { isOnline } from '$lib/stores/networkStatus';
-import { showToast, calciumService, calciumState } from '$lib/stores/calcium';
+import { showToast, nutrientService, nutrientState } from '$lib/stores/nutrients';
 import { CryptoUtils } from '$lib/utils/cryptoUtils';
 import { FEATURES } from '$lib/utils/featureFlags';
 import { logger } from '$lib/utils/logger';
@@ -82,7 +82,7 @@ export class SyncService {
     });
 
     try {
-      const storedSettings = localStorage.getItem('calcium_sync_settings');
+      const storedSettings = localStorage.getItem('nutrient_sync_settings');
       if (storedSettings) {
         logger.debug('SYNC INIT', 'Found stored sync settings, restoring...');
         const settings = JSON.parse(storedSettings);
@@ -135,7 +135,7 @@ export class SyncService {
       console.error('[SYNC INIT] ❌ Failed to initialize sync service:', error);
       setSyncError('Failed to initialize sync. Please check settings.');
       // Also remove potentially corrupt settings
-      localStorage.removeItem('calcium_sync_settings');
+      localStorage.removeItem('nutrient_sync_settings');
     }
   }
 
@@ -177,7 +177,7 @@ export class SyncService {
       await this.saveSettings();
 
       logger.debug('CREATE SYNC', 'Generating backup of current data...');
-      const currentData = await calciumService.generateBackup();
+      const currentData = await nutrientService.generateBackup();
 
       logger.debug('CREATE SYNC', 'Pushing initial data to cloud...');
       await this.pushToCloud(currentData);
@@ -236,7 +236,7 @@ export class SyncService {
             logger.debug('SYNC PULL', '  Remote:', metadataDoc.syncGenerationId);
             logger.debug('SYNC PULL', '  Local:', this.settings.syncGenerationId);
             logger.debug('SYNC PULL', 'Clearing ALL local data and forcing FULL pull of all documents');
-            await calciumService.clearApplicationData();
+            await nutrientService.clearApplicationData();
             this.settings.syncGenerationId = metadataDoc.syncGenerationId;
             forcePullAll = true; // Force pull all documents since we cleared all local data
           }
@@ -324,7 +324,7 @@ export class SyncService {
 
             for (const [dateString, entries] of Object.entries(monthDoc.journalEntries)) {
               try {
-                await calciumService.saveFoodsForDate(dateString, entries as any[]);
+                await nutrientService.saveFoodsForDate(dateString, entries as any[]);
               } catch (error) {
                 console.warn('[SYNC PULL] Failed to apply entries for', dateString, error);
               }
@@ -337,7 +337,7 @@ export class SyncService {
 
           // Reload the UI state to reflect the changes
           logger.debug('SYNC PULL', 'Reloading journal data into UI state...');
-          await calciumService.loadDailyFoods();
+          await nutrientService.loadDailyFoods();
           logger.debug('SYNC PULL', 'UI state reloaded');
         }
 
@@ -379,8 +379,8 @@ export class SyncService {
       logger.debug('SYNC PUSH', 'Starting multi-document push to cloud');
       setSyncStatus('syncing');
 
-      // Get full backup using existing CalciumService method
-      const fullBackup = dataToPush || await calciumService.generateBackup();
+      // Get full backup using existing NutrientService method
+      const fullBackup = dataToPush || await nutrientService.generateBackup();
       logger.debug('SYNC PUSH', 'Generated full backup');
 
       // Partition into documents for cloud storage
@@ -472,21 +472,21 @@ export class SyncService {
           this.settings.documentState!.persistent.lastModified = persistentResult.lastModified;
 
           // Apply persistent data changes
-          const currentState = get(calciumState);
+          const currentState = get(nutrientState);
           if (persistentData.preferences) {
-            calciumState.update(state => ({ ...state, settings: persistentData.preferences }));
+            nutrientState.update(state => ({ ...state, settings: persistentData.preferences }));
           }
           if (persistentData.customFoods) {
-            calciumState.update(state => ({ ...state, customFoods: persistentData.customFoods }));
+            nutrientState.update(state => ({ ...state, customFoods: persistentData.customFoods }));
           }
           if (persistentData.favorites) {
-            calciumState.update(state => ({ ...state, favorites: persistentData.favorites }));
+            nutrientState.update(state => ({ ...state, favorites: persistentData.favorites }));
           }
           if (persistentData.hiddenFoods) {
-            calciumState.update(state => ({ ...state, hiddenFoods: persistentData.hiddenFoods }));
+            nutrientState.update(state => ({ ...state, hiddenFoods: persistentData.hiddenFoods }));
           }
           if (persistentData.servingPreferences) {
-            calciumState.update(state => ({ ...state, servingPreferences: persistentData.servingPreferences }));
+            nutrientState.update(state => ({ ...state, servingPreferences: persistentData.servingPreferences }));
           }
 
           hasRemoteUpdates = true;
@@ -495,7 +495,7 @@ export class SyncService {
       }
 
       // Now push our local changes
-      const fullBackup = await calciumService.generateBackup();
+      const fullBackup = await nutrientService.generateBackup();
 
       // Update metadata
       const metadata = this.createMetadataDocument(fullBackup);
@@ -568,7 +568,7 @@ export class SyncService {
 
           // Apply month data changes to IndexedDB
           for (const [dateString, entries] of Object.entries(monthData.journalEntries || {})) {
-            await calciumService.saveFoodsForDate(dateString, entries as any[]);
+            await nutrientService.saveFoodsForDate(dateString, entries as any[]);
           }
 
           hasRemoteUpdates = true;
@@ -577,7 +577,7 @@ export class SyncService {
       }
 
       // Now push our local changes for this month
-      const fullBackup = await calciumService.generateBackup();
+      const fullBackup = await nutrientService.generateBackup();
 
       // Update metadata
       const metadata = this.createMetadataDocument(fullBackup);
@@ -642,7 +642,7 @@ export class SyncService {
       documentState: this.settings.documentState
     };
 
-    localStorage.setItem('calcium_sync_settings', JSON.stringify(storageData));
+    localStorage.setItem('nutrient_sync_settings', JSON.stringify(storageData));
     logger.debug('SAVE SETTINGS', '✅ Settings saved successfully');
   }
 
@@ -878,19 +878,19 @@ export class SyncService {
     // Update preferences
     if (persistentData.preferences) {
       logger.debug('APPLY PERSISTENT', 'Updating preferences');
-      calciumState.update(state => ({
+      nutrientState.update(state => ({
         ...state,
         settings: persistentData.preferences
       }));
-      await calciumService.saveSettings();
+      await nutrientService.saveSettings();
     }
 
-    // Apply custom foods (merge - CalciumService handles duplicates)
+    // Apply custom foods (merge - NutrientService handles duplicates)
     if (persistentData.customFoods && Array.isArray(persistentData.customFoods)) {
       logger.debug('APPLY PERSISTENT', 'Merging', persistentData.customFoods.length, 'custom foods');
       for (const customFood of persistentData.customFoods) {
         try {
-          await calciumService.saveCustomFoodToIndexedDB(customFood);
+          await nutrientService.saveCustomFoodToIndexedDB(customFood);
         } catch (error) {
           console.warn('[APPLY PERSISTENT] Failed to apply custom food:', customFood.name, error);
         }
@@ -898,7 +898,7 @@ export class SyncService {
 
       // Reload custom foods into state
       logger.debug('APPLY PERSISTENT', 'Reloading custom foods into state...');
-      await calciumService.loadCustomFoods();
+      await nutrientService.loadCustomFoods();
     }
 
     // Apply favorites (merge with existing)
@@ -906,10 +906,10 @@ export class SyncService {
       logger.debug('APPLY PERSISTENT', 'Applying', persistentData.favorites.length, 'favorites');
       try {
         // Get current favorites
-        const currentFavorites = get(calciumState).favorites;
+        const currentFavorites = get(nutrientState).favorites;
         // Merge with new favorites (Set removes duplicates)
         const mergedFavorites = Array.from(new Set([...currentFavorites, ...persistentData.favorites]));
-        await calciumService.restoreFavorites(mergedFavorites);
+        await nutrientService.restoreFavorites(mergedFavorites);
       } catch (error) {
         console.warn('[APPLY PERSISTENT] Failed to apply favorites:', error);
       }
@@ -919,9 +919,9 @@ export class SyncService {
     if (persistentData.hiddenFoods && Array.isArray(persistentData.hiddenFoods)) {
       logger.debug('APPLY PERSISTENT', 'Applying', persistentData.hiddenFoods.length, 'hidden foods');
       try {
-        const currentHidden = get(calciumState).hiddenFoods;
+        const currentHidden = get(nutrientState).hiddenFoods;
         const mergedHidden = Array.from(new Set([...currentHidden, ...persistentData.hiddenFoods]));
-        await calciumService.restoreHiddenFoods(mergedHidden);
+        await nutrientService.restoreHiddenFoods(mergedHidden);
       } catch (error) {
         console.warn('[APPLY PERSISTENT] Failed to apply hidden foods:', error);
       }
@@ -931,7 +931,7 @@ export class SyncService {
     if (persistentData.servingPreferences && Array.isArray(persistentData.servingPreferences)) {
       logger.debug('APPLY PERSISTENT', 'Applying', persistentData.servingPreferences.length, 'serving preferences');
       try {
-        const currentPrefs = Array.from(get(calciumState).servingPreferences.values());
+        const currentPrefs = Array.from(get(nutrientState).servingPreferences.values());
 
         // Merge preferences - newer timestamp wins for same foodId
         const mergedMap = new Map();
@@ -950,7 +950,7 @@ export class SyncService {
           }
         }
 
-        await calciumService.restoreServingPreferences(Array.from(mergedMap.values()));
+        await nutrientService.restoreServingPreferences(Array.from(mergedMap.values()));
       } catch (error) {
         console.warn('[APPLY PERSISTENT] Failed to apply serving preferences:', error);
       }
@@ -1065,7 +1065,7 @@ export class SyncService {
       console.error('[JOIN SYNC] ❌ Failed to join sync doc:', error);
       setSyncError(`Failed to join sync: ${error instanceof Error ? error.message : 'Unknown error'}`);
 
-      localStorage.removeItem('calcium_sync_settings');
+      localStorage.removeItem('nutrient_sync_settings');
       this.settings = null;
       syncState.update(state => ({ ...state, isEnabled: false, docId: null, status: 'error' }));
       throw error;
@@ -1276,7 +1276,7 @@ export class SyncService {
 
     // Remove from localStorage
     logger.debug('DISCONNECT SYNC', 'Removing sync settings from localStorage...');
-    localStorage.removeItem('calcium_sync_settings');
+    localStorage.removeItem('nutrient_sync_settings');
 
     // Update sync state
     logger.debug('DISCONNECT SYNC', 'Updating sync state to offline...');

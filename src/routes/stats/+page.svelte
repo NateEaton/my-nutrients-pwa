@@ -1,5 +1,5 @@
 <!--
- * My Calcium Tracker PWA
+ * My Nutrients Tracker PWA
  * Copyright (C) 2025 Nathan A. Eaton Jr.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,20 +18,21 @@
 
 <script>
   import { onMount, onDestroy, afterUpdate } from "svelte";
-  import { calciumState, calciumService } from "$lib/stores/calcium";
+  import { nutrientState, nutrientService } from "$lib/stores/nutrients";
   import { goto } from "$app/navigation";
   import { formatDate, isToday, getTodayString } from "$lib/utils/dateUtils";
   import { NUTRIENT_METADATA, getNutrientLabel, getNutrientUnit, getDefaultDisplayedNutrients } from "$lib/config/nutrientDefaults";
+  import { databaseViewState, statsViewState } from "$lib/stores/uiState"; // Add statsViewState to import
 
   // Nutrient selection state
-  let selectedNutrient = 'calcium';
+  let selectedNutrient = $statsViewState.selectedNutrient;
   let nutrientSettings = {
     nutrientGoals: {},
     displayedNutrients: getDefaultDisplayedNutrients()
   };
 
   // Stats state
-  let currentView = "weekly";
+  let currentView = $statsViewState.currentView || "weekly";
   let currentData = null;
   let selectedBarIndex = -1;
   let isDetailMode = false;
@@ -134,9 +135,9 @@
   onMount(async () => {
     // Load nutrient settings
     try {
-      nutrientSettings = await calciumService.getNutrientSettings();
-      // Default to first displayed nutrient
-      if (nutrientSettings.displayedNutrients && nutrientSettings.displayedNutrients.length > 0) {
+      nutrientSettings = await nutrientService.getNutrientSettings();
+      // Only override selectedNutrient if it wasn't already set from the store
+      if (!selectedNutrient && nutrientSettings.displayedNutrients && nutrientSettings.displayedNutrients.length > 0) {
         selectedNutrient = nutrientSettings.displayedNutrients[0];
       }
     } catch (error) {
@@ -231,7 +232,7 @@
   }
 
   async function loadDataForView() {
-    const allData = await calciumService.getAllJournalData();
+    const allData = await nutrientService.getAllJournalData();
 
     switch (currentView) {
       case "daily":
@@ -1010,10 +1011,13 @@
       showDatePicker = !showDatePicker;
     }
   }
+
+  $: statsViewState.set({ currentView, selectedNutrient });
+
 </script>
 
 <svelte:head>
-  <title>Statistics - My Calcium</title>
+  <title>Statistics - My Nutrients</title>
 </svelte:head>
 
 <div class="stats-page">
@@ -1030,18 +1034,10 @@
         on:change={() => loadDataForView()}
         class="nutrient-select"
       >
-        <!-- Displayed Nutrients (starred) -->
-        <optgroup label="⭐ Tracked Nutrients">
-          {#each NUTRIENT_METADATA.filter(n => nutrientSettings.displayedNutrients.includes(n.id)) as nutrient}
-            <option value={nutrient.id}>{nutrient.label} ({nutrient.unit})</option>
-          {/each}
-        </optgroup>
-        <!-- All Other Nutrients -->
-        <optgroup label="All Nutrients">
-          {#each NUTRIENT_METADATA.filter(n => !nutrientSettings.displayedNutrients.includes(n.id)) as nutrient}
-            <option value={nutrient.id}>{nutrient.label} ({nutrient.unit})</option>
-          {/each}
-        </optgroup>
+        <!-- Show only tracked nutrients (1-4) for mobile-friendly selector -->
+        {#each NUTRIENT_METADATA.filter(n => nutrientSettings.displayedNutrients.includes(n.id)) as nutrient}
+          <option value={nutrient.id}>{nutrient.label} ({nutrient.unit})</option>
+        {/each}
       </select>
     </div>
 

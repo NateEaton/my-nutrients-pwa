@@ -1,7 +1,7 @@
 {
-  "name": "calcium-sync-worker",
+  "name": "nutrients-sync-worker",
   "version": "1.0.0",
-  "description": "Cloudflare Worker for Calcium Tracker sync",
+  "description": "Cloudflare Worker for My Nutrients sync",
   "main": "src/index.ts",
   "scripts": {
     "dev": "wrangler dev",

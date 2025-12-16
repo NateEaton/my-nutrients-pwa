@@ -1,5 +1,5 @@
 <!--
- * My Calcium Tracker PWA
+ * My Nutrients Tracker PWA
  * Copyright (C) 2025 Nathan A. Eaton Jr.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
 -->
 
 <script>
-  import { calciumState, calciumService } from "$lib/stores/calcium";
+  import { nutrientState, nutrientService } from "$lib/stores/nutrients";
 
   /** Whether the backup modal is visible */
   export let show = false;
@@ -53,11 +53,11 @@
 
   async function generateBackupStats() {
     try {
-      if (!calciumService) {
+      if (!nutrientService) {
         backupStats = "Service not initialized yet";
         return;
       }
-      const backupData = await calciumService.generateBackup();
+      const backupData = await nutrientService.generateBackup();
       const stats = calculateStats(backupData);
       backupStats = stats;
     } catch (error) {
@@ -107,10 +107,10 @@
 
     isGenerating = true;
     try {
-      if (!calciumService) {
-        throw new Error("CalciumService not initialized");
+      if (!nutrientService) {
+        throw new Error("NutrientService not initialized");
       }
-      const backupData = await calciumService.generateBackup();
+      const backupData = await nutrientService.generateBackup();
 
       // Create filename with current date (local timezone)
       const now = new Date();
@@ -118,7 +118,7 @@
       const month = String(now.getMonth() + 1).padStart(2, "0");
       const day = String(now.getDate()).padStart(2, "0");
       const dateStr = `${year}-${month}-${day}`;
-      const filename = `calcium-tracker-backup-${dateStr}.json`;
+      const filename = `nutrients-tracker-backup-${dateStr}.json`;
 
       // Create and download file
       const blob = new Blob([JSON.stringify(backupData, null, 2)], {

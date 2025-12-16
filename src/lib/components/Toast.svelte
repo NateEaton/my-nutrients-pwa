@@ -1,5 +1,5 @@
 <!--
- * My Calcium Tracker PWA
+ * My Nutrients Tracker PWA
  * Copyright (C) 2025 Nathan A. Eaton Jr.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
 -->
 
 <script>
-  import { toastStore } from "$lib/stores/calcium";
+  import { toastStore } from "$lib/stores/nutrients";
   import { tick } from "svelte";
 
   let isVisible = false;

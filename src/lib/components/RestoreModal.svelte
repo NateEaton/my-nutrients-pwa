@@ -1,5 +1,5 @@
 <!--
- * My Calcium Tracker PWA
+ * My Nutrients Tracker PWA
  * Copyright (C) 2025 Nathan A. Eaton Jr.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
 -->
 
 <script>
-  import { showToast, calciumService } from "$lib/stores/calcium";
+  import { showToast, nutrientService } from "$lib/stores/nutrients";
   import { onDestroy } from "svelte";
   import { syncState } from "$lib/stores/sync";
   import { SyncService } from "$lib/services/SyncService";
@@ -201,7 +201,7 @@
       const preserveSync =
         $syncState.isEnabled && restoreSyncOption === "replace";
 
-      await calciumService.restoreFromBackup(backupData, { preserveSync });
+      await nutrientService.restoreFromBackup(backupData, { preserveSync });
 
       if (preserveSync) {
         showToast("Local data restored. Updating cloud...", "info");

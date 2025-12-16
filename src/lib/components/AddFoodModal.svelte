@@ -1,5 +1,5 @@
 <!--
- * My Calcium Tracker PWA
+ * My Nutrients Tracker PWA
  * Copyright (C) 2025 Nathan A. Eaton Jr.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
 <script>
   import { createEventDispatcher, onMount } from "svelte";
-  import { calciumState, calciumService, showToast } from "$lib/stores/calcium";
+  import { nutrientState, nutrientService, showToast } from "$lib/stores/nutrients";
   import { isOnline } from "$lib/stores/networkStatus";
   import { DEFAULT_FOOD_DATABASE, getPrimaryMeasure, getAllMeasures, hasMultipleMeasures, formatCalcium } from "$lib/data/foodDatabase";
   import { SearchService } from "$lib/services/SearchService";
@@ -97,14 +97,14 @@
 
       // Try ID lookup first
       if (lookupId) {
-        customFood = $calciumState.customFoods.find(f => f.id === lookupId);
+        customFood = $nutrientState.customFoods.find(f => f.id === lookupId);
         logger.debug('ADD FOOD', 'Found customFood by ID:', customFood);
       }
 
       // If no ID or not found, try matching by name and calcium
       if (!customFood && editingFood.name) {
         logger.debug('ADD FOOD', 'No ID match, trying name+calcium lookup for:', editingFood.name);
-        customFood = $calciumState.customFoods.find(f =>
+        customFood = $nutrientState.customFoods.find(f =>
           f.name === editingFood.name &&
           Math.abs(f.calcium - editingFood.calcium) < 0.01
         );
@@ -153,7 +153,7 @@
     // Database is already available via static import
     // Load nutrient settings
     try {
-      const settings = await calciumService.getNutrientSettings();
+      const settings = await nutrientService.getNutrientSettings();
       displayedNutrients = settings.displayedNutrients || getDefaultDisplayedNutrients();
     } catch (error) {
       console.error('Failed to load nutrient settings:', error);
@@ -310,14 +310,14 @@
       if (foodName.trim().length >= 2) {
         const allFoods = [
           ...foodDatabase,
-          ...$calciumState.customFoods,
+          ...$nutrientState.customFoods,
         ];
 
         const results = SearchService.searchFoods(foodName.trim(), allFoods, {
           mode: "add_food",
-          favorites: $calciumState.favorites,
-          hiddenFoods: $calciumState.hiddenFoods,
-          customFoods: $calciumState.customFoods,
+          favorites: $nutrientState.favorites,
+          hiddenFoods: $nutrientState.hiddenFoods,
+          customFoods: $nutrientState.customFoods,
           maxResults: 20,
         });
 
@@ -356,8 +356,8 @@
     // Check for saved serving preferences
     usingPreference = false;
 
-    if (food.id && calciumService) {
-      const savedPreference = calciumService.getServingPreference(food.id);
+    if (food.id && nutrientService) {
+      const savedPreference = nutrientService.getServingPreference(food.id);
       if (savedPreference) {
         servingQuantity = savedPreference.preferredQuantity;
         servingUnit = savedPreference.preferredUnit;
@@ -551,8 +551,8 @@
    */
   function getSearchResultDisplay(food) {
     // Check for saved serving preference
-    if (food.id && calciumService) {
-      const savedPreference = calciumService.getServingPreference(food.id);
+    if (food.id && nutrientService) {
+      const savedPreference = nutrientService.getServingPreference(food.id);
       if (savedPreference) {
         const measures = getAllMeasures(food);
         const measureIndex = savedPreference.preferredMeasureIndex ?? 0;
@@ -622,11 +622,11 @@
 
   async function handleDeleteConfirm() {
     try {
-      if (!calciumService) {
-        throw new Error("CalciumService not initialized");
+      if (!nutrientService) {
+        throw new Error("NutrientService not initialized");
       }
 
-      await calciumService.removeFood(editingIndex);
+      await nutrientService.removeFood(editingIndex);
       showDeleteConfirm = false;
       closeModal();
       dispatch("foodDeleted");
@@ -651,8 +651,8 @@
       return;
     }
 
-    if (calciumService) {
-      await calciumService.toggleFavorite(currentFoodData.id);
+    if (nutrientService) {
+      await nutrientService.toggleFavorite(currentFoodData.id);
     }
   }
 
@@ -685,7 +685,7 @@
     const scannedSource = scanContext.source === 'USDA FDC' ? 'usda_fdc' : 'openfoodfacts';
     logger.debug('ADD FOOD', 'Searching for existing UPC food:', { scannedUPC, scannedSource, calcium, measure });
 
-    return $calciumState.customFoods.find(food => {
+    return $nutrientState.customFoods.find(food => {
       const metadata = food.sourceMetadata;
       if (!metadata || metadata.sourceType !== 'upc_scan') {
         return false;
@@ -787,8 +787,8 @@
     errorMessage = "";
 
     try {
-      if (!calciumService) {
-        throw new Error("CalciumService not initialized");
+      if (!nutrientService) {
+        throw new Error("NutrientService not initialized");
       }
 
       const foodData = {
@@ -801,7 +801,7 @@
       };
 
       if (editingFood) {
-        await calciumService.updateFood(editingIndex, foodData);
+        await nutrientService.updateFood(editingIndex, foodData);
         dispatch("foodUpdated");
       } else {
         // Only save as custom food definition if it's truly new (not selected from search)
@@ -817,7 +817,7 @@
           if (existingFood) {
             // Duplicate UPC scan detected - reuse existing custom food
             logger.debug('ADD FOOD', 'Duplicate UPC scan detected, reusing existing custom food:', existingFood.id);
-            await calciumService.addFood({
+            await nutrientService.addFood({
               name: existingFood.name,
               calcium: calciumValue,
               nutrients: nutrients,
@@ -837,17 +837,17 @@
           logger.debug('ADD FOOD', 'Creating sourceMetadata, scanContext:', scanContext);
           let sourceMetadata;
           if (scanContext?.method === 'UPC' || scanContext?.method === 'Manual UPC') {
-            sourceMetadata = calciumService.createUPCSourceMetadata(scanContext);
+            sourceMetadata = nutrientService.createUPCSourceMetadata(scanContext);
             logger.debug('ADD FOOD', 'Created UPC sourceMetadata:', sourceMetadata);
           } else if (scanContext?.method === 'OCR') {
-            sourceMetadata = calciumService.createOCRSourceMetadata(scanContext);
+            sourceMetadata = nutrientService.createOCRSourceMetadata(scanContext);
             logger.debug('ADD FOOD', 'Created OCR sourceMetadata:', sourceMetadata);
           } else {
-            sourceMetadata = calciumService.createManualSourceMetadata();
+            sourceMetadata = nutrientService.createManualSourceMetadata();
             logger.debug('ADD FOOD', 'Created manual sourceMetadata:', sourceMetadata);
           }
 
-          await calciumService.saveCustomFood({
+          await nutrientService.saveCustomFood({
             name: foodName.trim(),
             calcium: calciumValue,  // Keep for backward compatibility
             nutrients: nutrients,    // New multi-nutrient support
@@ -903,10 +903,10 @@
 
           if (hasResetToOriginal) {
             // User explicitly reset to original - delete preference
-            await calciumService.deleteServingPreference(foodToSave.id);
+            await nutrientService.deleteServingPreference(foodToSave.id);
           } else if (hasChanges) {
             // User made changes - save preference
-            await calciumService.saveServingPreference(
+            await nutrientService.saveServingPreference(
               foodToSave.id,
               servingQuantity,
               servingUnit,
@@ -915,7 +915,7 @@
             );
           } else if (hasMultipleMeasures && isAddingFood) {
             // Multi-measure food being added with default - save preference to simplify future adds
-            await calciumService.saveServingPreference(
+            await nutrientService.saveServingPreference(
               foodToSave.id,
               servingQuantity,
               servingUnit,
@@ -924,11 +924,11 @@
             );
           } else if (!hasChanges) {
             // No changes and not a multi-measure add - delete any existing preference
-            await calciumService.deleteServingPreference(foodToSave.id);
+            await nutrientService.deleteServingPreference(foodToSave.id);
           }
         }
 
-        await calciumService.addFood(foodData);
+        await nutrientService.addFood(foodData);
         dispatch("foodAdded");
       }
 
@@ -1141,15 +1141,15 @@
               {#if !isCustomMode && currentFoodData && !currentFoodData.isCustom}
                 <button
                   class="favorite-modal-btn"
-                  class:favorite={$calciumState.favorites.has(currentFoodData.id)}
+                  class:favorite={$nutrientState.favorites.has(currentFoodData.id)}
                   on:click={toggleCurrentFoodFavorite}
-                  title={$calciumState.favorites.has(currentFoodData.id)
+                  title={$nutrientState.favorites.has(currentFoodData.id)
                     ? "Remove from favorites"
                     : "Add to favorites"}
                   type="button"
                 >
                   <span class="material-icons">
-                    {$calciumState.favorites.has(currentFoodData.id)
+                    {$nutrientState.favorites.has(currentFoodData.id)
                       ? "star"
                       : "star_border"}
                   </span>
@@ -1195,7 +1195,7 @@
                       {/if}
                     </div>
                   </div>
-                  {#if !food.isCustom && food.id && $calciumState.favorites.has(food.id)}
+                  {#if !food.isCustom && food.id && $nutrientState.favorites.has(food.id)}
                     <div class="search-item-favorite">
                       <span class="material-icons">star</span>
                     </div>

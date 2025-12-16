@@ -1,5 +1,5 @@
 <!--
- * My Calcium Tracker PWA
+ * My Nutrients Tracker PWA
  * Copyright (C) 2025 Nathan A. Eaton Jr.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 </script>
 
 <svelte:head>
-  <title>User Guide - My Calcium</title>
+  <title>User Guide - My Nutrients</title>
 </svelte:head>
 
 <div class="guide-container">
@@ -31,18 +31,18 @@
       Getting Started
     </summary>
     <div class="section-content">
-      <h4>Welcome to My Calcium!</h4>
+      <h4>Welcome to My Nutrients!</h4>
       <p>
-        My Calcium helps you track your daily calcium intake to support bone health and meet
-        nutritional goals. All your data stays private on your device, and you can use the app
-        offline.
+        My Nutrients helps you track essential nutrients (protein, calcium, fiber, vitamins, and more)
+        to support your health and meet nutritional goals. All your data stays private on your device,
+        and you can use the app offline.
       </p>
 
       <h4>First Steps</h4>
       <ol class="steps-list">
         <li>
           <strong>Find Your Foods:</strong> Search the database, scan barcodes, or add custom
-          foods with calcium content
+          foods with detailed nutrient information
         </li>
         <li>
           <strong>Log Your Intake:</strong> Add foods throughout the day with automatic serving
@@ -59,7 +59,7 @@
   <details class="guide-section">
     <summary>
       <span class="material-icons">track_changes</span>
-      Tracking Your Daily Calcium
+      Tracking Your Daily Nutrients
     </summary>
     <div class="section-content">
       <h4>Date Navigation & Goal</h4>
@@ -86,7 +86,7 @@
           <strong>Add a Custom Food:</strong> Tap the
           <span class="material-icons inline-icon">add_circle</span> icon at the
           top to switch to custom food mode, where you can enter your own food name
-          and calcium values.
+          and nutrient values.
         </li>
         <li>
           <strong>Smart Scan Dialog:</strong> Tap the 
@@ -102,10 +102,10 @@
               </li>
               {#if FEATURES.OCR_ENABLED}
                 <li>
-                  <strong>Scan a Nutrition Label:</strong> Switch to the 
-                  Nutrition Label tab to capture calcium content directly from food packaging. 
-                  This feature uses optical character recognition to read the nutrition facts panel. Use the 
-                  flashlight icon for better visibility in low light, and ensure the entire nutrition 
+                  <strong>Scan a Nutrition Label:</strong> Switch to the
+                  Nutrition Label tab to capture nutrient content directly from food packaging.
+                  This feature uses optical character recognition to read the nutrition facts panel. Use the
+                  flashlight icon for better visibility in low light, and ensure the entire nutrition
                   label is visible and in focus within the camera frame.
                 </li>
               {/if}
@@ -121,7 +121,7 @@
       <h4>Sorting Entries</h4>
       <p>
         On the main tracking screen, use the <span class="material-icons inline-icon">sort</span> sort buttons
-        to organize your daily entries by time added, food name, or calcium content.
+        to organize your daily entries by time added, food name, or nutrient content.
       </p>
 
       <h4>Food Source Icons</h4>
@@ -190,11 +190,11 @@
         </li>
         <li>
           <strong>Sort Results:</strong> Use the <span class="material-icons inline-icon">sort</span>
-          sort buttons to organize by food name, calcium content, or food type.
+          sort buttons to organize by food name, nutrient content, or food type.
         </li>
         <li>
-          <strong>Calcium Filter:</strong> Use the 
-          calcium (Ca) dropdown to show only foods within specific calcium ranges.
+          <strong>Nutrient Filter:</strong> Use the
+          nutrient dropdown to show only foods within specific nutrient ranges.
         </li>
         <li>
           <strong>Toggle Visibility:</strong> Click the <span class="material-icons inline-icon">check_box_outline_blank</span>
@@ -311,7 +311,7 @@
       <p>
         In <strong>Settings > Data</strong>, tap <strong>Export to CSV</strong>.
         The app will generate a file containing your complete journal history with
-        dates, food names, calcium amounts, and serving details. Unlike backups,
+        dates, food names, nutrient amounts, and serving details. Unlike backups,
         exports are designed for data analysis and cannot be used to restore your data.
       </p>
     </div>

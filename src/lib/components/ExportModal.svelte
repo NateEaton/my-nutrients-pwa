@@ -1,5 +1,5 @@
 <!--
- * My Calcium Tracker PWA
+ * My Nutrients Tracker PWA
  * Copyright (C) 2025 Nathan A. Eaton Jr.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
 -->
 
 <script>
-  import { calciumState, calciumService } from "$lib/stores/calcium";
+  import { nutrientState, nutrientService } from "$lib/stores/nutrients";
   import { NUTRIENT_METADATA, getNutrientUnit } from "$lib/config/nutrientDefaults";
 
   /** Whether the export modal is visible */
@@ -54,11 +54,11 @@
 
   async function generateExportStats() {
     try {
-      if (!calciumService) {
+      if (!nutrientService) {
         exportStats = "Service not initialized yet";
         return;
       }
-      const journalData = await calciumService.getAllJournalData();
+      const journalData = await nutrientService.getAllJournalData();
       const stats = calculateStats(journalData);
       exportStats = stats;
     } catch (error) {
@@ -160,10 +160,10 @@
 
     isGenerating = true;
     try {
-      if (!calciumService) {
-        throw new Error("CalciumService not initialized");
+      if (!nutrientService) {
+        throw new Error("NutrientService not initialized");
       }
-      const journalData = await calciumService.getAllJournalData();
+      const journalData = await nutrientService.getAllJournalData();
 
       // Generate CSV content
       const csvContent = generateCSV(journalData);

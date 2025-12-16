@@ -1,5 +1,5 @@
 <!--
- * My Calcium Tracker PWA
+ * My Nutrients Tracker PWA
  * Copyright (C) 2025 Nathan A. Eaton Jr.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
 -->
 
 <script>
-  import { calciumState, showToast, calciumService } from "$lib/stores/calcium";
+  import { nutrientState, showToast, nutrientService } from "$lib/stores/nutrients";
   import { pwaUpdateAvailable, pwaUpdateFunction } from "$lib/stores/pwa";
   import { onMount } from "svelte";
   import { FEATURES } from "$lib/utils/featureFlags";
@@ -41,13 +41,13 @@
   let isUserEditing = false;
 
   // Only update from state when user is not actively editing
-  $: if (!isUserEditing && $calciumState.settings?.dailyGoal !== undefined) {
-    dailyGoal = $calciumState.settings.dailyGoal;
+  $: if (!isUserEditing && $nutrientState.settings?.dailyGoal !== undefined) {
+    dailyGoal = $nutrientState.settings.dailyGoal;
   }
 
   onMount(async () => {
     try {
-      const settings = await calciumService.getSettings();
+      const settings = await nutrientService.getSettings();
       dailyGoal = settings.dailyGoal;
       selectedTheme = settings.theme || "auto";
       selectedColorScheme = settings.colorScheme || "blue";
@@ -69,7 +69,7 @@
   async function saveDailyGoal() {
     isUserEditing = false; // Allow state updates again
 
-    if (!calciumService) return;
+    if (!nutrientService) return;
 
     // Validate goal range
     if (dailyGoal < 100 || dailyGoal > 5000) {
@@ -78,7 +78,7 @@
     }
 
     try {
-      await calciumService.updateSettings({ dailyGoal });
+      await nutrientService.updateSettings({ dailyGoal });
       showToast("Daily goal updated", "success");
     } catch (error) {
       console.error("Error saving daily goal:", error);
@@ -101,10 +101,10 @@
   }
 
   async function saveTheme() {
-    if (!calciumService) return;
+    if (!nutrientService) return;
 
     try {
-      await calciumService.updateSettings({ theme: selectedTheme });
+      await nutrientService.updateSettings({ theme: selectedTheme });
       applyTheme(selectedTheme);
       showToast("Theme updated", "success");
     } catch (error) {
@@ -160,10 +160,10 @@
 
   // Update color scheme setting
   async function updateColorScheme(newScheme) {
-    if (!calciumService) return;
+    if (!nutrientService) return;
 
     try {
-      await calciumService.updateSettings({ colorScheme: newScheme });
+      await nutrientService.updateSettings({ colorScheme: newScheme });
       selectedColorScheme = newScheme;
 
       // Apply the color scheme immediately
@@ -232,7 +232,7 @@
 </script>
 
 <svelte:head>
-  <title>Settings - My Calcium</title>
+  <title>Settings - My Nutrients</title>
 </svelte:head>
 
 <div class="settings-container">
@@ -258,9 +258,72 @@
       </button>
     </div>
 
-    <!-- Appearance Section -->
+    <!-- Data Section -->
     <div class="settings-section">
-      <h3 class="section-title">Appearance</h3>
+      <h3 class="section-title">Data</h3>
+
+      {#if FEATURES.SYNC_ENABLED}
+        <button class="setting-nav-item" on:click={openSyncModal}>
+          <span class="material-icons setting-icon">sync</span>
+          <div class="setting-info">
+            <span class="setting-title">Sync</span>
+            <span class="setting-subtitle"
+              >Manage device pairing and sync status</span
+            >
+          </div>
+          <span class="material-icons nav-chevron">chevron_right</span>
+        </button>
+      {/if}
+
+      <button class="setting-nav-item" on:click={openBackupModal}>
+        <span class="material-icons setting-icon">backup</span>
+        <div class="setting-info">
+          <span class="setting-title">Create Backup</span>
+          <span class="setting-subtitle">Download your data</span>
+        </div>
+        <span class="material-icons nav-chevron">chevron_right</span>
+      </button>
+
+      <button class="setting-nav-item" on:click={openRestoreModal}>
+        <span class="material-icons setting-icon">restore</span>
+        <div class="setting-info">
+          <span class="setting-title">Restore Data</span>
+          <span class="setting-subtitle">Import from backup file</span>
+        </div>
+        <span class="material-icons nav-chevron">chevron_right</span>
+      </button>
+
+      <button class="setting-nav-item" on:click={openExportModal}>
+        <span class="material-icons setting-icon">file_download</span>
+        <div class="setting-info">
+          <span class="setting-title">Export to CSV</span>
+          <span class="setting-subtitle">Download entries as spreadsheet</span>
+        </div>
+        <span class="material-icons nav-chevron">chevron_right</span>
+      </button>
+    </div>
+
+    <!-- App Section -->
+    <div class="settings-section">
+      <h3 class="section-title">App</h3>
+
+      <button
+        class="setting-nav-item {$pwaUpdateAvailable ? 'update-available' : ''}"
+        on:click={$pwaUpdateAvailable ? installUpdate : checkForUpdate}
+      >
+        <span class="material-icons setting-icon">{$pwaUpdateAvailable ? 'system_update' : 'refresh'}</span>
+        <div class="setting-info">
+          <span class="setting-title">{$pwaUpdateAvailable ? 'Update App' : 'Check for Updates'}</span>
+          <span class="setting-subtitle">
+            {#if $pwaUpdateAvailable}
+              New version available - tap to update
+            {:else}
+              Manually check for app updates
+            {/if}
+          </span>
+        </div>
+        <span class="material-icons nav-chevron">{$pwaUpdateAvailable ? 'download' : 'chevron_right'}</span>
+      </button>
 
       <div class="setting-item inline">
         <span class="material-icons setting-icon">brightness_6</span>
@@ -359,74 +422,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Data Section -->
-    <div class="settings-section">
-      <h3 class="section-title">Data</h3>
-
-      {#if FEATURES.SYNC_ENABLED}
-        <button class="setting-nav-item" on:click={openSyncModal}>
-          <span class="material-icons setting-icon">sync</span>
-          <div class="setting-info">
-            <span class="setting-title">Sync</span>
-            <span class="setting-subtitle"
-              >Manage device pairing and sync status</span
-            >
-          </div>
-          <span class="material-icons nav-chevron">chevron_right</span>
-        </button>
-      {/if}
-
-      <button class="setting-nav-item" on:click={openBackupModal}>
-        <span class="material-icons setting-icon">backup</span>
-        <div class="setting-info">
-          <span class="setting-title">Create Backup</span>
-          <span class="setting-subtitle">Download your data</span>
-        </div>
-        <span class="material-icons nav-chevron">chevron_right</span>
-      </button>
-
-      <button class="setting-nav-item" on:click={openRestoreModal}>
-        <span class="material-icons setting-icon">restore</span>
-        <div class="setting-info">
-          <span class="setting-title">Restore Data</span>
-          <span class="setting-subtitle">Import from backup file</span>
-        </div>
-        <span class="material-icons nav-chevron">chevron_right</span>
-      </button>
-
-      <button class="setting-nav-item" on:click={openExportModal}>
-        <span class="material-icons setting-icon">file_download</span>
-        <div class="setting-info">
-          <span class="setting-title">Export to CSV</span>
-          <span class="setting-subtitle">Download entries as spreadsheet</span>
-        </div>
-        <span class="material-icons nav-chevron">chevron_right</span>
-      </button>
-    </div>
-
-    <!-- App Section -->
-    <div class="settings-section">
-      <h3 class="section-title">App</h3>
-
-      <button
-        class="setting-nav-item {$pwaUpdateAvailable ? 'update-available' : ''}"
-        on:click={$pwaUpdateAvailable ? installUpdate : checkForUpdate}
-      >
-        <span class="material-icons setting-icon">{$pwaUpdateAvailable ? 'system_update' : 'refresh'}</span>
-        <div class="setting-info">
-          <span class="setting-title">{$pwaUpdateAvailable ? 'Update App' : 'Check for Updates'}</span>
-          <span class="setting-subtitle">
-            {#if $pwaUpdateAvailable}
-              New version available - tap to update
-            {:else}
-              Manually check for app updates
-            {/if}
-          </span>
-        </div>
-        <span class="material-icons nav-chevron">{$pwaUpdateAvailable ? 'download' : 'chevron_right'}</span>
-      </button>
-    </div>
   {/if}
 </div>
 
@@ -442,6 +437,7 @@
 <style>
   .settings-container {
     padding: var(--spacing-md);
+    padding-bottom: 5rem;
     max-width: 100%;
     display: flex;
     flex-direction: column;

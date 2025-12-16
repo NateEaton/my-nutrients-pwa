@@ -4,16 +4,14 @@
 [![SvelteKit](https://img.shields.io/badge/SvelteKit-2.x-orange.svg)](https://kit.svelte.dev/)
 [![Node.js: >=18.0.0](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
 
-> **Development Status**: v1.0.0 in active development (December 2025)
+> **Development Status**: v1.0.0 nearing completion (December 2025)
 >
-> This is the **My Nutrients** app, a multi-nutrient tracking tool for seniors. It's being built as a comprehensive refactor of **My Calcium**, expanding from single-nutrient to 20+ nutrient tracking.
+> This is the **My Nutrients** app, a multi-nutrient tracking tool for seniors. Built as a comprehensive refactor of **My Calcium**, it now supports tracking 25+ nutrients including protein, calcium, fiber, vitamins, minerals, and omega fatty acids.
 >
 > **For implementation details**, see `_notes/` directory:
 > - [ARCHITECTURE.md](_notes/ARCHITECTURE.md) - System design
-> - [IMPLEMENTATION_PLAN.md](_notes/IMPLEMENTATION_PLAN.md) - Development roadmap
+> - [COMPLETION_PLAN.md](_notes/COMPLETION_PLAN.md) - Remaining work roadmap
 > - [MIGRATION_GUIDE.md](_notes/MIGRATION_GUIDE.md) - Migration from My Calcium
->
-> The content below describes the current foundation (My Calcium features). All features will be preserved and enhanced in My Nutrients v1.0.
 
 ---
 
@@ -46,14 +44,14 @@ This application is designed with a "local-first" approach but uses a cloud back
 ### Tracking & Data Entry
 -   **Curated Food Database**: Log entries from a comprehensive database of 3,876+ USDA-sourced foods, intelligently curated for relevance and usability. [Browse the public database documentation](https://ca-pwa.vercel.app/database-docs.html) to explore available foods.
 -   **Smart Scan**: Add foods quickly using your device's camera to scan UPC/EAN barcodes. Supports both USDA FoodData Central and OpenFoodFacts databases, with manual barcode entry option for quick lookup.
--   **Nutrition Label OCR** *(Optional)*: Capture calcium content directly from food packaging using optical character recognition. Requires API key configuration.
--   **Custom Foods**: Add and manage your own food items with specific calcium values. Custom foods support the same features as database foods, including serving memory and favorites.
+-   **Nutrition Label OCR** *(Optional)*: Capture nutrient information directly from food packaging using optical character recognition. Requires API key configuration.
+-   **Custom Foods**: Add and manage your own food items with detailed nutrient information. Custom foods support the same features as database foods, including serving memory and favorites.
 -   **Multi-Measure Support**: Many foods offer multiple serving options (cups, ounces, pieces, etc.). The app remembers both your preferred serving size and measurement unit for each food.
 -   **Favorites & Serving Memory**: Mark foods as favorites for quick access. The app remembers your preferred serving sizes and measure selections, making repeat entries effortless.
--   **Database Management**: Hide unwanted foods from search results, filter by calcium ranges (preset or custom), and sort by name, calcium content, or food type.
+-   **Database Management**: Hide unwanted foods from search results, filter by nutrient ranges (preset or custom), and sort by name, nutrient content, or food type.
 
 ### Analysis & Reporting
--   **Personalized Goals**: Set and adjust your personal daily calcium intake target.
+-   **Personalized Goals**: Set and adjust your personal daily nutrient intake targets for each tracked nutrient.
 -   **Data Visualization**: View your progress with interactive daily, weekly, monthly, and yearly charts on the Statistics page.
 -   **Printable Reports**: Generate comprehensive health reports to share with healthcare professionals.
 -   **CSV Export**: Export your complete journal history to CSV format for analysis in spreadsheet applications.
@@ -77,7 +75,7 @@ This application is designed with a "local-first" approach but uses a cloud back
 
 ## Architecture Overview
 
-The My Calcium Tracker is a modern, local-first Progressive Web App with a serverless backend for synchronization.
+The My Nutrients Tracker is a modern, local-first Progressive Web App with a serverless backend for synchronization.
 
 -   **Frontend (PWA)**: A SvelteKit application that handles all UI and stores data locally in the browser's IndexedDB. This allows the app to be fully functional offline.
 -   **Backend (Sync Service)**: A lightweight Cloudflare Worker that stores encrypted data blobs in Cloudflare's KV store. The worker acts as a simple relay, ensuring that the service itself cannot access user data.
@@ -117,14 +115,14 @@ The My Calcium Tracker is a modern, local-first Progressive Web App with a serve
     -   Fallback option when USDA data is unavailable
 
 #### Nutrition Label OCR (Optional)
--   **OCR.space API**: Optical character recognition for extracting calcium values from nutrition label photos
+-   **OCR.space API**: Optical character recognition for extracting nutrient values from nutrition label photos
     -   Requires: `VITE_OCR_API_KEY` environment variable
     -   Free and paid tiers available at [OCR.space](https://ocr.space/ocrapi)
     -   When enabled, adds OCR tab to Smart Scan modal
 
 ## Food Database Curation
 
-The food database is a core feature containing **3,876+ curated foods** from **USDA FoodData Central**, processed through a custom data pipeline located in the `source_data/` directory. This pipeline transforms raw USDA data into a user-friendly database optimized for practical calcium tracking.
+The food database is a core feature containing **3,876+ curated foods** from **USDA FoodData Central**, processed through a custom data pipeline located in the `source_data/` directory. This pipeline transforms raw USDA data into a user-friendly database optimized for practical nutrient tracking.
 
 ### Curation Pipeline
 
@@ -140,15 +138,15 @@ The data processing pipeline implements several intelligent transformations:
    - Removing branded products that may become outdated
    - Simplifying meat cuts to common preparations
    - Collapsing different cooking methods (raw, boiled, fried, baked) into representative entries
-   - Focusing on foods with significant calcium content
+   - Focusing on foods with significant nutrient content
 
 5. **Database Merging**: The newly curated data is merged with the app's existing JavaScript database, preserving any legacy data or custom food definitions.
 
 ### Browse the Database
 
-The complete curated database is publicly available at [https://ca-pwa.vercel.app/database-docs.html](https://ca-pwa.vercel.app/database-docs.html), allowing users to explore available foods before using the app. Each food entry includes its calcium content, serving sizes, food group classification, and USDA FDC ID for reference.
+The complete curated database is publicly available at [https://ca-pwa.vercel.app/database-docs.html](https://ca-pwa.vercel.app/database-docs.html), allowing users to explore available foods before using the app. Each food entry includes its nutrient content, serving sizes, food group classification, and USDA FDC ID for reference.
 
-This comprehensive curation process ensures the in-app database is both extensive and practical for everyday calcium tracking.
+This comprehensive curation process ensures the in-app database is both extensive and practical for everyday nutrient tracking.
 
 ## Installation & Deployment
 

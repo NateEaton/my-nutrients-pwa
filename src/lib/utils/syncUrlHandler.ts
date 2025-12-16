@@ -1,5 +1,5 @@
 /*
- * My Calcium Tracker PWA
+ * My Nutrients Tracker PWA
  * Copyright (C) 2025 Nathan A. Eaton Jr.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 // src/lib/utils/syncUrlHandler.ts
 
 import { SyncService } from '$lib/services/SyncService';
-import { showToast } from '$lib/stores/calcium';
+import { showToast } from '$lib/stores/nutrients';
 
 /**
  * Utility class for handling sync URLs that allow users to join existing
@@ -54,7 +54,7 @@ export class SyncUrlHandler {
         return false;
       }
       
-      const stored = localStorage.getItem('calcium_sync_settings');
+      const stored = localStorage.getItem('nutrient_sync_settings');
       if (stored) {
         const settings = JSON.parse(stored);
         if (settings.docId === docId) {

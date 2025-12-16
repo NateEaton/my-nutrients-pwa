@@ -1,5 +1,5 @@
 <!--
- * My Calcium Tracker PWA
+ * My Nutrients Tracker PWA
  * Copyright (C) 2025 Nathan A. Eaton Jr.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,12 +19,13 @@
 <script>
   import { onMount, onDestroy } from "svelte";
   import { goto } from "$app/navigation";
-  import { calciumState, calciumService } from "$lib/stores/calcium";
+  import { nutrientState, nutrientService } from "$lib/stores/nutrients";
   import { DATABASE_METADATA } from "$lib/data/foodDatabase";
   import { NUTRIENT_METADATA, getNutrientLabel, getNutrientUnit, getDefaultDisplayedNutrients } from "$lib/config/nutrientDefaults";
+  import { reportViewState } from "$lib/stores/uiState";
 
   // Nutrient selection state
-  let selectedNutrient = 'calcium';
+  let selectedNutrient = $reportViewState.selectedNutrient;
   let nutrientSettings = {
     nutrientGoals: {},
     displayedNutrients: getDefaultDisplayedNutrients()
@@ -60,7 +61,7 @@
 
   async function getAllJournalData() {
     // Use the IndexedDB method that reads from the new journalEntries store
-    return await calciumService.getAllJournalData();
+    return await nutrientService.getAllJournalData();
   }
 
   async function generateSummary(allData, dates) {
@@ -347,9 +348,9 @@
   onMount(async () => {
     try {
       // Load nutrient settings first
-      nutrientSettings = await calciumService.getNutrientSettings();
-      // Default to first displayed nutrient
-      if (nutrientSettings.displayedNutrients && nutrientSettings.displayedNutrients.length > 0) {
+      nutrientSettings = await nutrientService.getNutrientSettings();
+      // Use stored selection, or fall back to first displayed nutrient
+      if (!selectedNutrient && nutrientSettings.displayedNutrients && nutrientSettings.displayedNutrients.length > 0) {
         selectedNutrient = nutrientSettings.displayedNutrients[0];
       }
 
@@ -376,6 +377,7 @@
     }
   }
 
+  $: reportViewState.set({ selectedNutrient });
   $: yearlyChartData = reportData
     ? getYearlyChartData(reportData.yearlyChart, reportData.metadata.dailyGoal)
     : null;
@@ -405,18 +407,10 @@
         on:change={handleNutrientChange}
         class="nutrient-select"
       >
-        <!-- Displayed Nutrients (starred) -->
-        <optgroup label="⭐ Tracked Nutrients">
-          {#each NUTRIENT_METADATA.filter(n => nutrientSettings.displayedNutrients.includes(n.id)) as nutrient}
-            <option value={nutrient.id}>{nutrient.label} ({nutrient.unit})</option>
-          {/each}
-        </optgroup>
-        <!-- All Other Nutrients -->
-        <optgroup label="All Nutrients">
-          {#each NUTRIENT_METADATA.filter(n => !nutrientSettings.displayedNutrients.includes(n.id)) as nutrient}
-            <option value={nutrient.id}>{nutrient.label} ({nutrient.unit})</option>
-          {/each}
-        </optgroup>
+        <!-- Show only tracked nutrients (1-4) for mobile-friendly selector -->
+        {#each NUTRIENT_METADATA.filter(n => nutrientSettings.displayedNutrients.includes(n.id)) as nutrient}
+          <option value={nutrient.id}>{nutrient.label} ({nutrient.unit})</option>
+        {/each}
       </select>
     </div>
 

@@ -1,5 +1,5 @@
 <!--
- * My Calcium Tracker PWA
+ * My Nutrients Tracker PWA
  * Copyright (C) 2025 Nathan A. Eaton Jr.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -1140,7 +1140,7 @@
     flex-direction: column;
     /* Content-aware responsive sizing - increased height by ~15% */
     min-height: min(750px, 95vh);
-    max-height: min(950px, 98vh);
+    max-height: min(950px, 98dvh);
     overflow: hidden;
   }
   .modal-header {
@@ -1984,8 +1984,8 @@
   @media (max-width: 480px) {
     .modal-content {
       /* Optimized for 411x729 viewport - 15% taller for more camera space */
-      min-height: min(100vh, 690px); /* ~15% increase from 600px */
-      max-height: 100vh;
+      min-height: min(100dvh, 690px); /* ~15% increase from 600px */
+      max-height: 100dvh;
       border-radius: 0;
     }
 

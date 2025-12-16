@@ -9,11 +9,11 @@
   <link rel="manifest" href="%sveltekit.assets%/manifest.webmanifest" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>My Calcium</title>
+  <title>My Nutrients</title>
   <script>
     (function () {
       try {
-        const savedTheme = localStorage.getItem('calcium_theme') || 'auto';
+        const savedTheme = localStorage.getItem('nutrient_theme') || 'auto';
         const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
         const actualTheme = savedTheme === 'auto' ? (systemPrefersDark ? 'dark' : 'light') : savedTheme;
         document.documentElement.setAttribute('data-theme', actualTheme);

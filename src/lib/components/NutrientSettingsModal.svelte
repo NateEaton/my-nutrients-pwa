@@ -18,7 +18,7 @@
 
 <script>
   import { createEventDispatcher } from "svelte";
-  import { calciumService } from "$lib/stores/calcium";
+  import { nutrientService } from "$lib/stores/nutrients";
   import { NUTRIENT_METADATA, DEFAULT_NUTRIENT_GOALS } from "$lib/config/nutrientDefaults";
 
   export let show = false;
@@ -54,7 +54,7 @@
     isLoading = true;
     errorMessage = "";
     try {
-      settings = await calciumService.getNutrientSettings();
+      settings = await nutrientService.getNutrientSettings();
     } catch (error) {
       console.error("Error loading nutrient settings:", error);
       errorMessage = "Failed to load settings";
@@ -68,11 +68,17 @@
 
     if (index > -1) {
       // Remove from displayed nutrients
-      settings.displayedNutrients = settings.displayedNutrients.filter(id => id !== nutrientId);
+      settings = {
+        ...settings,
+        displayedNutrients: settings.displayedNutrients.filter(id => id !== nutrientId)
+      };
     } else {
       // Add to displayed nutrients if under limit
       if (settings.displayedNutrients.length < MAX_DISPLAYED) {
-        settings.displayedNutrients = [...settings.displayedNutrients, nutrientId];
+        settings = {
+          ...settings,
+          displayedNutrients: [...settings.displayedNutrients, nutrientId]
+        };
       } else {
         errorMessage = `You can only display up to ${MAX_DISPLAYED} nutrients at once`;
         setTimeout(() => errorMessage = "", 3000);
@@ -84,9 +90,8 @@
     return settings.displayedNutrients.includes(nutrientId);
   }
 
-  function canSelectMore() {
-    return settings.displayedNutrients.length < MAX_DISPLAYED;
-  }
+  // Reactive statement - updates automatically when displayedNutrients changes
+  $: canSelectMore = settings.displayedNutrients.length < MAX_DISPLAYED;
 
   function handleClose() {
     if (!isSubmitting) {
@@ -124,7 +129,7 @@
     errorMessage = "";
 
     try {
-      await calciumService.updateNutrientSettings(settings);
+      await nutrientService.updateNutrientSettings(settings);
 
       show = false;
       dispatch("updated", { settings });
@@ -181,13 +186,12 @@
                 <div class="nutrient-list">
                   {#each nutrients as nutrient}
                     {@const displayed = isDisplayed(nutrient.id)}
-                    {@const canSelect = canSelectMore() || displayed}
                     <div class="nutrient-item">
                       <label class="nutrient-checkbox">
                         <input
                           type="checkbox"
                           checked={displayed}
-                          disabled={!canSelect && !displayed}
+                          disabled={!displayed && !canSelectMore}
                           on:change={() => toggleNutrient(nutrient.id)}
                         />
                         <span class="nutrient-name">
@@ -533,5 +537,10 @@
     .btn {
       width: 100%;
     }
+
+    .modal-content {
+      height: 100dvh; /* FIX: Force dvh on mobile */
+      border-radius: 0;
+    }    
   }
 </style>
