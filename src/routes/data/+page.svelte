@@ -19,7 +19,7 @@
 <script>
   import { onMount, onDestroy } from "svelte";
   import { nutrientState, showToast, nutrientService } from "$lib/stores/nutrients";
-  import { DEFAULT_FOOD_DATABASE, getPrimaryMeasure, getAllMeasures, hasMultipleMeasures, formatCalcium } from "$lib/data/foodDatabase";
+  import { DEFAULT_FOOD_DATABASE, getPrimaryMeasure, getAllMeasures, hasMultipleMeasures } from "$lib/data/foodDatabase";
   import { NUTRIENT_METADATA } from "$lib/config/nutrientDefaults";
   import { SearchService } from "$lib/services/SearchService";
   import { goto } from "$app/navigation";

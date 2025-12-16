@@ -18,7 +18,6 @@
 
 <script>
   import { createEventDispatcher } from "svelte";
-  import { formatCalcium } from "$lib/data/foodDatabase";
   import { getNutrientLabel, getNutrientUnit } from "$lib/config/nutrientDefaults";
   import SourceIndicator from "./SourceIndicator.svelte";
   import MetadataPopup from "./MetadataPopup.svelte";

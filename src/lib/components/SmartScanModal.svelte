@@ -17,7 +17,7 @@
  */
 
 <!--
- * Unified Smart Scan Modal for Calcium Tracker PWA
+ * Unified Smart Scan Modal for My Nutrients PWA
  * Combines Barcode (UPC) and Nutrition Label (OCR) scanning.
 -->
 <script>

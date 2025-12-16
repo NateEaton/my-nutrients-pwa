@@ -16,7 +16,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-// USDA FoodData Central API Configuration for Calcium Tracker PWA
+// USDA FoodData Central API Configuration for My Nutrients PWA
 export const FDC_CONFIG = {
   // API key from environment variable
   API_KEY: import.meta.env.VITE_FDC_API_KEY || 'DEMO_KEY',

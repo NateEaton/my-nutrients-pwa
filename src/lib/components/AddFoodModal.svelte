@@ -20,7 +20,7 @@
   import { createEventDispatcher, onMount } from "svelte";
   import { nutrientState, nutrientService, showToast } from "$lib/stores/nutrients";
   import { isOnline } from "$lib/stores/networkStatus";
-  import { DEFAULT_FOOD_DATABASE, getPrimaryMeasure, getAllMeasures, hasMultipleMeasures, formatCalcium } from "$lib/data/foodDatabase";
+  import { DEFAULT_FOOD_DATABASE, getPrimaryMeasure, getAllMeasures, hasMultipleMeasures } from "$lib/data/foodDatabase";
   import { SearchService } from "$lib/services/SearchService";
   import UnitConverter from "$lib/services/UnitConverter";
   import ConfirmDialog from "./ConfirmDialog.svelte";
@@ -480,7 +480,7 @@
           // Use UnitConverter for regular convertible units
           for (const [nutrientId, baseValue] of Object.entries(baseNutrients)) {
             if (baseValue && typeof baseValue === 'number') {
-              const newValue = unitConverter.calculateCalciumForConvertedUnits(
+              const newValue = unitConverter.calculateNutrientForConvertedUnits(
                 baseValue,
                 parsedFoodMeasure.originalQuantity,
                 parsedFoodMeasure.detectedUnit,
