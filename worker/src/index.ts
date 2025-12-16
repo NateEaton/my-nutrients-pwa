@@ -22,8 +22,9 @@
  */
 
 interface Env {
-  SYNC_KV: KVNamespace;
-  ALLOWED_ORIGINS?: string; // Comma-separated list of allowed CORS origins
+  // MATCHES TOML BINDING: binding = "NUTRIENTS_SYNC_KV"
+  NUTRIENTS_SYNC_KV: KVNamespace; 
+  ALLOWED_ORIGINS?: string;
 }
 
 interface SyncRequest {
@@ -41,15 +42,15 @@ interface SyncResponse {
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
-    // Parse CORS origins from environment variable or use fallback defaults
+    // Parse CORS origins or use your specific defaults
     const allowedOrigins = env.ALLOWED_ORIGINS
       ? env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
       : [
-          'https://calcium.eatonfamily.net',
+          'https://nutri.eatonfamily.net',
+          'https://nutri-dev.eatonfamily.net',
+          // Local development defaults
           'http://localhost:5173',
-          'https://calcium-dev.eatonfamily.net',
-          'http://eatonmediasvr.local:8080',
-          'http://eatonmediasvr.local'
+          'http://127.0.0.1:5173'
         ];
 
     const origin = request.headers.get('Origin');
@@ -59,7 +60,7 @@ export default {
       'Access-Control-Allow-Origin': allowedOrigin,
       'Access-Control-Allow-Methods': 'GET, PUT, HEAD, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, X-Last-Modified',
-      'Access-Control-Expose-Headers': 'X-Last-Modified', // <-- IMPORTANT: Expose the custom header
+      'Access-Control-Expose-Headers': 'X-Last-Modified',
       'Access-Control-Max-Age': '86400',
     };
 
@@ -72,7 +73,7 @@ export default {
 
     try {
       if (path === '/ping') {
-        return Response.json({ success: true, message: 'Calcium sync worker is running' }, { headers: corsHeaders });
+        return Response.json({ success: true, message: 'My Nutrients sync worker is running' }, { headers: corsHeaders });
       }
 
       const docMatch = path.match(/^\/sync\/([a-zA-Z0-9-]+)$/);
@@ -83,15 +84,23 @@ export default {
       const docId = docMatch[1];
       const kvKey = `doc:${docId}`;
 
+      // --- GET REQUEST ---
       if (request.method === 'GET') {
-        const stored = await env.SYNC_KV.get(kvKey, { type: 'json' });
+        // Use NUTRIENTS_SYNC_KV
+        const stored = await env.NUTRIENTS_SYNC_KV.get(kvKey, { type: 'json' });
         if (!stored) {
           return Response.json({ success: false, error: 'Document not found' }, { status: 404, headers: corsHeaders });
         }
-        const response: SyncResponse = { success: true, docId, encrypted: (stored as any).encrypted, lastModified: (stored as any).lastModified };
+        const response: SyncResponse = { 
+            success: true, 
+            docId, 
+            encrypted: (stored as any).encrypted, 
+            lastModified: (stored as any).lastModified 
+        };
         return Response.json(response, { headers: corsHeaders });
       }
 
+      // --- PUT REQUEST ---
       if (request.method === 'PUT') {
         const body: SyncRequest = await request.json();
         if (!body.encrypted) {
@@ -100,7 +109,8 @@ export default {
         const lastModified = new Date().toISOString();
         const storeData = { encrypted: body.encrypted, lastModified, docId };
 
-        await env.SYNC_KV.put(kvKey, JSON.stringify(storeData), {
+        // Use NUTRIENTS_SYNC_KV
+        await env.NUTRIENTS_SYNC_KV.put(kvKey, JSON.stringify(storeData), {
           metadata: { lastModified },
         });
 
@@ -108,8 +118,10 @@ export default {
         return Response.json(response, { headers: corsHeaders });
       }
 
+      // --- HEAD REQUEST ---
       if (request.method === 'HEAD') {
-        const stored = await env.SYNC_KV.getWithMetadata(kvKey);
+        // Use NUTRIENTS_SYNC_KV
+        const stored = await env.NUTRIENTS_SYNC_KV.getWithMetadata(kvKey);
         if (!stored?.metadata) {
           return new Response(null, { status: 404, headers: corsHeaders });
         }
@@ -118,8 +130,7 @@ export default {
         const lastModified = metadata.lastModified;
 
         if (!lastModified) {
-          console.error(`Worker HEAD Error: Metadata found for key ${kvKey} but lastModified property is missing.`);
-          // Return 404 to signal to the client that something is wrong with this key
+          console.error(`Worker HEAD Error: Metadata found for key ${kvKey} but lastModified is missing.`);
           return new Response(null, { status: 404, headers: corsHeaders });
         }
         

@@ -139,11 +139,29 @@
     });
   }
 
+// src/routes/data/+page.svelte
+
   function handleNutrientChange(event) {
     const newNutrient = event.target.value;
+    
+    // UX Improvement: Reset filter to 'All' when switching nutrients.
+    // This prevents ranges meant for one nutrient (e.g. Sodium > 2000mg) 
+    // from incorrectly hiding all results for another (e.g. Vit D < 20mcg).
+    if (nutrientFilter.type !== "all") {
+      nutrientFilter = {
+         type: "all",
+         preset: null,
+         min: null,
+         max: null
+      };
+    }
+
+    // If we are currently sorting by the nutrient that was just deselected,
+    // update the sort to track the NEW nutrient.
     if (sortBy === selectedNutrientForControls) {
       sortBy = newNutrient;
     }
+    
     selectedNutrientForControls = newNutrient;
   }
 

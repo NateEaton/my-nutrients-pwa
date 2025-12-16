@@ -22,16 +22,17 @@
   import { goto } from "$app/navigation";
   import { formatDate, isToday, getTodayString } from "$lib/utils/dateUtils";
   import { NUTRIENT_METADATA, getNutrientLabel, getNutrientUnit, getDefaultDisplayedNutrients } from "$lib/config/nutrientDefaults";
+  import { databaseViewState, statsViewState } from "$lib/stores/uiState"; // Add statsViewState to import
 
   // Nutrient selection state
-  let selectedNutrient = 'calcium';
+  let selectedNutrient = $statsViewState.selectedNutrient;
   let nutrientSettings = {
     nutrientGoals: {},
     displayedNutrients: getDefaultDisplayedNutrients()
   };
 
   // Stats state
-  let currentView = "weekly";
+  let currentView = $statsViewState.currentView || "weekly";
   let currentData = null;
   let selectedBarIndex = -1;
   let isDetailMode = false;
@@ -135,8 +136,8 @@
     // Load nutrient settings
     try {
       nutrientSettings = await nutrientService.getNutrientSettings();
-      // Default to first displayed nutrient
-      if (nutrientSettings.displayedNutrients && nutrientSettings.displayedNutrients.length > 0) {
+      // Only override selectedNutrient if it wasn't already set from the store
+      if (!selectedNutrient && nutrientSettings.displayedNutrients && nutrientSettings.displayedNutrients.length > 0) {
         selectedNutrient = nutrientSettings.displayedNutrients[0];
       }
     } catch (error) {
@@ -1010,6 +1011,9 @@
       showDatePicker = !showDatePicker;
     }
   }
+
+  $: statsViewState.set({ currentView, selectedNutrient });
+
 </script>
 
 <svelte:head>

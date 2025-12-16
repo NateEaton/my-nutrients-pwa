@@ -22,9 +22,10 @@
   import { nutrientState, nutrientService } from "$lib/stores/nutrients";
   import { DATABASE_METADATA } from "$lib/data/foodDatabase";
   import { NUTRIENT_METADATA, getNutrientLabel, getNutrientUnit, getDefaultDisplayedNutrients } from "$lib/config/nutrientDefaults";
+  import { reportViewState } from "$lib/stores/uiState";
 
   // Nutrient selection state
-  let selectedNutrient = 'calcium';
+  let selectedNutrient = $reportViewState.selectedNutrient;
   let nutrientSettings = {
     nutrientGoals: {},
     displayedNutrients: getDefaultDisplayedNutrients()
@@ -348,8 +349,8 @@
     try {
       // Load nutrient settings first
       nutrientSettings = await nutrientService.getNutrientSettings();
-      // Default to first displayed nutrient
-      if (nutrientSettings.displayedNutrients && nutrientSettings.displayedNutrients.length > 0) {
+      // Use stored selection, or fall back to first displayed nutrient
+      if (!selectedNutrient && nutrientSettings.displayedNutrients && nutrientSettings.displayedNutrients.length > 0) {
         selectedNutrient = nutrientSettings.displayedNutrients[0];
       }
 
@@ -376,6 +377,7 @@
     }
   }
 
+  $: reportViewState.set({ selectedNutrient });
   $: yearlyChartData = reportData
     ? getYearlyChartData(reportData.yearlyChart, reportData.metadata.dailyGoal)
     : null;

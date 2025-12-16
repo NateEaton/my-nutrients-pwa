@@ -42,3 +42,23 @@ export const databaseViewState = writable<DatabaseViewState>(defaultDatabaseStat
 export function resetDatabaseViewState() {
   databaseViewState.set(defaultDatabaseState);
 }
+
+// Add these exports to the existing file:
+
+export interface StatsViewState {
+  currentView: string;
+  selectedNutrient: string | null;
+}
+
+export interface ReportViewState {
+  selectedNutrient: string | null;
+}
+
+export const statsViewState = writable<StatsViewState>({
+  currentView: 'weekly',
+  selectedNutrient: null
+});
+
+export const reportViewState = writable<ReportViewState>({
+  selectedNutrient: null
+});
