@@ -380,6 +380,7 @@
     .modal-container.full-screen {
       width: 100vw;
       height: 100vh;
+      height: 100dvh;
       max-width: none;
       touch-action: auto;
     }
