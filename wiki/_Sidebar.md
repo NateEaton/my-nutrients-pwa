@@ -16,9 +16,4 @@
 - [[Nutrient Reference]]
 
 ### Advanced
-- [[Migration Guide]]
 - [[Future Features]]
-
----
-
-**[Main Repo →](https://github.com/NateEaton/my-nutrients-pwa)**
