@@ -34,8 +34,8 @@
       <h4>Welcome to My Nutrients!</h4>
       <p>
         My Nutrients helps you track essential nutrients (protein, calcium, fiber, vitamins, and more)
-        to support your health and meet nutritional goals. All your data stays private on your device,
-        and you can use the app offline.
+        to support your health and meet nutritional goals. Your data is stored locally on your device
+        for offline access, or encrypted on the server when using cross-device sync.
       </p>
 
       <h4>First Steps</h4>
@@ -89,27 +89,11 @@
           and nutrient values.
         </li>
         <li>
-          <strong>Smart Scan Dialog:</strong> Tap the 
-           <span class="material-icons inline-icon">photo_camera</span> icon to add food 
-           using your device's camera. 
-           <ul>
-              <li>
-                <strong>Scan a Barcode:</strong> The app defaults to the Barcode tab which opens 
-                actively scanning for 
-                a product's UPC/EAN barcode. Choose between USDA or OpenFoodFacts databases
-                for lookup. Use the flashlight icon to enable your camera flash in low light,
-                or tap the keyboard icon to manually enter a barcode number.
-              </li>
-              {#if FEATURES.OCR_ENABLED}
-                <li>
-                  <strong>Scan a Nutrition Label:</strong> Switch to the
-                  Nutrition Label tab to capture nutrient content directly from food packaging.
-                  This feature uses optical character recognition to read the nutrition facts panel. Use the
-                  flashlight icon for better visibility in low light, and ensure the entire nutrition
-                  label is visible and in focus within the camera frame.
-                </li>
-              {/if}
-            <ul>
+          <strong>Smart Scan:</strong> Tap the
+           <span class="material-icons inline-icon">photo_camera</span> icon to scan
+           a product's UPC/EAN barcode using your device's camera. Choose between USDA or
+           OpenFoodFacts databases for lookup. Use the flashlight icon to enable your
+           camera flash in low light, or tap the keyboard icon to manually enter a barcode number.
         </li>
         <li>
           <strong>Edit or Delete:</strong> To change an entry, simply tap it on the
@@ -126,11 +110,10 @@
 
       <h4>Food Source Icons</h4>
       <p>
-        Each entry displays a small icon indicating its source: a pencil 
-        <span class="material-icons inline-icon">edit</span> for manually added foods, 
-        a barcode scanner <span class="material-icons inline-icon">qr_code_scanner</span> 
-        for UPC-scanned items{#if FEATURES.OCR_ENABLED}, or a camera <span class="material-icons inline-icon">photo_camera</span> 
-        for nutrition label scans{/if}. 
+        Each entry displays a small icon indicating its source: a pencil
+        <span class="material-icons inline-icon">edit</span> for manually added foods
+        or a barcode scanner <span class="material-icons inline-icon">qr_code_scanner</span>
+        for UPC-scanned items.
       </p>
 
       <h4>Serving Sizes & Favorites</h4>
@@ -158,6 +141,58 @@
           <span class="material-icons inline-icon">star_border</span> icon in the
           "Add Entry" dialog to mark a database food as a favorite. This helps it
           appear higher in search results.
+        </li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="guide-section">
+    <summary>
+      <span class="material-icons">science</span>
+      Managing Nutrients
+    </summary>
+    <div class="section-content">
+      <h4>Choosing Which Nutrients to Track</h4>
+      <p>
+        My Nutrients supports tracking 24+ essential nutrients. You can customize which nutrients
+        appear throughout the app:
+      </p>
+      <ul>
+        <li>
+          <strong>Nutrient Picks:</strong> In <strong>Settings > Nutrients</strong>, select up to
+          4 nutrients to display on your summary card, food entries, and throughout the app. The app
+          comes with sensible defaults (Protein, Calcium, Fiber, Vitamin D), but you can customize
+          based on your dietary needs.
+        </li>
+        <li>
+          <strong>Daily Goals:</strong> Also in <strong>Settings > Nutrients</strong>, set your
+          target intake for each nutrient. These goals appear as progress bars on the summary card
+          and determine when you've met your daily targets.
+        </li>
+      </ul>
+
+      <h4>Viewing Different Nutrients</h4>
+      <p>Beyond your selected nutrient picks, you can view any tracked nutrient:</p>
+      <ul>
+        <li>
+          <strong>Summary Card:</strong> The summary card displays your chosen nutrients with
+          progress bars. Swipe left/right or use arrow buttons to change dates.
+        </li>
+        <li>
+          <strong>Sort by Nutrient:</strong> On the main tracking page, <strong>long press</strong>
+          the nutrient sort button to choose a different nutrient for sorting your entries.
+        </li>
+        <li>
+          <strong>Statistics Page:</strong> Use the nutrient selector dropdown to view charts and
+          trends for any tracked nutrient across different time periods.
+        </li>
+        <li>
+          <strong>Report Page:</strong> Use the nutrient selector to choose which nutrient to include
+          in your printable report.
+        </li>
+        <li>
+          <strong>Database Page:</strong> Use the nutrient selector to sort and filter foods by any
+          nutrient. This helps you find foods high in specific nutrients you're targeting.
         </li>
       </ul>
     </div>
@@ -202,7 +237,7 @@
           are not available when adding a food item.
         </li>
         <li>
-          <strong>View Details:</strong> Tap the <span class="material-icons inline-icon">open_in_new</span>
+          <strong>View Details:</strong> Tap the <span class="material-icons inline-icon">info</span>
           icon on database foods to view detailed information in the food database documentation page.
         </li>
         <li>

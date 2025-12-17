@@ -17,7 +17,7 @@
  */
 
 /**
- * A comprehensive unit conversion system for calcium tracking app.
+ * A comprehensive unit conversion system for nutrient tracking app.
  * Handles volume, weight, and count-based measurements with USDA measure parsing.
  */
 
@@ -534,20 +534,20 @@ export class UnitConverter {
   }
 
   /**
-   * Calculate calcium for converted units.
+   * Calculate nutrient amount for converted units.
    * When a user changes serving size with unit conversion (e.g., oz to g),
-   * this ensures calcium is calculated correctly by converting the new quantity
+   * this ensures nutrients are calculated correctly by converting the new quantity
    * back to the original unit system before calculating the ratio.
    *
-   * @param originalCalcium - The base calcium amount in the original serving
+   * @param originalNutrient - The base nutrient amount in the original serving
    * @param originalQuantity - The original serving quantity
    * @param originalUnit - The original unit (e.g., "oz")
    * @param newQuantity - The new serving quantity
    * @param newUnit - The new unit (e.g., "g")
-   * @returns The correctly calculated calcium amount
+   * @returns The correctly calculated nutrient amount
    */
-  calculateCalciumForConvertedUnits(
-    originalCalcium: number,
+  calculateNutrientForConvertedUnits(
+    originalNutrient: number,
     originalQuantity: number,
     originalUnit: string,
     newQuantity: number,
@@ -561,15 +561,35 @@ export class UnitConverter {
         originalUnit
       );
 
-      // Calculate the ratio and apply it to calcium
+      // Calculate the ratio and apply it to nutrient amount
       const ratio = equivalentOriginalQuantity / originalQuantity;
 
-      return parseFloat((originalCalcium * ratio).toFixed(2));
+      return parseFloat((originalNutrient * ratio).toFixed(2));
     } catch (error) {
-      logger.error('Calcium calculation error:', error);
-      // Fallback: return original calcium unchanged
-      return originalCalcium;
+      logger.error('Nutrient calculation error:', error);
+      // Fallback: return original nutrient unchanged
+      return originalNutrient;
     }
+  }
+
+  /**
+   * @deprecated Use calculateNutrientForConvertedUnits() instead
+   * Backward compatibility alias for legacy code
+   */
+  calculateCalciumForConvertedUnits(
+    originalCalcium: number,
+    originalQuantity: number,
+    originalUnit: string,
+    newQuantity: number,
+    newUnit: string
+  ): number {
+    return this.calculateNutrientForConvertedUnits(
+      originalCalcium,
+      originalQuantity,
+      originalUnit,
+      newQuantity,
+      newUnit
+    );
   }
 }
 

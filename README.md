@@ -4,36 +4,9 @@
 [![SvelteKit](https://img.shields.io/badge/SvelteKit-2.x-orange.svg)](https://kit.svelte.dev/)
 [![Node.js: >=18.0.0](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
 
-> **Development Status**: v1.0.0 nearing completion (December 2025)
->
-> This is the **My Nutrients** app, a multi-nutrient tracking tool for seniors. Built as a comprehensive refactor of **My Calcium**, it now supports tracking 25+ nutrients including protein, calcium, fiber, vitamins, minerals, and omega fatty acids.
->
-> **For implementation details**, see `_notes/` directory:
-> - [ARCHITECTURE.md](_notes/ARCHITECTURE.md) - System design
-> - [COMPLETION_PLAN.md](_notes/COMPLETION_PLAN.md) - Remaining work roadmap
-> - [MIGRATION_GUIDE.md](_notes/MIGRATION_GUIDE.md) - Migration from My Calcium
-
----
-
-A Progressive Web App (PWA) designed to be a simple, privacy-focused tool for tracking essential nutrients for senior health. Search a comprehensive food database, add custom foods, and monitor your progress towards your nutritional goals. All data is stored locally on your device and can be seamlessly synchronized across multiple devices using a secure, lightweight cloud backend.
-
-## My Nutrients v1.0 - Coming Soon
-
-**New in v1.0**:
-- Track 20+ essential nutrients (protein, fiber, calcium, vitamins, minerals, omega fatty acids)
-- Select up to 4 nutrients to display in food cards and daily summaries
-- Nutrient-specific analysis and charts
-- RDA-based goals for seniors (age 65+)
-- Enhanced food database with comprehensive nutrient profiles
-- All My Calcium features preserved and enhanced
-
-**Migration from My Calcium**: Seamless migration of all your calcium tracking data. See `_notes/MIGRATION_GUIDE.md` for details.
+A Progressive Web App (PWA) for tracking essential nutrients—protein, calcium, fiber, vitamins, minerals, and more. Search a comprehensive food database, add custom foods, and monitor your progress toward nutritional goals. All data is stored locally on your device with optional secure cross-device synchronization.
 
 [**Live Demo**](https://ca-pwa.vercel.app/)
-
-### ⚠️ Note on Sync Functionality
-
-This application is designed with a "local-first" approach but uses a cloud backend for its cross-device sync feature. The backend is a serverless Cloudflare Worker that you can deploy yourself. The sync is end-to-end encrypted, meaning the server only stores encrypted data that it cannot read.
 
 ## App Screenshots
 
@@ -42,9 +15,9 @@ This application is designed with a "local-first" approach but uses a cloud back
 ## Core Features
 
 ### Tracking & Data Entry
--   **Curated Food Database**: Log entries from a comprehensive database of 3,876+ USDA-sourced foods, intelligently curated for relevance and usability. [Browse the public database documentation](https://ca-pwa.vercel.app/database-docs.html) to explore available foods.
+-   **Multi-Nutrient Tracking**: Track up to 4 nutrients simultaneously from 25+ available options including macronutrients, vitamins, minerals, and omega fatty acids.
+-   **Curated Food Database**: Log entries from a comprehensive database of thousands of USDA-sourced foods, intelligently curated for relevance and usability. The database can be extended through UPC scans of USDA and OpenFoodFacts databases and the ability to add custom foods.
 -   **Smart Scan**: Add foods quickly using your device's camera to scan UPC/EAN barcodes. Supports both USDA FoodData Central and OpenFoodFacts databases, with manual barcode entry option for quick lookup.
--   **Nutrition Label OCR** *(Optional)*: Capture nutrient information directly from food packaging using optical character recognition. Requires API key configuration.
 -   **Custom Foods**: Add and manage your own food items with detailed nutrient information. Custom foods support the same features as database foods, including serving memory and favorites.
 -   **Multi-Measure Support**: Many foods offer multiple serving options (cups, ounces, pieces, etc.). The app remembers both your preferred serving size and measurement unit for each food.
 -   **Favorites & Serving Memory**: Mark foods as favorites for quick access. The app remembers your preferred serving sizes and measure selections, making repeat entries effortless.
@@ -69,13 +42,14 @@ This application is designed with a "local-first" approach but uses a cloud back
 ## Quick Start
 
 1.  **Open the app** in any modern web browser or install it to your home screen.
-2.  Use the **"+" button** on the main Tracking screen to add food entries.
-3.  Use the **date navigator** or swipe on the summary card to view and log entries for different days.
-4.  Visit the **Settings** page to configure your daily goal, theme, and set up cross-device sync.
+2.  **Select nutrients** in Settings to choose which nutrients you want to track (up to 4).
+3.  **Add food entries** using the "+" button on the main Tracking screen.
+4.  **Navigate dates** using the date navigator or swipe on the summary card to view and log entries for different days.
+5.  **View your progress** on the Statistics page with interactive charts.
 
 ## Architecture Overview
 
-The My Nutrients Tracker is a modern, local-first Progressive Web App with a serverless backend for synchronization.
+My Nutrients is a modern, local-first Progressive Web App with an optional serverless backend for synchronization.
 
 -   **Frontend (PWA)**: A SvelteKit application that handles all UI and stores data locally in the browser's IndexedDB. This allows the app to be fully functional offline.
 -   **Backend (Sync Service)**: A lightweight Cloudflare Worker that stores encrypted data blobs in Cloudflare's KV store. The worker acts as a simple relay, ensuring that the service itself cannot access user data.
@@ -114,15 +88,9 @@ The My Nutrients Tracker is a modern, local-first Progressive Web App with a ser
     -   Requires: No API key needed (public API)
     -   Fallback option when USDA data is unavailable
 
-#### Nutrition Label OCR (Optional)
--   **OCR.space API**: Optical character recognition for extracting nutrient values from nutrition label photos
-    -   Requires: `VITE_OCR_API_KEY` environment variable
-    -   Free and paid tiers available at [OCR.space](https://ocr.space/ocrapi)
-    -   When enabled, adds OCR tab to Smart Scan modal
-
 ## Food Database Curation
 
-The food database is a core feature containing **3,876+ curated foods** from **USDA FoodData Central**, processed through a custom data pipeline located in the `source_data/` directory. This pipeline transforms raw USDA data into a user-friendly database optimized for practical nutrient tracking.
+The food database is a core feature containing **thousands of curated foods** from **USDA FoodData Central**, processed through a custom data pipeline located in the `source_data/` directory. This pipeline transforms raw USDA data into a user-friendly database optimized for practical nutrient tracking.
 
 ### Curation Pipeline
 
@@ -140,13 +108,9 @@ The data processing pipeline implements several intelligent transformations:
    - Collapsing different cooking methods (raw, boiled, fried, baked) into representative entries
    - Focusing on foods with significant nutrient content
 
-5. **Database Merging**: The newly curated data is merged with the app's existing JavaScript database, preserving any legacy data or custom food definitions.
+5. **Multi-Nutrient Extraction**: The pipeline extracts 25+ nutrients from USDA data, including macronutrients, vitamins, minerals, and omega fatty acids, providing comprehensive nutritional profiles for each food.
 
-### Browse the Database
-
-The complete curated database is publicly available at [https://ca-pwa.vercel.app/database-docs.html](https://ca-pwa.vercel.app/database-docs.html), allowing users to explore available foods before using the app. Each food entry includes its nutrient content, serving sizes, food group classification, and USDA FDC ID for reference.
-
-This comprehensive curation process ensures the in-app database is both extensive and practical for everyday nutrient tracking.
+This comprehensive curation process ensures the in-app database is both extensive and practical for everyday nutrient tracking. Browse available foods using the in-app Database page, which provides detailed nutrient information, serving sizes, and source attribution for each food entry.
 
 ## Installation & Deployment
 
@@ -164,7 +128,7 @@ This comprehensive curation process ensures the in-app database is both extensiv
 
 **API Key Configuration:**
 - Smart Scan works with free DEMO_KEY but has rate limits
-- OCR feature is entirely optional and requires separate API key
+- Get a free USDA FoodData Central API key for better performance
 
 ### Build Modes & Feature Flags
 
@@ -176,7 +140,6 @@ The application supports flexible deployment with optional features controlled b
 
 **Optional Features:**
 - **Smart Scan UPC Lookup**: Enabled by default with DEMO_KEY, enhanced with `VITE_FDC_API_KEY`
-- **OCR Nutrition Label Scanning**: Enabled when `VITE_OCR_API_KEY` is configured
 
 ### Environment Variables
 
@@ -186,11 +149,9 @@ Create a `.env` file in the project root (see `.env.example` for template):
 |----------|----------|---------|
 | `VITE_WORKER_URL` | No | Cloudflare Worker URL for sync. Omit for standalone mode. |
 | `VITE_FDC_API_KEY` | No | USDA FoodData Central API key. Falls back to rate-limited DEMO_KEY. |
-| `VITE_OCR_API_KEY` | No | OCR.space API key. Enables nutrition label scanning feature. |
 
 **Getting API Keys:**
 - **USDA FoodData Central**: Free key at [fdc.nal.usda.gov/api-guide.html](https://fdc.nal.usda.gov/api-guide.html)
-- **OCR.space**: Free and paid tiers at [ocr.space/ocrapi](https://ocr.space/ocrapi)
 
 ### Deployment Steps
 
@@ -215,7 +176,6 @@ Deploying involves two main steps: setting up the sync worker (optional) and dep
     Configure the variables based on your deployment needs:
     - `VITE_WORKER_URL`: Your Cloudflare Worker URL (if using sync)
     - `VITE_FDC_API_KEY`: Your USDA FoodData Central API key (optional)
-    - `VITE_OCR_API_KEY`: Your OCR.space API key (optional)
 
 2.  **Build the Application**: Use the included `deploy.sh` script or build manually:
     ```bash
@@ -263,8 +223,8 @@ This project follows modern web development practices with a focus on maintainab
 
 ```bash
 # Clone the repository
-git clone https://github.com/NateEaton/Ca-pwa.git
-cd Ca-pwa
+git clone https://github.com/NateEaton/my-nutrients-pwa.git
+cd my-nutrients-pwa
 
 # Install dependencies
 npm install
@@ -277,9 +237,11 @@ npm run dev
 
 This project is open source and welcomes contributions. Development setup instructions and coding guidelines can be found in the repository's documentation.
 
-### Development Acknowledgments
+## Acknowledgments
 
-This project was developed with assistance from AI tools following best practices in modern web development. The underlying concept, architecture decisions, implementation and testing were performed by the developer.
+**My Nutrients** was built by comprehensively refactoring the [My Calcium tracker](https://github.com/NateEaton/Ca-pwa), expanding it from single-nutrient tracking to a full multi-nutrient system supporting 24+ essential nutrients. The core architecture, PWA infrastructure, and user interface patterns were adapted from the original My Calcium application.
+
+This project was developed with assistance from AI tools following best practices in modern web development. The underlying concept, architecture decisions, implementation, and testing were performed by the developer.
 
 ## License
 

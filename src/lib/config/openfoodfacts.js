@@ -16,14 +16,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-// OpenFoodFacts API Configuration for Calcium Tracker PWA
+// OpenFoodFacts API Configuration for My Nutrients PWA
 export const OPENFOODFACTS_CONFIG = {
   // OpenFoodFacts API base URL
   API_BASE_URL: 'https://world.openfoodfacts.org/api/v2',
   PRODUCT_ENDPOINT: '/product', // Pattern: /product/{barcode}.json
 
   // User agent for API requests (required by OpenFoodFacts)
-  USER_AGENT: 'CalciumTracker/1.0 (https://calcium-dev.eatonfamily.net)',
+  USER_AGENT: 'MyNutrients/1.0 (nutrient tracking PWA)',
 
   // Nutrition data field mappings
   NUTRITION_FIELDS: {

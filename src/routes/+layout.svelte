@@ -67,7 +67,7 @@
       });
 
       // Subscribe to needRefresh and show notification
-      // For Calcium Tracker, we can defer update notification if sync is active
+      // For My Nutrients, we can defer update notification if sync is active
       needRefresh.subscribe(value => {
         pwaUpdateAvailable.set(value);
         if (value) {

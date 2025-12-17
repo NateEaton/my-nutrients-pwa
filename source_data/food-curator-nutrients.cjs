@@ -669,16 +669,28 @@ full.forEach((f) => delete f.id);
 abridged.forEach((f) => delete f.id);
 
 // Create metadata
-const curatedNotes = "Curated from USDA FoodData Central with multi-nutrient support. Branded foods filtered, cooking methods collapsed, nutritionally similar foods merged.";
+const curatedNotes = "This database was curated from USDA FoodData Central, combining multiple raw data files into a simplified format optimized for multi-nutrient tracking. The curation process assigned unique identifiers to each food, selected the most practical serving sizes, and merged nutritionally similar foods (those with identical or near-identical nutrient profiles) under single representative entries. To optimize app performance and usability, branded foods were filtered out (except essential staples), cooking method variations were simplified, and foods with very low nutrient content that only had technical 100-gram measurements (rather than practical serving sizes) were removed, while preserving nutritional accuracy through developer-maintained keep and exclusion lists.\n\nCustom curation lists applied:\n• Foods explicitly preserved: almonds, bison, ground, cheese, swiss, milk, whole, spinach, yogurt, plain\n• Foods explicitly excluded: alaska native, apache, babyfood, elk, emu, fast food, game meat, gluten free, hopi, kiwano, klamath, navajo, northern plains indians, ostrich, shoshone bannock";
 
 const updatedMetadata = metadata ? {
   ...metadata,
-  notes: curatedNotes
+  notes: curatedNotes,
+  sourceUrls: [
+    {
+      name: "USDA FoodData Central",
+      url: "https://fdc.nal.usda.gov/download-datasets.html"
+    }
+  ]
 } : {
   source: "USDA-FDC",
   name: "Curated Multi-Nutrient Database",
   description: "Curated food database with 20+ nutrients",
-  notes: curatedNotes
+  notes: curatedNotes,
+  sourceUrls: [
+    {
+      name: "USDA FoodData Central",
+      url: "https://fdc.nal.usda.gov/download-datasets.html"
+    }
+  ]
 };
 
 const fullOutput = {
