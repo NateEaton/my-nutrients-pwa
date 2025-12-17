@@ -46,9 +46,10 @@ yarn-debug.log* yarn-error.log*
 safariConsole*.txt
 
 
-# --- Sub-Repositories --- Ignore the separately-cloned wiki Git 
+# --- Sub-Repositories --- Ignore the separately-cloned wiki Git
 # repository. This prevents git from treating it as a submodule.
-/wiki/
+# Temporarily commented out to push initial wiki files
+# /wiki/
 
 # Project task tracking (local only)
 /_tasks/
