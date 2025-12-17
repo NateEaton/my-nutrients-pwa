@@ -55,14 +55,6 @@
       {
         "name": "USDA FoodData Central",
         "url": "https://fdc.nal.usda.gov/download-datasets.html"
-      },
-      {
-        "name": "Foundation Foods JSON",
-        "url": "https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_foundation_food_json_2024-04-24.zip"
-      },
-      {
-        "name": "SR Legacy JSON",
-        "url": "https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_json_2018-04.zip"
       }
     ],
     "notes": "JSON format provides complete nutrient data including all vitamins, minerals, and macronutrients. All nutrient values are per 100g in source data and must be converted to portion sizes."
