@@ -24,6 +24,10 @@ curated-nutrients-abridged.json
 [4] data-module-generator-nutrients.cjs  → Generate app module
     ↓
 foodDatabaseData.js (ready for app)
+    ↓
+[5] provenance-generator.cjs (optional)  → Generate source provenance
+    ↓
+provenance/*.json (food source details)
 ```
 
 ## Prerequisites
@@ -138,12 +142,38 @@ node data-module-generator-nutrients.cjs \
 
 **Expected time:** <1 minute
 
-### Step 5: Move to Application
+### Step 5: Generate Provenance Data (Optional)
 
-The generated file is already in the correct location:
-- `src/lib/data/foodDatabaseData.js`
+Create chunked JSON files for food source provenance:
 
-The application will automatically load this file when needed.
+```bash
+node provenance-generator.cjs \
+  curated-nutrients-abridged.json \
+  mastered-nutrient-data.json \
+  ../static/data/provenance
+```
+
+**What this does:**
+- Uses **abridged curated data** to determine which foods are in the app
+- Uses **mastered data** to retrieve full source details and collapsed food information
+- Generates 20 chunked JSON files for efficient on-demand loading
+- Enables the app to show users which USDA foods were combined into each app entry
+
+**Output:**
+- `../static/data/provenance/provenance_0.json` through `provenance_19.json`
+- Each chunk contains provenance data for foods with matching appId % 20
+
+**Expected time:** <1 minute
+
+**Note:** This replaces the old static HTML documentation approach with dynamic JSON lookup.
+
+### Step 6: Application Integration
+
+The generated files are already in the correct locations:
+- `src/lib/data/foodDatabaseData.js` - Main database
+- `static/data/provenance/*.json` - Source provenance data (if generated)
+
+The application will automatically load these files when needed.
 
 ## Complete Pipeline Command
 
@@ -178,6 +208,12 @@ node data-module-generator-nutrients.cjs \
   --module \
   --minify \
   --minimal
+
+# Step 5 (Optional): Generate provenance data
+node provenance-generator.cjs \
+  curated-nutrients-abridged.json \
+  mastered-nutrient-data.json \
+  ../static/data/provenance
 
 echo "✅ Pipeline complete! foodDatabaseData.js is ready."
 ```
