@@ -15,13 +15,13 @@ A Progressive Web App (PWA) for tracking essential nutrients—protein, calcium,
 ## Core Features
 
 ### Tracking & Data Entry
+-   **Multi-Nutrient Tracking**: Track up to 4 nutrients simultaneously from 25+ available options including macronutrients, vitamins, minerals, and omega fatty acids.
 -   **Curated Food Database**: Log entries from a comprehensive database of thousands of USDA-sourced foods, intelligently curated for relevance and usability. The database can be extended through UPC scans of USDA and OpenFoodFacts databases and the ability to add custom foods.
 -   **Smart Scan**: Add foods quickly using your device's camera to scan UPC/EAN barcodes. Supports both USDA FoodData Central and OpenFoodFacts databases, with manual barcode entry option for quick lookup.
 -   **Custom Foods**: Add and manage your own food items with detailed nutrient information. Custom foods support the same features as database foods, including serving memory and favorites.
 -   **Multi-Measure Support**: Many foods offer multiple serving options (cups, ounces, pieces, etc.). The app remembers both your preferred serving size and measurement unit for each food.
 -   **Favorites & Serving Memory**: Mark foods as favorites for quick access. The app remembers your preferred serving sizes and measure selections, making repeat entries effortless.
 -   **Database Management**: Hide unwanted foods from search results, filter by nutrient ranges (preset or custom), and sort by name, nutrient content, or food type.
--   **Multi-Nutrient Tracking**: Track up to 4 nutrients simultaneously from 25+ available options including macronutrients, vitamins, minerals, and omega fatty acids.
 
 ### Analysis & Reporting
 -   **Personalized Goals**: Set and adjust your personal daily nutrient intake targets for each tracked nutrient.
@@ -232,13 +232,6 @@ npm install
 # Start the development server
 npm run dev
 ```
-
-### Project Documentation
-
-For detailed implementation information, see the `_notes/` directory:
-- [ARCHITECTURE.md](_notes/ARCHITECTURE.md) - System design and component relationships
-- [DATA_PIPELINE.md](_notes/DATA_PIPELINE.md) - Food database generation process
-- [DECISIONS.md](_notes/DECISIONS.md) - Technical decisions and rationale
 
 ### Contributing
 
