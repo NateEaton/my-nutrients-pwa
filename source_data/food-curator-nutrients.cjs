@@ -673,12 +673,24 @@ const curatedNotes = "This database was curated from USDA FoodData Central, comb
 
 const updatedMetadata = metadata ? {
   ...metadata,
-  notes: curatedNotes
+  notes: curatedNotes,
+  sourceUrls: [
+    {
+      name: "USDA FoodData Central",
+      url: "https://fdc.nal.usda.gov/download-datasets.html"
+    }
+  ]
 } : {
   source: "USDA-FDC",
   name: "Curated Multi-Nutrient Database",
   description: "Curated food database with 20+ nutrients",
-  notes: curatedNotes
+  notes: curatedNotes,
+  sourceUrls: [
+    {
+      name: "USDA FoodData Central",
+      url: "https://fdc.nal.usda.gov/download-datasets.html"
+    }
+  ]
 };
 
 const fullOutput = {
