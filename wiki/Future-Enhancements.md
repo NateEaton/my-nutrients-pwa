@@ -1,18 +1,18 @@
-# My Nutrients - Future Enhancements Backlog
+# My Nutrients - Future Enhancements
 
 **Version**: 1.0
-**Date**: December 13, 2025
+**Date**: December 17, 2025
 **Status**: Post v1.0 Release
 
 ---
 
 ## Overview
 
-This document tracks feature ideas and enhancements deferred from the v1.0 release. Items are organized by priority and estimated complexity.
+This document tracks feature ideas and enhancements deferred from the v1.0 release.
 
 ---
 
-## High Priority (v1.1 Candidates)
+## Planned Enhancements
 
 ### 1. Enhanced Nutrient Selector on Stats/Reports Pages
 
@@ -32,76 +32,9 @@ This document tracks feature ideas and enhancements deferred from the v1.0 relea
 - Useful for one-off analysis
 - Maintains simple default behavior
 
-**Complexity**: Medium (2-3 hours)
-**Priority**: High - improves flexibility without complexity
-
 ---
 
-### 2. Multi-Nutrient Database Documentation HTML
-
-**Current State**: HTML docs generated with calcium only
-
-**Enhancement**: Generate HTML showing multiple nutrients
-
-**Options**:
-- **Option A**: Fixed 4 nutrients (protein, calcium, fiber, vitamin D)
-- **Option B**: All 25 nutrients (large file, ~10-15MB)
-- **Option C**: Configurable during build (specify which nutrients to include)
-
-**Proposed Implementation** (Option A):
-- Update `source_data/html-docs-generator.cjs`
-- Show 4 fixed nutrients in table columns
-- Add prominent note: "For complete nutrient information, use the Database page in the app"
-- Estimated file size: 2-3MB (manageable)
-
-**Benefits**:
-- More useful as a reference document
-- Still reasonable file size
-- Consistent with default app behavior
-
-**Complexity**: Low-Medium (4-6 hours)
-**Priority**: Medium - nice to have, not critical
-
----
-
-## Medium Priority (v1.2+ Candidates)
-
-### 3. Advanced Tracking Page Sorting Options
-
-**Current State**: Cycling button rotates through tracked nutrients
-
-**Enhancement**: Dropdown menu for nutrient selection
-
-**Implementation** (Option B from completion plan):
-```
-Sort: [Added] [Name] [Nutrients ▼]
-                      ↓
-            [✓ Protein]
-            [  Calcium]
-            [  Fiber]
-            [  Vitamin D]
-```
-
-**Benefits**:
-- More discoverable than cycling
-- Clear visual feedback
-- Familiar pattern
-
-**Trade-offs**:
-- Slightly more complex UI
-- Extra tap required
-
-**Alternative** (Option C): Long-press or swipe gesture to cycle
-- Most space-efficient
-- Power-user friendly
-- Discoverability issue (needs tooltip)
-
-**Complexity**: Low (2-3 hours)
-**Priority**: Medium - current cycling approach is functional
-
----
-
-### 4. Meal Planning
+### 2. Meal Planning
 
 **Description**: Pre-plan meals for future days
 
@@ -111,12 +44,9 @@ Sort: [Added] [Name] [Nutrients ▼]
 - Recurring meal patterns
 - Meal categories (breakfast, lunch, dinner, snacks)
 
-**Complexity**: High (2-3 days)
-**Priority**: Medium
-
 ---
 
-### 5. Recipe Builder
+### 3. Recipe Builder
 
 **Description**: Create recipes with automatic nutrient totals
 
@@ -126,29 +56,25 @@ Sort: [Added] [Name] [Nutrients ▼]
 - Save and reuse recipes
 - Export/share recipes
 
-**Complexity**: High (3-4 days)
-**Priority**: Medium
-
 ---
 
-## Low Priority (v2.0+ Candidates)
+### 4. Nutrition Label Scanning
 
-### 6. Photo Logging with OCR
+**Description**: Scan nutrition labels to quickly add foods
 
-**Description**: Take photos of meals and extract nutrients via OCR
+**Potential Approaches**:
+- **Option A: Traditional OCR**: Use OCR service (e.g., OCR.space) to extract text from nutrition label photos, then parse the text for nutrient values
+- **Option B: Cloud AI Vision**: Use vision-capable AI models (e.g., Cloudflare Workers AI) to directly understand nutrition labels and extract structured nutrient data
 
 **Features**:
-- Camera integration
-- OCR for nutrition labels
-- Smart nutrient extraction
-- Manual correction/editing
-
-**Complexity**: Very High (5+ days)
-**Priority**: Low - OCR already exists for nutrition labels
+- Camera integration for capturing nutrition label photos
+- Automatic nutrient extraction
+- Manual correction/editing of extracted values
+- Save as custom food entry
 
 ---
 
-### 7. Advanced Analytics
+### 5. Advanced Analytics
 
 **Description**: Nutrient correlations, trends, predictions
 
@@ -158,12 +84,9 @@ Sort: [Added] [Name] [Nutrients ▼]
 - Suggest foods to meet goals
 - Weekly/monthly trend analysis
 
-**Complexity**: Very High (1-2 weeks)
-**Priority**: Low
-
 ---
 
-### 8. Multi-Language Support
+### 6. Multi-Language Support
 
 **Description**: i18n support for global users
 
@@ -173,12 +96,9 @@ Sort: [Added] [Name] [Nutrients ▼]
 - RTL language support
 - Food database translations
 
-**Complexity**: Very High (2-3 weeks)
-**Priority**: Low
-
 ---
 
-### 9. Health App Integration
+### 7. Health App Integration
 
 **Description**: Sync with Apple Health, Google Fit, etc.
 
@@ -187,14 +107,11 @@ Sort: [Added] [Name] [Nutrients ▼]
 - Import activity data
 - Two-way synchronization
 
-**Complexity**: Very High (2+ weeks)
-**Priority**: Low - privacy concerns, platform-specific
-
 ---
 
-## Deferred Technical Improvements
+## Technical Improvements
 
-### 10. Database Page Table Virtualization
+### 8. Database Page Table Virtualization
 
 **Description**: Render only visible rows for better performance
 
@@ -207,12 +124,9 @@ Sort: [Added] [Name] [Nutrients ▼]
 - Better performance on low-end devices
 - Smooth scrolling with large datasets
 
-**Complexity**: Medium (1 day)
-**Priority**: Low - current performance is acceptable
-
 ---
 
-### 11. Stats Chart Lazy Loading
+### 9. Stats Chart Lazy Loading
 
 **Description**: Defer chart rendering until visible
 
@@ -224,12 +138,9 @@ Sort: [Added] [Name] [Nutrients ▼]
 - Faster page load
 - Reduced initial bundle size
 
-**Complexity**: Low (2-3 hours)
-**Priority**: Low
-
 ---
 
-### 12. Progressive Database Loading
+### 10. Progressive Database Loading
 
 **Description**: Split food database into chunks, load on-demand
 
@@ -248,12 +159,9 @@ Sort: [Added] [Name] [Nutrients ▼]
 - More complex loading logic
 - Potential search delays for uncommon foods
 
-**Complexity**: High (2-3 days)
-**Priority**: Low - acceptable with current 3s load time
-
 ---
 
-## Feature Requests (User-Submitted)
+## Feature Requests
 
 *This section will be populated with user feedback after v1.0 launch*
 
@@ -271,25 +179,5 @@ When prioritizing backlog items, consider:
 
 ---
 
-## Version Planning
-
-### v1.1 (Post-Launch Polish)
-- Enhanced nutrient selector (backlog #1)
-- Multi-nutrient HTML docs (backlog #2)
-- Bug fixes from user feedback
-- Performance optimizations
-
-### v1.2 (Feature Expansion)
-- Meal planning (backlog #4)
-- Recipe builder (backlog #5)
-- Advanced sorting options (backlog #3)
-
-### v2.0 (Major Features)
-- Advanced analytics (backlog #7)
-- Photo logging improvements (backlog #6)
-- Multi-language support (backlog #8)
-
----
-
-**Last Updated**: December 13, 2025
+**Last Updated**: December 17, 2025
 **Maintained By**: Nathan A. Eaton Jr.

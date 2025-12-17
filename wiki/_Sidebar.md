@@ -14,6 +14,3 @@
 ### Data & Pipeline
 - [[Data Pipeline]]
 - [[Nutrient Reference]]
-
-### Advanced
-- [[Future Features]]

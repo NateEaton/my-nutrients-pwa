@@ -6,8 +6,6 @@ Welcome to the My Nutrients PWA documentation wiki!
 
 My Nutrients is a Progressive Web App for tracking essential nutrients—protein, calcium, fiber, vitamins, minerals, and more. Built with SvelteKit and IndexedDB for offline-first functionality.
 
-**Live App:** [ca-pwa.vercel.app](https://ca-pwa.vercel.app/)
-
 ## Core Features
 
 ### Tracking & Data Entry
@@ -53,10 +51,6 @@ My Nutrients is a Progressive Web App for tracking essential nutrients—protein
 - **[[Data Pipeline]]** - Food database generation from USDA sources
 - **[[Nutrient Reference]]** - Complete nutrient codes and mappings
 
-### Advanced Topics
-
-- **[[Future Features]]** - AI Vision OCR implementation plan
-
 ## Tech Stack
 
 - **Frontend**: SvelteKit 2.x + Svelte 4.x
@@ -69,7 +63,6 @@ My Nutrients is a Progressive Web App for tracking essential nutrients—protein
 ## Quick Links
 
 - **[GitHub Repository](https://github.com/NateEaton/my-nutrients-pwa)**
-- **[Live Demo](https://ca-pwa.vercel.app/)**
 - **[Issues & Feedback](https://github.com/NateEaton/my-nutrients-pwa/issues)**
 
 ## Contributing
