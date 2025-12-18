@@ -21,8 +21,6 @@
   import {
     nutrientState,
     foods,
-    dailyTotal,
-    dailyGoal,
     nutrientService,
   } from "$lib/stores/nutrients";
   import FoodEntry from "$lib/components/FoodEntry.svelte";
@@ -150,7 +148,7 @@
           <div class="empty-icon">🥛</div>
           <div class="empty-text">
             <h3>No foods logged today</h3>
-            <p>Start tracking your calcium intake by adding your first food!</p>
+            <p>Start tracking your nutrition by adding your first food!</p>
           </div>
         </div>
       {/each}

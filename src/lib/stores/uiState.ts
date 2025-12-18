@@ -23,10 +23,10 @@ export interface DatabaseViewState {
 export const defaultDatabaseState: DatabaseViewState = {
   searchQuery: "",
   selectedFilter: "available",
-  sortBy: "calcium",
+  sortBy: "protein",
   sortOrder: "desc",
   typeSortRotation: 0,
-  selectedNutrientForControls: "calcium",
+  selectedNutrientForControls: "protein",
   nutrientFilter: {
     type: "all",
     preset: null,
