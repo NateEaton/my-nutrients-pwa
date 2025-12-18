@@ -363,7 +363,7 @@
     gap: var(--spacing-sm);
     padding: var(--spacing-md);
     background: var(--primary);
-    color: white;
+    color: var(--button-text);
     border: none;
     border-radius: 4px;
     cursor: pointer;

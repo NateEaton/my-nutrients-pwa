@@ -126,9 +126,9 @@
   }
 
   .toast.toast-info {
-    background: var(--primary);
+    background: var(--primary-color);
     color: white;
-    border-color: var(--primary);
+    border-color: var(--primary-color);
   }
 
   /* Mobile responsive */
