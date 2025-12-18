@@ -298,6 +298,29 @@ node migration/migrate_to_nutrients.mjs \
 
 ---
 
+## Settings Page Fix (2025-12-18 Evening)
+
+**Issue**: Settings page crashed with `Cannot read properties of undefined (reading 'toString')` after restore.
+
+**Root Cause**: Settings page expects `settings.dailyGoal` (old My Calcium format), but migration only provided `nutrientGoals.calcium` (new My Nutrients format).
+
+**Fix**: Updated `transformPreferences()` to include backwards compatibility fields:
+```javascript
+{
+  // New multi-nutrient format
+  "nutrientGoals": { "calcium": 1500, "protein": 60, "fiber": 28, "vitaminD": 20 },
+  "displayedNutrients": ["protein", "calcium", "fiber", "vitaminD"],
+  "theme": "auto",
+  "colorScheme": "blue",
+  // Backwards compatibility
+  "dailyGoal": 1500,
+  "sortBy": "time",
+  "sortOrder": "desc"
+}
+```
+
+---
+
 ## Next Steps
 
 1. **Import into Dev Environment**

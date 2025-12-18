@@ -2,10 +2,10 @@
   "metadata": {
     "version": "2.0.0",
     "appName": "My Nutrients PWA",
-    "createdAt": "2025-12-18T22:00:53.741Z",
+    "createdAt": "2025-12-18T22:38:51.903Z",
     "migratedFrom": "My Calcium",
     "originalVersion": "1.0.0",
-    "migrationDate": "2025-12-18T22:00:53.741Z",
+    "migrationDate": "2025-12-18T22:38:51.903Z",
     "sourceFiles": {
       "merged": "migration/calcium-nutrients-merged-stable-appids.json",
       "database": "src/lib/data/foodDatabaseData.js"
@@ -25,7 +25,10 @@
       "vitaminD"
     ],
     "theme": "auto",
-    "colorScheme": "blue"
+    "colorScheme": "blue",
+    "dailyGoal": 1500,
+    "sortBy": "time",
+    "sortOrder": "desc"
   },
   "customFoods": [
     {
