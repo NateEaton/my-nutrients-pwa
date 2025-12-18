@@ -2,10 +2,10 @@
   "metadata": {
     "version": "2.0.0",
     "appName": "My Nutrients PWA",
-    "createdAt": "2025-12-18T22:38:51.903Z",
+    "createdAt": "2025-12-18T23:00:29.136Z",
     "migratedFrom": "My Calcium",
     "originalVersion": "1.0.0",
-    "migrationDate": "2025-12-18T22:38:51.903Z",
+    "migrationDate": "2025-12-18T23:00:29.137Z",
     "sourceFiles": {
       "merged": "migration/calcium-nutrients-merged-stable-appids.json",
       "database": "src/lib/data/foodDatabaseData.js"
@@ -26,7 +26,6 @@
     ],
     "theme": "auto",
     "colorScheme": "blue",
-    "dailyGoal": 1500,
     "sortBy": "time",
     "sortOrder": "desc"
   },

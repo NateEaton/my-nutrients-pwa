@@ -285,7 +285,6 @@ function transformPreferences(oldPreferences) {
   const dailyGoal = oldPreferences.dailyGoal || 1500;
 
   return {
-    // New multi-nutrient format
     nutrientGoals: {
       calcium: dailyGoal,
       protein: 60,  // Default RDA values
@@ -295,8 +294,6 @@ function transformPreferences(oldPreferences) {
     displayedNutrients: ['protein', 'calcium', 'fiber', 'vitaminD'],
     theme: oldPreferences.theme || 'auto',
     colorScheme: 'blue',
-    // Backwards compatibility with Settings page (still expects dailyGoal)
-    dailyGoal: dailyGoal,
     sortBy: oldPreferences.sortBy || 'time',
     sortOrder: oldPreferences.sortOrder || 'desc'
   };
