@@ -3,19 +3,64 @@
 ## Plan Updates (Latest Revision)
 
 **Key Changes from Original Plan**:
-1. ✅ **Structured LLM Output**: LLM returns pre-parsed fields directly (no client-side regex parsing)
-2. ✅ **Primary Model Changed**: Using Llama 3.2 11B Vision (23% cheaper, proven track record)
-3. ✅ **Phase 0 Added**: Environment assessment + spike test for Go/No-Go decision
-4. ✅ **Simplified VisionService**: Direct mapping eliminates need for servingSizeParser utility
-5. ✅ **UX Enhancements**: Loading indicators and timeout handling for 2-5 second waits
-6. ✅ **Confidence Calibration**: Added strategy to validate LLM confidence scores vs actual accuracy
-7. ✅ **Hybrid Workflow Documented**: Worker code edits on NAS, deployments from MBP (OAuth requirement)
+1. ✅ **GENERALIZED MULTI-NUTRIENT EXTRACTION**: Extract ALL 20+ nutrients from labels, not just user-selected ones
+   - Users can change tracked nutrients without re-scanning
+   - More comprehensive data for future use
+   - Better user experience - scan once, track any nutrients later
+2. ✅ **Structured LLM Output**: LLM returns pre-parsed fields directly (no client-side regex parsing)
+3. ✅ **Primary Model Changed**: Using Llama 3.2 11B Vision (23% cheaper, proven track record)
+4. ✅ **Phase 0 Added**: Environment assessment + spike test for Go/No-Go decision
+5. ✅ **Simplified VisionService**: Direct mapping eliminates need for parsing utilities
+6. ✅ **UX Enhancements**: Loading indicators and timeout handling for 2-5 second waits
+7. ✅ **Confidence Calibration**: Added strategy to validate LLM confidence scores vs actual accuracy
+8. ✅ **Hybrid Workflow Documented**: Worker code edits on NAS, deployments from MBP (OAuth requirement)
+9. ✅ **Manual Steps Documented**: Clear checklist of user tasks for build, deploy, and test
 
 **Design Philosophy**:
+- **Extract all nutrients generically, not just user-selected ones** - maximizes data value
 - Leverage LLM's semantic understanding instead of brittle regex patterns
 - Start with lower-cost proven model, upgrade if needed
 - Validate approach early before committing to full implementation
 - Simplify client code by having Worker do more work
+- Future-proof the implementation by capturing comprehensive nutrition data
+
+---
+
+## Manual Steps Required (User Tasks)
+
+**IMPORTANT**: The following tasks must be performed manually by the user. Claude Code will prepare the code, but cannot execute these steps:
+
+### Build & Deployment Steps
+1. **Worker Deployment** (after Phase 1 code changes):
+   ```bash
+   # From your MacBook Pro (OAuth requirement)
+   cd ~/Ca-pwa-svelte/worker
+   npm run deploy
+   ```
+
+2. **PWA Build** (after Phase 2 code changes):
+   ```bash
+   # From either NAS or MBP
+   cd ~/my-nutrients-pwa
+   npm run build
+   npm run preview  # Test locally first
+   ```
+
+3. **Test & Validate**:
+   - Test with 5-10 sample nutrition label images
+   - Verify all nutrients are extracted correctly
+   - Check that settings toggle works
+   - Confirm fallback to OCR.space works if Vision fails
+
+### Testing Checklist
+- [ ] Deploy Worker successfully
+- [ ] Worker returns valid JSON for test images
+- [ ] VisionService integrates with UI without errors
+- [ ] Settings toggle persists and switches services correctly
+- [ ] Multi-nutrient extraction works (not just calcium)
+- [ ] Confidence scores are reasonable
+- [ ] Response times are acceptable (<5 seconds)
+- [ ] Error handling works gracefully
 
 ---
 
@@ -246,12 +291,24 @@ REQUIRED FIELDS (extract if present):
 - serving_measure: The unit of serving (e.g., "cup", "tbsp", "piece", "bottle")
 - serving_standard_value: Numeric value of standardized measure in parentheses (e.g., 240 from "240ml")
 - serving_standard_unit: Unit of standardized measure (e.g., "ml", "g", "oz")
-- calcium_mg: Calcium amount in milligrams only (extract from mg value or calculate from % DV)
-- calcium_percent_dv: Calcium % Daily Value if shown
-
-OPTIONAL FIELDS (extract if clearly visible):
 - servings_per_container: Number of servings
 - calories: Calories per serving
+
+NUTRIENT FIELDS (extract all visible nutrients in standard units):
+Macronutrients (grams):
+- protein_g, fiber_g, carbohydrates_g, sugars_g, fat_g, saturated_fat_g, monounsaturated_fat_g, polyunsaturated_fat_g
+
+Omega Fatty Acids (grams):
+- omega3_g, omega3_ala_g, omega3_epa_g, omega3_dha_g, omega6_g
+
+Minerals (milligrams):
+- calcium_mg, magnesium_mg, potassium_mg, iron_mg, zinc_mg
+
+Vitamins (varies by nutrient):
+- vitamin_d_mcg, vitamin_b12_mcg, folate_mcg, vitamin_b6_mg, vitamin_a_mcg, vitamin_c_mg, vitamin_k_mcg
+
+PERCENTAGE DV FIELDS (if nutrients show % DV instead of amounts):
+- For any nutrient, also extract the % DV value with suffix "_percent_dv" (e.g., calcium_percent_dv: 30)
 
 OUTPUT FORMAT:
 Return ONLY valid JSON matching this schema:
@@ -260,10 +317,47 @@ Return ONLY valid JSON matching this schema:
   "serving_measure": "string" or null,
   "serving_standard_value": number or null,
   "serving_standard_unit": "string" or null,
-  "calcium_mg": number or null,
-  "calcium_percent_dv": number or null,
   "servings_per_container": number or null,
   "calories": number or null,
+
+  // Macronutrients (g)
+  "protein_g": number or null,
+  "fiber_g": number or null,
+  "carbohydrates_g": number or null,
+  "sugars_g": number or null,
+  "fat_g": number or null,
+  "saturated_fat_g": number or null,
+  "monounsaturated_fat_g": number or null,
+  "polyunsaturated_fat_g": number or null,
+
+  // Omega fatty acids (g)
+  "omega3_g": number or null,
+  "omega3_ala_g": number or null,
+  "omega3_epa_g": number or null,
+  "omega3_dha_g": number or null,
+  "omega6_g": number or null,
+
+  // Minerals (mg)
+  "calcium_mg": number or null,
+  "magnesium_mg": number or null,
+  "potassium_mg": number or null,
+  "iron_mg": number or null,
+  "zinc_mg": number or null,
+
+  // Vitamins (varies)
+  "vitamin_d_mcg": number or null,
+  "vitamin_b12_mcg": number or null,
+  "folate_mcg": number or null,
+  "vitamin_b6_mg": number or null,
+  "vitamin_a_mcg": number or null,
+  "vitamin_c_mg": number or null,
+  "vitamin_k_mcg": number or null,
+
+  // Percentage DV for any nutrients
+  "calcium_percent_dv": number or null,
+  "iron_percent_dv": number or null,
+  // ... (include other _percent_dv fields as needed)
+
   "confidence": "high" | "medium" | "low"
 }
 
@@ -295,28 +389,45 @@ Label shows "1/2 cup" (no standard measure) →
 RULES:
 1. Parse serving size into separate quantity, measure, standard value, and standard unit
 2. Convert fractions to decimals (1/2 → 0.5, 1/4 → 0.25)
-3. For calcium, prioritize mg value over % DV calculation
-4. If calcium shows only % DV, you may calculate mg (1300mg = 100% DV)
-5. Return null for any field not clearly visible
-6. Set confidence based on label clarity and completeness
-7. Lowercase measure units for consistency
+3. Extract ALL visible nutrients from the label in their standard units
+4. For minerals/vitamins, prioritize absolute values (mg/mcg) over % DV calculations
+5. If a nutrient shows only % DV, calculate the absolute amount using these conversions:
+   - Calcium: 1300mg = 100% DV
+   - Iron: 18mg = 100% DV
+   - Potassium: 4700mg = 100% DV
+   - Vitamin D: 20mcg = 100% DV
+   - Vitamin B12: 2.4mcg = 100% DV
+   - (Similar conversions for other nutrients)
+6. Return null for any field not clearly visible
+7. Set confidence based on label clarity and completeness
+8. Lowercase measure units for consistency
+9. Extract as many nutrients as are visible - don't limit to just a few
 
 Return the JSON now:
 ```
 
 ### Prompt Optimization Considerations
 
-**Value of Targeted Prompting**:
-- ✅ **Highly valuable** - Specifying required fields focuses model attention
+**Value of Generalized Multi-Nutrient Prompting**:
+- ✅ **Extract ALL nutrients, not just user-selected ones** - This is the key insight
+- ✅ Users can change tracked nutrients without re-scanning labels
+- ✅ More comprehensive data for future features and analysis
+- ✅ Reduces need for user to specify which nutrients to track before scanning
+- ✅ Better user experience - scan once, track any nutrients later
+
+**Value of Structured Prompting**:
+- ✅ **Highly valuable** - Specifying all possible fields guides model attention
 - ✅ Reduces hallucination by constraining output
 - ✅ JSON schema enforcement improves parsing reliability
 - ✅ Few-shot examples handle edge cases (% DV only, missing units, etc.)
+- ✅ Comprehensive nutrient extraction means better data quality
 
 **Testing Required**:
-- Compare accuracy with/without field specification
-- Test different prompt phrasings
-- Validate JSON compliance rate
+- Compare accuracy with generalized vs. targeted prompting
+- Test different prompt phrasings for nutrient extraction
+- Validate JSON compliance rate for all nutrients
 - Measure confidence score accuracy
+- Verify % DV to absolute amount conversions
 
 ---
 
@@ -371,10 +482,21 @@ return {
     "serving_measure": "cup",
     "serving_standard_value": 240,
     "serving_standard_unit": "ml",
-    "calcium_mg": 380,
-    "calcium_percent_dv": 30,
     "servings_per_container": 6,
     "calories": 120,
+
+    "protein_g": 8.0,
+    "fiber_g": 0,
+    "carbohydrates_g": 12.0,
+    "sugars_g": 12.0,
+    "fat_g": 2.5,
+    "saturated_fat_g": 1.5,
+
+    "calcium_mg": 380,
+    "calcium_percent_dv": 30,
+    "vitamin_d_mcg": 2.5,
+    "potassium_mg": 380,
+
     "confidence": "high"
   },
   "model": "@cf/meta/llama-3.2-11b-vision-instruct",
@@ -405,14 +527,14 @@ return {
 - [ ] Create minimal `/ocr-test` endpoint in existing Worker
 - [ ] Test Llama 3.2 11B Vision with 5-10 existing test images
 - [ ] Validate structured JSON output format
-- [ ] Measure accuracy on serving size and calcium extraction
+- [ ] Measure accuracy on serving size and multi-nutrient extraction (protein, calcium, fiber, etc.)
 - [ ] Test response times (target < 3 seconds)
 - [ ] Verify free tier neuron usage tracking
 
 **Success Criteria**:
 - [ ] Can deploy Worker changes from NAS (or documented MBP requirement)
 - [ ] Model returns valid structured JSON ≥80% of time
-- [ ] Calcium extraction accuracy ≥60% on test set
+- [ ] Multi-nutrient extraction accuracy ≥60% on test set (at least 3-5 nutrients per label)
 - [ ] Average response time ≤5 seconds
 - [ ] Neuron usage ≤40 per scan
 
@@ -570,13 +692,47 @@ export class VisionService {
 
       // Direct mapping - no parsing utilities needed!
       // LLM returns pre-structured data
+      // Map all nutrients from Worker response to NutrientValues format
+      const nutrients = {
+        // Macronutrients
+        protein: data.protein_g || undefined,
+        fiber: data.fiber_g || undefined,
+        carbohydrates: data.carbohydrates_g || undefined,
+        sugars: data.sugars_g || undefined,
+        fat: data.fat_g || undefined,
+        saturatedFat: data.saturated_fat_g || undefined,
+        monounsaturatedFat: data.monounsaturated_fat_g || undefined,
+        polyunsaturatedFat: data.polyunsaturated_fat_g || undefined,
+        // Omega fatty acids
+        omega3: data.omega3_g || undefined,
+        omega3ALA: data.omega3_ala_g || undefined,
+        omega3EPA: data.omega3_epa_g || undefined,
+        omega3DHA: data.omega3_dha_g || undefined,
+        omega6: data.omega6_g || undefined,
+        // Minerals
+        calcium: data.calcium_mg || undefined,
+        magnesium: data.magnesium_mg || undefined,
+        potassium: data.potassium_mg || undefined,
+        iron: data.iron_mg || undefined,
+        zinc: data.zinc_mg || undefined,
+        // Vitamins
+        vitaminD: data.vitamin_d_mcg || undefined,
+        vitaminB12: data.vitamin_b12_mcg || undefined,
+        folate: data.folate_mcg || undefined,
+        vitaminB6: data.vitamin_b6_mg || undefined,
+        vitaminA: data.vitamin_a_mcg || undefined,
+        vitaminC: data.vitamin_c_mg || undefined,
+        vitaminK: data.vitamin_k_mcg || undefined
+      };
+
       return {
         rawText: `${data.serving_quantity || ''} ${data.serving_measure || ''}`.trim(),
         servingQuantity: data.serving_quantity,
         servingMeasure: data.serving_measure,
         standardMeasureValue: data.serving_standard_value,
         standardMeasureUnit: data.serving_standard_unit,
-        calcium: data.calcium_mg,
+        nutrients: nutrients, // All nutrients
+        calcium: data.calcium_mg, // Backward compatibility
         confidence: data.confidence || 'medium',
         source: 'vision'
       };
@@ -742,11 +898,13 @@ fs.writeFileSync('comparison_report.json', JSON.stringify(results, null, 2));
 ```
 
 **Success Criteria**:
-- [ ] VisionService accuracy ≥ 70% (acceptable)
+- [ ] VisionService multi-nutrient accuracy ≥ 70% (acceptable)
+- [ ] VisionService extracts at least 5-10 nutrients per label on average
 - [ ] VisionService accuracy ≥ OCRService accuracy (ideal)
 - [ ] Settings toggle works reliably
 - [ ] Both services coexist without conflicts
 - [ ] Error handling works for both services
+- [ ] All extracted nutrients properly map to NutrientValues format
 
 ### Phase 4: Prompt Optimization & Confidence Calibration (4-8 hours)
 
@@ -763,10 +921,14 @@ fs.writeFileSync('comparison_report.json', JSON.stringify(results, null, 2));
 - [ ] Consider Llama 4 Scout upgrade if accuracy insufficient
 
 **Optimization Areas**:
-1. **Field Prioritization**: Test if emphasizing calcium improves extraction
-2. **Format Variations**: Handle "Calcium 180mg 15%" vs "Calcium 15% (180mg)"
-3. **Unit Normalization**: Ensure consistent "mg" not "MG" or "milligrams"
-4. **Confidence Calibration Strategy**:
+1. **Generalized Multi-Nutrient Extraction**: Prompt asks for ALL visible nutrients, not just user-selected ones
+   - This allows the app to extract comprehensive nutrition data regardless of which nutrients the user is tracking
+   - Users can change tracked nutrients later without re-scanning
+   - More valuable data for future features
+2. **Format Variations**: Handle different label formats (e.g., "Calcium 180mg 15%" vs "Calcium 15% (180mg)")
+3. **Unit Normalization**: Ensure consistent units ("mg" not "MG" or "milligrams", "g" not "grams")
+4. **Percentage DV Conversions**: Test accuracy of converting % DV to absolute amounts
+5. **Confidence Calibration Strategy**:
    - Compare model-reported confidence vs actual accuracy on test set
    - LLM confidence scores often don't correlate with real accuracy
    - May need to override based on heuristics:
@@ -868,9 +1030,10 @@ If accuracy drops below acceptable threshold:
 - [ ] Worker endpoint processes images successfully
 - [ ] VisionService module created and functional
 - [ ] Settings toggle switches between services correctly
-- [ ] Client receives structured JSON response from Worker
+- [ ] Client receives structured JSON response from Worker with ALL nutrients
 - [ ] Serving size parsing extracts all components
-- [ ] Calcium extraction accuracy ≥ 70%
+- [ ] Multi-nutrient extraction accuracy ≥ 70% (at least 3-5 nutrients per label)
+- [ ] All nutrients properly mapped to NutrientValues format
 - [ ] Free tier usage stays under 50% for typical use
 - [ ] Error handling provides useful feedback
 - [ ] **OCRService remains completely unchanged and functional**
@@ -878,7 +1041,8 @@ If accuracy drops below acceptable threshold:
 
 ### Optimal Performance
 
-- [ ] Calcium extraction accuracy ≥ 85% (VisionService)
+- [ ] Multi-nutrient extraction accuracy ≥ 85% (VisionService)
+- [ ] VisionService extracts 10+ nutrients per label consistently
 - [ ] VisionService accuracy ≥ OCRService accuracy (at least comparable)
 - [ ] Serving size parsing accuracy ≥ 90% (both services)
 - [ ] Confidence scores correlate with accuracy
@@ -1204,7 +1368,7 @@ If uncertain about:
 
 ## Appendix: Example API Responses
 
-### Cloudflare Worker Response (Updated)
+### Cloudflare Worker Response (Updated - Multi-Nutrient)
 ```json
 {
   "success": true,
@@ -1213,14 +1377,26 @@ If uncertain about:
     "serving_measure": "cup",
     "serving_standard_value": 240,
     "serving_standard_unit": "ml",
-    "calcium_mg": 380,
-    "calcium_percent_dv": 30,
-    "servings_per_container": 6,
-    "calories": 120,
+    "servings_per_container": 8,
+    "calories": 150,
+
+    "protein_g": 8.0,
+    "fiber_g": 0,
+    "carbohydrates_g": 12.0,
+    "sugars_g": 12.0,
+    "fat_g": 8.0,
+    "saturated_fat_g": 5.0,
+
+    "calcium_mg": 300,
+    "calcium_percent_dv": 25,
+    "potassium_mg": 350,
+    "vitamin_d_mcg": 2.5,
+    "vitamin_a_mcg": 150,
+
     "confidence": "high"
   },
   "model": "@cf/meta/llama-3.2-11b-vision-instruct",
-  "neurons_used": 30
+  "neurons_used": 32
 }
 ```
 
@@ -1243,15 +1419,28 @@ If uncertain about:
 }
 ```
 
-### Mapped Result (Internal Format)
+### Mapped Result (Internal Format - Multi-Nutrient)
 ```typescript
 interface NutritionParseResult {
   servingQuantity: 1,
   servingMeasure: "cup",
   standardMeasureValue: 240,
   standardMeasureUnit: "ml",
-  calcium: 380,
+  nutrients: {
+    protein: 8.0,
+    fiber: 0,
+    carbohydrates: 12.0,
+    sugars: 12.0,
+    fat: 8.0,
+    saturatedFat: 5.0,
+    calcium: 300,
+    potassium: 350,
+    vitaminD: 2.5,
+    vitaminA: 150
+  },
+  calcium: 300, // Backward compatibility
   confidence: "high",
-  rawText: "1 cup (240ml)" // For debugging
+  rawText: "1 cup (240ml)", // For debugging
+  source: "vision"
 }
 ```
