@@ -172,7 +172,7 @@
     document.body.style.overflow = 'hidden';
   } else {
     // Restore body scrolling when modal closes
-    document.body.style.overflow = '';
+    document.body.style.removeProperty('overflow');
   }
 
   function resetForm() {
