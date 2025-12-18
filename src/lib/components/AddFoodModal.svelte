@@ -168,11 +168,6 @@
   // Reset form when modal opens or editing changes
   $: if (show) {
     resetForm();
-    // Prevent body scrolling when modal is open
-    document.body.style.overflow = 'hidden';
-  } else {
-    // Restore body scrolling when modal closes
-    document.body.style.removeProperty('overflow');
   }
 
   function resetForm() {
