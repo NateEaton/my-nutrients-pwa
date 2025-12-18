@@ -341,8 +341,7 @@
 
     // Get selected measure (initially primary/first measure)
     const selectedMeasure = availableMeasures[selectedMeasureIndex];
-    // Handle both nutrients format and legacy format
-    const calciumValue = selectedMeasure.nutrients?.calcium ?? selectedMeasure.calcium ?? 0;
+    const calciumValue = selectedMeasure.nutrients?.calcium ?? 0;
     calcium = calciumValue.toString();
 
     // If this is a custom food, switch to custom mode
@@ -378,7 +377,7 @@
         }
 
         // Recalculate nutrients for preferred serving
-        updateCalcium();
+        updateCalculatedNutrients();
 
         // Apply nutrient overrides if present (user-edited values)
         if (savedPreference.nutrientOverrides && Object.keys(savedPreference.nutrientOverrides).length > 0) {
@@ -422,8 +421,8 @@
       servingQuantity = parsedFoodMeasure.originalQuantity;
       servingUnit = parsedFoodMeasure.cleanedUnit || parsedFoodMeasure.detectedUnit;
       
-      // Recalculate calcium for the new serving size
-      updateCalcium();
+      // Recalculate nutrients for the new serving size
+      updateCalculatedNutrients();
     }
   }
 
@@ -515,11 +514,6 @@
     updateUnitSuggestions();
   }
 
-  // Legacy function name for backward compatibility (just calls the new function)
-  function updateCalcium() {
-    updateCalculatedNutrients();
-  }
-
   function updateUnitSuggestions() {
     if (
       parsedFoodMeasure &&
@@ -541,7 +535,7 @@
     servingQuantity = suggestion.quantity;
     servingUnit = suggestion.unit;
     hasResetToOriginal = false; // User changed from reset values
-    updateCalcium(); // This will also update suggestions via updateUnitSuggestions()
+    updateCalculatedNutrients(); // This will also update suggestions via updateUnitSuggestions()
     showUnitSuggestions = false;
   }
 
@@ -667,8 +661,8 @@
     usingPreference = false;
     hasResetToOriginal = true;
 
-    // Recalculate calcium with original serving
-    updateCalcium();
+    // Recalculate nutrients with original serving
+    updateCalculatedNutrients();
   }
 
   /**
@@ -694,7 +688,7 @@
       return (
         metadata.upc === scannedUPC &&
         metadata.upcSource === scannedSource &&
-        food.calcium === calcium &&
+        food.nutrients.calcium === parseFloat(calcium) &&
         food.measure === measure
       );
     });
@@ -1316,7 +1310,7 @@
                 bind:value={servingQuantity}
                 on:input={() => {
                   hasResetToOriginal = false;
-                  updateCalcium();
+                  updateCalculatedNutrients();
                 }}
                 placeholder="1"
                 min="0.01"

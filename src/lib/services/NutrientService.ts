@@ -169,7 +169,7 @@ export class NutrientService {
    * @param sortBy The field to sort by
    * @param sortOrder Optional sort order; if not provided, toggles current order
    */
-  async updateSort(sortBy: 'time' | 'name' | 'calcium', sortOrder?: 'asc' | 'desc'): Promise<void> {
+  async updateSort(sortBy: 'time' | 'name' | string, sortOrder?: 'asc' | 'desc'): Promise<void> {
     const state = get(nutrientState);
 
     let newSortOrder = sortOrder;
@@ -489,16 +489,11 @@ export class NutrientService {
   }
 
   private async loadSettings(): Promise<void> {
-    // Load nutrient goals (with backward compatibility for old calcium_goal)
+    // Load nutrient goals
     const nutrientGoalsJson = localStorage.getItem('nutrient_goals');
-    const oldCalciumGoal = localStorage.getItem('calcium_goal');
-    let nutrientGoals = DEFAULT_NUTRIENT_GOALS;
-    if (nutrientGoalsJson) {
-      nutrientGoals = JSON.parse(nutrientGoalsJson);
-    } else if (oldCalciumGoal) {
-      // Migrate old single calcium goal
-      nutrientGoals = { ...DEFAULT_NUTRIENT_GOALS, calcium: parseInt(oldCalciumGoal) };
-    }
+    const nutrientGoals = nutrientGoalsJson
+      ? JSON.parse(nutrientGoalsJson)
+      : DEFAULT_NUTRIENT_GOALS;
 
     // Load displayed nutrients
     const displayedNutrientsJson = localStorage.getItem('nutrient_displayed');
@@ -506,9 +501,8 @@ export class NutrientService {
       ? JSON.parse(displayedNutrientsJson)
       : getDefaultDisplayedNutrients();
 
-    // Load sort settings (with backward compatibility)
-    const sortSettingsJson = localStorage.getItem('nutrient_sort_settings')
-      || localStorage.getItem('calcium_sort_settings');
+    // Load sort settings
+    const sortSettingsJson = localStorage.getItem('nutrient_sort_settings');
     const sortSettings = sortSettingsJson ? JSON.parse(sortSettingsJson) : {};
 
     // Load theme and color scheme
@@ -1090,20 +1084,12 @@ private async clearAllData(): Promise<void> {
     try {
       const totalNutrients = this.calculateTotalNutrients(foods);
 
-      // Legacy: Calculate totalCalcium for backward compatibility
-      const totalCalcium = foods.reduce((sum, food) => {
-        // Use getPrimaryMeasure for compatibility with both formats
-        const primaryMeasure = getPrimaryMeasure(food);
-        return sum + (primaryMeasure.calcium || primaryMeasure.nutrients?.calcium || 0);
-      }, 0);
-
       const journalEntry = {
         date: dateString,
         foods: foods,
         lastModified: Date.now(),
         syncStatus: 'pending',
-        totalNutrients: totalNutrients,
-        totalCalcium: totalCalcium // Legacy field for backward compatibility
+        totalNutrients: totalNutrients
       };
 
       await new Promise<void>((resolve, reject) => {
@@ -1135,17 +1121,7 @@ private async clearAllData(): Promise<void> {
     const totals: any = {};
 
     for (const food of foods) {
-      // Handle both old (single calcium field) and new (nutrients object) formats
-      let foodNutrients: any = {};
-
-      // Prioritize new format (nutrients object)
-      if ('nutrients' in food && food.nutrients) {
-        foodNutrients = food.nutrients;
-      }
-      // Fall back to old format (calcium field only) for legacy data
-      else if ('calcium' in food && typeof food.calcium === 'number') {
-        foodNutrients = { calcium: food.calcium };
-      }
+      const foodNutrients = food.nutrients || {};
 
       // Aggregate all nutrients
       for (const [nutrient, value] of Object.entries(foodNutrients)) {

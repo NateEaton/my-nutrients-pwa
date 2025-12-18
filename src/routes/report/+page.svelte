@@ -77,7 +77,7 @@
     const dailyTotals = dates.map((date) => {
       const foods = allData[date];
       const total = foods.reduce((sum, food) => {
-        const nutrientValue = food.nutrients?.[selectedNutrient] ?? food[selectedNutrient] ?? 0;
+        const nutrientValue = food.nutrients?.[selectedNutrient] ?? 0;
         return sum + nutrientValue;
       }, 0);
       return { date, total };
@@ -122,7 +122,7 @@
 
       const foods = allData[dateStr] || [];
       const totalNutrient = foods.reduce((sum, food) => {
-        const nutrientValue = food.nutrients?.[selectedNutrient] ?? food[selectedNutrient] ?? 0;
+        const nutrientValue = food.nutrients?.[selectedNutrient] ?? 0;
         return sum + nutrientValue;
       }, 0);
       const dailyGoal = nutrientSettings.nutrientGoals?.[selectedNutrient] || 0;
@@ -178,7 +178,7 @@
         const monthTotal = monthDays.reduce((sum, dateStr) => {
           const foods = allData[dateStr];
           return sum + foods.reduce((daySum, food) => {
-            const nutrientValue = food.nutrients?.[selectedNutrient] ?? food[selectedNutrient] ?? 0;
+            const nutrientValue = food.nutrients?.[selectedNutrient] ?? 0;
             return daySum + nutrientValue;
           }, 0);
         }, 0);
@@ -227,7 +227,7 @@
 
       const foods = allData[dateStr] || [];
       const totalNutrient = foods.reduce((sum, food) => {
-        const nutrientValue = food.nutrients?.[selectedNutrient] ?? food[selectedNutrient] ?? 0;
+        const nutrientValue = food.nutrients?.[selectedNutrient] ?? 0;
         return sum + nutrientValue;
       }, 0);
       const dailyGoal = nutrientSettings.nutrientGoals?.[selectedNutrient] || 0;

@@ -253,6 +253,46 @@ Sort: [Added] [Name] [Nutrients ▼]
 
 ---
 
+### 13. Enhanced Toast Notification System
+
+**Description**: Adopt the more sophisticated toast system from my-pt-pwa
+
+**Current State**:
+- Single toast at a time (new toasts replace existing)
+- Fixed 3-second duration
+- No manual dismiss
+- No icons
+- Full background color
+
+**Enhancement Features**:
+- **Queue Support**: Multiple toasts can display simultaneously
+- **Manual Dismiss**: Click toast or X button to close
+- **Duplicate Prevention**: Same message won't show twice
+- **Material Icons**: Visual indicators for each type (success, error, warning, info)
+- **Better Styling**: Left border accent with surface background (instead of full solid color)
+- **Keyboard Support**: Enter/Space to dismiss
+- **Unique IDs**: Each toast tracked independently
+- **Configurable Duration**: Can override default 3-second timeout per toast
+
+**Implementation Notes**:
+- Source: `https://github.com/NateEaton/my-pt-pwa/blob/main/src/lib/components/Toast.svelte`
+- Create new `src/lib/stores/toast.ts` with queue logic
+- Replace `Toast.svelte` component
+- Keep `showToast()` wrapper for backward compatibility
+- All 38 existing toast calls remain unchanged
+
+**Benefits**:
+- More professional appearance
+- Better UX with manual dismiss
+- Can show update notification + error simultaneously
+- Improved accessibility (ARIA labels, keyboard support)
+- Prevents duplicate message spam
+
+**Complexity**: Low-Medium (2-3 hours)
+**Priority**: Low - current system works, but enhancement would be nice
+
+---
+
 ## Feature Requests (User-Submitted)
 
 *This section will be populated with user feedback after v1.0 launch*

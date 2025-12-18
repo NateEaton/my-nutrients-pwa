@@ -337,14 +337,14 @@ function generateHtmlDocument(bodyContent, totalRows, generatedDate, metadata) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>Food Database Documentation - Calcium Tracker</title>
+  <title>Food Database Documentation - My Nutrients</title>
   <link rel="stylesheet" href="database-docs.css">
 </head>
 <body>
   <div class="page-container">
     <header class="header">
       <h1>Food Database Documentation</h1>
-      <p>Complete transparency into your calcium tracking database</p>
+      <p>Complete transparency into your nutrient tracking database</p>
       <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
     </header>
 
@@ -354,7 +354,7 @@ function generateHtmlDocument(bodyContent, totalRows, generatedDate, metadata) {
           type="text" 
           id="searchInput"
           class="search-input" 
-          placeholder="Search foods, sources, or calcium values..."
+          placeholder="Search foods, sources, or nutrient values..."
           autocomplete="off"
         >
         <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
@@ -369,11 +369,11 @@ function generateHtmlDocument(bodyContent, totalRows, generatedDate, metadata) {
       <div class="explanation-grid">
         <div class="explanation-item">
           <h5>Representative Foods</h5>
-          <p>Foods shown with <span style="color: var(--secondary); font-weight: 600;">*</span> represent groups of nutritionally similar foods. All foods in a group have identical calcium values.</p>
+          <p>Foods shown with <span style="color: var(--secondary); font-weight: 600;">*</span> represent groups of nutritionally similar foods. All foods in a group have identical nutrient values.</p>
         </div>
         <div class="explanation-item">
           <h5>Multiple Serving Sizes</h5>
-          <p>Foods marked with "(multiple servings)" show all available serving size options from the USDA source data, displayed as multiple rows with different calcium values per serving.</p>
+          <p>Foods marked with "(multiple servings)" show all available serving size options from the USDA source data, displayed as multiple rows with different nutrient values per serving.</p>
         </div>
         <div class="explanation-item">
           <h5>Collapsed Foods</h5>

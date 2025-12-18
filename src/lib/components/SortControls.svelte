@@ -26,7 +26,7 @@
   const dispatch = createEventDispatcher();
   
   // Track which nutrient is active
-  let activeNutrientId = 'calcium';
+  let activeNutrientId = 'protein';
   let showNutrientMenu = false;
   let longPressTimer;
   let isLongPress = false;
