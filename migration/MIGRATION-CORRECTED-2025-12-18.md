@@ -298,22 +298,44 @@ node migration/migrate_to_nutrients.mjs \
 
 ---
 
-## Settings Page Fix (2025-12-18 Evening)
+## Edit Modal Fix (2025-12-18 Evening)
 
-**Issue**: Settings page crashed with `Cannot read properties of undefined (reading 'toString')` after restore.
+**Issue**: App crashed with `Cannot read properties of undefined (reading 'toString')` when clicking a journal entry to edit it.
 
-**Root Cause**: Settings page expects `settings.dailyGoal` (old My Calcium format), but migration only provided `nutrientGoals.calcium` (new My Nutrients format).
+**Root Cause**: `AddFoodModal.svelte` line 179 was accessing `editingFood.calcium` directly, but migrated database foods have `editingFood.nutrients.calcium` instead.
 
-**Fix**: Updated `transformPreferences()` to include backwards compatibility fields:
+**Fixes Applied**:
+
+1. **AddFoodModal.svelte** - Handle both formats when loading edit data:
 ```javascript
+// Before (crashed):
+calcium = editingFood.calcium.toString();
+
+// After (works with both formats):
+const calciumValue = editingFood.nutrients?.calcium ?? editingFood.calcium ?? 0;
+calcium = calciumValue.toString();
+```
+
+2. **Settings Page** - Use correct `nutrientGoals` structure:
+```javascript
+// Load calcium goal from nutrientGoals (new format) or dailyGoal (legacy fallback)
+dailyGoal = settings.nutrientGoals?.calcium ?? settings.dailyGoal ?? 1000;
+
+// Save to nutrientGoals.calcium
+const updatedGoals = {
+  ...currentSettings.nutrientGoals,
+  calcium: dailyGoal
+};
+await nutrientService.updateSettings({ nutrientGoals: updatedGoals });
+```
+
+3. **Migration Script** - Uses proper structure (no backwards compat hack):
+```json
 {
-  // New multi-nutrient format
   "nutrientGoals": { "calcium": 1500, "protein": 60, "fiber": 28, "vitaminD": 20 },
   "displayedNutrients": ["protein", "calcium", "fiber", "vitaminD"],
   "theme": "auto",
   "colorScheme": "blue",
-  // Backwards compatibility
-  "dailyGoal": 1500,
   "sortBy": "time",
   "sortOrder": "desc"
 }
