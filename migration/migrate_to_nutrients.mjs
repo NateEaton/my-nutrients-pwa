@@ -20,6 +20,118 @@ import path from 'path';
 // ============================================================================
 
 /**
+ * Nutrient precision configuration (from data pipeline)
+ * Defines appropriate decimal places for each nutrient type
+ */
+const NUTRIENT_PRECISION = {
+  // Macronutrients (g) - 1 decimal place
+  protein: 1,
+  fiber: 1,
+  carbohydrates: 1,
+  sugars: 1,
+  fat: 1,
+  saturatedFat: 1,
+  monounsaturatedFat: 1,
+  polyunsaturatedFat: 1,
+
+  // Omega fatty acids (g) - 2 decimal places
+  omega3: 2,
+  omega3ALA: 2,
+  omega3EPA: 2,
+  omega3DHA: 2,
+  omega6: 2,
+
+  // Minerals (mg) - 1 decimal place
+  calcium: 1,
+  magnesium: 1,
+  potassium: 1,
+  iron: 1,
+  zinc: 1,
+
+  // Vitamins - 1 decimal place
+  vitaminD: 1,
+  vitaminB12: 1,
+  folate: 1,
+  vitaminB6: 1,
+  vitaminA: 1,
+  vitaminC: 1,
+  vitaminK: 1,
+};
+
+/**
+ * Round nutrient value to appropriate precision (from data pipeline)
+ */
+function roundNutrientValue(nutrientKey, value) {
+  if (value == null || isNaN(value)) return 0;
+  if (value === 0) return 0;
+
+  const precision = NUTRIENT_PRECISION[nutrientKey];
+  if (!precision) {
+    // Default to 1 decimal place for unknown nutrients
+    return Math.round(value * 10) / 10;
+  }
+
+  // Fixed precision
+  const factor = Math.pow(10, precision);
+  return Math.round(value * factor) / factor;
+}
+
+/**
+ * Round all nutrients in a nutrients object (from data pipeline)
+ */
+function roundNutrients(nutrients, omitZeros = true) {
+  if (!nutrients || typeof nutrients !== 'object') {
+    return {};
+  }
+
+  const rounded = {};
+  for (const [key, value] of Object.entries(nutrients)) {
+    const roundedValue = roundNutrientValue(key, value);
+
+    // Omit zeros if requested
+    if (omitZeros && roundedValue === 0) {
+      continue;
+    }
+
+    rounded[key] = roundedValue;
+  }
+
+  return rounded;
+}
+
+/**
+ * Parse and fix serving sizes from old production bug
+ * Old bug: qty=1, unit="3 oz (85g)" → Should be: qty=3, unit="oz (85g)"
+ * Also handles: qty=1, unit="4oz" → Should be: qty=4, unit="oz"
+ */
+function parseServingSize(servingQuantity, servingUnit) {
+  if (!servingUnit || servingQuantity !== 1) {
+    return { servingQuantity, servingUnit };
+  }
+
+  // Pattern 1: "3 oz (85g)" or "1 cup (240ml)" - with space
+  const matchWithSpace = servingUnit.match(/^(\d+(?:\.\d+)?)\s+(.+)$/);
+  if (matchWithSpace) {
+    return {
+      servingQuantity: parseFloat(matchWithSpace[1]),
+      servingUnit: matchWithSpace[2]
+    };
+  }
+
+  // Pattern 2: "4oz" or "2tablespoons" - without space
+  const matchNoSpace = servingUnit.match(/^(\d+(?:\.\d+)?)(oz|tablespoon|tablespoons|teaspoon|teaspoons|cup|cups|gram|grams|g)(.*)$/i);
+  if (matchNoSpace) {
+    return {
+      servingQuantity: parseFloat(matchNoSpace[1]),
+      servingUnit: matchNoSpace[2] + matchNoSpace[3] // Combine unit + optional suffix like "(85g)"
+    };
+  }
+
+  // No fix needed
+  return { servingQuantity, servingUnit };
+}
+
+/**
  * Load database from JS or JSON file
  */
 async function loadDatabase(filePath) {
@@ -190,14 +302,20 @@ function enhanceJournalEntries(journalEntries, databaseLookup, customFoods) {
         // Find custom food ID by name
         const customFoodId = entry.customFoodId || customFoodLookup.get(entry.name.toLowerCase().trim());
 
+        // Fix serving size bug from old production
+        const fixedServing = parseServingSize(
+          entry.servingQuantity || 1,
+          entry.servingUnit
+        );
+
         return {
           name: entry.name,
           customFoodId: customFoodId, // Add custom food ID
           nutrients: {
             calcium: entry.calcium || 0
           },
-          servingQuantity: entry.servingQuantity || 1,
-          servingUnit: entry.servingUnit,
+          servingQuantity: fixedServing.servingQuantity, // Use fixed quantity
+          servingUnit: fixedServing.servingUnit, // Use fixed unit
           timestamp: entry.timestamp,
           isCustom: true
         };
@@ -230,14 +348,23 @@ function enhanceJournalEntries(journalEntries, databaseLookup, customFoods) {
           }
         }
 
+        // Apply data pipeline rounding to match database precision
+        const roundedNutrients = roundNutrients(scaledNutrients, true);
+
+        // Fix serving size bug from old production
+        const fixedServing = parseServingSize(
+          entry.servingQuantity || 1,
+          entry.servingUnit
+        );
+
         enhancedCount++;
 
         return {
           name: entry.name,
           appId: appId, // ADD APPID!
-          nutrients: scaledNutrients,
-          servingQuantity: entry.servingQuantity || 1,
-          servingUnit: entry.servingUnit,
+          nutrients: roundedNutrients, // Use rounded nutrients
+          servingQuantity: fixedServing.servingQuantity, // Use fixed quantity
+          servingUnit: fixedServing.servingUnit, // Use fixed unit
           timestamp: entry.timestamp,
           isCustom: false
         };
@@ -247,13 +374,19 @@ function enhanceJournalEntries(journalEntries, databaseLookup, customFoods) {
       fallbackCount++;
       unmatchedNames.add(entry.name);
 
+      // Fix serving size bug from old production
+      const fixedServing = parseServingSize(
+        entry.servingQuantity || 1,
+        entry.servingUnit
+      );
+
       return {
         name: entry.name,
         nutrients: {
           calcium: entry.calcium || 0
         },
-        servingQuantity: entry.servingQuantity || 1,
-        servingUnit: entry.servingUnit,
+        servingQuantity: fixedServing.servingQuantity, // Use fixed quantity
+        servingUnit: fixedServing.servingUnit, // Use fixed unit
         timestamp: entry.timestamp,
         isCustom: false
       };
