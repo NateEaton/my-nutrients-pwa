@@ -73,28 +73,12 @@ export const nutrientState = writable<NutrientState>({
   isLoading: true
 });
 
-// Derived stores for computed values
-export const dailyTotal = derived(
-  nutrientState,
-  ($state) => $state.foods.reduce((sum, food) => sum + food.calcium, 0)
-);
-
-export const goalProgress = derived(
-  [dailyTotal, nutrientState],
-  ([$total, $state]) => Math.min(Math.round(($total / $state.settings.dailyGoal) * 100), 100)
-);
-
-// REMOVED: sortedFoods derived store - foods array is now sorted in-place
+// REMOVED: Legacy derived stores (dailyTotal, goalProgress, sortedFoods)
+// These were for single-nutrient tracking and are no longer needed.
 // The foods array in nutrientState is maintained in sorted order by NutrientService
 
-// Shared NutrientService instance 
+// Shared NutrientService instance
 export const nutrientService = new NutrientService();
-
-// Current daily goal (derived for easy access)
-export const dailyGoal = derived(
-  nutrientState,
-  ($state) => $state.settings.dailyGoal
-);
 
 // Helper stores for UI state
 export const isToday = derived(

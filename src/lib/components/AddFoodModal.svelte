@@ -341,8 +341,7 @@
 
     // Get selected measure (initially primary/first measure)
     const selectedMeasure = availableMeasures[selectedMeasureIndex];
-    // Handle both nutrients format and legacy format
-    const calciumValue = selectedMeasure.nutrients?.calcium ?? selectedMeasure.calcium ?? 0;
+    const calciumValue = selectedMeasure.nutrients?.calcium ?? 0;
     calcium = calciumValue.toString();
 
     // If this is a custom food, switch to custom mode
@@ -689,7 +688,7 @@
       return (
         metadata.upc === scannedUPC &&
         metadata.upcSource === scannedSource &&
-        food.calcium === calcium &&
+        food.nutrients.calcium === parseFloat(calcium) &&
         food.measure === measure
       );
     });

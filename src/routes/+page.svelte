@@ -21,8 +21,6 @@
   import {
     nutrientState,
     foods,
-    dailyTotal,
-    dailyGoal,
     nutrientService,
   } from "$lib/stores/nutrients";
   import FoodEntry from "$lib/components/FoodEntry.svelte";

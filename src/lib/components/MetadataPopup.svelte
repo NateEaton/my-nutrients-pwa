@@ -95,7 +95,7 @@
       <div class="modal-body">
         <div class="food-info">
           <h4>{food.name}</h4>
-          <p class="food-details">{food.calcium}mg calcium per {food.measure}</p>
+          <p class="food-details">{food.nutrients?.calcium || 0}mg calcium per {food.measure}</p>
         </div>
 
         <div class="metadata-section">
@@ -165,10 +165,10 @@
               </div>
             {/if}
 
-            {#if food.calcium}
+            {#if food.nutrients?.calcium}
               <div class="info-item">
                 <span class="label">Calcium per Serving:</span>
-                <span class="value">{food.calcium}mg</span>
+                <span class="value">{food.nutrients.calcium}mg</span>
               </div>
             {/if}
 
