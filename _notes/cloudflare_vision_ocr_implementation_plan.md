@@ -69,67 +69,126 @@
 
 ### Pre-Implementation: Worker AI Binding Setup
 
-**BEFORE starting Phase 0**, you need to configure the Cloudflare Workers AI binding:
+**BEFORE starting Phase 0**, you need to configure the Cloudflare Workers AI binding based on your chosen option:
 
-**Note**: This assumes you're using **Option A** (same worker). If using Option B, apply these steps to your new AI worker.
+---
 
-1. **Update wrangler.toml** (on your MBP at `~/my-nutrients-pwa/worker/wrangler.toml`):
+#### Setup for Option A: Same Worker (Recommended)
+
+**What you need to do:**
+
+1. **Add AI binding to existing worker** (on your MBP at `~/my-nutrients-pwa/worker/wrangler.toml`):
    ```toml
    # Add this AI binding configuration
    [ai]
    binding = "AI"
    ```
 
-2. **Get Worker URLs**:
+2. **Deploy the updated worker**:
    ```bash
    # On your MBP
    cd ~/my-nutrients-pwa/worker
-
-   # Deploy to dev and note the URL
-   wrangler deploy --env dev
-   # Output will show: Published your-worker-name (dev) to https://your-worker-dev.workers.dev
-
-   # Deploy to production and note the URL
-   wrangler deploy
-   # Output will show: Published your-worker-name to https://your-worker.workers.dev
+   npm run deploy
    ```
 
-3. **Update Environment Variables** (on NAS at `/home/user/my-nutrients-pwa/`):
-
-   Create `.env` for development:
+3. **Verify AI binding works**:
    ```bash
-   # Copy from example
-   cp .env.example .env
-
-   # Edit .env and set:
-   VITE_WORKER_URL=https://your-worker-dev.workers.dev
-   VITE_OCR_API_KEY=your_ocr_api_key
-   VITE_FDC_API_KEY=your_fdc_api_key
-   ```
-
-   Create `.env.production` for production builds:
-   ```bash
-   # Create .env.production
-   cat > .env.production << EOF
-   VITE_WORKER_URL=https://your-worker.workers.dev
-   VITE_OCR_API_KEY=your_ocr_api_key
-   VITE_FDC_API_KEY=your_fdc_api_key
-   EOF
-   ```
-
-4. **Verify AI Binding Works**:
-   ```bash
-   # On MBP, test that AI binding is accessible
+   # On MBP
    cd ~/my-nutrients-pwa/worker
    wrangler dev
    # Try accessing a test endpoint that uses env.AI (you'll create this in Phase 0)
    ```
 
-**Important Notes**:
-- The AI binding is configured in `wrangler.toml`, NOT in environment variables
-- The worker URL is the same URL you're already using for sync - you're just adding a new `/ocr` endpoint
-- If you don't have dev/prod environments set up, you can use the same URL for both
-- The AI binding gives your worker access to Cloudflare's AI models without additional API keys
+**That's it!** Your existing `VITE_WORKER_URL` in `.env` and `.env.production` remains unchanged. The `/ocr` endpoint will be added to your existing worker at the same URL.
+
+**No environment variable changes needed** - you're just adding a new route to the existing worker.
+
+---
+
+#### Setup for Option B: Separate Workers
+
+**What you need to do:**
+
+1. **Create a new worker project**:
+   ```bash
+   # On your MBP
+   cd ~/my-nutrients-pwa
+   mkdir -p worker-ai
+   cd worker-ai
+   npm init -y
+   npm install wrangler
+   ```
+
+2. **Create new wrangler.toml** (in `~/my-nutrients-pwa/worker-ai/wrangler.toml`):
+   ```toml
+   name = "my-nutrients-ai-worker"
+   main = "src/index.ts"
+   compatibility_date = "2024-01-01"
+
+   [ai]
+   binding = "AI"
+   ```
+
+3. **Deploy new worker and get URL**:
+   ```bash
+   # On your MBP
+   cd ~/my-nutrients-pwa/worker-ai
+
+   # Deploy to dev
+   wrangler deploy --env dev
+   # Note the URL: https://my-nutrients-ai-worker-dev.workers.dev
+
+   # Deploy to production
+   wrangler deploy
+   # Note the URL: https://my-nutrients-ai-worker.workers.dev
+   ```
+
+4. **Update environment variables** (on NAS at `/home/user/my-nutrients-pwa/`):
+
+   Update `.env` for development:
+   ```bash
+   # Keep existing VITE_WORKER_URL for sync
+   VITE_WORKER_URL=https://your-sync-worker-dev.workers.dev
+
+   # Add NEW variable for AI worker
+   VITE_AI_WORKER_URL=https://my-nutrients-ai-worker-dev.workers.dev
+
+   VITE_OCR_API_KEY=your_ocr_api_key
+   VITE_FDC_API_KEY=your_fdc_api_key
+   ```
+
+   Update `.env.production` for production:
+   ```bash
+   # Keep existing VITE_WORKER_URL for sync
+   VITE_WORKER_URL=https://your-sync-worker.workers.dev
+
+   # Add NEW variable for AI worker
+   VITE_AI_WORKER_URL=https://my-nutrients-ai-worker.workers.dev
+
+   VITE_OCR_API_KEY=your_ocr_api_key
+   VITE_FDC_API_KEY=your_fdc_api_key
+   ```
+
+5. **Update VisionService to use new URL**:
+   ```typescript
+   // In src/lib/services/VisionService.ts
+   const workerUrl = import.meta.env.VITE_AI_WORKER_URL; // Use separate URL
+   ```
+
+---
+
+### Summary of Differences
+
+| Aspect | Option A (Same Worker) | Option B (Separate Workers) |
+|--------|----------------------|---------------------------|
+| **Worker changes** | Add AI binding to existing worker | Create new worker project |
+| **Deployment** | Deploy existing worker | Deploy new worker separately |
+| **Environment variables** | No changes needed (reuse VITE_WORKER_URL) | Add new VITE_AI_WORKER_URL |
+| **Client code** | VisionService uses existing VITE_WORKER_URL | VisionService uses new VITE_AI_WORKER_URL |
+| **Routes** | Add `/ocr` to existing worker | New worker only has `/ocr` |
+| **Complexity** | ✅ Simple | ⚠️ More complex |
+
+
 
 ### Build & Deployment Steps
 1. **Worker Deployment** (after Phase 0/1 code changes):
