@@ -226,7 +226,7 @@
               <span class="material-icons">hourglass_empty</span>
             </div>
           </div>
-          <p>Loading your calcium data...</p>
+          <p>Loading your nutrient data...</p>
         </div>
       {:else}
         <slot />

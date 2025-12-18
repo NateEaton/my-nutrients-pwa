@@ -169,7 +169,7 @@ export class NutrientService {
    * @param sortBy The field to sort by
    * @param sortOrder Optional sort order; if not provided, toggles current order
    */
-  async updateSort(sortBy: 'time' | 'name' | 'calcium', sortOrder?: 'asc' | 'desc'): Promise<void> {
+  async updateSort(sortBy: 'time' | 'name' | string, sortOrder?: 'asc' | 'desc'): Promise<void> {
     const state = get(nutrientState);
 
     let newSortOrder = sortOrder;

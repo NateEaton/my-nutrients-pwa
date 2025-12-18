@@ -1016,7 +1016,7 @@
                     </div>
 
                     <div class="debug-section">
-                      <h5>🥛 Parsed Calcium:</h5>
+                      <h5>🥛 Parsed Nutrients:</h5>
                       <div class="debug-value">
                         {debugData.parsedElements?.calcium ? `${debugData.parsedElements.calcium}mg` : 'null'}
                       </div>

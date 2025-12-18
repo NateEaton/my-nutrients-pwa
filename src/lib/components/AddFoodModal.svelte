@@ -378,7 +378,7 @@
         }
 
         // Recalculate nutrients for preferred serving
-        updateCalcium();
+        updateCalculatedNutrients();
 
         // Apply nutrient overrides if present (user-edited values)
         if (savedPreference.nutrientOverrides && Object.keys(savedPreference.nutrientOverrides).length > 0) {
@@ -422,8 +422,8 @@
       servingQuantity = parsedFoodMeasure.originalQuantity;
       servingUnit = parsedFoodMeasure.cleanedUnit || parsedFoodMeasure.detectedUnit;
       
-      // Recalculate calcium for the new serving size
-      updateCalcium();
+      // Recalculate nutrients for the new serving size
+      updateCalculatedNutrients();
     }
   }
 
@@ -515,11 +515,6 @@
     updateUnitSuggestions();
   }
 
-  // Legacy function name for backward compatibility (just calls the new function)
-  function updateCalcium() {
-    updateCalculatedNutrients();
-  }
-
   function updateUnitSuggestions() {
     if (
       parsedFoodMeasure &&
@@ -541,7 +536,7 @@
     servingQuantity = suggestion.quantity;
     servingUnit = suggestion.unit;
     hasResetToOriginal = false; // User changed from reset values
-    updateCalcium(); // This will also update suggestions via updateUnitSuggestions()
+    updateCalculatedNutrients(); // This will also update suggestions via updateUnitSuggestions()
     showUnitSuggestions = false;
   }
 
@@ -667,8 +662,8 @@
     usingPreference = false;
     hasResetToOriginal = true;
 
-    // Recalculate calcium with original serving
-    updateCalcium();
+    // Recalculate nutrients with original serving
+    updateCalculatedNutrients();
   }
 
   /**
@@ -1316,7 +1311,7 @@
                 bind:value={servingQuantity}
                 on:input={() => {
                   hasResetToOriginal = false;
-                  updateCalcium();
+                  updateCalculatedNutrients();
                 }}
                 placeholder="1"
                 min="0.01"
