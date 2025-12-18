@@ -6,7 +6,7 @@
 
 A Progressive Web App (PWA) for tracking essential nutrients—protein, calcium, fiber, vitamins, minerals, and more. Search a comprehensive food database, add custom foods, and monitor your progress toward nutritional goals. All data is stored locally on your device with optional secure cross-device synchronization.
 
-[**Live Demo**](https://ca-pwa.vercel.app/)
+[**Live Demo**](https://my-nutrients-pwa.pages.dev/)
 
 ## App Screenshots
 
