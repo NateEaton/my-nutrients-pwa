@@ -298,15 +298,66 @@ node migration/migrate_to_nutrients.mjs \
 
 ---
 
-## Edit Modal Fix (2025-12-18 Evening)
+## Migration Data Quality Fixes (2025-12-18 Evening)
+
+### Fix 1: Edit Modal Crash
 
 **Issue**: App crashed with `Cannot read properties of undefined (reading 'toString')` when clicking a journal entry to edit it.
 
 **Root Cause**: `AddFoodModal.svelte` line 179 was accessing `editingFood.calcium` directly, but migrated database foods have `editingFood.nutrients.calcium` instead.
 
-**Fixes Applied**:
+### Fix 2: Nutrient Precision
 
-1. **AddFoodModal.svelte** - Handle both formats when loading edit data:
+**Issue**: Migrated nutrient values had excessive precision (10-12 digits) instead of 1-2 decimals.
+
+**Examples**:
+- ❌ Before: `protein: 22.112499999999997`, `protein: 1.4651162790697676`
+- ✅ After: `protein: 22.1`, `protein: 1.5`
+
+**Root Cause**: Migration used raw scaled values without data pipeline's rounding logic.
+
+**Fix**: Added rounding functions from `data-module-generator-nutrients.cjs`:
+```javascript
+const NUTRIENT_PRECISION = {
+  protein: 1,      // 1 decimal place
+  calcium: 1,      // 1 decimal place
+  omega3: 2,       // 2 decimal places
+  // ... etc
+};
+
+function roundNutrients(nutrients) {
+  // Rounds each nutrient to appropriate precision
+}
+```
+
+**Result**: All nutrients now match data pipeline precision (1-2 decimals).
+
+### Fix 3: Serving Size Bug
+
+**Issue**: Old production version incorrectly stored serving quantities (22 affected entries).
+
+**Examples**:
+- ❌ `qty=1, unit="3 oz (3 oz)"` → ✅ `qty=3, unit="oz (3 oz)"`
+- ❌ `qty=1, unit="4oz"` → ✅ `qty=4, unit="oz"`
+
+**Root Cause**: Old app parsed USDA measure strings incorrectly, embedding quantity in unit field.
+
+**Fix**: Added `parseServingSize()` to detect and fix patterns:
+```javascript
+function parseServingSize(servingQuantity, servingUnit) {
+  // Pattern 1: "3 oz (85g)" with space
+  // Pattern 2: "4oz" without space
+  // Extracts quantity and corrects unit
+}
+```
+
+**Result**: All 22 bugged entries fixed, serving sizes now match database structure.
+
+---
+
+## Code Changes
+
+### 1. AddFoodModal.svelte - Handle both formats when loading edit data:
 ```javascript
 // Before (crashed):
 calcium = editingFood.calcium.toString();
