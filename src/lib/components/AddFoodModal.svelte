@@ -1052,6 +1052,7 @@
     class="modal-backdrop"
     on:click={closeModal}
     on:keydown={handleBackdropKeydown}
+    on:touchmove|preventDefault
     role="button"
     tabindex="0"
   >
@@ -1060,6 +1061,7 @@
       class="modal-content"
       on:click|stopPropagation
       on:keydown|stopPropagation
+      on:touchmove|stopPropagation
       class:custom-food-mode={isCustomMode}
       role="dialog"
       tabindex="-1"

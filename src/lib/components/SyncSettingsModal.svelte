@@ -349,6 +349,7 @@
   }
   .copy-btn {
     background: var(--surface-variant);
+    color: var(--text-primary);
     border: 1px solid var(--divider);
     cursor: pointer;
     padding: 0 var(--spacing-md);
@@ -361,10 +362,12 @@
     justify-content: center;
     gap: var(--spacing-sm);
     padding: var(--spacing-md);
-    background: var(--surface-variant);
-    border: 1px solid var(--divider);
+    background: var(--primary);
+    color: white;
+    border: none;
     border-radius: 4px;
     cursor: pointer;
+    font-weight: 500;
   }
   .qr-code-wrapper {
     text-align: center;
