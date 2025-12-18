@@ -30,11 +30,50 @@
 
 **IMPORTANT**: The following tasks must be performed manually by the user. Claude Code will prepare the code, but cannot execute these steps:
 
+### Pre-Implementation: Worker Strategy Decision
+
+**IMPORTANT**: Decide whether to use the same Worker for both Sync and OCR functionality:
+
+#### Option A: Same Worker (Recommended for MVP)
+**Pros**:
+- ✅ Single deployment and management point
+- ✅ One URL to configure (VITE_WORKER_URL)
+- ✅ Shared CORS and auth configuration
+- ✅ Simpler for initial rollout
+
+**Cons**:
+- ⚠️ Mixed concerns (sync + AI processing)
+- ⚠️ Potential resource contention if heavily used
+- ⚠️ Both features share the same Worker limits
+
+**Setup**: Add AI binding to existing sync worker, add new `/ocr` route
+
+#### Option B: Separate Workers
+**Pros**:
+- ✅ Clean separation of concerns
+- ✅ Independent scaling and monitoring
+- ✅ Isolated failure domains
+- ✅ Easier to optimize each worker separately
+
+**Cons**:
+- ⚠️ Two deployments to manage
+- ⚠️ Two URLs to configure (VITE_WORKER_URL, VITE_AI_WORKER_URL)
+- ⚠️ More complex CORS setup
+- ⚠️ Higher management overhead
+
+**Setup**: Create new worker project, configure separate URLs
+
+**Recommendation**: Start with **Option A** (same worker) for simplicity. You can always split later if needed. The AI binding adds minimal overhead, and typical usage won't strain Worker limits.
+
+---
+
 ### Pre-Implementation: Worker AI Binding Setup
 
 **BEFORE starting Phase 0**, you need to configure the Cloudflare Workers AI binding:
 
-1. **Update wrangler.toml** (on your MBP at `~/Ca-pwa-svelte/worker/wrangler.toml`):
+**Note**: This assumes you're using **Option A** (same worker). If using Option B, apply these steps to your new AI worker.
+
+1. **Update wrangler.toml** (on your MBP at `~/my-nutrients-pwa/worker/wrangler.toml`):
    ```toml
    # Add this AI binding configuration
    [ai]
@@ -44,7 +83,7 @@
 2. **Get Worker URLs**:
    ```bash
    # On your MBP
-   cd ~/Ca-pwa-svelte/worker
+   cd ~/my-nutrients-pwa/worker
 
    # Deploy to dev and note the URL
    wrangler deploy --env dev
@@ -81,7 +120,7 @@
 4. **Verify AI Binding Works**:
    ```bash
    # On MBP, test that AI binding is accessible
-   cd ~/Ca-pwa-svelte/worker
+   cd ~/my-nutrients-pwa/worker
    wrangler dev
    # Try accessing a test endpoint that uses env.AI (you'll create this in Phase 0)
    ```
@@ -96,7 +135,7 @@
 1. **Worker Deployment** (after Phase 0/1 code changes):
    ```bash
    # From your MacBook Pro (OAuth requirement)
-   cd ~/Ca-pwa-svelte/worker
+   cd ~/my-nutrients-pwa/worker
    npm run deploy
    ```
 
@@ -1330,7 +1369,7 @@ worker/wrangler.toml                    [MODIFY - add AI binding]
 
 **Pattern**:
 1. **Claude Code** (on NAS): Edit worker source files in `worker/src/`
-2. **User** (on MBP): Deploy with `cd ~/Ca-pwa-svelte/worker && npm run deploy`
+2. **User** (on MBP): Deploy with `cd ~/my-nutrients-pwa/worker && npm run deploy`
 3. **Testing**: Can run from anywhere after deployment
 
 **Iteration Cycle**:
@@ -1350,7 +1389,7 @@ cd worker
 # Prepare test harness
 
 # User: Deploy from MBP
-cd ~/Ca-pwa-svelte/worker && npm run deploy
+cd ~/my-nutrients-pwa/worker && npm run deploy
 
 # Claude Code or User: Run 5-10 test images and measure accuracy
 # Make Go/No-Go decision
@@ -1365,7 +1404,7 @@ cd worker
 # Update src/index.ts to route /ocr requests
 
 # User: Deploy from MBP
-cd ~/Ca-pwa-svelte/worker && npm run deploy
+cd ~/my-nutrients-pwa/worker && npm run deploy
 
 # Test with curl before client integration
 ```
