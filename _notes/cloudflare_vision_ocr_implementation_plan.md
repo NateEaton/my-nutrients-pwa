@@ -30,8 +30,70 @@
 
 **IMPORTANT**: The following tasks must be performed manually by the user. Claude Code will prepare the code, but cannot execute these steps:
 
+### Pre-Implementation: Worker AI Binding Setup
+
+**BEFORE starting Phase 0**, you need to configure the Cloudflare Workers AI binding:
+
+1. **Update wrangler.toml** (on your MBP at `~/Ca-pwa-svelte/worker/wrangler.toml`):
+   ```toml
+   # Add this AI binding configuration
+   [ai]
+   binding = "AI"
+   ```
+
+2. **Get Worker URLs**:
+   ```bash
+   # On your MBP
+   cd ~/Ca-pwa-svelte/worker
+
+   # Deploy to dev and note the URL
+   wrangler deploy --env dev
+   # Output will show: Published your-worker-name (dev) to https://your-worker-dev.workers.dev
+
+   # Deploy to production and note the URL
+   wrangler deploy
+   # Output will show: Published your-worker-name to https://your-worker.workers.dev
+   ```
+
+3. **Update Environment Variables** (on NAS at `/home/user/my-nutrients-pwa/`):
+
+   Create `.env` for development:
+   ```bash
+   # Copy from example
+   cp .env.example .env
+
+   # Edit .env and set:
+   VITE_WORKER_URL=https://your-worker-dev.workers.dev
+   VITE_OCR_API_KEY=your_ocr_api_key
+   VITE_FDC_API_KEY=your_fdc_api_key
+   ```
+
+   Create `.env.production` for production builds:
+   ```bash
+   # Create .env.production
+   cat > .env.production << EOF
+   VITE_WORKER_URL=https://your-worker.workers.dev
+   VITE_OCR_API_KEY=your_ocr_api_key
+   VITE_FDC_API_KEY=your_fdc_api_key
+   EOF
+   ```
+
+4. **Verify AI Binding Works**:
+   ```bash
+   # On MBP, test that AI binding is accessible
+   cd ~/Ca-pwa-svelte/worker
+   wrangler dev
+   # Try accessing a test endpoint that uses env.AI (you'll create this in Phase 0)
+   ```
+
+**Important Notes**:
+- The AI binding is configured in `wrangler.toml`, NOT in environment variables
+- The worker URL is the same URL you're already using for sync - you're just adding a new `/ocr` endpoint
+- If you don't have dev/prod environments set up, you can use the same URL for both
+- The AI binding gives your worker access to Cloudflare's AI models without additional API keys
+
 ### Build & Deployment Steps
-1. **Worker Deployment** (after Phase 1 code changes):
+1. **Worker Deployment** (after Phase 0/1 code changes):
    ```bash
    # From your MacBook Pro (OAuth requirement)
    cd ~/Ca-pwa-svelte/worker
@@ -53,13 +115,26 @@
    - Confirm fallback to OCR.space works if Vision fails
 
 ### Testing Checklist
-- [ ] Deploy Worker successfully
+
+**Pre-Implementation**:
+- [ ] AI binding added to wrangler.toml
+- [ ] Dev worker URL obtained and added to .env
+- [ ] Production worker URL obtained and added to .env.production
+- [ ] Worker deploys successfully with AI binding
+- [ ] Can access worker at both dev and prod URLs
+
+**Phase 0 - Spike Test**:
+- [ ] Spike test endpoint created and deployed
 - [ ] Worker returns valid JSON for test images
+- [ ] Multi-nutrient extraction accuracy ≥60%
+- [ ] Response times acceptable (<5 seconds)
+
+**Phases 1-3 - Full Implementation**:
+- [ ] Full /ocr endpoint deployed
 - [ ] VisionService integrates with UI without errors
 - [ ] Settings toggle persists and switches services correctly
 - [ ] Multi-nutrient extraction works (not just calcium)
 - [ ] Confidence scores are reasonable
-- [ ] Response times are acceptable (<5 seconds)
 - [ ] Error handling works gracefully
 
 ---
@@ -544,19 +619,28 @@ return {
 
 **Goal**: Create `/ocr` endpoint in existing Cloudflare Worker
 
+**Prerequisites**:
+- ✅ AI binding already added to `wrangler.toml` (see Pre-Implementation section)
+- ✅ Worker URLs configured in .env files
+- ✅ Phase 0 spike test completed with positive results
+
 **Tasks**:
-- [ ] Add vision AI binding to `wrangler.toml`
 - [ ] Create new OCR handler function in `worker/src/ocr.ts`
 - [ ] Accept multipart/form-data image upload
-- [ ] Call Llama 4 Scout model with structured prompt
-- [ ] Return JSON response
+- [ ] Call Llama 3.2 11B Vision model with structured prompt
+- [ ] Return JSON response with all nutrients
 - [ ] Add error handling and rate limit logging
 - [ ] Deploy and test with curl
 
 **Files to Modify**:
 - `worker/src/index.ts` - Add OCR route
-- `worker/wrangler.toml` - Add AI binding
-- `worker/src/ocr.ts` - New file
+- `worker/src/ocr.ts` - New file (main implementation)
+
+**Note**: The AI binding should already be configured in `wrangler.toml` from Pre-Implementation setup:
+```toml
+[ai]
+binding = "AI"
+```
 
 **Code Example**:
 ```typescript
