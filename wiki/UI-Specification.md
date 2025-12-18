@@ -122,54 +122,6 @@ Milk, whole (1 cup)
 
 ---
 
-### Nutrients Page (NEW)
-
-**Layout**:
-```
-┌────────────────────────────────────┐
-│ < Nutrients          [Calcium ▼]  │
-├────────────────────────────────────┤
-│                                     │
-│         ╭─────────────╮             │
-│        │      71%     │             │
-│        │              │             │
-│        │  856 / 1200  │             │
-│        │      mg      │             │
-│         ╰─────────────╯             │
-│                                     │
-│ ┌───────────────────────────────┐  │
-│ │ 7-Day Trend                   │  │
-│ │     •─•─•─•─•─•─•             │  │
-│ └───────────────────────────────┘  │
-│                                     │
-│ Top Sources Today:                 │
-│   Milk, whole         276mg        │
-│   Cheese, cheddar     204mg        │
-│   Yogurt, Greek       187mg        │
-│                                     │
-└────────────────────────────────────┘
-```
-
-**Nutrient Selector Dropdown**:
-```
-┌─────────────────────────────┐
-│ ⭐ Protein                  │
-│ ⭐ Calcium (current)        │
-│ ⭐ Fiber                    │
-│ ⭐ Vitamin D                │
-│ ─────────────────────────   │
-│   Magnesium                 │
-│   Potassium                 │
-│   Iron                      │
-│   Zinc                      │
-│   ...                       │
-└─────────────────────────────┘
-```
-
-**Swipe**: Left → next nutrient, Right → previous nutrient
-
----
-
 ### Nutrient Settings Modal
 
 **Layout**:

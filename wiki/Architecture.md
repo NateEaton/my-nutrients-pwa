@@ -2,37 +2,36 @@
 
 **Version**: 1.0.0
 **Date**: December 2025
-**Status**: Design Phase
 
 ---
 
 ## Table of Contents
 
 1. [Overview](#overview)
-2. [Current Architecture (My Calcium)](#current-architecture-my-calcium)
-3. [Proposed Architecture (My Nutrients)](#proposed-architecture-my-nutrients)
-4. [Data Layer](#data-layer)
-5. [Service Layer](#service-layer)
-6. [UI Layer](#ui-layer)
-7. [External Services](#external-services)
-8. [Data Flow](#data-flow)
-9. [Security & Privacy](#security--privacy)
+2. [Architecture](#architecture)
+3. [Data Layer](#data-layer)
+4. [Service Layer](#service-layer)
+5. [UI Layer](#ui-layer)
+6. [External Services](#external-services)
+7. [Data Flow](#data-flow)
+8. [Security & Privacy](#security--privacy)
+9. [Performance Considerations](#performance-considerations)
 
 ---
 
 ## Overview
 
-**My Nutrients** is a Progressive Web App (PWA) that helps seniors track essential nutrients for better health. It builds upon the proven foundation of **My Calcium**, expanding from single-nutrient tracking to comprehensive multi-nutrient monitoring.
+**My Nutrients** is a Progressive Web App (PWA) that helps users track essential nutrients for better health, supporting 20+ nutrients including macronutrients, minerals, vitamins, and omega fatty acids.
 
 ### Design Principles
 
 1. **Local-First**: All data stored locally; works offline
 2. **Privacy-Focused**: No third-party tracking or analytics
-3. **Simple UX**: Optimized for seniors; progressive disclosure of complexity
+3. **Simple UX**: Progressive disclosure of complexity
 4. **Data Ownership**: Complete backup/restore/export capabilities
 5. **Optional Sync**: Encrypted cross-device synchronization
 
-### Target Nutrients (20+)
+### Tracked Nutrients
 
 **Macronutrients**: Protein, Fiber, Carbohydrates, Sugars, Fat (total, saturated, monounsaturated, polyunsaturated), Omega-3, Omega-6
 
@@ -42,87 +41,53 @@
 
 ---
 
-## Current Architecture (My Calcium)
+## Architecture
 
 ### Tech Stack
 
-- **Frontend**: SvelteKit 2.37.0 + Svelte 4.2.19
-- **Build Tool**: Vite 5.2.11
-- **Language**: TypeScript with JSDoc
-- **PWA**: vite-plugin-pwa 0.20.0
-- **Storage**: IndexedDB (primary), localStorage (settings)
-- **Sync Backend**: Cloudflare Workers + KV Store
-- **Encryption**: Web Crypto API (AES-GCM)
+- **Frontend**: SvelteKit 2.x + Svelte 4.x
+- **Build Tool**: Vite 5.x
+- **Storage**: IndexedDB (local-first, offline-capable)
+- **Styling**: CSS custom properties + scoped component styles
+- **Deployment**: Static site (Vercel)
+- **Sync** (Optional): Cloudflare Workers + KV storage
 
-### Storage Schema (Current)
+### System Architecture
 
-**IndexedDB Database**: `CalciumTracker` (version 7)
-
-**Object Stores**:
-- `customFoods` - User-created foods
-- `journalEntries` - Daily food logs
-- `favorites` - Favorited food IDs
-- `hiddenFoods` - Hidden food IDs
-- `servingPreferences` - Preferred serving sizes per food
-
-**localStorage Keys**:
-- `calcium_goal` - Daily calcium target
-- `calcium_theme` - UI theme preference
-- `calcium_sort_settings` - Sort preferences
-- `calcium_sync_settings` - Sync configuration
-
-### Current Data Models
-
-```typescript
-interface FoodEntry {
-  name: string;
-  calcium: number;              // Single nutrient only
-  servingQuantity: number;
-  servingUnit: string;
-  timestamp: string;
-  isCustom?: boolean;
-  customFoodId?: number;
-  note?: string;
-}
-
-interface USDAFood {
-  id: number;
-  name: string;
-  measures?: Array<{
-    measure: string;
-    calcium: number;            // Single nutrient only
-  }>;
-}
-
-interface JournalEntry {
-  date: string;                 // YYYY-MM-DD
-  foods: FoodEntry[];
-  lastModified: number;
-  syncStatus: string;
-  totalCalcium: number;         // Single total only
-}
+```
+┌─────────────────────────────────────────────────────────┐
+│                      UI Layer                            │
+│  (SvelteKit Routes + Svelte Components)                 │
+│  - Tracking Page (/)                                    │
+│  - Stats Page (/stats)                                  │
+│  - Reports Page (/reports)                              │
+│  - Database Page (/database)                            │
+│  - Settings Modal                                        │
+└──────────────────┬──────────────────────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────────────────────┐
+│                   Service Layer                          │
+│  (Business Logic & State Management)                    │
+│  - NutrientService (IndexedDB operations)               │
+│  - Svelte Stores (reactive state)                       │
+│  - Calculation utilities                                │
+└──────────────────┬──────────────────────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────────────────────┐
+│                    Data Layer                            │
+│  - IndexedDB: NutrientTracker (v1)                      │
+│    - journalEntries (food logs)                         │
+│    - customFoods (user-created foods)                   │
+│    - settings (nutrient goals + preferences)            │
+│  - Static Food Database (~2-5MB)                        │
+│    - 3,500+ USDA foods with nutrients                   │
+│  - Provenance Data (optional, chunked JSON)             │
+└─────────────────────────────────────────────────────────┘
 ```
 
-### Key Services
-
-- **CalciumService**: Business logic for food/journal management
-- **SearchService**: Food search with scoring algorithm
-- **SyncService**: End-to-end encrypted cloud sync
-- **UnitConverter**: Serving size conversions
-- **FDCService**: USDA barcode lookup
-- **HouseholdMeasureService**: Measure parsing/conversion
-
----
-
-## Proposed Architecture (My Nutrients)
-
-### New Database Schema
-
-**IndexedDB Database**: `NutrientTracker` (version 1)
-
-**Object Stores**: Same structure, updated data models
-
-### Enhanced Data Models
+### Data Models
 
 ```typescript
 interface NutrientValues {
@@ -132,10 +97,15 @@ interface NutrientValues {
   carbohydrates?: number;
   sugars?: number;
   fat?: number;
-  saturatedFat?: number;
+  saturated
+
+Fat?: number;
   monounsaturatedFat?: number;
   polyunsaturatedFat?: number;
   omega3?: number;
+  omega3ALA?: number;
+  omega3EPA?: number;
+  omega3DHA?: number;
   omega6?: number;
 
   // Minerals (milligrams)
@@ -146,18 +116,18 @@ interface NutrientValues {
   zinc?: number;
 
   // Vitamins (varies)
-  vitaminD?: number;         // mcg (or IU)
+  vitaminD?: number;         // mcg
   vitaminB12?: number;       // mcg
   folate?: number;           // mcg DFE
   vitaminB6?: number;        // mg
-  vitaminA?: number;         // mcg RAE (or IU)
+  vitaminA?: number;         // mcg RAE
   vitaminC?: number;         // mg
   vitaminK?: number;         // mcg
 }
 
 interface FoodEntry {
   name: string;
-  nutrients: NutrientValues;     // Multi-nutrient support
+  nutrients: NutrientValues;
   servingQuantity: number;
   servingUnit: string;
   timestamp: string;
@@ -169,40 +139,34 @@ interface FoodEntry {
 interface USDAFood {
   id: number;
   name: string;
-  measures?: Array<{
+  measures: Array<{
     measure: string;
-    nutrients: NutrientValues;   // Multi-nutrient per serving
+    nutrients: NutrientValues;
   }>;
 }
 
 interface JournalEntry {
-  date: string;
+  date: string;              // YYYY-MM-DD
   foods: FoodEntry[];
   lastModified: number;
   syncStatus: string;
-  totalNutrients: NutrientValues; // Multi-nutrient totals
+  totalNutrients: NutrientValues;
 }
 
 interface NutrientSettings {
-  nutrientGoals: Record<string, number>;    // { calcium: 1500, protein: 60, ... }
-  displayedNutrients: string[];             // Max 4 for UI display
-  theme: string;
+  nutrientGoals: Record<string, number>;     // { protein: 60, calcium: 1200, ... }
+  displayedNutrients: string[];              // Max 4 for UI display
+  theme: 'auto' | 'light' | 'dark';
   colorScheme: string;
 }
 ```
 
-### Storage Impact Analysis
+### Storage Analysis
 
-**Current Storage Usage**:
-- Food database: ~400KB (3,876 foods, calcium only)
-- Journal entry: ~150 bytes per food
-- 365 days typical: ~55KB
-
-**Projected Storage Usage**:
-- Food database: ~2-3MB (3,800+ foods, 20+ nutrients)
-- Journal entry: ~450 bytes per food (3x increase)
+- Food database: ~2-5MB (3,500+ foods, 20+ nutrients per food)
+- Journal entry: ~450 bytes per food
 - 365 days typical: ~165KB
-- **Total app size**: ~3-4MB (well within PWA best practices)
+- **Total app size**: ~3-6MB (within PWA best practices)
 
 ---
 
@@ -210,212 +174,115 @@ interface NutrientSettings {
 
 ### IndexedDB Architecture
 
-**Database Name**: `NutrientTracker`
-**Version**: 1 (new identity from CalciumTracker v7)
+**Database**: `NutrientTracker` (version 1)
 
-**Object Store Details**:
+**Object Stores**:
 
-#### `customFoods`
-- **Key Path**: `id` (negative integers, e.g., -1, -2, -3)
-- **Indexes**: `name`, `dateAdded`
-- **Purpose**: User-created custom foods with full nutrient data
+1. **`journalEntries`**
+   - Key: `date` (string, YYYY-MM-DD format)
+   - Stores daily food logs with nutrient totals
+   - Indexed by date for efficient range queries
 
-```typescript
-interface CustomFood {
-  id: number;                    // Negative ID
-  name: string;
-  nutrients: NutrientValues;     // All nutrients user entered
-  measure: string;
-  dateAdded: string;
-  isCustom: true;
-  sourceMetadata?: {             // Optional scan source info
-    sourceType: 'manual' | 'upc_scan' | 'ocr_scan';
-    upc?: string;
-    scanData?: any;
-  };
+2. **`customFoods`**
+   - Key: Auto-increment integer
+   - User-created food items with custom nutrient values
+   - Allows editing and deletion
+
+3. **`settings`**
+   - Key: Setting name (string)
+   - Stores nutrient goals, display preferences, theme
+
+**Indexes**:
+- `journalEntries`: By date (primary key)
+- `journalEntries`: By syncStatus (for sync operations)
+
+### Food Database
+
+The static food database is a minified JavaScript module (`foodDatabaseData.js`) containing:
+- 3,500+ USDA-sourced foods
+- Multiple serving sizes per food
+- 20+ nutrients per serving
+- Compressed keys for size optimization
+
+**Format**:
+```javascript
+{
+  i: 100,  // id
+  n: "Milk, whole",  // name
+  ms: [{  // measures
+    s: "1 cup (244g)",  // serving
+    n: { p: 7.99, ca: 276, vd: 2.9, ... }  // nutrients
+  }]
 }
 ```
 
-#### `journalEntries`
-- **Key Path**: `date` (YYYY-MM-DD string)
-- **Indexes**: `lastModified`, `syncStatus`
-- **Purpose**: Daily food logs with multi-nutrient totals
+**Loading**: Database loaded asynchronously on app start, rehydrated from minified format.
 
-```typescript
-interface JournalEntry {
-  date: string;                  // Primary key
-  foods: FoodEntry[];
-  lastModified: number;
-  syncStatus: 'pending' | 'synced';
-  totalNutrients: NutrientValues;  // Pre-calculated daily totals
-}
-```
+### Provenance Data
 
-#### `favorites`
-- **Key Path**: `foodId`
-- **Purpose**: Quick access to frequently used foods
-
-#### `hiddenFoods`
-- **Key Path**: `foodId`
-- **Purpose**: Foods hidden from search results
-
-#### `servingPreferences`
-- **Key Path**: `foodId`
-- **Purpose**: Remember user's preferred serving size per food
-
-```typescript
-interface UserServingPreference {
-  foodId: number;
-  preferredQuantity: number;
-  preferredUnit: string;
-  lastUsed: string;
-  preferredMeasureIndex?: number;
-}
-```
-
-#### `migrations`
-- **Key Path**: `name`
-- **Purpose**: Track completed data migrations
-
-### localStorage Architecture
-
-**Prefix**: `nutrient_` (new prefix for My Nutrients)
-
-**Keys**:
-- `nutrient_goals` - JSON of nutrient goals
-- `nutrient_displayed` - JSON array of displayed nutrients (max 4)
-- `nutrient_theme` - Theme preference
-- `nutrient_sync_settings` - Sync configuration (encrypted key)
+Optional chunked JSON files (`provenance_0.json` - `provenance_19.json`) provide source information:
+- Which USDA foods were collapsed into each app food
+- FDC IDs for reference
+- Loaded on-demand when viewing food details
 
 ---
 
 ## Service Layer
 
-### Core Services
+### NutrientService
 
-#### NutrientService (renamed from CalciumService)
+**Purpose**: Centralized business logic for all nutrient and journal operations
 
 **Responsibilities**:
-- Journal management (add/edit/delete food entries)
-- Multi-nutrient aggregation
+- IndexedDB CRUD operations
+- Nutrient total calculations
 - Settings management
 - Backup/restore operations
+- Data validation
 
 **Key Methods**:
 ```typescript
 class NutrientService {
-  // Food operations
-  addFood(food: FoodEntry): Promise<void>
-  updateFood(index: number, food: FoodEntry): Promise<void>
-  removeFood(index: number): Promise<void>
+  // Journal operations
+  async addFoodEntry(date: string, food: FoodEntry): Promise<void>
+  async deleteFoodEntry(date: string, index: number): Promise<void>
+  async getJournalEntry(date: string): Promise<JournalEntry | null>
+  async getDayTotals(date: string): Promise<NutrientValues>
 
-  // Date navigation
-  changeDate(newDate: string): Promise<void>
-  loadFoodsForDate(date: string): Promise<FoodEntry[]>
-  saveFoodsForDate(date: string, foods: FoodEntry[]): Promise<void>
-
-  // Multi-nutrient aggregation
-  calculateTotalNutrients(foods: FoodEntry[]): NutrientValues
+  // Custom foods
+  async addCustomFood(food: CustomFood): Promise<number>
+  async updateCustomFood(id: number, food: CustomFood): Promise<void>
+  async deleteCustomFood(id: number): Promise<void>
 
   // Settings
-  getSettings(): Promise<NutrientSettings>
-  updateSettings(settings: Partial<NutrientSettings>): Promise<void>
+  async getNutrientSettings(): Promise<NutrientSettings>
+  async updateNutrientSettings(settings: Partial<NutrientSettings>): Promise<void>
 
   // Backup/Restore
-  generateBackup(): Promise<BackupData>
-  restoreFromBackup(backup: BackupData): Promise<void>
+  async exportBackup(): Promise<BackupData>
+  async importBackup(backup: BackupData): Promise<void>
 }
 ```
 
-**Changes from CalciumService**:
-- Single `calcium` values → `NutrientValues` objects
-- `totalCalcium` → `totalNutrients`
-- Goal management: single goal → map of nutrient goals
-- Aggregation: sum calcium → sum all nutrients
+### Svelte Stores
 
-#### SearchService
+**Purpose**: Reactive state management
 
-**No changes needed** - Already nutrient-agnostic
-
-**Current scoring algorithm**:
-- Keyword matching on food names
-- Bonus points for favorites, custom foods
-- Calcium content bonus → **Remove or make nutrient-agnostic**
-
-**Responsibilities**:
-- Fuzzy search across food database + custom foods
-- Scoring and ranking
-- Filter by favorites, hidden foods
-
-#### SyncService
-
-**Minimal changes** - Architecture is data-agnostic
-
-**Responsibilities**:
-- End-to-end encryption (AES-GCM)
-- Multi-document sync (metadata, persistent, monthly journals)
-- Conflict resolution
-- Auto-sync scheduling
-
-**Changes needed**:
-- Backup format version bump (2.1.0 → 3.0.0)
-- No changes to encryption/sync logic
-
-#### UnitConverter
-
-**No changes needed** - Already nutrient-agnostic
-
-**Responsibilities**:
-- Convert between volume/weight units (cups, oz, g, ml)
-- Validate unit compatibility
-- Suggest unit conversions
-
-#### FDCService (USDA Barcode Lookup)
-
-**Significant changes needed** - Extract all nutrients
-
-**Current**: Extracts only calcium from API response
-**New**: Extract all 20+ target nutrients
-
-**Changes**:
-```typescript
-// Current (line 271)
-const calciumNutrient = product.foodNutrients.find(
-  nutrient => nutrientNumber === "301"
-);
-
-// New approach
-const NUTRIENT_MAP = {
-  '203': 'protein',
-  '291': 'fiber',
-  '301': 'calcium',
-  '304': 'magnesium',
-  '306': 'potassium',
-  '303': 'iron',
-  '309': 'zinc',
-  '328': 'vitaminD',
-  '418': 'vitaminB12',
-  '435': 'folate',
-  '415': 'vitaminB6',
-  '320': 'vitaminA',
-  '401': 'vitaminC',
-  '430': 'vitaminK',
-  // ... etc
-};
-
-function extractNutrients(product: FDCProduct): NutrientValues {
-  const nutrients: NutrientValues = {};
-  for (const [nutrientId, key] of Object.entries(NUTRIENT_MAP)) {
-    const nutrient = product.foodNutrients.find(
-      n => n.nutrientNumber === nutrientId
-    );
-    if (nutrient?.value) {
-      nutrients[key] = nutrient.value;
-    }
-  }
-  return nutrients;
-}
+**Main Store** (`nutrients.ts`):
+```javascript
+export const nutrients = writable<NutrientState>({
+  foods: [],
+  totalNutrients: {},
+  displayedNutrients: [],
+  nutrientGoals: {},
+  currentDate: getTodayString()
+});
 ```
+
+**Derived Stores**:
+- Progress percentages
+- Formatted nutrient displays
+- Date navigation state
 
 ---
 
@@ -423,343 +290,211 @@ function extractNutrients(product: FDCProduct): NutrientValues {
 
 ### Component Architecture
 
-#### Existing Components (Require Updates)
+**Pages** (SvelteKit routes):
+- `+page.svelte` - Tracking page (main food journal)
+- `stats/+page.svelte` - Statistics with charts
+- `reports/+page.svelte` - Printable reports
+- `database/+page.svelte` - Food database browser
+- `database/[id]/+page.svelte` - Food detail page
 
-**SummaryCard.svelte**
-- **Current**: Shows daily calcium total vs. goal
-- **New**: Shows 3-4 selected nutrients with progress bars
-- **Layout**: Horizontal scroll or stacked rows
+**Key Components**:
 
-**FoodEntry.svelte**
-- **Current**: Shows calcium value for food
-- **New**: Shows 3-4 selected nutrients in compact format
-- **Example**: `170 cal | 17g protein | 250mg calcium | 0g fiber`
+1. **SummaryCard.svelte**
+   - Displays daily progress for up to 4 nutrients
+   - Progress bars with percentage completion
+   - Swipe navigation for date changing
 
-**AddFoodModal.svelte**
-- **Current**: Shows calcium when selecting food
-- **New**: Shows 3-4 selected nutrients
-- **Complexity**: Medium (more data to display)
+2. **FoodEntry.svelte**
+   - Individual food item display
+   - Shows selected nutrients inline
+   - Edit/delete actions
 
-**Stats (+page.svelte)**
-- **Current**: Charts for calcium over time
-- **New**: Nutrient selector dropdown, charts for selected nutrient
-- **Complexity**: High (parameterize all aggregation logic)
+3. **AddFoodModal.svelte**
+   - Search USDA database or add custom foods
+   - Multi-nutrient input for custom foods
+   - Serving size calculator with live preview
 
-**Report (+page.svelte)**
-- **Current**: Printable calcium report
-- **New**: Select nutrient, generate report for that nutrient
-- **Complexity**: Medium
+4. **SettingsModal.svelte**
+   - Nutrient selection (max 4 displayed)
+   - Goal setting per nutrient
+   - Theme and preferences
 
-#### New Components
+5. **Chart Components**
+   - Daily, weekly, monthly, yearly views
+   - Nutrient selector
+   - Goal line overlay
 
-**NutrientSelector.svelte**
-- **Purpose**: Dropdown/picker for choosing which nutrient to view
-- **Features**:
-  - Star indicator for displayed nutrients
-  - Separator between displayed and other nutrients
-  - Horizontal swipe support for mobile
+### Responsive Design
 
-**NutrientCard.svelte**
-- **Purpose**: Show progress for a single nutrient
-- **Content**:
-  - Daily total / goal
-  - Progress bar/ring
-  - 7-day trend sparkline (optional)
-
-**NutrientSettingsModal.svelte**
-- **Purpose**: Configure nutrient goals and display preferences
-- **Features**:
-  - Checkbox list (max 4 selected)
-  - Goal input per nutrient
-  - Unit display (mg, g, mcg, IU)
-  - Validation (reasonable ranges)
-
-**Nutrients (+page.svelte)** - NEW ROUTE
-- **Purpose**: Dedicated page for nutrient-by-nutrient analysis
-- **Layout**:
-  - Top: Nutrient selector with swipe navigation
-  - Main: Selected nutrient's daily total, goal progress, trend
-  - Bottom: Top contributing foods for that nutrient
-- **Navigation**: Swipe left/right to change nutrients
-
-### Route Structure
-
-```
-/routes
-  ├── +page.svelte                 # Main tracking page (food journal)
-  ├── /nutrients
-  │   └── +page.svelte             # NEW: Nutrient-by-nutrient view
-  ├── /stats
-  │   └── +page.svelte             # Statistics with nutrient selector
-  ├── /report
-  │   └── +page.svelte             # Reports with nutrient selector
-  ├── /settings
-  │   └── +page.svelte             # Settings (includes NutrientSettingsModal)
-  ├── /data
-  │   └── +page.svelte             # Data management (backup/restore/export)
-  └── /guide
-      └── +page.svelte             # Help/guide
-```
-
-### Navigation Bar
-
-**Current**: Tracking | Stats | Report | Settings
-
-**New**: Tracking | **Nutrients** | Stats | Report | Settings
+- **Mobile-first**: Optimized for phone screens
+- **Breakpoints**:
+  - Mobile: < 640px
+  - Tablet: 640px - 1024px
+  - Desktop: > 1024px
+- **Touch-optimized**: Swipe gestures, large tap targets
 
 ---
 
 ## External Services
 
-### USDA FoodData Central (FDC)
+### Optional: Barcode Scanning
 
-**Two integration points**:
+**Providers**:
+1. **USDA FoodData Central** (via FDC ID from barcode)
+2. **OpenFoodFacts API** (community database)
 
-1. **CSV Download** (Primary data source)
-   - **Endpoint**: https://fdc.nal.usda.gov/download-datasets/
-   - **Files**: Foundation Foods + SR Legacy Foods
-   - **Format**: CSV with all nutrients per food/serving
-   - **Update Frequency**: Biannual (April/October)
-   - **Usage**: Offline food database generation
+**Flow**:
+```
+User scans barcode
+     ↓
+Query USDA FDC API
+     ↓
+If found → Add to journal
+If not found → Query OpenFoodFacts
+     ↓
+Convert to app format → Add to journal
+```
 
-2. **API** (Barcode lookup only)
-   - **Endpoint**: `https://api.nal.usda.gov/fdc/v1/foods/search`
-   - **Authentication**: API key (DEMO_KEY or custom)
-   - **Rate Limits**: DEMO_KEY heavily throttled
-   - **Usage**: Smart Scan UPC lookups
-   - **Response**: All nutrients per 100g + serving info
+### Optional: Cross-Device Sync
 
-### OpenFoodFacts (Fallback)
+**Provider**: Cloudflare Workers + KV storage
 
-**Purpose**: Secondary source for barcode lookups when FDC fails
+**Architecture**:
+- End-to-end encryption (AES-256-GCM)
+- Device pairing via 6-digit code
+- Conflict resolution: last-write-wins per date
 
-**Endpoint**: `https://world.openfoodfacts.org/api/v0/product/{barcode}.json`
-
-**No authentication required**
-
-### OCR Service (Optional)
-
-**Purpose**: Extract nutrients from nutrition label photos
-
-**Endpoint**: OCR.space API (or similar)
-
-**Requires**: `VITE_OCR_API_KEY`
+**Endpoints**:
+- `POST /pair` - Initiate device pairing
+- `GET /sync/:deviceId` - Retrieve updates
+- `POST /sync/:deviceId` - Push updates
 
 ---
 
 ## Data Flow
 
-### Food Addition Flow
+### Adding a Food Entry
 
 ```
-User scans barcode OR searches database
+User selects food + serving
          ↓
-    FDCService / SearchService
+Calculate nutrients for serving size
          ↓
-    Extract all nutrients (NutrientValues)
+Create FoodEntry object
          ↓
-    AddFoodModal displays selected nutrients (3-4)
+NutrientService.addFoodEntry()
          ↓
-    User confirms quantity/serving
+Load existing journal entry for date
          ↓
-    NutrientService.addFood(foodEntry)
+Append food to entry.foods[]
          ↓
-    Save to IndexedDB journalEntries
+Recalculate totalNutrients
          ↓
-    Calculate totalNutrients for day
+Save to IndexedDB
          ↓
-    Update UI (SummaryCard, FoodEntry cards)
+Update Svelte store
          ↓
-    Trigger sync (if enabled)
+UI updates (reactive)
 ```
 
-### Nutrient View Flow
+### Loading a Day's Journal
 
 ```
-User navigates to Nutrients page
+User navigates to date
          ↓
-    Load journal data for current day
+NutrientService.getJournalEntry(date)
          ↓
-    User selects nutrient from dropdown (or swipes)
+Query IndexedDB by date key
          ↓
-    Calculate daily total for that nutrient
+Return JournalEntry or null
          ↓
-    Display progress vs. goal
+Update Svelte store
          ↓
-    Load 7-day history for trend
-         ↓
-    List top contributing foods
+SummaryCard + FoodEntry components re-render
 ```
 
-### Settings Update Flow
+### Searching Foods
 
 ```
-User opens Nutrient Settings
+User types search query
          ↓
-    Load current settings (goals, displayed nutrients)
+Filter food database (client-side)
          ↓
-    User checks/unchecks nutrients (max 4)
+Apply nutrient filters if selected
          ↓
-    User updates goals
+Sort by relevance/nutrients
          ↓
-    NutrientService.updateSettings()
-         ↓
-    Save to localStorage + IndexedDB
-         ↓
-    Trigger sync
-         ↓
-    Update UI to show new displayed nutrients
+Display results with nutrient preview
 ```
 
 ---
 
 ## Security & Privacy
 
-### Data Encryption (Sync)
+### Data Privacy
 
-**Algorithm**: AES-GCM (256-bit)
-**Key Derivation**: Web Crypto API
-**Encryption Scope**: Entire backup blob before upload
+- **No server-side storage** (except optional sync)
+- **No third-party analytics or tracking**
+- **No cookies** (except localStorage for settings)
+- **Local-only by default**
 
-**Flow**:
-```
-Local data → JSON.stringify → encrypt(AES-GCM) → Base64 → Upload to Cloudflare KV
-Download → Base64 decode → decrypt(AES-GCM) → JSON.parse → Local storage
-```
+### Sync Encryption
 
-**Key Management**:
-- Encryption key never leaves device
-- Stored in localStorage (sync_settings)
-- User can regenerate key (creates new sync doc)
+When sync is enabled:
+- All data encrypted client-side before upload
+- Encryption key derived from pairing code
+- Server never sees plaintext data
+- Automatic key rotation
 
-### Privacy Guarantees
+### Input Validation
 
-1. **No Third-Party Tracking**: Zero analytics, ads, or external trackers
-2. **Local-First**: All data stored on device, works offline
-3. **Optional Sync**: User chooses whether to enable
-4. **End-to-End Encrypted**: Server cannot read data
-5. **Open Source**: GPL v3, full code review available
-
-### API Key Handling
-
-**USDA FDC API Key**:
-- Stored in environment variable: `VITE_FDC_API_KEY`
-- Never exposed to client (bundled during build)
-- Falls back to DEMO_KEY if not configured
-
-**Sync Keys**:
-- Generated on device
-- Never transmitted in clear text
-- User-controlled (can reset/regenerate)
+- Nutrient values: min/max range validation
+- Serving quantities: positive numbers only
+- Date inputs: valid date format checks
+- SQL injection: N/A (no SQL database)
+- XSS: Svelte auto-escapes all bindings
 
 ---
 
 ## Performance Considerations
 
-### Bundle Size Optimization
+### Bundle Size
 
-**Food Database**:
-- Minified format with key compression
-- Rehydration at runtime
-- Lazy loading (future enhancement)
-
-**Code Splitting**:
-- Stats page: Lazy load charts
-- Report page: Lazy load on demand
-- Settings: Load modals on demand
-
-### IndexedDB Performance
-
-**Indexing Strategy**:
-- Primary keys on frequently queried fields (`date`, `foodId`)
-- Composite indexes avoided (minimal benefit, high cost)
-- Index on `lastModified` for sync queries
-
-**Query Optimization**:
-- Pre-calculate daily totals (avoid re-aggregation)
-- Batch writes (transaction per day, not per food)
-- Use cursors for large date ranges
+- Initial JavaScript: ~150KB (gzipped)
+- Food database: ~2-5MB (lazy-loaded)
+- Total initial load: ~200KB
+- Time to interactive: < 2s on 3G
 
 ### Rendering Optimization
 
-**Svelte Reactivity**:
-- Derived stores for computed values (auto-memoization)
-- Avoid nested reactivity (flatten where possible)
-- Use `{#key}` blocks for efficient re-renders
+- Virtual scrolling for long food lists
+- Lazy loading of food database
+- Debounced search input (300ms)
+- Memoized calculations
+- Efficient Svelte reactivity
 
-**Virtualization** (future):
-- Food list: Render visible items only
-- Stats charts: Downsample for large datasets
+### IndexedDB Performance
 
----
+- Indexed queries for fast date lookups
+- Batch operations for bulk updates
+- Transactions for atomicity
+- Cursor-based iteration for large datasets
 
-## Migration Path
+### Caching Strategy
 
-### From My Calcium to My Nutrients
-
-**Database Migration**:
-- Old: `CalciumTracker` v7
-- New: `NutrientTracker` v1
-- Strategy: Create new database, migrate data, delete old
-
-**Data Transformation**:
-```typescript
-// Old format
-{ calcium: 250 }
-
-// New format
-{ nutrients: { calcium: 250 } }
-```
-
-**User Experience**:
-- Offline migration via backup file
-- No data loss (calcium values preserved)
-- New sync pairing required
-
-See `_notes/MIGRATION_GUIDE.md` for detailed steps.
-
----
-
-## Future Enhancements
-
-### Phase 2+ Features
-
-1. **Meal Planning**: Pre-plan meals, copy to journal
-2. **Recipe Support**: Create recipes with nutrient totals
-3. **Smart Suggestions**: AI-powered food recommendations to meet goals
-4. **Photo Logging**: Take photos of meals with OCR
-5. **Advanced Analytics**: Nutrient correlations, trends over time
-6. **Multi-Language**: i18n support for global users
-7. **Accessibility**: Enhanced screen reader support, high contrast modes
-
-### Scalability
-
-**Current capacity**:
-- ~4,000 foods in database
-- ~365 days of journal data
-- ~50 custom foods per user
-
-**Growth path**:
-- Database: Can handle 10,000+ foods with lazy loading
-- Journal: IndexedDB supports years of data (multi-GB)
-- Sync: Cloudflare KV limits are generous (1GB per namespace)
+**Service Worker**:
+- Cache app shell (HTML, CSS, JS)
+- Cache food database
+- Network-first for sync operations
+- Cache-first for static assets
 
 ---
 
 ## Conclusion
 
-The My Nutrients architecture builds on the proven, battle-tested foundation of My Calcium while extending it to support comprehensive multi-nutrient tracking. The modular design, clear separation of concerns, and local-first philosophy make this transition straightforward and low-risk.
+My Nutrients is built as a local-first PWA prioritizing privacy, offline functionality, and performance. The architecture supports comprehensive multi-nutrient tracking while maintaining a small bundle size and fast load times. Optional sync provides cross-device capabilities without compromising the core local-first design.
 
-**Key Strengths**:
-- ✅ Minimal changes to sync/backup/restore infrastructure
-- ✅ Search and unit conversion are already nutrient-agnostic
-- ✅ Well-structured services layer makes refactoring mechanical
-- ✅ IndexedDB schema naturally extends to multi-nutrient support
-- ✅ Component architecture supports parameterization
+---
 
-**Key Risks**:
-- ⚠️ Bundle size increase (mitigated by minification)
-- ⚠️ UI complexity increase (mitigated by progressive disclosure)
-- ⚠️ Migration complexity (mitigated by offline backup approach)
-
-**Overall Assessment**: **HIGHLY FEASIBLE** with 3-4 weeks of focused development.
+**Last Updated**: December 17, 2025
+**Maintained By**: Nathan A. Eaton Jr.

@@ -7,7 +7,7 @@
 
 ## Project Overview
 
-**My Nutrients PWA** is a Progressive Web App for tracking multiple nutrients across daily food intake. Originally designed as "My Calcium Tracker" for single-nutrient tracking, it has been refactored to support 20+ nutrients including macronutrients, minerals, vitamins, and omega fatty acids.
+**My Nutrients PWA** is a Progressive Web App for tracking multiple nutrients across daily food intake, supporting 20+ nutrients including macronutrients, minerals, vitamins, and omega fatty acids.
 
 **Tech Stack**:
 - **Frontend**: SvelteKit (SSR + CSR)
@@ -166,7 +166,7 @@ export interface MeasureSet {
 
 The application uses a service layer pattern to separate business logic from UI:
 
-**CalciumService** (`src/lib/services/CalciumService.ts`):
+**NutrientService** (`src/lib/services/NutrientService.ts`):
 - Manages IndexedDB operations
 - Handles nutrient calculations
 - Provides data access methods
@@ -174,29 +174,29 @@ The application uses a service layer pattern to separate business logic from UI:
 
 **Usage Example**:
 ```javascript
-import { calciumService } from '$lib/services/CalciumService';
+import { nutrientService } from '$lib/services/NutrientService';
 
 // Add a food entry
-await calciumService.addFoodEntry(date, foodData);
+await nutrientService.addFoodEntry(date, foodData);
 
 // Get daily totals
-const totals = await calciumService.getDayTotals(date);
+const totals = await nutrientService.getDayTotals(date);
 
 // Get nutrient settings
-const settings = await calciumService.getNutrientSettings();
+const settings = await nutrientService.getNutrientSettings();
 ```
 
 ### State Management
 
-Global state is managed using Svelte stores (`src/lib/stores/calcium.ts`):
+Global state is managed using Svelte stores (`src/lib/stores/nutrients.ts`):
 
 ```javascript
-import { calcium } from '$lib/stores/calcium';
+import { nutrients } from '$lib/stores/nutrients';
 
 // Subscribe to state changes
-$: foods = $calcium.foods;
-$: totalNutrients = $calcium.totalNutrients;
-$: displayedNutrients = $calcium.displayedNutrients;
+$: foods = $nutrients.foods;
+$: totalNutrients = $nutrients.totalNutrients;
+$: displayedNutrients = $nutrients.displayedNutrients;
 ```
 
 ---
@@ -247,23 +247,29 @@ The food database is generated using scripts in `source_data/`. See the [[Data P
 ```bash
 cd source_data
 
-# Step 1: Assign stable appIds
+# Step 1: Extract nutrients from USDA JSON files
+node json-data-processor.cjs \
+  --foundation FoodData_Central_foundation_food_json_2024-04-24.json \
+  --sr-legacy FoodData_Central_sr_legacy_food_json_2018-04.json \
+  --output combined-nutrient-data
+
+# Step 2: Assign stable appIds
 node master-key-assigner-json.cjs \
   combined-nutrient-data.json \
   mastered-nutrient-data.json
 
-# Step 2: Curate foods
+# Step 3: Curate foods
 node food-curator-nutrients.cjs \
   mastered-nutrient-data.json \
   curated-nutrients-abridged.json
 
-# Step 3: Generate module
+# Step 4: Generate module
 node data-module-generator-nutrients.cjs \
   curated-nutrients-abridged.json \
   ../src/lib/data/foodDatabaseData.js \
   --module --minify --minimal
 
-# Step 4 (Optional): Generate provenance data
+# Step 5 (Optional): Generate provenance data
 node provenance-generator.cjs \
   curated-nutrients-abridged.json \
   mastered-nutrient-data.json \
@@ -409,7 +415,7 @@ Component-specific styles use `<style>` blocks with scoped CSS.
 Enable verbose logging:
 
 ```javascript
-// In src/lib/services/CalciumService.ts
+// In src/lib/services/NutrientService.ts
 const DEBUG = true; // Set to true for console logging
 ```
 
