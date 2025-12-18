@@ -145,8 +145,9 @@ function createDatabaseLookup(database) {
 
   for (const food of database) {
     const name = (food.name || food.n || '').toLowerCase().trim();
-    if (name) {
-      lookup.set(name, food);
+    const appId = food.appId || food.id || food.i;
+    if (name && appId) {
+      lookup.set(name, { food, appId });
     }
   }
 
@@ -167,12 +168,18 @@ function normalizeName(name) {
 /**
  * Enhance journal entries with multi-nutrient data
  */
-function enhanceJournalEntries(journalEntries, databaseLookup) {
+function enhanceJournalEntries(journalEntries, databaseLookup, customFoods) {
   const enhanced = {};
   let enhancedCount = 0;
   let customCount = 0;
   let fallbackCount = 0;
   const unmatchedNames = new Set();
+
+  // Create custom food lookup by name
+  const customFoodLookup = new Map();
+  for (const food of customFoods) {
+    customFoodLookup.set(food.name.toLowerCase().trim(), food.id);
+  }
 
   for (const [date, entries] of Object.entries(journalEntries)) {
     enhanced[date] = entries.map(entry => {
@@ -180,8 +187,12 @@ function enhanceJournalEntries(journalEntries, databaseLookup) {
       if (entry.isCustom) {
         customCount++;
 
+        // Find custom food ID by name
+        const customFoodId = entry.customFoodId || customFoodLookup.get(entry.name.toLowerCase().trim());
+
         return {
           name: entry.name,
+          customFoodId: customFoodId, // Add custom food ID
           nutrients: {
             calcium: entry.calcium || 0
           },
@@ -194,10 +205,11 @@ function enhanceJournalEntries(journalEntries, databaseLookup) {
 
       // Database food - try to match by name
       const normalizedName = normalizeName(entry.name);
-      const food = databaseLookup.get(normalizedName);
+      const match = databaseLookup.get(normalizedName);
 
-      if (food) {
+      if (match) {
         // Found match - extract all nutrients
+        const { food, appId } = match;
         const measureIndex = 0; // Use first measure (could enhance this later)
         const nutrients = extractAllNutrients(food, measureIndex);
 
@@ -222,6 +234,7 @@ function enhanceJournalEntries(journalEntries, databaseLookup) {
 
         return {
           name: entry.name,
+          appId: appId, // ADD APPID!
           nutrients: scaledNutrients,
           servingQuantity: entry.servingQuantity || 1,
           servingUnit: entry.servingUnit,
@@ -340,7 +353,8 @@ async function migrateToNutrients(config) {
   console.log('\n📊 Enhancing journal entries with multi-nutrient data...');
   const enhancedEntries = enhanceJournalEntries(
     mergedBackup.journalEntries,
-    databaseLookup
+    databaseLookup,
+    mergedBackup.customFoods
   );
 
   // Transform preferences

@@ -15,6 +15,36 @@
 import fs from "fs";
 import path from "path";
 
+// Rehydrate minified database (new My Nutrients format)
+function rehydrateMinifiedDatabase(db, keys, measureKeys) {
+  return db.map(food => {
+    const rehydrated = {};
+    for (const [minKey, fullKey] of Object.entries(keys)) {
+      if (food[minKey] !== undefined) {
+        rehydrated[fullKey] = food[minKey];
+      }
+    }
+
+    const measuresKey = food.ms ? 'ms' : food.m ? 'm' : null;
+    if (measuresKey && Array.isArray(food[measuresKey])) {
+      rehydrated.measures = food[measuresKey].map(measure => {
+        const rehydratedMeasure = {};
+        for (const [minKey, fullKey] of Object.entries(measureKeys)) {
+          if (measure[minKey] !== undefined) {
+            rehydratedMeasure[fullKey] = measure[minKey];
+          }
+        }
+        if (measure.n && typeof measure.n === 'object') {
+          rehydratedMeasure.nutrients = measure.n;
+        }
+        return rehydratedMeasure;
+      });
+    }
+
+    return rehydrated;
+  });
+}
+
 // Match confidence levels
 const MATCH_TYPES = {
   EXACT: "EXACT",
@@ -508,6 +538,12 @@ async function loadDatabase(filePath) {
               console.log(`✅ Loaded ${module.foodDatabase.length} items via ES module import`);
               analyzeDatabase(module.foodDatabase, filePath);
               return module.foodDatabase;
+            } else if (module.DB && module.KEYS && module.MEASURE_KEYS) {
+              // New minified format - rehydrate
+              console.log(`✅ Loaded minified database (${module.DB.length} items)`);
+              const rehydrated = rehydrateMinifiedDatabase(module.DB, module.KEYS, module.MEASURE_KEYS);
+              analyzeDatabase(rehydrated, filePath);
+              return rehydrated;
             } else if (module.default && Array.isArray(module.default)) {
               console.log(`✅ Loaded ${module.default.length} items via ES module import`);
               analyzeDatabase(module.default, filePath);
