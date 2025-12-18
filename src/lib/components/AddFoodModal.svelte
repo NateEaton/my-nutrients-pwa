@@ -168,6 +168,11 @@
   // Reset form when modal opens or editing changes
   $: if (show) {
     resetForm();
+    // Prevent body scrolling when modal is open
+    document.body.style.overflow = 'hidden';
+  } else {
+    // Restore body scrolling when modal closes
+    document.body.style.overflow = '';
   }
 
   function resetForm() {
@@ -1052,7 +1057,6 @@
     class="modal-backdrop"
     on:click={closeModal}
     on:keydown={handleBackdropKeydown}
-    on:touchmove|preventDefault
     role="button"
     tabindex="0"
   >
@@ -1061,7 +1065,6 @@
       class="modal-content"
       on:click|stopPropagation
       on:keydown|stopPropagation
-      on:touchmove|stopPropagation
       class:custom-food-mode={isCustomMode}
       role="dialog"
       tabindex="-1"
