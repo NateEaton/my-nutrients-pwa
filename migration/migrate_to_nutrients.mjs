@@ -388,27 +388,34 @@ function enhanceJournalEntries(journalEntries, databaseLookup, customFoods) {
         // Find matching measure index
         const measureIndex = findMatchingMeasureIndex(measures, entry.servingUnit);
 
-        // Extract nutrients from database (these are for qty=1 of the measure)
+        // Extract nutrients from database (these are for 1 instance of that measure)
         const nutrientsPerServing = extractAllNutrients(food, measureIndex);
+
+        // IMPORTANT: Save original quantity BEFORE any parsing fixes
+        const originalQuantity = entry.servingQuantity || 1;
 
         // Fix serving size bug from old production
         const fixedServing = parseServingSize(
-          entry.servingQuantity || 1,
+          originalQuantity,
           entry.servingUnit
         );
 
-        // CRITICAL: Scale database nutrients by serving quantity
-        // Database nutrients are for qty=1, but journal entry might have qty=2, 0.5, etc.
+        // CRITICAL: Scale database nutrients by ORIGINAL serving quantity
+        // Database nutrients are for 1 instance of the measure, but journal entry
+        // might have qty=2 (2 servings), qty=0.5 (half serving), etc.
+        // We use ORIGINAL quantity because:
+        // - Pork: original qty=1, unit="3 oz" → nutrients for "3 oz"=10mg → 1×10mg=10mg ✓
+        // - Wine: original qty=2, unit="1 serving" → nutrients for "1 serving"=12mg → 2×12mg=24mg ✓
         const scaledByQuantity = {};
         for (const [nutrient, value] of Object.entries(nutrientsPerServing)) {
           if (typeof value === 'number') {
-            scaledByQuantity[nutrient] = value * fixedServing.servingQuantity;
+            scaledByQuantity[nutrient] = value * originalQuantity; // Use ORIGINAL, not fixed!
           }
         }
 
         // Check if we actually fixed the serving size
         const servingSizeWasFixed = (
-          fixedServing.servingQuantity !== (entry.servingQuantity || 1) ||
+          fixedServing.servingQuantity !== originalQuantity ||
           fixedServing.servingUnit !== entry.servingUnit
         );
 
@@ -416,7 +423,7 @@ function enhanceJournalEntries(journalEntries, databaseLookup, customFoods) {
 
         if (servingSizeWasFixed) {
           // Serving size bug was fixed - this is the SAME serving, just displayed correctly
-          // Use scaled nutrients (already scaled by quantity above)
+          // Use scaled nutrients (already scaled by ORIGINAL quantity above)
           finalNutrients = scaledByQuantity;
         } else {
           // Serving size is correct - check if calcium matches database
