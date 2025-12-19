@@ -353,6 +353,36 @@ function parseServingSize(servingQuantity, servingUnit) {
 
 **Result**: All 22 bugged entries fixed, serving sizes now match database structure.
 
+### Fix 4: Nutrient Scaling Logic
+
+**Issue**: Migrated nutrients didn't match fresh database entries.
+
+**Example**: Pork entry showed protein=24.1 (migrated) vs 23.6 (fresh from database)
+
+**Root Cause**: Initial migration applied calcium-based scaling even when fixing serving size bug.
+- Old: qty=1, unit="3 oz (3 oz)", calcium=10.2
+- Migration scaled: protein = 23.6 × (10.2/10) = 24.1
+- But this is the SAME serving, just displayed correctly!
+
+**Fix**: Implemented 3-tier scaling logic:
+
+1. **Serving size bug fixed** (qty/unit changed):
+   - This is SAME serving, just corrected display
+   - Use database nutrients AS-IS (no scaling)
+
+2. **Serving size correct, calcium matches** (within 0.5mg tolerance):
+   - Use database nutrients AS-IS
+
+3. **Serving size correct, calcium differs**:
+   - User override in old app
+   - Scale all nutrients by calcium ratio
+
+**Result**: Migrated nutrients now match database exactly.
+
+**Example**:
+- Before: qty=1, unit="3 oz (3 oz)", calcium=10.2, protein=24.1
+- After: qty=3, unit="oz (3 oz)", calcium=10, protein=23.6 ✅
+
 ---
 
 ## Code Changes
