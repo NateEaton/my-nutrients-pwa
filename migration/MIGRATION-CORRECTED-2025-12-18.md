@@ -509,6 +509,55 @@ function parseServingSize(servingQuantity, servingUnit) {
 - Bread: qty=1, unit="slice large" ✅ (was "1 slice large")
 - Serving preferences also fixed with correct units
 
+### Fix 8: Serving Quantity Scaling
+
+**Issue**: Nutrients from database not scaled by serving quantity, causing wrong values for entries with qty≠1.
+
+**Examples**:
+- ❌ Wine: qty=2, calcium=12 (wrong - only 1 serving worth)
+- ❌ Persimmon: qty=0.5, calcium=13 (wrong - full fruit worth)
+
+**Root Cause**: Database nutrients are stored per-measure (qty=1). When extracting nutrients for a journal entry with qty=2 or qty=0.5, the migration used the raw database values without scaling.
+
+**Critical flaw in logic**:
+```javascript
+// BEFORE (wrong):
+const nutrients = extractAllNutrients(food, measureIndex); // Gets nutrients for qty=1
+// ... then used nutrients directly without considering servingQuantity
+```
+
+**Fix**: Scale database nutrients by serving quantity BEFORE applying any other logic:
+```javascript
+// AFTER (correct):
+// Extract nutrients from database (these are for qty=1 of the measure)
+const nutrientsPerServing = extractAllNutrients(food, measureIndex);
+
+const fixedServing = parseServingSize(entry.servingQuantity || 1, entry.servingUnit);
+
+// CRITICAL: Scale database nutrients by serving quantity
+const scaledByQuantity = {};
+for (const [nutrient, value] of Object.entries(nutrientsPerServing)) {
+  if (typeof value === 'number') {
+    scaledByQuantity[nutrient] = value * fixedServing.servingQuantity;
+  }
+}
+
+// Then apply 3-tier logic using scaledByQuantity
+```
+
+**Result**: All nutrients now correctly proportional to serving quantity.
+
+**Examples Fixed**:
+- Wine: qty=2, calcium=24 ✅ (was 12, now 2 × 12)
+- Persimmon (full): qty=1, calcium=13 ✅
+- Persimmon (half): qty=0.5, calcium=6.5 ✅ (was 13, now 0.5 × 13)
+
+**Validation**:
+- Original wine entry: qty=2, calcium=23.6
+- Migrated wine entry: qty=2, calcium=24 ✓ (within rounding)
+- Original persimmon: qty=0.5, calcium=6.7
+- Migrated persimmon: qty=0.5, calcium=6.5 ✓ (within rounding)
+
 ---
 
 ## Code Changes
