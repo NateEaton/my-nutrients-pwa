@@ -388,13 +388,23 @@ function enhanceJournalEntries(journalEntries, databaseLookup, customFoods) {
         // Find matching measure index
         const measureIndex = findMatchingMeasureIndex(measures, entry.servingUnit);
 
-        const nutrients = extractAllNutrients(food, measureIndex);
+        // Extract nutrients from database (these are for qty=1 of the measure)
+        const nutrientsPerServing = extractAllNutrients(food, measureIndex);
 
         // Fix serving size bug from old production
         const fixedServing = parseServingSize(
           entry.servingQuantity || 1,
           entry.servingUnit
         );
+
+        // CRITICAL: Scale database nutrients by serving quantity
+        // Database nutrients are for qty=1, but journal entry might have qty=2, 0.5, etc.
+        const scaledByQuantity = {};
+        for (const [nutrient, value] of Object.entries(nutrientsPerServing)) {
+          if (typeof value === 'number') {
+            scaledByQuantity[nutrient] = value * fixedServing.servingQuantity;
+          }
+        }
 
         // Check if we actually fixed the serving size
         const servingSizeWasFixed = (
@@ -406,27 +416,27 @@ function enhanceJournalEntries(journalEntries, databaseLookup, customFoods) {
 
         if (servingSizeWasFixed) {
           // Serving size bug was fixed - this is the SAME serving, just displayed correctly
-          // Use database nutrients AS-IS (no scaling)
-          finalNutrients = nutrients;
+          // Use scaled nutrients (already scaled by quantity above)
+          finalNutrients = scaledByQuantity;
         } else {
           // Serving size is correct - check if calcium matches database
-          const standardCalcium = nutrients.calcium || 1;
+          const standardCalcium = scaledByQuantity.calcium || 1;
           const actualCalcium = entry.calcium || 0;
           const calciumDiff = Math.abs(standardCalcium - actualCalcium);
 
           if (calciumDiff < 0.5) {
-            // Calcium matches (within rounding tolerance) - use database values
-            finalNutrients = nutrients;
+            // Calcium matches (within rounding tolerance) - use scaled database values
+            finalNutrients = scaledByQuantity;
           } else {
-            // Calcium differs - this is a user override, scale all nutrients
+            // Calcium differs - this is a user override, scale all nutrients further
             const scale = actualCalcium / standardCalcium;
-            const scaledNutrients = {};
-            for (const [nutrient, value] of Object.entries(nutrients)) {
+            const rescaledNutrients = {};
+            for (const [nutrient, value] of Object.entries(scaledByQuantity)) {
               if (typeof value === 'number') {
-                scaledNutrients[nutrient] = value * scale;
+                rescaledNutrients[nutrient] = value * scale;
               }
             }
-            finalNutrients = scaledNutrients;
+            finalNutrients = rescaledNutrients;
           }
         }
 
