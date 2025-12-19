@@ -84,11 +84,12 @@
    binding = "AI"
    ```
 
-2. **Deploy the updated worker**:
+2. **Deploy the updated worker to dev environment first** (for testing):
    ```bash
    # On your MBP
    cd ~/my-nutrients-pwa/worker
-   npm run deploy
+   npm run deploy:dev
+   # This deploys to your dev environment only
    ```
 
 3. **Verify AI binding works**:
@@ -96,12 +97,22 @@
    # On MBP
    cd ~/my-nutrients-pwa/worker
    wrangler dev
-   # Try accessing a test endpoint that uses env.AI (you'll create this in Phase 0)
+   # The AI binding is now available as env.AI
+   # No new endpoints exist yet - that comes in Phase 0
    ```
 
-**That's it!** Your existing `VITE_WORKER_URL` in `.env` and `.env.production` remains unchanged. The `/ocr` endpoint will be added to your existing worker at the same URL.
+**That's it for pre-implementation!**
 
-**No environment variable changes needed** - you're just adding a new route to the existing worker.
+Your existing `VITE_WORKER_URL` in `.env` and `.env.production` remains unchanged.
+
+**Important**: At this point, you've only added the AI binding infrastructure. The `/ocr` endpoint code will be created by Claude Code in Phase 0, then you'll deploy it.
+
+**Production Deployment**: After testing in dev, deploy to production with:
+```bash
+cd ~/my-nutrients-pwa/worker
+npm run deploy
+# Or: npm run deploy:prod (if you have that script)
+```
 
 ---
 
@@ -187,6 +198,35 @@
 | **Client code** | VisionService uses existing VITE_WORKER_URL | VisionService uses new VITE_AI_WORKER_URL |
 | **Routes** | Add `/ocr` to existing worker | New worker only has `/ocr` |
 | **Complexity** | ✅ Simple | ⚠️ More complex |
+
+---
+
+### What Happens Next: Timeline of `/ocr` Endpoint
+
+**Pre-Implementation (NOW)**:
+- ✅ You add AI binding to `wrangler.toml`
+- ✅ You deploy to dev: `npm run deploy:dev`
+- ✅ Worker has AI capability but no new endpoints yet
+- ✅ Your existing routes continue to work normally
+
+**Phase 0: Spike Test (NEXT)**:
+- ⚙️ Claude Code creates `/ocr-test` endpoint in `worker/src/`
+- ⚙️ You deploy from MBP: `npm run deploy:dev`
+- ⚙️ Test endpoint appears at: `https://your-worker-dev.workers.dev/ocr-test`
+- ⚙️ You test with 5-10 sample images
+- ✅ Go/No-Go decision based on results
+
+**Phase 1: Full Implementation (IF Phase 0 succeeds)**:
+- ⚙️ Claude Code creates production `/ocr` endpoint
+- ⚙️ You deploy to dev: `npm run deploy:dev`
+- ⚙️ You test thoroughly
+- ⚙️ You deploy to prod: `npm run deploy`
+- ✅ Endpoint available at: `https://your-worker.workers.dev/ocr`
+
+**Phase 2-3: Client Integration**:
+- ⚙️ Claude Code creates VisionService that calls `/ocr`
+- ⚙️ Your existing `VITE_WORKER_URL` is used (no changes needed!)
+- ✅ PWA can now use AI vision for OCR
 
 
 
