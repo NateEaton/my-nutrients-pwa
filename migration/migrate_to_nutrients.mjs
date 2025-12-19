@@ -101,34 +101,50 @@ function roundNutrients(nutrients, omitZeros = true) {
 
 /**
  * Parse and fix serving sizes from old production bug
- * Old bug: qty=1, unit="3 oz (85g)" → Should be: qty=3, unit="oz (85g)"
- * Also handles: qty=1, unit="4oz" → Should be: qty=4, unit="oz"
+ * Old bug patterns:
+ * 1. qty=1, unit="3 oz (85g)" → Should be: qty=3, unit="oz (85g)"
+ * 2. qty=1, unit="4oz" → Should be: qty=4, unit="oz"
+ * 3. qty=2, unit="1 serving (5oz)" → Should be: qty=2, unit="serving (5oz)"
  */
 function parseServingSize(servingQuantity, servingUnit) {
-  if (!servingUnit || servingQuantity !== 1) {
-    return { servingQuantity, servingUnit };
+  if (!servingUnit) {
+    return { servingQuantity: servingQuantity || 1, servingUnit: servingUnit || '' };
   }
 
-  // Pattern 1: "3 oz (85g)" or "1 cup (240ml)" - with space
-  const matchWithSpace = servingUnit.match(/^(\d+(?:\.\d+)?)\s+(.+)$/);
-  if (matchWithSpace) {
-    return {
-      servingQuantity: parseFloat(matchWithSpace[1]),
-      servingUnit: matchWithSpace[2]
-    };
+  // Pattern 1 & 2: Only apply when qty=1 (quantity embedded in unit)
+  if (servingQuantity === 1) {
+    // Pattern 1: "3 oz (85g)" or "1 cup (240ml)" - with space
+    const matchWithSpace = servingUnit.match(/^(\d+(?:\.\d+)?)\s+(.+)$/);
+    if (matchWithSpace) {
+      return {
+        servingQuantity: parseFloat(matchWithSpace[1]),
+        servingUnit: matchWithSpace[2]
+      };
+    }
+
+    // Pattern 2: "4oz" or "2tablespoons" - without space
+    const matchNoSpace = servingUnit.match(/^(\d+(?:\.\d+)?)(oz|tablespoon|tablespoons|teaspoon|teaspoons|cup|cups|gram|grams|g)(.*)$/i);
+    if (matchNoSpace) {
+      return {
+        servingQuantity: parseFloat(matchNoSpace[1]),
+        servingUnit: matchNoSpace[2] + matchNoSpace[3]
+      };
+    }
   }
 
-  // Pattern 2: "4oz" or "2tablespoons" - without space
-  const matchNoSpace = servingUnit.match(/^(\d+(?:\.\d+)?)(oz|tablespoon|tablespoons|teaspoon|teaspoons|cup|cups|gram|grams|g)(.*)$/i);
-  if (matchNoSpace) {
+  // Pattern 3: Unit starts with "1 " (from database measure format like "1 serving 5 fl oz")
+  // Strip the leading "1 " but keep original quantity
+  // This applies to any quantity, not just qty=1
+  const leadingNumber = servingUnit.match(/^1\s+(.+)$/);
+  if (leadingNumber) {
     return {
-      servingQuantity: parseFloat(matchNoSpace[1]),
-      servingUnit: matchNoSpace[2] + matchNoSpace[3] // Combine unit + optional suffix like "(85g)"
+      servingQuantity: servingQuantity || 1, // Keep original quantity
+      servingUnit: leadingNumber[1] // Strip leading "1 "
     };
   }
 
   // No fix needed
-  return { servingQuantity, servingUnit };
+  return { servingQuantity: servingQuantity || 1, servingUnit };
 }
 
 /**
@@ -561,6 +577,16 @@ async function migrateToNutrients(config) {
   // Create final restore file
   console.log('\n📝 Creating My Nutrients restore file...');
 
+  // Fix serving preferences (apply same serving size bug fixes)
+  const fixedServingPreferences = (mergedBackup.servingPreferences || []).map(pref => {
+    const fixed = parseServingSize(pref.preferredQuantity, pref.preferredUnit);
+    return {
+      ...pref,
+      preferredQuantity: fixed.servingQuantity,
+      preferredUnit: fixed.servingUnit
+    };
+  });
+
   const restoreFile = {
     metadata: {
       version: '2.0.0',
@@ -578,7 +604,7 @@ async function migrateToNutrients(config) {
     customFoods: mergedBackup.customFoods,
     favorites: mergedBackup.favorites,
     hiddenFoods: mergedBackup.hiddenFoods,
-    servingPreferences: mergedBackup.servingPreferences,
+    servingPreferences: fixedServingPreferences,
     journalEntries: enhancedEntries
   };
 
