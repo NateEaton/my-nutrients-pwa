@@ -509,54 +509,69 @@ function parseServingSize(servingQuantity, servingUnit) {
 - Bread: qty=1, unit="slice large" ✅ (was "1 slice large")
 - Serving preferences also fixed with correct units
 
-### Fix 8: Serving Quantity Scaling
+### Fix 8: Serving Quantity Scaling (Use Original Quantity)
 
-**Issue**: Nutrients from database not scaled by serving quantity, causing wrong values for entries with qty≠1.
+**Issue**: Nutrients from database not scaled correctly by serving quantity.
 
-**Examples**:
+**Two sub-issues found and fixed:**
+
+**Part 1 - Missing scaling**: Database nutrients not scaled at all
 - ❌ Wine: qty=2, calcium=12 (wrong - only 1 serving worth)
 - ❌ Persimmon: qty=0.5, calcium=13 (wrong - full fruit worth)
 
-**Root Cause**: Database nutrients are stored per-measure (qty=1). When extracting nutrients for a journal entry with qty=2 or qty=0.5, the migration used the raw database values without scaling.
+**Part 2 - Wrong quantity used**: After fixing Pattern 1 bugs, scaled by fixed quantity instead of original
+- ❌ Pork: original qty=1, unit="3 oz" → fixed qty=3, unit="oz" → scaled by 3 → calcium=30 (wrong!)
 
-**Critical flaw in logic**:
-```javascript
-// BEFORE (wrong):
-const nutrients = extractAllNutrients(food, measureIndex); // Gets nutrients for qty=1
-// ... then used nutrients directly without considering servingQuantity
-```
+**Root Cause**: Database nutrients are stored per-measure. For a measure like "3 oz" with calcium=10mg, that's 10mg for the ENTIRE "3 oz" measure, not per ounce.
 
-**Fix**: Scale database nutrients by serving quantity BEFORE applying any other logic:
+When Pattern 1 fix changes qty=1, unit="3 oz" → qty=3, unit="oz", the database nutrients are ALREADY for "3 oz", so we must use the ORIGINAL quantity (1), not the fixed quantity (3).
+
+**Critical distinction**:
+- **Database measure**: "3 oz (85g)" with calcium=10mg means 10mg for 3 oz total
+- **Journal entry**: qty=1, unit="3 oz" means "1 serving of that 3 oz measure"
+- **After Pattern 1 fix**: qty=3, unit="oz" (corrected display)
+- **Must scale by**: ORIGINAL qty=1 (not fixed qty=3)
+
+**Fix**: Scale database nutrients by ORIGINAL serving quantity (before any parsing fixes):
 ```javascript
-// AFTER (correct):
-// Extract nutrients from database (these are for qty=1 of the measure)
+// CORRECT APPROACH:
+// Extract nutrients from database (these are for 1 instance of that measure)
 const nutrientsPerServing = extractAllNutrients(food, measureIndex);
 
-const fixedServing = parseServingSize(entry.servingQuantity || 1, entry.servingUnit);
+// IMPORTANT: Save original quantity BEFORE any parsing fixes
+const originalQuantity = entry.servingQuantity || 1;
 
-// CRITICAL: Scale database nutrients by serving quantity
+// Fix serving size bug from old production
+const fixedServing = parseServingSize(originalQuantity, entry.servingUnit);
+
+// CRITICAL: Scale database nutrients by ORIGINAL serving quantity
+// We use ORIGINAL quantity because:
+// - Pork: original qty=1, unit="3 oz" → nutrients for "3 oz"=10mg → 1×10mg=10mg ✓
+// - Wine: original qty=2, unit="1 serving" → nutrients for "1 serving"=12mg → 2×12mg=24mg ✓
 const scaledByQuantity = {};
 for (const [nutrient, value] of Object.entries(nutrientsPerServing)) {
   if (typeof value === 'number') {
-    scaledByQuantity[nutrient] = value * fixedServing.servingQuantity;
+    scaledByQuantity[nutrient] = value * originalQuantity; // Use ORIGINAL, not fixed!
   }
 }
 
 // Then apply 3-tier logic using scaledByQuantity
 ```
 
-**Result**: All nutrients now correctly proportional to serving quantity.
+**Result**: All nutrients correctly proportional to serving quantity.
 
 **Examples Fixed**:
-- Wine: qty=2, calcium=24 ✅ (was 12, now 2 × 12)
-- Persimmon (full): qty=1, calcium=13 ✅
-- Persimmon (half): qty=0.5, calcium=6.5 ✅ (was 13, now 0.5 × 13)
+- **Pork** (Pattern 1): original qty=1, unit="3 oz" → calcium=10mg ✅ (was 30mg when using fixed qty=3)
+- **Wine** (Pattern 3): original qty=2, unit="1 serving" → calcium=24mg ✅ (was 12mg when not scaling)
+- **Persimmon** (Pattern 3): original qty=0.5, unit="1 fruit" → calcium=6.5mg ✅ (was 13mg when not scaling)
 
 **Validation**:
-- Original wine entry: qty=2, calcium=23.6
-- Migrated wine entry: qty=2, calcium=24 ✓ (within rounding)
-- Original persimmon: qty=0.5, calcium=6.7
-- Migrated persimmon: qty=0.5, calcium=6.5 ✓ (within rounding)
+- Original pork entry: qty=1, unit="3 oz (3 oz)", calcium=10.2
+- Migrated pork entry: qty=3, unit="oz (3 oz)", calcium=10 ✓ (within rounding)
+- Original wine entry: qty=2, unit="1 serving (5 fl oz)", calcium=23.6
+- Migrated wine entry: qty=2, unit="serving (5 fl oz)", calcium=24 ✓ (within rounding)
+- Original persimmon entry: qty=0.5, unit="1 fruit (2-1/2 dia)", calcium=6.7
+- Migrated persimmon entry: qty=0.5, unit="fruit (2-1/2 dia)", calcium=6.5 ✓ (within rounding)
 
 ---
 
