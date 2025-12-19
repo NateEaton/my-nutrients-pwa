@@ -412,6 +412,103 @@ Old entry: "1 slice large" but got nutrients from "1 oz" measure!
 - Before: "slice large" → used [0] "1 oz" → calcium=31, protein=4.1
 - After: "slice large" → matched [2] "1 slice large" → calcium=42, protein=5.5 ✅
 
+### Fix 6: Backup Settings Store Update
+
+**Issue**: Backup file contained stale settings data for `displayedNutrients` and `nutrientGoals`.
+
+**Root Cause**: `NutrientService.updateNutrientSettings()` saved to localStorage but didn't update the store. When `generateBackup()` ran, it read stale data from the store instead of current localStorage values.
+
+**Fix**: Updated `updateNutrientSettings()` in `src/lib/services/NutrientService.ts`:
+```typescript
+async updateNutrientSettings(newSettings: Partial<NutrientSettings>): Promise<void> {
+  const currentSettings = await this.getNutrientSettings();
+  const updatedSettings = { ...currentSettings, ...newSettings };
+
+  // Update the store first (THIS WAS MISSING)
+  nutrientState.update(state => ({
+    ...state,
+    settings: { ...state.settings, ...updatedSettings }
+  }));
+
+  // Then save to localStorage
+  if (updatedSettings.nutrientGoals) {
+    localStorage.setItem('nutrient_goals', JSON.stringify(updatedSettings.nutrientGoals));
+  }
+  // ... rest of localStorage saves
+}
+```
+
+**Result**: Backup now contains current settings values.
+
+### Fix 7: Leading "1 " Pattern in Serving Units
+
+**Issue**: Serving units incorrectly starting with "1 " from database measure format, appearing in both journal entries and serving preferences.
+
+**Examples**:
+- ❌ `qty=2, unit="1 serving (5 fl oz)"` → ✅ `qty=2, unit="serving (5 fl oz)"`
+- ❌ `qty=1, unit="1 slice large"` → ✅ `qty=1, unit="slice large"`
+
+**Root Cause**: Database measure strings include leading "1 " (e.g., "1 serving (5oz)", "1 slice large"). When old app stored these as serving units, it included the "1 ". This is different from Patterns 1 & 2 which had the quantity embedded in the unit when qty=1.
+
+**Pattern Differences**:
+- **Pattern 1 & 2**: Only apply when `qty=1` (quantity was embedded in unit)
+  - Example: qty=1, unit="3 oz" → qty=3, unit="oz"
+- **Pattern 3**: Strip leading "1 " regardless of quantity (from database measure format)
+  - Example: qty=2, unit="1 serving (5oz)" → qty=2, unit="serving (5oz)"
+
+**Fix**: Updated `parseServingSize()` in `migrate_to_nutrients.mjs`:
+```javascript
+function parseServingSize(servingQuantity, servingUnit) {
+  if (!servingUnit) {
+    return { servingQuantity: servingQuantity || 1, servingUnit: servingUnit || '' };
+  }
+
+  // Pattern 1 & 2: Only apply when qty=1 (quantity embedded in unit)
+  if (servingQuantity === 1) {
+    // Pattern 1: "3 oz (85g)" with space
+    const matchWithSpace = servingUnit.match(/^(\d+(?:\.\d+)?)\s+(.+)$/);
+    if (matchWithSpace) {
+      return {
+        servingQuantity: parseFloat(matchWithSpace[1]),
+        servingUnit: matchWithSpace[2]
+      };
+    }
+
+    // Pattern 2: "4oz" without space
+    const matchNoSpace = servingUnit.match(/^(\d+(?:\.\d+)?)(oz|tablespoon|...)(.*)$/i);
+    if (matchNoSpace) {
+      return {
+        servingQuantity: parseFloat(matchNoSpace[1]),
+        servingUnit: matchNoSpace[2] + matchNoSpace[3]
+      };
+    }
+  }
+
+  // Pattern 3: Unit starts with "1 " (from database measure format)
+  // Strip the leading "1 " but keep original quantity
+  const leadingNumber = servingUnit.match(/^1\s+(.+)$/);
+  if (leadingNumber) {
+    return {
+      servingQuantity: servingQuantity || 1,
+      servingUnit: leadingNumber[1]
+    };
+  }
+
+  return { servingQuantity: servingQuantity || 1, servingUnit };
+}
+```
+
+**Applied to both**:
+1. Journal entries during migration
+2. Serving preferences (serving memory)
+
+**Result**: All serving units now correctly formatted without leading "1 ".
+
+**Examples Fixed**:
+- Wine: qty=2, unit="serving (5 fl oz)" ✅ (was "1 serving (5 fl oz)")
+- Bread: qty=1, unit="slice large" ✅ (was "1 slice large")
+- Serving preferences also fixed with correct units
+
 ---
 
 ## Code Changes
