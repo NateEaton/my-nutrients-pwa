@@ -132,6 +132,43 @@ function parseServingSize(servingQuantity, servingUnit) {
 }
 
 /**
+ * Find the best matching measure in the database for a given serving unit
+ * @param {Array} measures - Array of measure objects from database food
+ * @param {string} servingUnit - The serving unit from the old entry
+ * @returns {number} - Index of best matching measure (0 if no match found)
+ */
+function findMatchingMeasureIndex(measures, servingUnit) {
+  if (!measures || measures.length === 0) return 0;
+  if (!servingUnit) return 0;
+
+  // Normalize the serving unit for comparison
+  const normalizedUnit = servingUnit.toLowerCase().trim();
+
+  // Try exact match first
+  for (let i = 0; i < measures.length; i++) {
+    const measure = measures[i];
+    const measureText = (measure.measure || measure.s || '').toLowerCase().trim();
+    if (measureText === normalizedUnit) {
+      return i;
+    }
+  }
+
+  // Try partial match (e.g., "slice large" should match "1 slice large")
+  for (let i = 0; i < measures.length; i++) {
+    const measure = measures[i];
+    const measureText = (measure.measure || measure.s || '').toLowerCase().trim();
+
+    // Check if measure contains the unit (e.g., "1 slice large" contains "slice large")
+    if (measureText.includes(normalizedUnit) || normalizedUnit.includes(measureText)) {
+      return i;
+    }
+  }
+
+  // No match found - use first measure as fallback
+  return 0;
+}
+
+/**
  * Load database from JS or JSON file
  */
 async function loadDatabase(filePath) {
@@ -326,9 +363,15 @@ function enhanceJournalEntries(journalEntries, databaseLookup, customFoods) {
       const match = databaseLookup.get(normalizedName);
 
       if (match) {
-        // Found match - extract all nutrients from first measure
+        // Found match - find the correct measure by matching serving unit
         const { food, appId } = match;
-        const measureIndex = 0; // Use first measure
+
+        // Get measures from food (handle both formats)
+        const measures = food.measures || food.ms || food.m || [];
+
+        // Find matching measure index
+        const measureIndex = findMatchingMeasureIndex(measures, entry.servingUnit);
+
         const nutrients = extractAllNutrients(food, measureIndex);
 
         // Fix serving size bug from old production
