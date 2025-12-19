@@ -383,6 +383,35 @@ function parseServingSize(servingQuantity, servingUnit) {
 - Before: qty=1, unit="3 oz (3 oz)", calcium=10.2, protein=24.1
 - After: qty=3, unit="oz (3 oz)", calcium=10, protein=23.6 ✅
 
+### Fix 5: Database Measure Matching
+
+**Issue**: Migrated nutrients incorrect when foods have multiple serving sizes.
+
+**Example**: Bread entry had calcium=31 instead of 42.
+
+**Root Cause**: Migration always used first measure (index 0), ignoring which serving size the old entry actually had.
+
+**Example** (Bread, multi-grain, toasted):
+
+Database has 4 measures:
+- [0] "1 oz" → calcium=31, protein=4.1 ❌ Migration used this
+- [1] "1 slice regular" → calcium=27, protein=3.5
+- [2] "1 slice large" → calcium=42, protein=5.5 ✅ Should use this
+- [3] "100 g" → calcium=111, protein=14.5
+
+Old entry: "1 slice large" but got nutrients from "1 oz" measure!
+
+**Fix**: Added `findMatchingMeasureIndex()` function:
+1. Try exact match on serving unit text
+2. Try partial match ("slice large" matches "1 slice large")
+3. Fallback to first measure if no match
+
+**Result**: Correct measure matched for each entry.
+
+**Example**:
+- Before: "slice large" → used [0] "1 oz" → calcium=31, protein=4.1
+- After: "slice large" → matched [2] "1 slice large" → calcium=42, protein=5.5 ✅
+
 ---
 
 ## Code Changes
