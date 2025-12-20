@@ -649,8 +649,28 @@ const beforeBrandFilter = full.length;
 full = full.filter((food) => !containsBrand(food.name, keepSet));
 console.log(`[PROCESS] Brand filter: ${beforeBrandFilter} → ${full.length} (-${beforeBrandFilter - full.length})`);
 
-// Step 5: Abridgement
-let abridged = applyAbridge(full);
+// Step 5: Abridgement (skip for keep-listed foods)
+console.log(`[PROCESS] Abridgement starting with ${full.length} foods`);
+
+// Split foods: keep-listed vs others
+const keptFoods = full.filter(f => keepSet.has(normalizeName(f.name)));
+const otherFoods = full.filter(f => !keepSet.has(normalizeName(f.name)));
+
+console.log(`[PROCESS] Keep-listed foods: ${keptFoods.length} (will bypass abridgement)`);
+console.log(`[PROCESS] Other foods: ${otherFoods.length} (will be abridged)`);
+
+if (keptFoods.length > 0) {
+  console.log(`[PROCESS] Protected foods:`);
+  keptFoods.forEach(f => console.log(`          - ${f.name}`));
+}
+
+// Only abridge the non-kept foods
+const abridgedOthers = otherFoods.length > 0 ? applyAbridge(otherFoods) : [];
+
+// Combine kept foods (unchanged) with abridged others
+let abridged = [...keptFoods, ...abridgedOthers];
+
+console.log(`[PROCESS] Final abridged count: ${abridged.length} (${keptFoods.length} kept + ${abridgedOthers.length} abridged)`);
 
 // Sort by appId
 full.sort((a, b) => a.appId - b.appId);

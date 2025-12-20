@@ -1,6 +1,46 @@
+# Original Keep List (staples)
 Cheese, swiss
 Milk, whole
 Yogurt, plain, whole milk
 Almonds
 Spinach, raw
 Bison, ground, raw
+
+# Additional Foods for User Migration Continuity (21 unmatched foods)
+# Added: 2025-12-20 to preserve user's historical journal entries
+
+# Vegetables (cooked variants and specific types)
+Squash, summer, zucchini, includes skin, cooked, boiled, drained, without salt
+Broccoli, frozen, chopped, cooked, boiled, drained, without salt
+Cabbage, bok choy, raw
+Arugula, baby, raw
+Spinach, baby
+
+# Legumes and beans
+Edamame, frozen, unprepared
+Yardlong beans, mature seeds, cooked, boiled, with salt
+Peas, edible-podded, cooked, boiled, drained, with salt
+
+# Fruits
+Avocado, Hass, peeled, raw
+Pineapple, raw
+
+# Lettuce varieties
+Lettuce, romaine, green, raw
+Lettuce, leaf, green, raw
+
+# Proteins
+Eggs, Grade A, Large, egg whole
+Mushrooms, shiitake, cooked, without salt
+
+# Grains and starches
+Potatoes, mashed, dehydrated, prepared from granules with milk
+Rice, brown, long grain, unenriched, raw
+
+# Dairy and fats
+Butter, salted
+Cheese, parmesan, grated, refrigerated
+
+# Nuts and seeds
+Peanut butter, smooth style, without salt
+Flaxseed, ground
