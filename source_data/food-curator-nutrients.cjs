@@ -449,7 +449,8 @@ function collapseDuplicates(recs) {
 
     // Process each bucket
     for (const bucket of buckets) {
-      const chosen = chooseBestServing(bucket);
+      const preferredBucket = preferNoSalt(bucket);
+      const chosen = chooseBestServing(preferredBucket);
 
       // Check if foods were actually collapsed (different sourceIds)
       const uniqueSourceIds = new Set(bucket.map(item => item.sourceId));
@@ -505,6 +506,21 @@ function collapseDuplicates(recs) {
   console.log(`[COLLAPSE] Collapsed to ${finalResult.length} unique foods`);
   return finalResult;
 }
+
+// Preference rule: when collapsing nutritionally identical foods,
+// prefer unsalted / no-salt-added variants as the canonical entry.
+// Salted variants remain available via provenance (collapsedFrom).
+function preferNoSalt(bucket) {
+  const noSaltRegex = /\b(no salt added|without salt|without added salt|unsalted)\b/i;
+  const saltedRegex = /\b(with salt|salted)\b/i;
+
+  const noSalt = bucket.filter(f => noSaltRegex.test(f.name));
+  if (noSalt.length > 0) return noSalt;
+
+  // If no explicit no-salt, just return full bucket unchanged
+  return bucket;
+}
+
 
 function applyAbridge(data) {
   console.log(`[ABRIDGE] Starting abridgement with ${data.length} foods`);
