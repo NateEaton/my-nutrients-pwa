@@ -1,13 +1,14 @@
 # When you get user's latest backup:
 cd migration
 
-# Step 1: ID mapping
+# Step 1: ID mapping (assign stable appIds)
 node migrate-backup-enhanced.mjs \
-  [user-backup].json \
-  ../src/lib/data/foodDatabaseData.js \
-  merged-output.json
+  --old-backup [user-backup].json \
+  --old-database prod-foodDatabaseData.js \
+  --curated-data ../src/lib/data/foodDatabaseData.js \
+  --output merged-output.json
 
-# Step 2: Multi-nutrient transform  
+# Step 2: Multi-nutrient transform
 node migrate_to_nutrients.mjs \
   --merged-backup merged-output.json \
   --new-database ../src/lib/data/foodDatabaseData.js \
