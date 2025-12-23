@@ -41,14 +41,18 @@
   let isUserEditing = false;
 
   // Only update from state when user is not actively editing
-  $: if (!isUserEditing && $nutrientState.settings?.dailyGoal !== undefined) {
+  $: if (!isUserEditing && $nutrientState.settings?.nutrientGoals?.calcium !== undefined) {
+    dailyGoal = $nutrientState.settings.nutrientGoals.calcium;
+  } else if (!isUserEditing && $nutrientState.settings?.dailyGoal !== undefined) {
+    // Fallback for legacy format
     dailyGoal = $nutrientState.settings.dailyGoal;
   }
 
   onMount(async () => {
     try {
       const settings = await nutrientService.getSettings();
-      dailyGoal = settings.dailyGoal;
+      // Get calcium goal from nutrientGoals (new format) or fallback to dailyGoal (legacy)
+      dailyGoal = settings.nutrientGoals?.calcium ?? settings.dailyGoal ?? 1000;
       selectedTheme = settings.theme || "auto";
       selectedColorScheme = settings.colorScheme || "blue";
 
@@ -78,7 +82,13 @@
     }
 
     try {
-      await nutrientService.updateSettings({ dailyGoal });
+      // Get current settings to preserve other nutrient goals
+      const currentSettings = await nutrientService.getSettings();
+      const updatedGoals = {
+        ...currentSettings.nutrientGoals,
+        calcium: dailyGoal
+      };
+      await nutrientService.updateSettings({ nutrientGoals: updatedGoals });
       showToast("Daily goal updated", "success");
     } catch (error) {
       console.error("Error saving daily goal:", error);

@@ -24,6 +24,29 @@
   import { NUTRIENT_METADATA, getNutrientLabel, getNutrientUnit, getDefaultDisplayedNutrients } from "$lib/config/nutrientDefaults";
   import { databaseViewState, statsViewState } from "$lib/stores/uiState"; // Add statsViewState to import
 
+  // Nutrient rounding precision (same as migration)
+  const NUTRIENT_PRECISION = {
+    protein: 1, fiber: 1, carbohydrates: 1, sugars: 1,
+    fat: 1, saturatedFat: 1, monounsaturatedFat: 1, polyunsaturatedFat: 1,
+    omega3: 2, omega3ALA: 2, omega3EPA: 2, omega3DHA: 2, omega6: 2,
+    calcium: 1, magnesium: 1, potassium: 1, iron: 1, zinc: 1,
+    vitaminD: 1, vitaminB12: 1, folate: 1, vitaminB6: 1,
+    vitaminA: 1, vitaminC: 1, vitaminK: 1
+  };
+
+  function roundNutrient(value, nutrientKey) {
+    if (value == null || isNaN(value)) return 0;
+    if (value === 0) return 0;
+    const precision = NUTRIENT_PRECISION[nutrientKey] ?? 1;
+    const factor = Math.pow(10, precision);
+    return Math.round(value * factor) / factor;
+  }
+
+  function formatNutrientValue(value, nutrientKey) {
+    const precision = NUTRIENT_PRECISION[nutrientKey] ?? 1;
+    return value.toFixed(precision);
+  }
+
   // Nutrient selection state
   let selectedNutrient = $statsViewState.selectedNutrient;
   let nutrientSettings = {
@@ -272,10 +295,13 @@
         return foodHour === hour;
       });
 
-      const hourTotal = hourFoods.reduce((sum, food) => {
-        const nutrientValue = food.nutrients?.[selectedNutrient] ?? food[selectedNutrient] ?? 0;
-        return sum + nutrientValue;
-      }, 0);
+      const hourTotal = roundNutrient(
+        hourFoods.reduce((sum, food) => {
+          const nutrientValue = food.nutrients?.[selectedNutrient] ?? food[selectedNutrient] ?? 0;
+          return sum + nutrientValue;
+        }, 0),
+        selectedNutrient
+      );
 
       return {
         date: dateStr,
@@ -297,7 +323,10 @@
       };
     });
 
-    const dayTotal = hourlyData.reduce((sum, hour) => sum + hour.value, 0);
+    const dayTotal = roundNutrient(
+      hourlyData.reduce((sum, hour) => sum + hour.value, 0),
+      selectedNutrient
+    );
     const hoursWithData = hourlyData.filter((hour) => hour.value > 0).length;
 
     return {
@@ -311,7 +340,7 @@
       data: hourlyData,
       unit: getNutrientUnit(selectedNutrient),
       averageValue:
-        hoursWithData > 0 ? Math.round(dayTotal / hoursWithData) : 0,
+        hoursWithData > 0 ? roundNutrient(dayTotal / hoursWithData, selectedNutrient) : 0,
       totalValue: dayTotal,
       maxValue: Math.max(...hourlyData.map((h) => h.value)),
       minValue: Math.min(
@@ -349,10 +378,13 @@
       const isFuture = date > today;
 
       const foods = allData[dateStr] || [];
-      const totalNutrient = foods.reduce((sum, food) => {
-        const nutrientValue = food.nutrients?.[selectedNutrient] ?? food[selectedNutrient] ?? 0;
-        return sum + nutrientValue;
-      }, 0);
+      const totalNutrient = roundNutrient(
+        foods.reduce((sum, food) => {
+          const nutrientValue = food.nutrients?.[selectedNutrient] ?? food[selectedNutrient] ?? 0;
+          return sum + nutrientValue;
+        }, 0),
+        selectedNutrient
+      );
 
       const currentGoal = nutrientSettings.nutrientGoals?.[selectedNutrient] || 0;
 
@@ -402,11 +434,12 @@
       subtitle: subtitle,
       data: data,
       unit: getNutrientUnit(selectedNutrient),
-      averageValue: Math.round(
+      averageValue: roundNutrient(
         data
           .filter((d) => !d.isFuture) // Remove: && d.value > 0
           .reduce((sum, d) => sum + d.value, 0) /
-          Math.max(1, data.filter((d) => !d.isFuture).length) // Remove: && d.value > 0
+          Math.max(1, data.filter((d) => !d.isFuture).length), // Remove: && d.value > 0
+        selectedNutrient
       ),
       maxValue: Math.max(...data.map((d) => d.value)),
       minValue: Math.min(
@@ -445,10 +478,13 @@
       const isFuture = date > today;
 
       const foods = allData[dateStr] || [];
-      const totalNutrient = foods.reduce((sum, food) => {
-        const nutrientValue = food.nutrients?.[selectedNutrient] ?? food[selectedNutrient] ?? 0;
-        return sum + nutrientValue;
-      }, 0);
+      const totalNutrient = roundNutrient(
+        foods.reduce((sum, food) => {
+          const nutrientValue = food.nutrients?.[selectedNutrient] ?? food[selectedNutrient] ?? 0;
+          return sum + nutrientValue;
+        }, 0),
+        selectedNutrient
+      );
 
       const currentGoal = nutrientSettings.nutrientGoals?.[selectedNutrient] || 0;
 
@@ -478,11 +514,12 @@
       }),
       data: data,
       unit: getNutrientUnit(selectedNutrient),
-      averageValue: Math.round(
+      averageValue: roundNutrient(
         data
           .filter((d) => !d.isFuture) // Remove: && d.value > 0
           .reduce((sum, d) => sum + d.value, 0) /
-          Math.max(1, data.filter((d) => !d.isFuture).length) // Remove: && d.value > 0
+          Math.max(1, data.filter((d) => !d.isFuture).length), // Remove: && d.value > 0
+        selectedNutrient
       ),
       maxValue: Math.max(...data.map((d) => d.value)),
       minValue: Math.min(
@@ -533,7 +570,7 @@
             return daySum + nutrientValue;
           }, 0);
         }, 0);
-        averageDaily = Math.round(monthTotal / monthDays.length);
+        averageDaily = roundNutrient(monthTotal / monthDays.length, selectedNutrient);
       }
 
       const currentGoal = nutrientSettings.nutrientGoals?.[selectedNutrient] || 0;
@@ -562,11 +599,12 @@
       subtitle: targetYear.toString(),
       data: data,
       unit: getNutrientUnit(selectedNutrient),
-      averageValue: Math.round(
+      averageValue: roundNutrient(
         data
           .filter((d) => !d.isFuture) // Remove: && d.value > 0
           .reduce((sum, d) => sum + d.value, 0) /
-          Math.max(1, data.filter((d) => !d.isFuture).length) // Remove: && d.value > 0
+          Math.max(1, data.filter((d) => !d.isFuture).length), // Remove: && d.value > 0
+        selectedNutrient
       ),
       maxValue: Math.max(...data.map((d) => d.value)),
       minValue: Math.min(
@@ -777,7 +815,7 @@
       (sum, item) => sum + item.value,
       0
     );
-    const averageValue = totalValue / allNonFutureDays.length;
+    const averageValue = roundNutrient(totalValue / allNonFutureDays.length, selectedNutrient);
     const percentageOfGoal = (averageValue / currentGoal) * 100;
 
     return Math.round(percentageOfGoal);
@@ -1131,11 +1169,11 @@
         <div class="stats-main-value">
           <span class="stats-value">
             {#if isDetailMode && selectedBarIndex >= 0}
-              {currentData.data[selectedBarIndex].value.toFixed(2)}
+              {formatNutrientValue(currentData.data[selectedBarIndex].value, selectedNutrient)}
             {:else if currentView === "daily"}
-              {(currentData.totalValue || 0).toFixed(2)}
+              {formatNutrientValue(currentData.totalValue || 0, selectedNutrient)}
             {:else}
-              {currentData.averageValue.toFixed(2)}
+              {formatNutrientValue(currentData.averageValue, selectedNutrient)}
             {/if}
           </span>
           <span class="stats-unit">{currentData?.unit || getNutrientUnit(selectedNutrient)}</span>

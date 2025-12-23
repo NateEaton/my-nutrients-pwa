@@ -1,7 +1,7 @@
 # My Nutrients PWA - Guide for Claude (AI Assistant)
 
-**Version**: 1.0.0
-**Last Updated**: December 11, 2025
+**Version**: 1.1.0
+**Last Updated**: December 23, 2025
 
 ---
 
@@ -97,8 +97,11 @@ cd source_data
 # Step 1: Assign stable appIds
 node master-key-assigner-json.cjs combined-nutrient-data.json mastered-nutrient-data.json
 
-# Step 2: Curate foods (filter, clean measures)
-node food-curator-nutrients.cjs mastered-nutrient-data.json curated-nutrients-abridged.json
+# Step 2: Curate foods (filter, clean measures) with keep list
+node food-curator-nutrients.cjs \
+  mastered-nutrient-data.json \
+  curated-nutrients \
+  --keep-list keep-list.txt
 
 # Step 3: Generate minified JS module
 node data-module-generator-nutrients.cjs \
@@ -118,6 +121,58 @@ ls -lh ../src/lib/data/foodDatabaseData.js
 - `export const DATABASE_METADATA` - Database metadata
 
 See `_notes/DATA_PIPELINE.md` for complete pipeline documentation.
+
+### Keep List Feature
+
+**Purpose**: Preserve specific foods through the curation pipeline for user data continuity and legacy food support.
+
+**How It Works**:
+- Foods listed in `source_data/keep-list.txt` completely **bypass all 5 abridgement steps**:
+  1. Cooking method collapse (raw/cooked preference)
+  2. Meat cut simplification
+  3. Industrial prep filtering (frozen/canned)
+  4. Low-nutrient 100g-only filtering
+  5. Category filtering (snacks/restaurant)
+
+**Current Keep List**: 179 foods including:
+- 6 original staples (milk, cheese, yogurt, almonds, spinach, bison)
+- 173 legacy foods from original USDA calcium publication (86% coverage)
+
+**Usage**:
+```bash
+# Add food names (exact USDA names) to keep-list.txt
+echo "Squash, summer, zucchini, includes skin, cooked, boiled, drained" >> keep-list.txt
+
+# Run pipeline with keep list
+node food-curator-nutrients.cjs \
+  mastered-nutrient-data.json \
+  curated-nutrients \
+  --keep-list keep-list.txt
+```
+
+**Important Notes**:
+- Food names must match exactly as they appear in USDA source data
+- Normalization is applied, but exact names work best
+- Keep-listed foods are preserved even if they would normally be filtered
+- See `source_data/KEEP-LIST-GUIDE.md` for complete documentation
+
+### "Without Salt" Preference
+
+**Feature**: When collapsing nutritionally identical foods, the pipeline prefers unsalted variants.
+
+**Behavior**:
+- Chooses "without salt" over "with salt"
+- Chooses "no salt added" over "salted"
+- Chooses "unsalted" over "salted"
+
+**Implementation**: `preferNoSalt()` function in `food-curator-nutrients.cjs` (lines 510-522)
+
+**Result**: Salted variants are collapsed into unsalted versions and preserved in provenance data.
+
+**Example**:
+- Database contains: "Turnip greens, frozen, cooked, boiled, drained, without salt"
+- Provenance shows: Also available as "...with salt" variant
+- User searches for "turnip greens" → finds the "without salt" version
 
 ---
 
@@ -370,9 +425,19 @@ refactor: Extract nutrient formatting to helper function
 - ✅ Phase 1: Backend Services (data pipeline, types, services)
 - ✅ Phase 2: Service Integration (IndexedDB, calculations, settings)
 - ✅ Phase 3: UI Updates (components, nutrient display, modals)
+- ✅ Phase 4: Settings UI (nutrient selection, goals, import/export)
 
-**In Progress**:
-- Phase 4: Settings UI (nutrient selection, goals, import/export)
+**Migration to Multi-Nutrient Format**:
+- ✅ Data pipeline enhancements (keep list, salt preference)
+- ✅ Legacy food restoration (298/346 foods, 86% coverage)
+- ✅ Migration scripts tested and documented
+- ✅ 8 migration fixes applied (serving bugs, nutrient scaling, etc.)
+- ✅ Backward compatibility maintained
+
+**Migration Documentation**:
+- `migration/MIGRATION-CORRECTED-2025-12-18.md` - Complete migration log with all fixes
+- `migration/MY-NUTRIENTS-MIGRATION-PLAN.md` - Original migration plan
+- `FINAL-PRE-MERGE-CHECKLIST.md` - Pre-merge checklist and production migration guide
 
 See `_notes/IMPLEMENTATION_PLAN.md` for detailed phase breakdown.
 

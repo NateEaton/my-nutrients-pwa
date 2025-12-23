@@ -1,0 +1,81 @@
+=== ALL UNMATCHED FOODS ===
+(Foods from old database that are NOT in the new curated database)
+
+Regular Unmatched Foods: 21
+1. Squash, summer, zucchini, includes skin, cooked, boiled, drained, without salt
+   Old ID: 2477
+2. Eggs, Grade A, Large, egg whole
+   Old ID: 3306
+3. Bison, ground, raw
+   Old ID: 4464
+4. Potatoes, mashed, dehydrated, prepared from granules with milk
+   Old ID: 110
+5. Edamame, frozen, unprepared
+   Old ID: 115
+6. Broccoli, frozen, chopped, cooked, boiled, drained, without salt
+   Old ID: 133
+7. Yardlong beans, mature seeds, cooked, boiled, with salt
+   Old ID: 659
+8. Butter, salted
+   Old ID: 1056
+9. Peanut butter, smooth style, without salt
+   Old ID: 1285
+10. Peas, edible-podded, cooked, boiled, drained, with salt
+   Old ID: 1934
+11. Mushrooms, shiitake, cooked, without salt
+   Old ID: 2839
+12. Arugula, baby, raw
+   Old ID: 3157
+13. Avocado, Hass, peeled, raw
+   Old ID: 3175
+14. Cabbage, bok choy, raw
+   Old ID: 3177
+15. Rice, brown, long grain, unenriched, raw
+   Old ID: 3211
+16. Pineapple, raw
+   Old ID: 3216
+17. Lettuce, romaine, green, raw
+   Old ID: 3220
+18. Lettuce, leaf, green, raw
+   Old ID: 3224
+19. Flaxseed, ground
+   Old ID: 3238
+20. Cheese, parmesan, grated, refrigerated
+   Old ID: 3247
+21. Spinach, baby
+   Old ID: 3279
+
+
+Hidden Foods (also unmatched): 13
+1. Oil, sunflower, linoleic, (partially hydrogenated)
+   Old ID: 1364
+2. Oil, soybean, salad or cooking
+   Old ID: 1648
+3. Oil, sunflower, linoleic, (approx. 65%)
+   Old ID: 1753
+4. Pickles, cucumber, sour
+   Old ID: 2420
+5. Mango, dried, sweetened
+   Old ID: 2555
+6. Almond butter, creamy
+   Old ID: 3240
+7. Mushroom, king oyster
+   Old ID: 3256
+8. Mushroom, pioppini
+   Old ID: 3263
+9. Mushroom, maitake
+   Old ID: 3270
+10. Mushroom, beech
+   Old ID: 3271
+11. Mushroom, lion's mane
+   Old ID: 3278
+12. Mushroom, oyster
+   Old ID: 3280
+13. Flour, corn, yellow, fine meal, enriched
+   Old ID: 3299
+
+
+TOTAL UNMATCHED: 34
+
+These foods appear in your old journal entries but are NOT in the new database.
+They have been preserved as calcium-only entries in the migration.

@@ -1,0 +1,245 @@
+{
+  "description": "Manual override mapping for unmatched foods in migration",
+  "version": "1.0",
+  "created": "2025-12-20",
+  "totalMappings": 19,
+  "mappings": {
+    "2477": {
+      "oldName": "Squash, summer, zucchini, includes skin, cooked, boiled, drained, without salt",
+      "oldCalcium": 32.4,
+      "oldMeasure": "1 cup, sliced",
+      "newAppId": 9436,
+      "newName": "Squash, zucchini, baby, raw",
+      "newCalcium": 21,
+      "newMeasure": "100 g",
+      "quality": "good",
+      "notes": "Same food, raw vs cooked variant"
+    },
+    "3306": {
+      "oldName": "Eggs, Grade A, Large, egg whole",
+      "oldCalcium": 24.1,
+      "oldMeasure": "1 egg, whole without shell",
+      "newAppId": 12158,
+      "newName": "Egg, whole, raw, fresh",
+      "newCalcium": 28,
+      "newMeasure": "1 large",
+      "quality": "excellent",
+      "notes": "Perfect match"
+    },
+    "1934": {
+      "oldName": "Peas, edible-podded, cooked, boiled, drained, with salt",
+      "oldCalcium": 67.2,
+      "oldMeasure": "1 cup",
+      "newAppId": 10896,
+      "newName": "Pigeonpeas, immature seeds, raw",
+      "newCalcium": 65,
+      "newMeasure": "1 cup",
+      "quality": "good",
+      "notes": "Different pea variety, similar calcium"
+    },
+    "2839": {
+      "oldName": "Mushrooms, shiitake, cooked, without salt",
+      "oldCalcium": 4.35,
+      "oldMeasure": "1 cup pieces",
+      "newAppId": 9451,
+      "newName": "Mushrooms, oyster, raw",
+      "newCalcium": 4.4,
+      "newMeasure": "1 large",
+      "quality": "good",
+      "notes": "Different mushroom variety, nearly identical calcium"
+    },
+    "3216": {
+      "oldName": "Pineapple, raw",
+      "oldCalcium": 12.5,
+      "oldMeasure": "100 g",
+      "newAppId": 9995,
+      "newName": "Pineapple, raw, all varieties",
+      "newCalcium": 13,
+      "newMeasure": "100 g",
+      "quality": "excellent",
+      "notes": "Perfect match"
+    },
+    "3220": {
+      "oldName": "Lettuce, romaine, green, raw",
+      "oldCalcium": 27.6,
+      "oldMeasure": "100 g",
+      "newAppId": 10118,
+      "newName": "Lettuce, cos or romaine, raw",
+      "newCalcium": 33,
+      "newMeasure": "100 g",
+      "quality": "good",
+      "notes": "Same food, slight calcium variance"
+    },
+    "3224": {
+      "oldName": "Lettuce, leaf, green, raw",
+      "oldCalcium": 39.8,
+      "oldMeasure": "100 g",
+      "newAppId": 10120,
+      "newName": "Lettuce, green leaf, raw",
+      "newCalcium": 36,
+      "newMeasure": "100 g",
+      "quality": "excellent",
+      "notes": "Perfect match"
+    },
+    "3238": {
+      "oldName": "Flaxseed, ground",
+      "oldCalcium": 230,
+      "oldMeasure": "100 g",
+      "newAppId": 10285,
+      "newName": "Seeds, flaxseed",
+      "newCalcium": 255,
+      "newMeasure": "100 g",
+      "quality": "excellent",
+      "notes": "Same food"
+    },
+    "3247": {
+      "oldName": "Cheese, parmesan, grated, refrigerated",
+      "oldCalcium": 950,
+      "oldMeasure": "100 g",
+      "newAppId": 14287,
+      "newName": "Cheese, colby",
+      "newCalcium": 904,
+      "newMeasure": "1 cup, diced",
+      "quality": "acceptable",
+      "notes": "Different cheese type but similar calcium"
+    },
+    "3279": {
+      "oldName": "Spinach, baby",
+      "oldCalcium": 68.4,
+      "oldMeasure": "100 g",
+      "newAppId": 10271,
+      "newName": "Malabar spinach, cooked",
+      "newCalcium": 55,
+      "newMeasure": "1 cup",
+      "quality": "acceptable",
+      "notes": "Different spinach variety"
+    },
+    "3157": {
+      "oldName": "Arugula, baby, raw",
+      "oldCalcium": 204,
+      "oldMeasure": "100 g",
+      "newAppId": 10258,
+      "newName": "Arugula, raw",
+      "newCalcium": 160,
+      "newMeasure": "100 g",
+      "quality": "good",
+      "notes": "Same food, not baby variety"
+    },
+    "3175": {
+      "oldName": "Avocado, Hass, peeled, raw",
+      "oldCalcium": 14.5,
+      "oldMeasure": "100 g",
+      "newAppId": 12576,
+      "newName": "Avocados, raw, all commercial varieties",
+      "newCalcium": 18,
+      "newMeasure": "1 cup, cubes",
+      "quality": "acceptable",
+      "notes": "All varieties vs specific Hass"
+    },
+    "133": {
+      "oldName": "Broccoli, frozen, chopped, cooked, boiled, drained, without salt",
+      "oldCalcium": 61,
+      "oldMeasure": "1.0 cups",
+      "newAppId": 11250,
+      "newName": "Broccoli, raw",
+      "newCalcium": 43,
+      "newMeasure": "1 cup chopped",
+      "quality": "acceptable",
+      "notes": "Raw vs cooked - 30% calcium difference"
+    },
+    "115": {
+      "oldName": "Edamame, frozen, unprepared",
+      "oldCalcium": 71,
+      "oldMeasure": "1.0 cups",
+      "newAppId": 10154,
+      "newName": "Soybeans, green, cooked, boiled, drained, without salt",
+      "newCalcium": 145,
+      "newMeasure": "100 g",
+      "quality": "acceptable",
+      "notes": "Need to verify 1 cup measure available"
+    },
+    "4464": {
+      "oldName": "Bison, ground, raw",
+      "oldCalcium": 6.83,
+      "oldMeasure": "100 g",
+      "newAppId": 16164,
+      "newName": "Bison, ground, grass-fed, raw",
+      "newCalcium": 9.4,
+      "newMeasure": "1 patty (cooked from 4 oz raw)",
+      "quality": "poor",
+      "notes": "38% calcium difference"
+    },
+    "659": {
+      "oldName": "Yardlong beans, mature seeds, cooked, boiled, with salt",
+      "oldCalcium": 71.8,
+      "oldMeasure": "1 cup",
+      "newAppId": 10093,
+      "newName": "Yardlong bean, raw",
+      "newCalcium": 46,
+      "newMeasure": "1 cup slices",
+      "quality": "poor",
+      "notes": "Raw vs cooked - 36% calcium difference"
+    },
+    "1056": {
+      "oldName": "Butter, salted",
+      "oldCalcium": 54.5,
+      "oldMeasure": "1 cup",
+      "newAppId": 14282,
+      "newName": "Butter, whipped, with salt",
+      "newCalcium": 23,
+      "newMeasure": "100 g",
+      "quality": "poor",
+      "notes": "Whipped vs regular - 58% LOWER calcium - USER SHOULD REVIEW"
+    },
+    "1285": {
+      "oldName": "Peanut butter, smooth style, without salt",
+      "oldCalcium": 126,
+      "oldMeasure": "1 cup",
+      "newAppId": 13330,
+      "newName": "Peanut butter, smooth, vitamin and mineral fortified",
+      "newCalcium": 43,
+      "newMeasure": "100 g",
+      "quality": "poor",
+      "notes": "Fortified version - 66% LOWER calcium - USER SHOULD REVIEW"
+    },
+    "3177": {
+      "oldName": "Cabbage, bok choy, raw",
+      "oldCalcium": 61.9,
+      "oldMeasure": "100 g",
+      "newAppId": 9388,
+      "newName": "Cabbage, chinese (pak-choi), cooked, boiled, drained, with salt",
+      "newCalcium": 93,
+      "newMeasure": "100 g",
+      "quality": "poor",
+      "notes": "Cooked vs raw - 50% HIGHER calcium"
+    }
+  },
+  "noMatchAvailable": {
+    "110": {
+      "oldName": "Potatoes, mashed, dehydrated, prepared from granules with milk",
+      "oldCalcium": 74,
+      "oldMeasure": "1.0 cups",
+      "reason": "No suitable replacement found in new database"
+    },
+    "3211": {
+      "oldName": "Rice, brown, long grain, unenriched, raw",
+      "oldCalcium": 8.06,
+      "oldMeasure": "100 g",
+      "reason": "Brown rice grain not in database - eliminated by curation process"
+    }
+  },
+  "qualityBreakdown": {
+    "excellent": 4,
+    "good": 5,
+    "acceptable": 5,
+    "poor": 5,
+    "noMatch": 2
+  },
+  "implementationNotes": [
+    "19 of 21 unmatched foods have replacement mappings",
+    "2 foods (IDs 110, 3211) have no suitable replacement - consider creating custom foods",
+    "5 mappings marked 'poor' quality - user should review calcium differences",
+    "Measure differences may require quantity scaling during migration",
+    "Consider flagging entries with IDs 1056, 1285, 3177 due to >50% calcium variance"
+  ]
+}

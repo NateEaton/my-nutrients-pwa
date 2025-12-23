@@ -345,6 +345,12 @@ export class NutrientService {
     const currentSettings = await this.getNutrientSettings();
     const updatedSettings = { ...currentSettings, ...newSettings };
 
+    // Update the store first
+    nutrientState.update(state => ({
+      ...state,
+      settings: { ...state.settings, ...updatedSettings }
+    }));
+
     // Save to localStorage
     if (updatedSettings.nutrientGoals) {
       localStorage.setItem('nutrient_goals', JSON.stringify(updatedSettings.nutrientGoals));
