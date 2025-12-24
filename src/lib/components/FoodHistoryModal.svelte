@@ -195,8 +195,9 @@
     display: flex;
     align-items: center;
     padding: 1rem 0.5rem 1rem 0.5rem;
-    background-color: var(--surface);
-    border-bottom: 1px solid var(--divider);
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: var(--shadow);
     gap: 0.5rem;
   }
 
@@ -205,7 +206,7 @@
     border: none;
     cursor: pointer;
     padding: 0.5rem;
-    color: var(--text-primary);
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -215,7 +216,7 @@
   }
 
   .back-btn:hover {
-    background-color: var(--hover-bg);
+    background-color: var(--hover-overlay);
   }
 
   .back-btn .material-icons {
@@ -231,7 +232,7 @@
     margin: 0;
     font-size: var(--font-size-lg);
     font-weight: 600;
-    color: var(--text-primary);
+    color: white;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -303,12 +304,12 @@
   }
 
   .date-header:hover {
-    background-color: var(--hover-bg);
+    background-color: var(--primary-alpha-5);
   }
 
   .date-header .material-icons {
     font-size: 20px;
-    color: var(--accent-color);
+    color: var(--primary-color);
   }
 
   .date-header .arrow {

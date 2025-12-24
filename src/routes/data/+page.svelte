@@ -299,7 +299,7 @@
   // --- Reactivity (Data Filtering) ---
 
   $: {
-    typeSortRotation; nutrientFilter; selectedNutrientForControls; showJournaledOnly;
+    typeSortRotation; nutrientFilter; selectedNutrientForControls; showJournaledOnly; journaledFoodIds;
     let foods = [];
 
     if (selectedFilter === "available") {
@@ -401,7 +401,7 @@
       totalCount = $nutrientState.customFoods.length;
     }
 
-    if (searchQuery.trim() || nutrientFilter.type !== "all") {
+    if (searchQuery.trim() || nutrientFilter.type !== "all" || showJournaledOnly) {
       return `${filteredFoods.length} of ${totalCount}`;
     } else {
       return `${totalCount} items`;
@@ -1272,7 +1272,7 @@
     width: 18px;
     height: 18px;
     cursor: pointer;
-    accent-color: var(--accent-color);
+    accent-color: var(--primary-color);
   }
 
   .journaled-filter-checkbox:hover {
