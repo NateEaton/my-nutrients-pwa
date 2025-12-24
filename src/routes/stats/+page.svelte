@@ -962,8 +962,8 @@
             ? item.chartLabel
             : item.shortDate;
 
-        // Make labels clickable for non-future dates (weekly/monthly/yearly views)
-        if (!item.isFuture && item.date) {
+        // Make labels clickable for non-future dates (weekly and monthly views only)
+        if (!item.isFuture && item.date && (currentView === "weekly" || currentView === "monthly")) {
           label.classList.add("clickable");
           label.style.cursor = "pointer";
           label.addEventListener("click", (e) => {

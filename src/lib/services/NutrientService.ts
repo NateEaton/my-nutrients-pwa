@@ -43,6 +43,15 @@ export class NutrientService {
     await this.initializeIndexedDB();
     await this.initializeCustomFoodIdCounter();
 
+    // Restore current date from localStorage if available
+    const savedDate = localStorage.getItem('nutrient_current_date');
+    if (savedDate) {
+      nutrientState.update(state => ({
+        ...state,
+        currentDate: savedDate
+      }));
+    }
+
     // Load all data
     await this.loadSettings();
     await this.loadDailyFoods();
@@ -286,6 +295,9 @@ export class NutrientService {
       currentDate: newDate,
       foods: []
     }));
+
+    // Persist current date to localStorage so it's restored on page reload
+    localStorage.setItem('nutrient_current_date', newDate);
 
     await this.loadDailyFoods();
     await this.applySortToFoods();
