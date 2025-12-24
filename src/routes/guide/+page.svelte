@@ -243,6 +243,11 @@
           icon on database foods to view detailed information in the food database documentation page.
         </li>
         <li>
+          <strong>View Journal History:</strong> Tap the <span class="material-icons inline-icon">history</span>
+          history icon (shown below the info icon) to see all dates when you've logged that food.
+          In the history modal, you can tap any date to jump directly to that day's tracker to review your full journal.
+        </li>
+        <li>
           <strong>Database Info:</strong> The header's <span class="material-icons inline-icon">info</span>
           icon provides details about the database source and curation process.
         </li>

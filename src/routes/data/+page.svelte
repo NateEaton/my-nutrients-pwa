@@ -26,6 +26,7 @@
   import { base } from "$app/paths";
   import SourceIndicator from "$lib/components/SourceIndicator.svelte";
   import MetadataPopup from "$lib/components/MetadataPopup.svelte";
+  import FoodHistoryModal from "$lib/components/FoodHistoryModal.svelte";
   import { databaseViewState } from "$lib/stores/uiState"; 
 
   // --- State Variables (Initialized from Store) ---
@@ -56,6 +57,8 @@
   let foodToDelete = null;
   let showMetadataPopup = false;
   let selectedFoodForMetadata = null;
+  let showHistoryModal = false;
+  let selectedFoodForHistory = null;
 
   // --- Helpers ---
 
@@ -379,6 +382,11 @@
   function handleInfoClick(food) {
     selectedFoodForMetadata = food;
     showMetadataPopup = true;
+  }
+
+  function handleHistoryClick(food) {
+    selectedFoodForHistory = food;
+    showHistoryModal = true;
   }
 
   async function handleDeleteFood() {
@@ -722,7 +730,7 @@
         {#each filteredFoods as food}
           <div class="food-card" class:custom={food.isCustom}>
             
-            <!-- Left Column: Checkbox OR Info Icon -->
+            <!-- Left Column: Checkbox/Info Icon + History Icon (stacked) -->
             <div class="card-left-col">
               {#if selectedFilter === "database" && !food.isCustom}
                 <input
@@ -733,14 +741,23 @@
                   title={$nutrientState.hiddenFoods.has(food.id) ? "Unhide food" : "Hide food"}
                 />
               {:else if !food.isCustom}
-                <button 
-                  class="detail-link-btn" 
+                <button
+                  class="detail-link-btn"
                   on:click|stopPropagation={() => openFoodDocs(food)}
                   title="View source details"
                 >
                   <span class="material-icons">info</span>
                 </button>
               {/if}
+
+              <!-- History icon (always shown below) -->
+              <button
+                class="history-btn"
+                on:click|stopPropagation={() => handleHistoryClick(food)}
+                title="View journal history"
+              >
+                <span class="material-icons">history</span>
+              </button>
             </div>
 
             <!-- Middle Column: Content -->
@@ -842,6 +859,11 @@
     }}
   />
 {/if}
+
+<FoodHistoryModal
+  bind:show={showHistoryModal}
+  food={selectedFoodForHistory}
+/>
 
 <svelte:window on:click={handleClickOutside} />
 
@@ -1149,7 +1171,7 @@
     border-radius: 8px;
     padding: 12px 16px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     position: relative;
     gap: 12px;
   }
@@ -1159,12 +1181,14 @@
     background-color: var(--custom-food-bg);
   }
 
-  /* Left Column (Checkbox or Info Icon) */
+  /* Left Column (Checkbox/Info Icon + History Icon stacked) */
   .card-left-col {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     width: 24px; /* Fixed width for alignment */
+    gap: 4px;
     flex-shrink: 0;
   }
 
@@ -1207,6 +1231,29 @@
   }
 
   .detail-link-btn .material-icons {
+    font-size: 20px;
+  }
+
+  .history-btn {
+    background: none;
+    border: none;
+    padding: 2px;
+    color: var(--accent-color);
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .history-btn:hover {
+    opacity: 1;
+    background-color: var(--accent-alpha-10);
+    border-radius: 50%;
+  }
+
+  .history-btn .material-icons {
     font-size: 20px;
   }
 
