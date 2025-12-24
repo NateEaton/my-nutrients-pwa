@@ -253,7 +253,8 @@
   }
 
   async function toggleJournaledFilter() {
-    showJournaledOnly = !showJournaledOnly;
+    // Note: showJournaledOnly is already toggled by bind:checked
+    // Just load data if needed
     if (showJournaledOnly && !journaledFoodIds) {
       // Load journal data on first activation
       journaledFoodIds = await loadJournaledFoodIds();
