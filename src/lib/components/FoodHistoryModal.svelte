@@ -104,14 +104,16 @@
 <svelte:window on:keydown={handleKeydown} />
 
 {#if show}
-  <div class="modal-backdrop" on:click={handleBackdropClick}>
-    <div class="history-modal" on:click|stopPropagation>
-      <div class="modal-header">
-        <h3>Journal History</h3>
-        <button class="close-button" on:click={handleClose} title="Close">
-          <span class="material-icons">close</span>
+  <div class="modal-backdrop">
+    <div class="history-modal">
+      <header class="modal-header">
+        <button class="back-btn" on:click={handleClose} title="Back">
+          <span class="material-icons">arrow_back</span>
         </button>
-      </div>
+        <div class="header-title">
+          <h1>Journal History</h1>
+        </div>
+      </header>
 
       <div class="food-name">{food?.name || "Unknown Food"}</div>
 
@@ -159,7 +161,6 @@
             <span>•</span>
             <span>{uniqueDates} {uniqueDates === 1 ? 'day' : 'days'}</span>
           </div>
-          <button class="btn-secondary" on:click={handleClose}>Close</button>
         </div>
       {/if}
     </div>
@@ -173,58 +174,67 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--background);
     z-index: 1000;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
+    flex-direction: column;
   }
 
   .history-modal {
-    background-color: var(--surface);
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    width: 90%;
-    max-width: 500px;
-    max-height: 80vh;
+    flex: 1;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-  }
-
-  .modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid var(--divider);
     background-color: var(--background);
   }
 
-  .modal-header h3 {
-    margin: 0;
-    font-size: var(--font-size-lg);
-    font-weight: 600;
-    color: var(--text-primary);
+  .modal-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    padding: 1rem 0.5rem 1rem 0.5rem;
+    background-color: var(--surface);
+    border-bottom: 1px solid var(--divider);
+    gap: 0.5rem;
   }
 
-  .close-button {
+  .back-btn {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0.25rem;
-    color: var(--text-secondary);
+    padding: 0.5rem;
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    transition: all 0.2s ease;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0;
   }
 
-  .close-button:hover {
-    background-color: var(--divider);
+  .back-btn:hover {
+    background-color: var(--hover-bg);
+  }
+
+  .back-btn .material-icons {
+    font-size: 24px;
+  }
+
+  .header-title {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .header-title h1 {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    font-weight: 600;
     color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .food-name {
@@ -337,12 +347,14 @@
   }
 
   .modal-footer {
+    position: sticky;
+    bottom: 0;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     padding: 1rem 1.5rem;
     border-top: 1px solid var(--divider);
-    background-color: var(--background);
+    background-color: var(--surface);
   }
 
   .stats {
@@ -351,43 +363,6 @@
     gap: 0.5rem;
     color: var(--text-secondary);
     font-size: var(--font-size-sm);
-  }
-
-  .btn-secondary {
-    padding: 0.5rem 1.25rem;
-    border: 1px solid var(--divider);
-    background-color: var(--surface);
-    color: var(--text-primary);
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: var(--font-size-base);
     font-weight: 500;
-    transition: all 0.2s ease;
-  }
-
-  .btn-secondary:hover {
-    background-color: var(--hover-bg);
-    border-color: var(--text-secondary);
-  }
-
-  @media (max-width: 600px) {
-    .history-modal {
-      width: 95%;
-      max-height: 90vh;
-    }
-
-    .modal-header,
-    .food-name,
-    .modal-footer {
-      padding: 1rem;
-    }
-
-    .date-header {
-      padding: 0.75rem 1rem;
-    }
-
-    .entries {
-      padding: 0 1rem 0.75rem 2.75rem;
-    }
   }
 </style>

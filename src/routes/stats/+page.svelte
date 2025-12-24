@@ -695,9 +695,10 @@
         dayDate.setDate(todayNormalized.getDate() + currentDayOffset);
         return dayDate;
       case "weekly":
-        const weekDate = new Date(todayNormalized);
-        weekDate.setDate(todayNormalized.getDate() + currentWeekOffset * 7);
-        return weekDate;
+        const weekStart = new Date(todayNormalized);
+        weekStart.setDate(todayNormalized.getDate() - todayNormalized.getDay());
+        weekStart.setDate(weekStart.getDate() + currentWeekOffset * 7);
+        return weekStart;
       case "monthly":
         const monthDate = new Date(todayNormalized);
         monthDate.setMonth(todayNormalized.getMonth() + currentMonthOffset);
@@ -1974,6 +1975,18 @@
     .chart-label {
       font-size: 0.7rem; /* Slightly smaller than --font-size-xs for mobile */
       min-width: 0;
+    }
+
+    /* Make clickable dates MORE visible on mobile */
+    .chart-label.clickable {
+      font-size: 0.75rem; /* Slightly larger than non-clickable */
+      font-weight: 600; /* Bolder by default on mobile */
+      text-decoration-thickness: 1.5px; /* Thicker underline */
+    }
+
+    .chart-label.clickable:hover {
+      text-decoration-thickness: 2px;
+      transform: translateY(-2px); /* More pronounced lift */
     }
   }
 </style>
