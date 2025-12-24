@@ -558,9 +558,9 @@ async function migrateToNutrients(config) {
     outputPath
   } = config;
 
-  console.log('='*70);
+  console.log('='.repeat(70));
   console.log('MY NUTRIENTS MIGRATION');
-  console.log('='*70);
+  console.log('='.repeat(70));
 
   // Load files
   console.log('\n📂 Loading files...');
@@ -632,9 +632,9 @@ async function migrateToNutrients(config) {
   console.log(`📁 Output: ${outputPath}`);
 
   // Print statistics
-  console.log('\n' + '='*70);
+  console.log('\n' + '='.repeat(70));
   console.log('MIGRATION STATISTICS');
-  console.log('='*70);
+  console.log('='.repeat(70));
 
   const dates = Object.keys(restoreFile.journalEntries).sort();
   console.log(`\n📅 Journal Entries:`);
@@ -680,9 +680,9 @@ async function migrateToNutrients(config) {
     console.log(`   Sample values: ${nutrientStr}`);
   }
 
-  console.log('\n' + '='*70);
+  console.log('\n' + '='.repeat(70));
   console.log('✅ READY FOR VALIDATION AND TESTING');
-  console.log('='*70);
+  console.log('='.repeat(70));
 }
 
 // ============================================================================

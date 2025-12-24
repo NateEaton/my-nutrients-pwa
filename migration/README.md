@@ -40,6 +40,78 @@ Before starting the migration, ensure these files exist in the `migration/` fold
 
 ## Migration Workflow
 
+### Step 0: Pre-Migration Merge (Optional - When Needed)
+
+**When to use this step:**
+- You have multiple backup files with different date ranges that need to be combined
+- One backup has missing/corrupted data that was restored from an earlier backup
+- You need to merge historical data with current data before migration
+
+**Skip this step if:**
+- You have a single, complete backup file to migrate
+- All your data is already in one file
+
+**What it does:**
+- Merges journal entries from both files (union of all dates)
+- Deduplicates custom foods by name (newer version wins on conflicts)
+- Uses latest file's settings, favorites, serving preferences
+- Creates single complete backup ready for migration
+
+**Script:** `migration/merge_backups.py`
+
+**Command:**
+```bash
+cd migration
+
+python3 merge_backups.py \
+  calcium-tracker-backup-OLD-with-missing-data.json \
+  calcium-tracker-backup-CURRENT.json \
+  calcium-tracker-MERGED.json
+```
+
+**Arguments:**
+- First argument: Base/older backup file (e.g., file with restored missing dates)
+- Second argument: Latest backup file (has current preferences and favorites)
+- Third argument: Output merged file path
+
+**Example Use Case:**
+```bash
+# Your wife's app is missing Aug 16-19 data
+# You have an old backup (11-10) that HAS those dates
+# You have a current backup (11-19) that's missing those dates but has current data
+
+python3 merge_backups.py \
+  calcium-tracker-backup-2025-11-10-updated-with-missing-data.json \
+  calcium-tracker-backup-2025-11-19.json \
+  calcium-tracker-backup-2025-11-19-merged.json
+
+# Result: merged file has ALL dates (including Aug 16-19) plus current preferences
+# Now use this merged file for Step 1 (ID Mapping)
+```
+
+**Output:**
+- Creates merged backup file combining data from both sources
+- Shows detailed merge report (what was added, deduplicated, preserved)
+- Displays date range coverage
+
+**Validation:**
+```bash
+# Quick check of merged file
+python3 -c "
+import json
+data = json.load(open('calcium-tracker-MERGED.json'))
+dates = sorted(data['journalEntries'].keys())
+print(f'Total days: {len(dates)}')
+print(f'Date range: {dates[0]} to {dates[-1]}')
+print(f'Custom foods: {len(data[\"customFoods\"])}')
+print(f'Check for missing dates in range...')
+"
+```
+
+**After merging, proceed with normal migration workflow starting at Step 1.**
+
+---
+
 ### Step 1: ID Mapping (Assign Stable appIds)
 
 **What it does:**
@@ -180,13 +252,23 @@ node -e "
 
 ## Troubleshooting
 
-### "Error: Missing required arguments"
+### "Error: Missing required arguments" (merge_backups.py)
+- Ensure all 3 arguments are provided: base-file, latest-file, output-file
+- Check file paths are correct and files exist
+
+### "Error: Missing required arguments" (migrate-backup-enhanced.mjs)
 - Ensure all 4 arguments are provided to migrate-backup-enhanced.mjs
 - Use named argument format (--old-backup, --old-database, etc.)
 
 ### "Error: Cannot find module"
 - Run from migration folder: `cd migration`
 - Verify Node.js is installed: `node --version` (need v14+)
+- Verify Python 3 is installed: `python3 --version` (for merge script)
+
+### Missing dates in migrated data
+- Check if you need Step 0 (Pre-Migration Merge) to combine multiple backups
+- Review source backup file(s) to confirm all expected dates are present
+- Use merge_backups.py to combine files before running migration scripts
 
 ### High unmatched food count
 - Check prod-foodDatabaseData.js exists and is correct baseline
@@ -207,8 +289,9 @@ node -e "
 
 ### Keep These Files (Required)
 - `prod-foodDatabaseData.js` - Production baseline (657KB)
-- `migrate-backup-enhanced.mjs` - Stage 1 script
-- `migrate_to_nutrients.mjs` - Stage 2 script
+- `merge_backups.py` - Pre-migration merge script (optional, for combining backups)
+- `migrate-backup-enhanced.mjs` - Stage 1 script (ID mapping)
+- `migrate_to_nutrients.mjs` - Stage 2 script (multi-nutrient transform)
 - `calcium-tracker-backup-2025-12-18.json` - Test backup (241KB)
 - `food-id-overrides.json` - Manual mappings (7.5KB)
 - Migration documentation files (*.md)
@@ -225,9 +308,10 @@ node -e "
 ## Migration History
 
 - **2025-11-10** - Initial migration tests
-- **2025-11-19** - Enhanced measure matching
+- **2025-11-19** - Enhanced measure matching, pre-migration merge for missing Aug dates
 - **2025-12-18** - Final test run with all 8 fixes applied
 - **2025-12-23** - Documentation updated, ready for production
+- **2025-12-24** - Added Step 0 (Pre-Migration Merge) documentation, updated merge_backups.py with CLI args
 
 See `MIGRATION-CORRECTED-2025-12-18.md` for complete migration log with all fixes applied.
 
@@ -244,6 +328,6 @@ See `MIGRATION-CORRECTED-2025-12-18.md` for complete migration log with all fixe
 
 ---
 
-**Last Updated:** December 23, 2025
-**Migration Scripts Version:** Enhanced with measure index matching
+**Last Updated:** December 24, 2025
+**Migration Scripts Version:** Enhanced with measure index matching and pre-migration merge
 **Ready for Production:** Yes
