@@ -1843,10 +1843,10 @@
   }
 
   .chart-label.clickable {
-    color: var(--accent-color);
+    color: var(--primary-color);
     text-decoration: underline;
     text-decoration-style: solid;
-    text-decoration-color: var(--accent-color);
+    text-decoration-color: var(--primary-color);
     text-underline-offset: 2px;
     text-decoration-thickness: 1px;
     font-weight: 500;

@@ -364,12 +364,8 @@
           to include in the report
         </li>
         <li>
-          <strong>Choose Date Range:</strong> Select the time period for your report (week,
-          month, custom range)
-        </li>
-        <li>
-          <strong>Generate Report:</strong> The report includes daily totals, averages, and
-          progress toward your goals
+          <strong>View Report:</strong> The report automatically generates with your complete
+          tracking history
         </li>
         <li>
           <strong>Print or Save:</strong> Use your browser's print function to save as PDF or
@@ -379,9 +375,16 @@
 
       <h4>What's Included</h4>
       <p>
-        Reports show your daily nutrient intake, goal achievement, and food journal entries
-        for the selected period, formatted for easy sharing with doctors, dietitians, or for
-        your personal records.
+        Reports automatically include multiple time periods for comprehensive analysis:
+      </p>
+      <ul>
+        <li><strong>All-Time Summary:</strong> Total days tracked, daily average, and goal achievement percentage across your entire history</li>
+        <li><strong>Past 12 Months:</strong> Monthly average chart showing trends over the past year</li>
+        <li><strong>Past 30 Days:</strong> Daily totals chart for recent activity</li>
+        <li><strong>Past 7 Days:</strong> Detailed daily breakdown with goal achievement indicators</li>
+      </ul>
+      <p>
+        All data is formatted for easy sharing with doctors, dietitians, or for your personal records.
       </p>
     </div>
   </details>
