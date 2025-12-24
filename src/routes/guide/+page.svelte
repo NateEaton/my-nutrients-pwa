@@ -208,7 +208,9 @@
         <strong>Statistics Page:</strong> Visualize your intake. Switch between
         <span class="material-icons inline-icon">date_range</span> daily,
         weekly, monthly, and yearly views. Tap a <span class="material-icons inline-icon">bar_chart</span> bar
-        in the chart to see the specific total for that period.
+        in the chart to see the specific total for that period. In weekly and monthly views,
+        you can also <strong>tap on a date label</strong> (shown in your theme's accent color with
+        an underline) to jump directly to that date on the tracking page to review what you ate.
       </p>
       <p>
         <strong>Database Page:</strong> Browse all foods in the database and your custom foods.

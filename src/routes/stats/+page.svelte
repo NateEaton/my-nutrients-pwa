@@ -1842,18 +1842,20 @@
   }
 
   .chart-label.clickable {
+    color: var(--accent-color);
     text-decoration: underline;
-    text-decoration-style: dotted;
-    text-decoration-color: var(--text-secondary);
+    text-decoration-style: solid;
+    text-decoration-color: var(--accent-color);
     text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+    font-weight: 500;
     transition: all 0.2s ease;
   }
 
   .chart-label.clickable:hover {
-    text-decoration-style: solid;
-    text-decoration-color: var(--accent-color);
-    color: var(--accent-color);
+    text-decoration-thickness: 2px;
     font-weight: 600;
+    transform: translateY(-1px);
   }
 
   .additional-stats {
