@@ -1,0 +1,63 @@
+=== UNMATCHED FOODS ANALYSIS ===
+
+Total: 34 foods that were in old database but not in new database
+
+CATEGORY BREAKDOWN:
+
+Cooking method variants (raw version exists): 5
+  - Squash, summer, zucchini, includes skin, cooked, boiled, drained, without salt
+  - Broccoli, frozen, chopped, cooked, boiled, drained, without salt
+  - Yardlong beans, mature seeds, cooked, boiled, with salt
+  - Peas, edible-podded, cooked, boiled, drained, with salt
+  - Mushrooms, shiitake, cooked, without salt
+
+Specific product variants (generic version exists): 5
+  - Eggs, Grade A, Large, egg whole
+  - Arugula, baby, raw
+  - Avocado, Hass, peeled, raw
+  - Spinach, baby
+  - Almond butter, creamy
+
+Frozen/prepared variants (fresh version exists): 2
+  - Potatoes, mashed, dehydrated, prepared from granules with milk
+  - Edamame, frozen, unprepared
+
+With/without salt variants: 2
+  - Butter, salted
+  - Peanut butter, smooth style, without salt
+
+Brand-specific or specialty items: 4
+  - Oil, sunflower, linoleic, (partially hydrogenated)
+  - Oil, sunflower, linoleic, (approx. 65%)
+  - Mushroom, king oyster
+  - Mushroom, pioppini
+
+Other: 16
+  - Bison, ground, raw
+  - Cabbage, bok choy, raw
+  - Rice, brown, long grain, unenriched, raw
+  - Pineapple, raw
+  - Lettuce, romaine, green, raw
+  - Lettuce, leaf, green, raw
+  - Flaxseed, ground
+  - Cheese, parmesan, grated, refrigerated
+  - Oil, soybean, salad or cooking
+  - Pickles, cucumber, sour
+  - Mango, dried, sweetened
+  - Mushroom, maitake
+  - Mushroom, beech
+  - Mushroom, lion's mane
+  - Mushroom, oyster
+  - Flour, corn, yellow, fine meal, enriched
+
+
+=== RECOMMENDATION ===
+For these unmatched foods, users should search for:
+  - Zucchini → "zucchini, raw"
+  - Eggs, Grade A → "egg, whole"
+  - Broccoli, frozen, cooked → "broccoli, raw"
+  - Butter, salted → "butter" (generic)
+  - Specialty mushrooms → "mushrooms" (generic)
+  - Baby spinach → "spinach, raw"
+
+Old journal entries with these foods are preserved as calcium-only.

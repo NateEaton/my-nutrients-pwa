@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 """
-Merge calcium-tracker-backup-2025-11-10-updated-with-missing-data.json
-with calcium-tracker-backup-2025-11-19.json to create a complete backup
-that includes:
-- All journal entries from both files
-- All custom foods from both files (deduplicated)
-- All serving preferences from 11-19
-- All favorites from 11-19
-- Settings from 11-19
+Merge two calcium tracker backup files to create a complete backup.
+
+Use this BEFORE running the migration scripts when you need to:
+- Combine backups with different date ranges
+- Restore missing data from an older backup
+- Merge historical data with current data
+
+Output includes:
+- All journal entries from both files (union, latest wins on conflicts)
+- All custom foods from both files (deduplicated by name, latest wins)
+- Serving preferences, favorites, settings from latest file
 """
 
 import json
+import sys
 from datetime import datetime
 
 def load_json(filepath):
@@ -63,14 +67,32 @@ def merge_journal_entries(entries1, entries2):
     return merged
 
 def main():
-    print("="*60)
-    print("MERGING BACKUP FILES")
-    print("="*60)
+    # Parse command line arguments
+    if len(sys.argv) != 4:
+        print("Usage: python3 merge_backups.py <base-file> <latest-file> <output-file>")
+        print("")
+        print("Arguments:")
+        print("  base-file    - Older backup file (e.g., with restored missing data)")
+        print("  latest-file  - Current backup file (has latest preferences/favorites)")
+        print("  output-file  - Output merged file path")
+        print("")
+        print("Example:")
+        print("  python3 merge_backups.py \\")
+        print("    calcium-tracker-backup-2025-11-10-updated.json \\")
+        print("    calcium-tracker-backup-2025-11-19.json \\")
+        print("    calcium-tracker-backup-2025-11-19-merged.json")
+        sys.exit(1)
 
-    # File paths
-    base_file = '/mnt/projects/Ca-pwa-svelte/migration/calcium-tracker-backup-2025-11-10-updated-with-missing-data.json'
-    latest_file = '/mnt/projects/Ca-pwa-svelte/migration/calcium-tracker-backup-2025-11-19.json'
-    output_file = '/mnt/projects/Ca-pwa-svelte/migration/calcium-tracker-backup-2025-11-19-merged.json'
+    base_file = sys.argv[1]
+    latest_file = sys.argv[2]
+    output_file = sys.argv[3]
+
+    print("="*60)
+    print("MERGING BACKUP FILES (PRE-MIGRATION)")
+    print("="*60)
+    print(f"\nBase file:   {base_file}")
+    print(f"Latest file: {latest_file}")
+    print(f"Output file: {output_file}")
 
     # Load both files
     base_data = load_json(base_file)
@@ -80,13 +102,13 @@ def main():
     print("ANALYZING SOURCE FILES")
     print("="*60)
 
-    print(f"\nBase file (11-10 updated):")
+    print(f"\nBase file:")
     print(f"  Journal entries: {len(base_data.get('journalEntries', {}))}")
     print(f"  Custom foods: {len(base_data.get('customFoods', []))}")
     print(f"  Favorites: {len(base_data.get('favorites', []))}")
     print(f"  Serving preferences: {len(base_data.get('servingPreferences', {}))}")
 
-    print(f"\nLatest file (11-19):")
+    print(f"\nLatest file:")
     print(f"  Journal entries: {len(latest_data.get('journalEntries', {}))}")
     print(f"  Custom foods: {len(latest_data.get('customFoods', []))}")
     print(f"  Favorites: {len(latest_data.get('favorites', []))}")
@@ -174,11 +196,12 @@ def main():
     print("\n" + "="*60)
     print("NEXT STEPS")
     print("="*60)
-    print("1. Run migration script on the merged file:")
-    print(f"   node migrate-backup-enhanced.mjs {output_file}")
-    print("2. Verify the migrated output")
-    print("3. Test on dev phone")
-    print("4. Deploy to production")
+    print("1. Proceed with migration workflow (see README.md):")
+    print("   - Step 1: ID Mapping (migrate-backup-enhanced.mjs)")
+    print("   - Step 2: Multi-Nutrient Transform (migrate_to_nutrients.mjs)")
+    print("")
+    print(f"2. Start with: node migrate-backup-enhanced.mjs --old-backup {output_file} ...")
+    print("3. Follow complete migration instructions in README.md")
 
 if __name__ == '__main__':
     main()

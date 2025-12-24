@@ -176,7 +176,9 @@
       isCustomMode = editingFood.isCustom || false;
       isSelectedFromSearch = !editingFood.isCustom; // Set true for database foods
       foodName = editingFood.name;
-      calcium = editingFood.calcium.toString();
+      // Handle both nutrients object format and legacy calcium-only format
+      const calciumValue = editingFood.nutrients?.calcium ?? editingFood.calcium ?? 0;
+      calcium = calciumValue.toString();
       servingQuantity = editingFood.servingQuantity;
       servingUnit = editingFood.servingUnit;
 

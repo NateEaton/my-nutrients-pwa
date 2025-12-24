@@ -449,7 +449,8 @@ function collapseDuplicates(recs) {
 
     // Process each bucket
     for (const bucket of buckets) {
-      const chosen = chooseBestServing(bucket);
+      const preferredBucket = preferNoSalt(bucket);
+      const chosen = chooseBestServing(preferredBucket);
 
       // Check if foods were actually collapsed (different sourceIds)
       const uniqueSourceIds = new Set(bucket.map(item => item.sourceId));
@@ -505,6 +506,21 @@ function collapseDuplicates(recs) {
   console.log(`[COLLAPSE] Collapsed to ${finalResult.length} unique foods`);
   return finalResult;
 }
+
+// Preference rule: when collapsing nutritionally identical foods,
+// prefer unsalted / no-salt-added variants as the canonical entry.
+// Salted variants remain available via provenance (collapsedFrom).
+function preferNoSalt(bucket) {
+  const noSaltRegex = /\b(no salt added|without salt|without added salt|unsalted)\b/i;
+  const saltedRegex = /\b(with salt|salted)\b/i;
+
+  const noSalt = bucket.filter(f => noSaltRegex.test(f.name));
+  if (noSalt.length > 0) return noSalt;
+
+  // If no explicit no-salt, just return full bucket unchanged
+  return bucket;
+}
+
 
 function applyAbridge(data) {
   console.log(`[ABRIDGE] Starting abridgement with ${data.length} foods`);
@@ -649,8 +665,28 @@ const beforeBrandFilter = full.length;
 full = full.filter((food) => !containsBrand(food.name, keepSet));
 console.log(`[PROCESS] Brand filter: ${beforeBrandFilter} → ${full.length} (-${beforeBrandFilter - full.length})`);
 
-// Step 5: Abridgement
-let abridged = applyAbridge(full);
+// Step 5: Abridgement (skip for keep-listed foods)
+console.log(`[PROCESS] Abridgement starting with ${full.length} foods`);
+
+// Split foods: keep-listed vs others
+const keptFoods = full.filter(f => keepSet.has(normalizeName(f.name)));
+const otherFoods = full.filter(f => !keepSet.has(normalizeName(f.name)));
+
+console.log(`[PROCESS] Keep-listed foods: ${keptFoods.length} (will bypass abridgement)`);
+console.log(`[PROCESS] Other foods: ${otherFoods.length} (will be abridged)`);
+
+if (keptFoods.length > 0) {
+  console.log(`[PROCESS] Protected foods:`);
+  keptFoods.forEach(f => console.log(`          - ${f.name}`));
+}
+
+// Only abridge the non-kept foods
+const abridgedOthers = otherFoods.length > 0 ? applyAbridge(otherFoods) : [];
+
+// Combine kept foods (unchanged) with abridged others
+let abridged = [...keptFoods, ...abridgedOthers];
+
+console.log(`[PROCESS] Final abridged count: ${abridged.length} (${keptFoods.length} kept + ${abridgedOthers.length} abridged)`);
 
 // Sort by appId
 full.sort((a, b) => a.appId - b.appId);
