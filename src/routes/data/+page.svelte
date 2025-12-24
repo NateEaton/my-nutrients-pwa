@@ -44,6 +44,8 @@
   // let typeSortRotationState = 0; // Unused local var removed
   const foodDatabase = DEFAULT_FOOD_DATABASE;
   let isDatabaseLoading = false;
+  let showJournaledOnly = false;
+  let journaledFoodIds = null; // Cache of journaled food names/IDs
 
   // Multi-nutrient support
   let nutrientSettings = null;
@@ -227,6 +229,56 @@
     return true;
   }
 
+  async function loadJournaledFoodIds() {
+    if (!nutrientService) return null;
+    const allJournalData = await nutrientService.getAllJournalData();
+    const databaseNames = new Set();
+    const customIds = new Set();
+    const foodFrequency = new Map(); // Track how many times each food was logged
+
+    Object.values(allJournalData).forEach(entries => {
+      entries.forEach(entry => {
+        if (entry.isCustom && entry.customFoodId) {
+          customIds.add(entry.customFoodId);
+          const key = `custom_${entry.customFoodId}`;
+          foodFrequency.set(key, (foodFrequency.get(key) || 0) + 1);
+        } else {
+          databaseNames.add(entry.name);
+          foodFrequency.set(entry.name, (foodFrequency.get(entry.name) || 0) + 1);
+        }
+      });
+    });
+
+    return { databaseNames, customIds, foodFrequency };
+  }
+
+  async function toggleJournaledFilter() {
+    showJournaledOnly = !showJournaledOnly;
+    if (showJournaledOnly && !journaledFoodIds) {
+      // Load journal data on first activation
+      journaledFoodIds = await loadJournaledFoodIds();
+    }
+  }
+
+  function passesJournaledFilter(food) {
+    if (!showJournaledOnly || !journaledFoodIds) return true;
+
+    if (food.isCustom) {
+      return journaledFoodIds.customIds.has(food.id);
+    } else {
+      return journaledFoodIds.databaseNames.has(food.name);
+    }
+  }
+
+  function getFoodFrequency(food) {
+    if (!journaledFoodIds) return 0;
+    if (food.isCustom) {
+      return journaledFoodIds.foodFrequency.get(`custom_${food.id}`) || 0;
+    } else {
+      return journaledFoodIds.foodFrequency.get(food.name) || 0;
+    }
+  }
+
   // --- Lifecycle ---
 
   onMount(async () => {
@@ -246,7 +298,7 @@
   // --- Reactivity (Data Filtering) ---
 
   $: {
-    typeSortRotation; nutrientFilter; selectedNutrientForControls; 
+    typeSortRotation; nutrientFilter; selectedNutrientForControls; showJournaledOnly;
     let foods = [];
 
     if (selectedFilter === "available") {
@@ -276,6 +328,11 @@
       foods = foods.filter((food) => passesNutrientFilter(food));
     }
 
+    // Apply journaled foods filter
+    if (showJournaledOnly) {
+      foods = foods.filter((food) => passesJournaledFilter(food));
+    }
+
     foods.sort((a, b) => {
       let comparison = 0;
       switch (sortBy) {
@@ -288,6 +345,13 @@
           comparison = aPriority - bPriority;
           if (comparison === 0) comparison = a.name.localeCompare(b.name);
           return comparison;
+        case "frequency":
+          // Sort by how many times the food was journaled
+          const aFreq = getFoodFrequency(a);
+          const bFreq = getFoodFrequency(b);
+          comparison = aFreq - bFreq;
+          if (comparison === 0) comparison = a.name.localeCompare(b.name);
+          break;
         default:
           const aValue = getNutrientValue(a, sortBy);
           const bValue = getNutrientValue(b, sortBy);
@@ -678,6 +742,18 @@
         </div>
       </div>
 
+      <!-- Journaled Foods Filter Checkbox -->
+      <div class="journaled-filter-container">
+        <label class="journaled-filter-checkbox">
+          <input
+            type="checkbox"
+            bind:checked={showJournaledOnly}
+            on:change={toggleJournaledFilter}
+          />
+          <span>Show only foods I've journaled</span>
+        </label>
+      </div>
+
       <!-- 4. Sort Controls -->
       <div class="data-sort-controls">
         <span class="material-icons sort-section-icon">sort</span>
@@ -722,6 +798,21 @@
             <span>Type</span>
             <span class="material-icons sort-icon">{selectedFilter === "user" ? "" : getSortIcon("type")}</span>
           </div>
+
+          {#if showJournaledOnly}
+            <div
+              class="sort-option"
+              class:active={sortBy === "frequency"}
+              on:click={() => handleSortClick("frequency")}
+              on:keydown={(e) => handleSortKeydown(e, "frequency")}
+              role="button"
+              tabindex="0"
+            >
+              <span class="material-icons">query_stats</span>
+              <span>Frequency</span>
+              <span class="material-icons sort-icon">{getSortIcon("frequency")}</span>
+            </div>
+          {/if}
         </div>
       </div>
 
@@ -750,14 +841,16 @@
                 </button>
               {/if}
 
-              <!-- History icon (always shown below) -->
-              <button
-                class="history-btn"
-                on:click|stopPropagation={() => handleHistoryClick(food)}
-                title="View journal history"
-              >
-                <span class="material-icons">history</span>
-              </button>
+              <!-- History icon (shown only when journaled filter is active) -->
+              {#if showJournaledOnly}
+                <button
+                  class="history-btn"
+                  on:click|stopPropagation={() => handleHistoryClick(food)}
+                  title="View journal history"
+                >
+                  <span class="material-icons">history</span>
+                </button>
+              {/if}
             </div>
 
             <!-- Middle Column: Content -->
@@ -1155,6 +1248,34 @@
 
   .sort-icon {
     font-size: 16px;
+  }
+
+  /* Journaled Foods Filter Checkbox */
+  .journaled-filter-container {
+    padding: 0.5rem 1rem;
+    background-color: var(--surface);
+    border-bottom: 1px solid var(--divider);
+  }
+
+  .journaled-filter-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    user-select: none;
+  }
+
+  .journaled-filter-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--accent-color);
+  }
+
+  .journaled-filter-checkbox:hover {
+    color: var(--text-primary);
   }
 
   /* Food Item Styles (Unified Card Layout) */
