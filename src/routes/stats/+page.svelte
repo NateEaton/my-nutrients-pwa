@@ -788,6 +788,12 @@
     }
   }
 
+  async function navigateToDate(dateStr) {
+    // Navigate to home page for the selected date
+    await nutrientService.changeDate(dateStr);
+    goto('/');
+  }
+
   function updateViewButtons() {
   }
 
@@ -955,6 +961,16 @@
           currentView === "monthly" && item.chartLabel
             ? item.chartLabel
             : item.shortDate;
+
+        // Make labels clickable for non-future dates (weekly/monthly/yearly views)
+        if (!item.isFuture && item.date) {
+          label.classList.add("clickable");
+          label.style.cursor = "pointer";
+          label.addEventListener("click", (e) => {
+            e.stopPropagation();
+            navigateToDate(item.date);
+          });
+        }
       }
       chartLabels.appendChild(label);
     });
@@ -1823,6 +1839,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .chart-label.clickable {
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: var(--text-secondary);
+    text-underline-offset: 2px;
+    transition: all 0.2s ease;
+  }
+
+  .chart-label.clickable:hover {
+    text-decoration-style: solid;
+    text-decoration-color: var(--accent-color);
+    color: var(--accent-color);
+    font-weight: 600;
   }
 
   .additional-stats {
