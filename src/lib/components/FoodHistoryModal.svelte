@@ -178,6 +178,7 @@
     z-index: 1000;
     display: flex;
     flex-direction: column;
+    align-items: center; /* Center horizontally */
   }
 
   .history-modal {
@@ -186,6 +187,8 @@
     flex-direction: column;
     overflow: hidden;
     background-color: var(--background);
+    width: 100%;
+    max-width: 480px; /* Match app container width */
   }
 
   .modal-header {
