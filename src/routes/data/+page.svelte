@@ -703,7 +703,7 @@
         </div>
       {/if}
 
-      <!-- 3. View Mode Controls -->
+      <!-- 3. Filter Controls -->
       <div class="data-filter-controls">
         <span class="material-icons filter-section-icon">filter_list</span>
         <div class="sort-options">
@@ -741,10 +741,7 @@
             <span>User</span>
           </div>
         </div>
-      </div>
-
-      <!-- Journaled Foods Filter Checkbox -->
-      <div class="journaled-filter-container">
+        <!-- Journaled Foods Filter Checkbox -->
         <label class="journaled-filter-checkbox">
           <input
             type="checkbox"
@@ -1252,12 +1249,6 @@
   }
 
   /* Journaled Foods Filter Checkbox */
-  .journaled-filter-container {
-    padding: 0.5rem 1rem;
-    background-color: var(--surface);
-    border-bottom: 1px solid var(--divider);
-  }
-
   .journaled-filter-checkbox {
     display: flex;
     align-items: center;
@@ -1266,6 +1257,8 @@
     font-size: var(--font-size-sm);
     color: var(--text-secondary);
     user-select: none;
+    margin-left: auto; /* Push to the right end of the row */
+    padding-left: var(--spacing-md);
   }
 
   .journaled-filter-checkbox input[type="checkbox"] {
