@@ -1831,7 +1831,7 @@
     opacity: 1;
   }
 
-  .chart-label {
+  :global(.chart-label) {
     text-align: center;
     font-size: var(--font-size-xs);
     font-weight: 500;
@@ -1842,7 +1842,7 @@
     justify-content: center;
   }
 
-  .chart-label.clickable {
+  :global(.chart-label.clickable) {
     color: var(--primary-color);
     text-decoration: underline;
     text-decoration-style: solid;
@@ -1853,7 +1853,7 @@
     transition: all 0.2s ease;
   }
 
-  .chart-label.clickable:hover {
+  :global(.chart-label.clickable:hover) {
     text-decoration-thickness: 2px;
     font-weight: 600;
     transform: translateY(-1px);
@@ -1972,19 +1972,19 @@
       gap: var(--spacing-xs); /* Match mobile chart canvas gap */
     }
 
-    .chart-label {
+    :global(.chart-label) {
       font-size: 0.7rem; /* Slightly smaller than --font-size-xs for mobile */
       min-width: 0;
     }
 
     /* Make clickable dates MORE visible on mobile */
-    .chart-label.clickable {
+    :global(.chart-label.clickable) {
       font-size: 0.75rem; /* Slightly larger than non-clickable */
       font-weight: 600; /* Bolder by default on mobile */
       text-decoration-thickness: 1.5px; /* Thicker underline */
     }
 
-    .chart-label.clickable:hover {
+    :global(.chart-label.clickable:hover) {
       text-decoration-thickness: 2px;
       transform: translateY(-2px); /* More pronounced lift */
     }
