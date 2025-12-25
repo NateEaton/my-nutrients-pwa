@@ -703,6 +703,18 @@
         </div>
       {/if}
 
+      <!-- Journaled Foods Filter Checkbox -->
+      <div class="journaled-filter-container">
+        <label class="journaled-filter-checkbox">
+          <input
+            type="checkbox"
+            bind:checked={showJournaledOnly}
+            on:change={toggleJournaledFilter}
+          />
+          <span>Show only foods I've journaled</span>
+        </label>
+      </div>
+
       <!-- 3. Filter Controls -->
       <div class="data-filter-controls">
         <span class="material-icons filter-section-icon">filter_list</span>
@@ -741,15 +753,6 @@
             <span>User</span>
           </div>
         </div>
-        <!-- Journaled Foods Filter Checkbox -->
-        <label class="journaled-filter-checkbox">
-          <input
-            type="checkbox"
-            bind:checked={showJournaledOnly}
-            on:change={toggleJournaledFilter}
-          />
-          <span>Show only foods I've journaled</span>
-        </label>
       </div>
 
       <!-- 4. Sort Controls -->
@@ -1249,6 +1252,13 @@
   }
 
   /* Journaled Foods Filter Checkbox */
+  .journaled-filter-container {
+    display: flex;
+    align-items: center;
+    padding: 4px 0;
+    margin-bottom: 8px;
+  }
+
   .journaled-filter-checkbox {
     display: flex;
     align-items: center;
@@ -1257,8 +1267,6 @@
     font-size: var(--font-size-sm);
     color: var(--text-secondary);
     user-select: none;
-    margin-left: auto; /* Push to the right end of the row */
-    padding-left: var(--spacing-md);
   }
 
   .journaled-filter-checkbox input[type="checkbox"] {
