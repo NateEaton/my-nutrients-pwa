@@ -1,11 +1,11 @@
 {
-  "name": "calcium-tracker-svelte",
+  "name": "my-nutrients-pwa",
   "version": "1.0",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
-      "name": "calcium-tracker-svelte",
+      "name": "my-nutrients-pwa",
       "version": "1.0",
       "dependencies": {
         "@zxing/browser": "^0.1.5",
