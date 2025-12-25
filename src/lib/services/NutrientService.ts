@@ -18,7 +18,7 @@
 
 import { get } from 'svelte/store';
 import { nutrientState, showToast } from '$lib/stores/nutrients';
-import type { FoodEntry, CustomFood, UserServingPreference, NutrientSettings, NutrientValues } from '$lib/types/nutrients';
+import type { FoodEntry, CustomFood, USDAFood, UserServingPreference, NutrientSettings, NutrientValues } from '$lib/types/nutrients';
 import { DEFAULT_FOOD_DATABASE, getPrimaryMeasure } from '$lib/data/foodDatabase';
 import { SyncService } from '$lib/services/SyncService';
 import { SyncTrigger } from '$lib/utils/syncTrigger';
@@ -42,6 +42,15 @@ export class NutrientService {
   async initialize(): Promise<void> {
     await this.initializeIndexedDB();
     await this.initializeCustomFoodIdCounter();
+
+    // Restore current date from localStorage if available
+    const savedDate = localStorage.getItem('nutrient_current_date');
+    if (savedDate) {
+      nutrientState.update(state => ({
+        ...state,
+        currentDate: savedDate
+      }));
+    }
 
     // Load all data
     await this.loadSettings();
@@ -286,6 +295,9 @@ export class NutrientService {
       currentDate: newDate,
       foods: []
     }));
+
+    // Persist current date to localStorage so it's restored on page reload
+    localStorage.setItem('nutrient_current_date', newDate);
 
     await this.loadDailyFoods();
     await this.applySortToFoods();
@@ -1026,6 +1038,39 @@ private async clearAllData(): Promise<void> {
     }
 
     return journalData;
+  }
+
+  /**
+   * Gets the journal history for a specific food (all dates it was logged).
+   * @param food The food to search for (database or custom food)
+   * @returns Promise resolving to an array of history entries with dates
+   */
+  async getFoodHistory(food: USDAFood | CustomFood): Promise<Array<FoodEntry & { date: string }>> {
+    const allData = await this.getAllJournalData();
+    const matches: Array<FoodEntry & { date: string }> = [];
+
+    for (const [date, foods] of Object.entries(allData)) {
+      const matching = foods.filter(f => {
+        // Custom food: match by exact ID
+        if (food.isCustom && f.customFoodId === food.id) {
+          return true;
+        }
+        // Database food: match by exact name (exclude custom foods)
+        if (!food.isCustom && f.name === food.name && !f.isCustom) {
+          return true;
+        }
+        return false;
+      });
+
+      if (matching.length > 0) {
+        matching.forEach(entry => {
+          matches.push({ ...entry, date });
+        });
+      }
+    }
+
+    // Sort by date descending (most recent first)
+    return matches.sort((a, b) => b.date.localeCompare(a.date));
   }
 
   /**

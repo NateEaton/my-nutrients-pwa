@@ -695,9 +695,10 @@
         dayDate.setDate(todayNormalized.getDate() + currentDayOffset);
         return dayDate;
       case "weekly":
-        const weekDate = new Date(todayNormalized);
-        weekDate.setDate(todayNormalized.getDate() + currentWeekOffset * 7);
-        return weekDate;
+        const weekStart = new Date(todayNormalized);
+        weekStart.setDate(todayNormalized.getDate() - todayNormalized.getDay());
+        weekStart.setDate(weekStart.getDate() + currentWeekOffset * 7);
+        return weekStart;
       case "monthly":
         const monthDate = new Date(todayNormalized);
         monthDate.setMonth(todayNormalized.getMonth() + currentMonthOffset);
@@ -786,6 +787,12 @@
         chartCanvas.appendChild(detailLine);
       }
     }
+  }
+
+  async function navigateToDate(dateStr) {
+    // Navigate to home page for the selected date
+    await nutrientService.changeDate(dateStr);
+    goto('/');
   }
 
   function updateViewButtons() {
@@ -955,6 +962,16 @@
           currentView === "monthly" && item.chartLabel
             ? item.chartLabel
             : item.shortDate;
+
+        // Make labels clickable for non-future dates (weekly and monthly views only)
+        if (!item.isFuture && item.date && (currentView === "weekly" || currentView === "monthly")) {
+          label.classList.add("clickable");
+          label.style.cursor = "pointer";
+          label.addEventListener("click", (e) => {
+            e.stopPropagation();
+            navigateToDate(item.date);
+          });
+        }
       }
       chartLabels.appendChild(label);
     });
@@ -1814,7 +1831,7 @@
     opacity: 1;
   }
 
-  .chart-label {
+  :global(.chart-label) {
     text-align: center;
     font-size: var(--font-size-xs);
     font-weight: 500;
@@ -1823,6 +1840,23 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  :global(.chart-label.clickable) {
+    color: var(--primary-color);
+    text-decoration: underline;
+    text-decoration-style: solid;
+    text-decoration-color: var(--primary-color);
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  :global(.chart-label.clickable:hover) {
+    text-decoration-thickness: 2px;
+    font-weight: 600;
+    transform: translateY(-1px);
   }
 
   .additional-stats {
@@ -1938,9 +1972,21 @@
       gap: var(--spacing-xs); /* Match mobile chart canvas gap */
     }
 
-    .chart-label {
+    :global(.chart-label) {
       font-size: 0.7rem; /* Slightly smaller than --font-size-xs for mobile */
       min-width: 0;
+    }
+
+    /* Make clickable dates MORE visible on mobile */
+    :global(.chart-label.clickable) {
+      font-size: 0.75rem; /* Slightly larger than non-clickable */
+      font-weight: 600; /* Bolder by default on mobile */
+      text-decoration-thickness: 1.5px; /* Thicker underline */
+    }
+
+    :global(.chart-label.clickable:hover) {
+      text-decoration-thickness: 2px;
+      transform: translateY(-2px); /* More pronounced lift */
     }
   }
 </style>

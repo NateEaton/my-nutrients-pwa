@@ -26,6 +26,7 @@
   import { base } from "$app/paths";
   import SourceIndicator from "$lib/components/SourceIndicator.svelte";
   import MetadataPopup from "$lib/components/MetadataPopup.svelte";
+  import FoodHistoryModal from "$lib/components/FoodHistoryModal.svelte";
   import { databaseViewState } from "$lib/stores/uiState"; 
 
   // --- State Variables (Initialized from Store) ---
@@ -43,6 +44,8 @@
   // let typeSortRotationState = 0; // Unused local var removed
   const foodDatabase = DEFAULT_FOOD_DATABASE;
   let isDatabaseLoading = false;
+  let showJournaledOnly = false;
+  let journaledFoodIds = null; // Cache of journaled food names/IDs
 
   // Multi-nutrient support
   let nutrientSettings = null;
@@ -56,6 +59,8 @@
   let foodToDelete = null;
   let showMetadataPopup = false;
   let selectedFoodForMetadata = null;
+  let showHistoryModal = false;
+  let selectedFoodForHistory = null;
 
   // --- Helpers ---
 
@@ -224,6 +229,57 @@
     return true;
   }
 
+  async function loadJournaledFoodIds() {
+    if (!nutrientService) return null;
+    const allJournalData = await nutrientService.getAllJournalData();
+    const databaseNames = new Set();
+    const customIds = new Set();
+    const foodFrequency = new Map(); // Track how many times each food was logged
+
+    Object.values(allJournalData).forEach(entries => {
+      entries.forEach(entry => {
+        if (entry.isCustom && entry.customFoodId) {
+          customIds.add(entry.customFoodId);
+          const key = `custom_${entry.customFoodId}`;
+          foodFrequency.set(key, (foodFrequency.get(key) || 0) + 1);
+        } else {
+          databaseNames.add(entry.name);
+          foodFrequency.set(entry.name, (foodFrequency.get(entry.name) || 0) + 1);
+        }
+      });
+    });
+
+    return { databaseNames, customIds, foodFrequency };
+  }
+
+  async function toggleJournaledFilter() {
+    // Note: showJournaledOnly is already toggled by bind:checked
+    // Just load data if needed
+    if (showJournaledOnly && !journaledFoodIds) {
+      // Load journal data on first activation
+      journaledFoodIds = await loadJournaledFoodIds();
+    }
+  }
+
+  function passesJournaledFilter(food) {
+    if (!showJournaledOnly || !journaledFoodIds) return true;
+
+    if (food.isCustom) {
+      return journaledFoodIds.customIds.has(food.id);
+    } else {
+      return journaledFoodIds.databaseNames.has(food.name);
+    }
+  }
+
+  function getFoodFrequency(food) {
+    if (!journaledFoodIds) return 0;
+    if (food.isCustom) {
+      return journaledFoodIds.foodFrequency.get(`custom_${food.id}`) || 0;
+    } else {
+      return journaledFoodIds.foodFrequency.get(food.name) || 0;
+    }
+  }
+
   // --- Lifecycle ---
 
   onMount(async () => {
@@ -243,7 +299,7 @@
   // --- Reactivity (Data Filtering) ---
 
   $: {
-    typeSortRotation; nutrientFilter; selectedNutrientForControls; 
+    typeSortRotation; nutrientFilter; selectedNutrientForControls; showJournaledOnly; journaledFoodIds;
     let foods = [];
 
     if (selectedFilter === "available") {
@@ -273,6 +329,11 @@
       foods = foods.filter((food) => passesNutrientFilter(food));
     }
 
+    // Apply journaled foods filter
+    if (showJournaledOnly) {
+      foods = foods.filter((food) => passesJournaledFilter(food));
+    }
+
     foods.sort((a, b) => {
       let comparison = 0;
       switch (sortBy) {
@@ -285,6 +346,13 @@
           comparison = aPriority - bPriority;
           if (comparison === 0) comparison = a.name.localeCompare(b.name);
           return comparison;
+        case "frequency":
+          // Sort by how many times the food was journaled
+          const aFreq = getFoodFrequency(a);
+          const bFreq = getFoodFrequency(b);
+          comparison = aFreq - bFreq;
+          if (comparison === 0) comparison = a.name.localeCompare(b.name);
+          break;
         default:
           const aValue = getNutrientValue(a, sortBy);
           const bValue = getNutrientValue(b, sortBy);
@@ -333,7 +401,7 @@
       totalCount = $nutrientState.customFoods.length;
     }
 
-    if (searchQuery.trim() || nutrientFilter.type !== "all") {
+    if (searchQuery.trim() || nutrientFilter.type !== "all" || showJournaledOnly) {
       return `${filteredFoods.length} of ${totalCount}`;
     } else {
       return `${totalCount} items`;
@@ -379,6 +447,11 @@
   function handleInfoClick(food) {
     selectedFoodForMetadata = food;
     showMetadataPopup = true;
+  }
+
+  function handleHistoryClick(food) {
+    selectedFoodForHistory = food;
+    showHistoryModal = true;
   }
 
   async function handleDeleteFood() {
@@ -630,7 +703,19 @@
         </div>
       {/if}
 
-      <!-- 3. View Mode Controls -->
+      <!-- Journaled Foods Filter Checkbox -->
+      <div class="journaled-filter-container">
+        <label class="journaled-filter-checkbox">
+          <input
+            type="checkbox"
+            bind:checked={showJournaledOnly}
+            on:change={toggleJournaledFilter}
+          />
+          <span>Show only foods I've journaled</span>
+        </label>
+      </div>
+
+      <!-- 3. Filter Controls -->
       <div class="data-filter-controls">
         <span class="material-icons filter-section-icon">filter_list</span>
         <div class="sort-options">
@@ -714,6 +799,21 @@
             <span>Type</span>
             <span class="material-icons sort-icon">{selectedFilter === "user" ? "" : getSortIcon("type")}</span>
           </div>
+
+          {#if showJournaledOnly}
+            <div
+              class="sort-option"
+              class:active={sortBy === "frequency"}
+              on:click={() => handleSortClick("frequency")}
+              on:keydown={(e) => handleSortKeydown(e, "frequency")}
+              role="button"
+              tabindex="0"
+            >
+              <span class="material-icons">query_stats</span>
+              <span>Frequency</span>
+              <span class="material-icons sort-icon">{getSortIcon("frequency")}</span>
+            </div>
+          {/if}
         </div>
       </div>
 
@@ -722,7 +822,7 @@
         {#each filteredFoods as food}
           <div class="food-card" class:custom={food.isCustom}>
             
-            <!-- Left Column: Checkbox OR Info Icon -->
+            <!-- Left Column: Checkbox/Info Icon + History Icon (stacked) -->
             <div class="card-left-col">
               {#if selectedFilter === "database" && !food.isCustom}
                 <input
@@ -733,12 +833,23 @@
                   title={$nutrientState.hiddenFoods.has(food.id) ? "Unhide food" : "Hide food"}
                 />
               {:else if !food.isCustom}
-                <button 
-                  class="detail-link-btn" 
+                <button
+                  class="detail-link-btn"
                   on:click|stopPropagation={() => openFoodDocs(food)}
                   title="View source details"
                 >
                   <span class="material-icons">info</span>
+                </button>
+              {/if}
+
+              <!-- History icon (shown only when journaled filter is active) -->
+              {#if showJournaledOnly}
+                <button
+                  class="history-btn"
+                  on:click|stopPropagation={() => handleHistoryClick(food)}
+                  title="View journal history"
+                >
+                  <span class="material-icons">history</span>
                 </button>
               {/if}
             </div>
@@ -842,6 +953,11 @@
     }}
   />
 {/if}
+
+<FoodHistoryModal
+  bind:show={showHistoryModal}
+  food={selectedFoodForHistory}
+/>
 
 <svelte:window on:click={handleClickOutside} />
 
@@ -1135,6 +1251,35 @@
     font-size: 16px;
   }
 
+  /* Journaled Foods Filter Checkbox */
+  .journaled-filter-container {
+    display: flex;
+    align-items: center;
+    padding: 4px 0;
+    margin-bottom: 8px;
+  }
+
+  .journaled-filter-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    user-select: none;
+  }
+
+  .journaled-filter-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--primary-color);
+  }
+
+  .journaled-filter-checkbox:hover {
+    color: var(--text-primary);
+  }
+
   /* Food Item Styles (Unified Card Layout) */
   .results-container {
     margin-top: 16px;
@@ -1149,7 +1294,7 @@
     border-radius: 8px;
     padding: 12px 16px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     position: relative;
     gap: 12px;
   }
@@ -1159,12 +1304,14 @@
     background-color: var(--custom-food-bg);
   }
 
-  /* Left Column (Checkbox or Info Icon) */
+  /* Left Column (Checkbox/Info Icon + History Icon stacked) */
   .card-left-col {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     width: 24px; /* Fixed width for alignment */
+    gap: 4px;
     flex-shrink: 0;
   }
 
@@ -1207,6 +1354,29 @@
   }
 
   .detail-link-btn .material-icons {
+    font-size: 20px;
+  }
+
+  .history-btn {
+    background: none;
+    border: none;
+    padding: 2px;
+    color: var(--accent-color);
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .history-btn:hover {
+    opacity: 1;
+    background-color: var(--accent-alpha-10);
+    border-radius: 50%;
+  }
+
+  .history-btn .material-icons {
     font-size: 20px;
   }
 
