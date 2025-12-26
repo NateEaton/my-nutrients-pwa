@@ -92,6 +92,10 @@ source_data/iof-calcium-config.json
 source_data/iof-calcium-parsed.csv
 source_data/migrated-migration-report.json
 
+migration/merged-output-migration-report.json
+migration/merged-output.json
+migration/nutrients-restore-*.json
+
 ocr/*
 !ocr/fetch_labels.js
 !ocr/generate_ocr_dataset.js
