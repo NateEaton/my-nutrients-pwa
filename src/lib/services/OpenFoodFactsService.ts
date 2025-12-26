@@ -21,6 +21,7 @@
 import { HouseholdMeasureService } from './HouseholdMeasureService';
 import { OPENFOODFACTS_CONFIG } from '$lib/config/openfoodfacts.js';
 import { logger } from '$lib/utils/logger';
+import type { NutrientValues } from '$lib/types/nutrients';
 
 interface OpenFoodFactsProduct {
   product_name?: string;
@@ -67,11 +68,17 @@ interface ParsedProduct {
   householdServingFullText?: string;
   smartServing?: any;
 
+  // Multi-nutrient support
+  nutrients: NutrientValues;
+  nutrientsPerServing: NutrientValues;
+
+  // Legacy calcium fields (for backward compatibility)
   calcium: string;
   calciumValue: number | null;
   calciumPercentDV?: number | null;
   calciumFromPercentDV?: number | null;
   calciumPerServing?: number | null;
+
   ingredients: string;
   confidence: string;
   rawData: any;
@@ -228,57 +235,72 @@ export class OpenFoodFactsService {
       }
 
 
-      // Extract calcium from nutriments
-      let calcium = '';
-      let calciumValue = null;
-      let calciumPerServing = null;
+      // Extract all nutrients from nutriments
+      logger.debug('OFF', 'Extracting nutrients from nutriments...');
 
-      logger.debug('OFF', 'Extracting calcium from nutriments...');
+      const nutrients: NutrientValues = {};
+      const nutrientsPerServing: NutrientValues = {};
 
       if (product.nutriments) {
-        // IMPORTANT: OpenFoodFacts calcium units are inconsistent!
-        // calcium_unit may say "mg" but values are often fractional grams (e.g., 0.158)
-        // The OpenFoodFacts website shows these as milligrams after conversion
-        // Therefore, we ALWAYS apply 1000x conversion regardless of stated unit
-        const calciumUnit = product.nutriments[OPENFOODFACTS_CONFIG.NUTRITION_FIELDS.CALCIUM_UNIT] || 'unknown';
-        const conversionFactor = OPENFOODFACTS_CONFIG.UNIT_CONVERSION.GRAMS_TO_MG; // Always 1000x
+        // Iterate through the nutrient mapping
+        for (const [offField, mapping] of Object.entries(OPENFOODFACTS_CONFIG.NUTRIENT_MAP)) {
+          const rawValue = product.nutriments[offField];
+          if (rawValue !== undefined && rawValue !== null) {
+            const numericValue = parseFloat(rawValue.toString());
+            if (!isNaN(numericValue) && numericValue > 0) {
+              // Determine the target property name and conversion
+              let targetKey: string;
+              let convertedValue: number;
 
-        logger.debug('OFF', 'Calcium unit detected:', calciumUnit, 'using conversion factor:', conversionFactor);
+              if (typeof mapping === 'string') {
+                // Simple mapping, no conversion (values already in grams)
+                targetKey = mapping;
+                convertedValue = numericValue;
+              } else {
+                // Complex mapping with unit conversion
+                targetKey = mapping.key;
+                if (mapping.convertToMg) {
+                  // Convert grams to milligrams (mg)
+                  convertedValue = numericValue * 1000;
+                } else if (mapping.convertToMcg) {
+                  // Convert grams to micrograms (mcg)
+                  convertedValue = numericValue * 1000000;
+                } else {
+                  convertedValue = numericValue;
+                }
+              }
 
-        // Try calcium_100g first (per 100g value)
-        if (product.nutriments[OPENFOODFACTS_CONFIG.NUTRITION_FIELDS.CALCIUM_100G]) {
-          const rawCalciumValue = parseFloat(product.nutriments[OPENFOODFACTS_CONFIG.NUTRITION_FIELDS.CALCIUM_100G].toString()) || null;
-          logger.debug('OFF', 'Raw calcium_100g value:', rawCalciumValue);
-          if (rawCalciumValue !== null) {
-            calciumValue = rawCalciumValue * conversionFactor; // Always convert g→mg
-            calcium = `${calciumValue} mg`;
-            logger.debug('OFF', 'Converted calcium value:', calciumValue, 'mg (per 100g)');
+              // Store in nutrients object (per 100g)
+              nutrients[targetKey] = convertedValue;
+
+              logger.debug('OFF', `Extracted ${targetKey}: ${convertedValue} (from ${offField}: ${rawValue})`);
+            }
           }
-        } else {
-          logger.debug('OFF', 'No calcium_100g value found in nutriments');
         }
 
-        // Try calcium_serving if available
-        if (product.nutriments[OPENFOODFACTS_CONFIG.NUTRITION_FIELDS.CALCIUM_SERVING]) {
-          const rawCalciumServing = parseFloat(product.nutriments[OPENFOODFACTS_CONFIG.NUTRITION_FIELDS.CALCIUM_SERVING].toString()) || null;
-          logger.debug('OFF', 'Raw calcium_serving value:', rawCalciumServing);
-          if (rawCalciumServing !== null) {
-            calciumPerServing = rawCalciumServing * conversionFactor; // Always convert g→mg
-            logger.debug('OFF', 'Converted calcium per serving:', calciumPerServing, 'mg');
+        logger.debug('OFF', 'Extracted nutrients per 100g:', nutrients);
+
+        // Calculate per-serving nutrients if we have serving size
+        if (servingCount && this.householdMeasureService.isVolumeOrMassUnit(servingUnit)) {
+          logger.debug('OFF', 'Calculating nutrients per serving for', servingCount, servingUnit);
+          for (const [nutrientKey, value] of Object.entries(nutrients)) {
+            // OpenFoodFacts nutrients are per 100g, calculate for actual serving size
+            nutrientsPerServing[nutrientKey] = Math.round((value * servingCount) / 100 * 100) / 100;
           }
-        } else {
-          logger.debug('OFF', 'No calcium_serving value found in nutriments');
+          logger.debug('OFF', 'Calculated nutrients per serving:', nutrientsPerServing);
         }
       } else {
         logger.debug('OFF', 'No nutriments data available in product');
       }
 
-      // Calculate per-serving calcium if we have the data
-      if (!calciumPerServing && calciumValue && servingCount && this.householdMeasureService.isVolumeOrMassUnit(servingUnit)) {
-        logger.debug('OFF', 'Calculating calcium per serving from 100g value...');
-        // OpenFoodFacts calcium is per 100g, calculate for actual serving size
-        calciumPerServing = Math.round((calciumValue * servingCount) / 100);
-        logger.debug('OFF', 'Calculated calcium per serving:', calciumPerServing, 'mg', '(from', calciumValue, 'mg per 100g * serving of', servingCount, servingUnit, ')');
+      // Legacy calcium fields for backward compatibility
+      let calcium = '';
+      let calciumValue = nutrients.calcium || null;
+      let calciumPerServing = nutrientsPerServing.calcium || null;
+
+      if (calciumValue) {
+        calcium = `${calciumValue} mg`;
+        logger.debug('OFF', 'Legacy calcium value:', calcium);
       }
 
       // ============================================================================
@@ -355,18 +377,26 @@ export class OpenFoodFactsService {
         householdServingFullText: product.serving_size,
         smartServing: smartServingResult,
 
+        // Multi-nutrient support
+        nutrients: nutrients,
+        nutrientsPerServing: nutrientsPerServing,
+
+        // Legacy calcium fields (for backward compatibility)
         calcium: calcium,
         calciumValue: calciumValue,
         calciumPercentDV: null, // OpenFoodFacts doesn't provide percent DV
         calciumFromPercentDV: null,
         calciumPerServing: calciumPerServing,
+
         ingredients: ingredients,
         confidence: confidence,
         rawData: product
       };
 
       logger.debug('OFF', 'Successfully parsed product data');
-      logger.debug('OFF', 'Final result - calcium:', calcium, 'per serving:', calciumPerServing, 'mg');
+      logger.debug('OFF', 'Final result - nutrients per 100g:', Object.keys(nutrients).length, 'nutrients extracted');
+      logger.debug('OFF', 'Final result - nutrients per serving:', Object.keys(nutrientsPerServing).length, 'nutrients calculated');
+      logger.debug('OFF', 'Legacy calcium fields - value:', calcium, 'per serving:', calciumPerServing, 'mg');
 
       return result;
 
