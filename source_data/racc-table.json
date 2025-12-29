@@ -1,0 +1,389 @@
+{
+  "metadata": {
+    "source": "FDA 21 CFR 101.12 - Reference Amounts Customarily Consumed",
+    "version": "2016 Final Rule",
+    "description": "Reference amounts customarily consumed per eating occasion for adults and children 4+ years",
+    "url": "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-101/subpart-A/section-101.12",
+    "notes": "Portions are synthesized based on RACC when USDA data lacks specific measures"
+  },
+  "categories": {
+    "Dairy and Egg Products": {
+      "patterns": {
+        "milk": {
+          "racc_grams": 240,
+          "portion": "1 cup",
+          "notes": "Fluid milk, all types"
+        },
+        "yogurt": {
+          "racc_grams": 227,
+          "portion": "1 cup",
+          "notes": "Yogurt, all types"
+        },
+        "cheese": {
+          "racc_grams": 30,
+          "portion": "1 oz",
+          "notes": "Hard cheese, shredded or chunk"
+        },
+        "cheese.*cottage|ricotta": {
+          "racc_grams": 110,
+          "portion": "1/2 cup",
+          "notes": "Soft cheese like cottage, ricotta"
+        },
+        "cream|sour cream": {
+          "racc_grams": 30,
+          "portion": "2 tablespoons",
+          "notes": "Cream, sour cream"
+        },
+        "egg": {
+          "racc_grams": 50,
+          "portion": "1 large egg",
+          "notes": "Whole egg"
+        },
+        "butter": {
+          "racc_grams": 15,
+          "portion": "1 tablespoon",
+          "notes": "Butter, margarine"
+        }
+      },
+      "default": {
+        "racc_grams": 30,
+        "portion": "1 oz"
+      }
+    },
+    "Poultry Products": {
+      "patterns": {
+        "chicken|turkey|poultry": {
+          "racc_grams": 85,
+          "portion": "3 oz",
+          "notes": "Cooked poultry"
+        }
+      },
+      "default": {
+        "racc_grams": 85,
+        "portion": "3 oz"
+      }
+    },
+    "Beef Products": {
+      "patterns": {
+        "beef|steak|roast": {
+          "racc_grams": 85,
+          "portion": "3 oz",
+          "notes": "Cooked beef"
+        },
+        "ground": {
+          "racc_grams": 85,
+          "portion": "3 oz",
+          "notes": "Ground beef, cooked"
+        }
+      },
+      "default": {
+        "racc_grams": 85,
+        "portion": "3 oz"
+      }
+    },
+    "Pork Products": {
+      "patterns": {
+        "pork|ham|bacon": {
+          "racc_grams": 85,
+          "portion": "3 oz",
+          "notes": "Cooked pork (except bacon: 15g/3 slices)"
+        }
+      },
+      "default": {
+        "racc_grams": 85,
+        "portion": "3 oz"
+      }
+    },
+    "Finfish and Shellfish Products": {
+      "patterns": {
+        "fish|salmon|tuna|cod|tilapia": {
+          "racc_grams": 85,
+          "portion": "3 oz",
+          "notes": "Cooked fish"
+        },
+        "shrimp|shellfish": {
+          "racc_grams": 85,
+          "portion": "3 oz",
+          "notes": "Cooked shellfish"
+        }
+      },
+      "default": {
+        "racc_grams": 85,
+        "portion": "3 oz"
+      }
+    },
+    "Sausages and Luncheon Meats": {
+      "patterns": {
+        "hot dog|frankfurter": {
+          "racc_grams": 55,
+          "portion": "1 hot dog",
+          "notes": "Hot dog/frankfurter"
+        },
+        "sausage": {
+          "racc_grams": 55,
+          "portion": "2 links",
+          "notes": "Breakfast sausage links"
+        },
+        "bacon": {
+          "racc_grams": 15,
+          "portion": "3 slices",
+          "notes": "Bacon"
+        }
+      },
+      "default": {
+        "racc_grams": 55,
+        "portion": "2 oz"
+      }
+    },
+    "Legumes and Legume Products": {
+      "patterns": {
+        "beans|lentils|chickpeas|peas": {
+          "racc_grams": 130,
+          "portion": "1/2 cup",
+          "notes": "Cooked beans, legumes"
+        },
+        "tofu": {
+          "racc_grams": 85,
+          "portion": "3 oz",
+          "notes": "Tofu"
+        },
+        "hummus": {
+          "racc_grams": 30,
+          "portion": "2 tablespoons",
+          "notes": "Hummus, bean dips"
+        }
+      },
+      "default": {
+        "racc_grams": 130,
+        "portion": "1/2 cup"
+      }
+    },
+    "Nut and Seed Products": {
+      "patterns": {
+        "nuts|almonds|pecans|walnuts|cashews|peanuts": {
+          "racc_grams": 30,
+          "portion": "1 oz",
+          "notes": "Nuts, whole or pieces"
+        },
+        "nut butter|peanut butter|almond butter": {
+          "racc_grams": 32,
+          "portion": "2 tablespoons",
+          "notes": "Nut butters"
+        },
+        "seeds|flaxseed|chia|sunflower": {
+          "racc_grams": 30,
+          "portion": "1 oz",
+          "notes": "Seeds"
+        }
+      },
+      "default": {
+        "racc_grams": 30,
+        "portion": "1 oz"
+      }
+    },
+    "Vegetables and Vegetable Products": {
+      "patterns": {
+        "leafy.*raw|lettuce|spinach.*raw|greens.*raw": {
+          "racc_grams": 85,
+          "portion": "1 cup",
+          "notes": "Raw leafy vegetables"
+        },
+        "vegetable|broccoli|carrots|cauliflower": {
+          "racc_grams": 85,
+          "portion": "1/2 cup",
+          "notes": "Cooked or raw vegetables"
+        },
+        "potato|sweet potato": {
+          "racc_grams": 110,
+          "portion": "1 medium",
+          "notes": "Potatoes"
+        },
+        "tomato": {
+          "racc_grams": 148,
+          "portion": "1 medium",
+          "notes": "Tomato"
+        }
+      },
+      "default": {
+        "racc_grams": 85,
+        "portion": "1/2 cup"
+      }
+    },
+    "Fruits and Fruit Juices": {
+      "patterns": {
+        "apple|orange|banana|pear": {
+          "racc_grams": 140,
+          "portion": "1 medium",
+          "notes": "Medium whole fruit"
+        },
+        "berries|strawberries|blueberries|raspberries": {
+          "racc_grams": 140,
+          "portion": "1 cup",
+          "notes": "Berries"
+        },
+        "grape": {
+          "racc_grams": 126,
+          "portion": "3/4 cup",
+          "notes": "Grapes"
+        },
+        "juice": {
+          "racc_grams": 240,
+          "portion": "1 cup",
+          "notes": "Fruit juice"
+        }
+      },
+      "default": {
+        "racc_grams": 140,
+        "portion": "1 medium fruit"
+      }
+    },
+    "Cereal Grains and Pasta": {
+      "patterns": {
+        "bread": {
+          "racc_grams": 50,
+          "portion": "1 slice",
+          "notes": "Bread"
+        },
+        "rice|pasta.*cooked|noodles.*cooked": {
+          "racc_grams": 140,
+          "portion": "1/2 cup",
+          "notes": "Cooked rice, pasta"
+        },
+        "oatmeal|cereal.*cooked": {
+          "racc_grams": 234,
+          "portion": "1 cup",
+          "notes": "Cooked cereal"
+        },
+        "cereal.*ready": {
+          "racc_grams": 40,
+          "portion": "1 cup",
+          "notes": "Ready-to-eat cereal (varies by density)"
+        },
+        "flour": {
+          "racc_grams": 30,
+          "portion": "1/4 cup",
+          "notes": "Flour, grains"
+        }
+      },
+      "default": {
+        "racc_grams": 55,
+        "portion": "1/2 cup"
+      }
+    },
+    "Baked Products": {
+      "patterns": {
+        "bread": {
+          "racc_grams": 50,
+          "portion": "1 slice",
+          "notes": "Sliced bread"
+        },
+        "bagel": {
+          "racc_grams": 110,
+          "portion": "1 bagel",
+          "notes": "Bagel"
+        },
+        "muffin": {
+          "racc_grams": 55,
+          "portion": "1 small muffin",
+          "notes": "Muffin"
+        },
+        "cookie": {
+          "racc_grams": 30,
+          "portion": "2 cookies",
+          "notes": "Cookies"
+        },
+        "cake": {
+          "racc_grams": 80,
+          "portion": "1 slice",
+          "notes": "Cake"
+        }
+      },
+      "default": {
+        "racc_grams": 50,
+        "portion": "1 piece"
+      }
+    },
+    "Fats and Oils": {
+      "patterns": {
+        "oil|olive oil|vegetable oil": {
+          "racc_grams": 15,
+          "portion": "1 tablespoon",
+          "notes": "Cooking oils"
+        },
+        "butter|margarine": {
+          "racc_grams": 15,
+          "portion": "1 tablespoon",
+          "notes": "Butter, margarine"
+        },
+        "mayonnaise|dressing": {
+          "racc_grams": 15,
+          "portion": "1 tablespoon",
+          "notes": "Mayonnaise, salad dressing"
+        }
+      },
+      "default": {
+        "racc_grams": 15,
+        "portion": "1 tablespoon"
+      }
+    },
+    "Spices and Herbs": {
+      "patterns": {
+        "spice|herb|seasoning": {
+          "racc_grams": 1,
+          "portion": "1 teaspoon",
+          "notes": "Ground spices, herbs"
+        }
+      },
+      "default": {
+        "racc_grams": 1,
+        "portion": "1 teaspoon"
+      }
+    },
+    "Beverages": {
+      "patterns": {
+        "coffee|tea": {
+          "racc_grams": 240,
+          "portion": "1 cup",
+          "notes": "Coffee, tea"
+        },
+        "juice|soda|drink": {
+          "racc_grams": 240,
+          "portion": "1 cup",
+          "notes": "Beverages"
+        }
+      },
+      "default": {
+        "racc_grams": 240,
+        "portion": "1 cup"
+      }
+    },
+    "Sweets": {
+      "patterns": {
+        "sugar|honey|syrup": {
+          "racc_grams": 15,
+          "portion": "1 tablespoon",
+          "notes": "Sweeteners"
+        },
+        "jam|jelly|preserves": {
+          "racc_grams": 20,
+          "portion": "1 tablespoon",
+          "notes": "Spreads"
+        },
+        "chocolate|candy": {
+          "racc_grams": 30,
+          "portion": "1 oz",
+          "notes": "Candy, chocolate"
+        }
+      },
+      "default": {
+        "racc_grams": 30,
+        "portion": "1 oz"
+      }
+    }
+  },
+  "fallback": {
+    "racc_grams": 100,
+    "portion": "100 g",
+    "notes": "Default when no category match found"
+  }
+}
