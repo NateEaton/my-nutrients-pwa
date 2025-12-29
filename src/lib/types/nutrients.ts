@@ -62,7 +62,8 @@ export interface FoodEntry {
   servingUnit: string;
   timestamp: string;
   isCustom?: boolean;
-  customFoodId?: number;
+  customFoodId?: number; // For custom foods (negative IDs: -1, -2, -3, ...)
+  appId?: number; // For database foods (positive IDs from curated database)
   note?: string;
 }
 
@@ -73,6 +74,8 @@ export interface CustomFood {
   measure: string;
   dateAdded: string;
   isCustom: true;
+  isDeleted?: boolean;  // Marks logical deletion (prevents ID reuse)
+  deletedAt?: string;   // Timestamp of deletion
 
   // Enhanced source metadata
   sourceMetadata?: {

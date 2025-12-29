@@ -46,6 +46,7 @@
   let isDatabaseLoading = false;
   let showJournaledOnly = false;
   let journaledFoodIds = null; // Cache of journaled food names/IDs
+  let previousSortBeforeFrequency = null; // Store previous sort when switching to frequency
 
   // Multi-nutrient support
   let nutrientSettings = null;
@@ -187,6 +188,11 @@
         sortOrder = sortOrder === "asc" ? "desc" : "asc";
       }
     } else {
+      // Save current sort before switching to frequency
+      if (sort === "frequency" && sortBy !== "frequency") {
+        previousSortBeforeFrequency = sortBy;
+      }
+
       sortBy = sort;
       if (sort === "type") typeSortRotation = 0;
       sortOrder = sort === "name" ? "asc" : "desc";
@@ -234,30 +240,54 @@
     const allJournalData = await nutrientService.getAllJournalData();
     const databaseNames = new Set();
     const customIds = new Set();
+    const customNames = new Set(); // Fallback for custom foods without IDs
     const foodFrequency = new Map(); // Track how many times each food was logged
 
     Object.values(allJournalData).forEach(entries => {
       entries.forEach(entry => {
-        if (entry.isCustom && entry.customFoodId) {
-          customIds.add(entry.customFoodId);
-          const key = `custom_${entry.customFoodId}`;
-          foodFrequency.set(key, (foodFrequency.get(key) || 0) + 1);
+        if (entry.isCustom) {
+          if (entry.customFoodId) {
+            // Custom food with ID (preferred)
+            customIds.add(entry.customFoodId);
+            const key = `custom_${entry.customFoodId}`;
+            foodFrequency.set(key, (foodFrequency.get(key) || 0) + 1);
+          } else {
+            // Custom food without ID (fallback name matching for buggy/legacy data)
+            customNames.add(entry.name);
+            const key = `custom_name_${entry.name}`;
+            foodFrequency.set(key, (foodFrequency.get(key) || 0) + 1);
+          }
         } else {
+          // Database food
           databaseNames.add(entry.name);
           foodFrequency.set(entry.name, (foodFrequency.get(entry.name) || 0) + 1);
         }
       });
     });
 
-    return { databaseNames, customIds, foodFrequency };
+    return { databaseNames, customIds, customNames, foodFrequency };
   }
 
   async function toggleJournaledFilter() {
     // Note: showJournaledOnly is already toggled by bind:checked
-    // Just load data if needed
-    if (showJournaledOnly && !journaledFoodIds) {
-      // Load journal data on first activation
-      journaledFoodIds = await loadJournaledFoodIds();
+
+    if (showJournaledOnly) {
+      // Turning filter ON - load journal data if needed
+      if (!journaledFoodIds) {
+        journaledFoodIds = await loadJournaledFoodIds();
+      }
+    } else {
+      // Turning filter OFF - restore previous sort if currently on frequency
+      if (sortBy === "frequency") {
+        if (previousSortBeforeFrequency) {
+          sortBy = previousSortBeforeFrequency;
+          previousSortBeforeFrequency = null;
+        } else {
+          // Fallback to name sort if no previous sort was saved
+          sortBy = "name";
+          sortOrder = "asc";
+        }
+      }
     }
   }
 
@@ -265,7 +295,9 @@
     if (!showJournaledOnly || !journaledFoodIds) return true;
 
     if (food.isCustom) {
-      return journaledFoodIds.customIds.has(food.id);
+      // Prefer ID matching, fallback to name matching
+      return journaledFoodIds.customIds.has(food.id) ||
+             journaledFoodIds.customNames.has(food.name);
     } else {
       return journaledFoodIds.databaseNames.has(food.name);
     }
@@ -274,7 +306,10 @@
   function getFoodFrequency(food) {
     if (!journaledFoodIds) return 0;
     if (food.isCustom) {
-      return journaledFoodIds.foodFrequency.get(`custom_${food.id}`) || 0;
+      // Try ID-based frequency first, fallback to name-based
+      const idFreq = journaledFoodIds.foodFrequency.get(`custom_${food.id}`) || 0;
+      const nameFreq = journaledFoodIds.foodFrequency.get(`custom_name_${food.name}`) || 0;
+      return idFreq + nameFreq;
     } else {
       return journaledFoodIds.foodFrequency.get(food.name) || 0;
     }
@@ -302,12 +337,15 @@
     typeSortRotation; nutrientFilter; selectedNutrientForControls; showJournaledOnly; journaledFoodIds;
     let foods = [];
 
+    // Filter out deleted custom foods from display
+    const activeCustomFoods = $nutrientState.customFoods.filter(f => !f.isDeleted);
+
     if (selectedFilter === "available") {
-      foods = [...foodDatabase, ...$nutrientState.customFoods];
+      foods = [...foodDatabase, ...activeCustomFoods];
     } else if (selectedFilter === "database") {
       foods = [...foodDatabase];
     } else if (selectedFilter === "user") {
-      foods = [...$nutrientState.customFoods];
+      foods = [...activeCustomFoods];
     }
 
     if (searchQuery.trim()) {
@@ -390,15 +428,18 @@
 
   $: itemCountText = (() => {
     let totalCount = 0;
+    // Count only active (non-deleted) custom foods
+    const activeCustomFoodsCount = $nutrientState.customFoods.filter(f => !f.isDeleted).length;
+
     if (selectedFilter === "available") {
       const visibleDatabaseFoods = foodDatabase.filter(
         (food) => !$nutrientState.hiddenFoods.has(food.id)
       );
-      totalCount = visibleDatabaseFoods.length + $nutrientState.customFoods.length;
+      totalCount = visibleDatabaseFoods.length + activeCustomFoodsCount;
     } else if (selectedFilter === "database") {
       totalCount = foodDatabase.length;
     } else if (selectedFilter === "user") {
-      totalCount = $nutrientState.customFoods.length;
+      totalCount = activeCustomFoodsCount;
     }
 
     if (searchQuery.trim() || nutrientFilter.type !== "all" || showJournaledOnly) {

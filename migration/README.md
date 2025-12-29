@@ -33,12 +33,50 @@ Before starting the migration, ensure these files exist in the `migration/` fold
 ### Migration Scripts (Already Present)
 - `migrate-backup-enhanced.mjs` - Stage 1: ID mapping
 - `migrate_to_nutrients.mjs` - Stage 2: Multi-nutrient transform
+- `analyze-journal-ids.mjs` - Validation: Analyze ID consistency
+- `cleanup-journal-ids.mjs` - Cleanup: Fix ID inconsistencies
 
 ### Optional Override Files
 - `food-id-overrides.json` - Manual food ID mappings for edge cases
 - `food-replacements-mapping.json` - Substitute foods for discontinued items
 
 ## Migration Workflow
+
+### Quick Reference - Full Migration Pipeline
+
+```
+Step 0 (Optional): Pre-Migration Merge
+  ↓ merge_backups.py (if combining multiple backups)
+
+Step 1: ID Mapping
+  ↓ migrate-backup-enhanced.mjs
+  ↓ merged-output.json created
+
+Step 1a: Validate ID Mapping
+  ↓ analyze-journal-ids.mjs
+
+Step 2: Multi-Nutrient Transform
+  ↓ migrate_to_nutrients.mjs
+  ↓ nutrients-restore-PRODUCTION.json created
+
+Step 2a: Validate Transform
+  ↓ analyze-journal-ids.mjs
+  ↓ If issues found →
+
+Step 2b: Cleanup (if needed)
+  ↓ cleanup-journal-ids.mjs
+  ↓ nutrients-restore-PRODUCTION-cleaned.json created
+
+Step 2c: Re-validate
+  ↓ analyze-journal-ids.mjs
+  ↓ Should show all clean ✅
+
+Step 3: User Import
+  ↓ Import final file into app
+  ✅ Done!
+```
+
+---
 
 ### Step 0: Pre-Migration Merge (Optional - When Needed)
 
@@ -147,6 +185,41 @@ node migrate-backup-enhanced.mjs \
 - Look for "EXACT" and "HIGH" confidence matches
 - Note any "UNMATCHED" items (will be dropped or substituted)
 
+---
+
+### Step 1a: Validate ID Mapping (Analysis)
+
+**What it does:**
+- Analyzes journal entries for ID field consistency
+- Reports custom foods with/without customFoodId
+- Reports database foods with/without appId
+- Identifies legacy positive IDs in customFoodId field
+- Checks isCustom flag consistency
+
+**Command:**
+```bash
+node analyze-journal-ids.mjs merged-output.json
+```
+
+**Optional verbose mode:**
+```bash
+node analyze-journal-ids.mjs merged-output.json --verbose
+```
+
+**What to look for:**
+- Custom foods should have `customFoodId` (negative IDs like -1, -2, -3)
+- Database foods should have `appId` (positive IDs from database)
+- No entries should have BOTH `customFoodId` AND `appId`
+- `isCustom` flag should match ID type
+- No positive IDs in `customFoodId` field (legacy artifact)
+
+**Expected results after Stage 1:**
+- Most database foods will NOT have appId yet (added in Stage 2)
+- Custom foods should have negative customFoodId values
+- May see some legacy positive IDs that need cleanup
+
+---
+
 ### Step 2: Multi-Nutrient Transform
 
 **What it does:**
@@ -195,6 +268,181 @@ node -e "
 - Settings: true
 - Preferences: true
 - Hidden Foods: 0-50 (varies by user)
+
+---
+
+### Step 2a: Validate Multi-Nutrient Transform (Analysis)
+
+**What it does:**
+- Re-analyzes journal entries after multi-nutrient transformation
+- Verifies ID fields are correct after migration
+- Identifies any remaining inconsistencies
+
+**Command:**
+```bash
+node analyze-journal-ids.mjs nutrients-restore-PRODUCTION.json
+```
+
+**Optional verbose mode:**
+```bash
+node analyze-journal-ids.mjs nutrients-restore-PRODUCTION.json --verbose
+```
+
+**What to look for:**
+- All custom foods should have `customFoodId` (negative IDs)
+- Database foods should have `appId` (positive IDs) where possible
+- No entries with BOTH `customFoodId` AND `appId`
+- `isCustom` flag matches ID type
+- No positive IDs in `customFoodId` field
+
+**Expected results:**
+- ✅ If clean: "All journal entries have consistent ID fields!"
+- ⚠️ If issues found: Proceed to Step 2b (Cleanup)
+
+---
+
+### Step 2b: Cleanup ID Inconsistencies (If Needed)
+
+**When to run this step:**
+- Only if Step 2a analysis shows inconsistencies
+- Skip if analysis shows all entries are clean
+
+**What it does:**
+- Backfills missing `customFoodId` for custom foods
+- Backfills missing `appId` for database foods
+- Moves legacy positive IDs from customFoodId to appId
+- Ensures `isCustom` flag consistency
+- Supports manual override file for name mismatches
+- Creates detailed change log
+
+**Command (dry-run first):**
+```bash
+node cleanup-journal-ids.mjs \
+  --input nutrients-restore-PRODUCTION.json \
+  --output nutrients-restore-PRODUCTION-cleaned.json \
+  --database ../src/lib/data/foodDatabaseData.js \
+  --dry-run
+```
+
+**Review the changes**, then run without dry-run:
+```bash
+node cleanup-journal-ids.mjs \
+  --input nutrients-restore-PRODUCTION.json \
+  --output nutrients-restore-PRODUCTION-cleaned.json \
+  --database ../src/lib/data/foodDatabaseData.js
+```
+
+**Arguments:**
+- `--input` - File to clean (nutrients-restore-PRODUCTION.json)
+- `--output` - Cleaned output file
+- `--database` - Current database (for backfilling appIds)
+- `--custom-foods` - (Optional) Custom foods file (uses backup's customFoods if not provided)
+- `--overrides` - (Optional) Manual override file for custom food ID assignments (see below)
+- `--dry-run` - (Optional) Preview changes without writing output
+
+**Output Files Created:**
+- `nutrients-restore-PRODUCTION-cleaned.json` - Cleaned backup
+- `nutrients-restore-PRODUCTION-cleaned-changelog.json` - Detailed change log
+
+**What it fixes:**
+1. **Custom foods missing customFoodId**: Backfills by matching name + calcium value
+2. **Database foods missing appId**: Backfills by matching name to database
+3. **Legacy positive IDs in customFoodId**: Moves to appId field (database foods)
+4. **Inconsistent isCustom flag**: Sets to true if has customFoodId
+5. **Both IDs present**: Removes incorrect ID based on isCustom flag
+
+---
+
+#### Handling Name Mismatches with Manual Overrides
+
+**Why this is needed:**
+The cleanup script uses exact name + calcium matching to backfill customFoodId. However, if users edited journal entry names after creation (which the legacy app allowed), the names may not match exactly.
+
+**Example mismatch:**
+- Custom food definition: `"Oikos Yogurt, plain , nonfat"` (ID -50)
+- Journal entry name: `"Oikos Pro Plain Yogurt"` (same food, different name)
+- Result: Cleanup script can't match → entry left without customFoodId
+
+**Creating a manual override file:**
+
+1. **Check the changelog** for warnings like:
+   ```
+   Warning: Could not backfill customFoodId for "Oikos Pro Plain Yogurt"
+   ```
+
+2. **Create `custom-food-overrides.json`** in the migration folder:
+   ```json
+   {
+     "customFoodIdOverrides": {
+       "2025-11-30[10]": {
+         "entryName": "Oikos Pro Plain Yogurt",
+         "assignedId": -50,
+         "matchedTo": "Oikos Yogurt, plain , nonfat",
+         "reason": "User edited journal entry name after creation - same food, different name variant",
+         "calcium": 270,
+         "serving": "0.75 cups"
+       }
+     }
+   }
+   ```
+
+   **Override key format:** `"YYYY-MM-DD[index]"` where index is the entry position in that day's array
+   - Example: `"2025-11-30[10]"` = 11th entry (0-indexed) on November 30, 2025
+
+3. **Re-run cleanup with overrides:**
+   ```bash
+   node cleanup-journal-ids.mjs \
+     --input nutrients-restore-PRODUCTION.json \
+     --output nutrients-restore-PRODUCTION-cleaned.json \
+     --database ../src/lib/data/foodDatabaseData.js \
+     --overrides custom-food-overrides.json
+   ```
+
+4. **Verify in changelog:**
+   The output should show:
+   ```
+   Applied manual override: customFoodId = -50 (matched to "Oikos Yogurt, plain , nonfat")
+   ```
+
+**Finding the correct ID to assign:**
+- Look in the `customFoods` array in your backup file
+- Match by calcium value, measure, and similar name
+- Use the custom food's `id` field as the `assignedId` in your override
+
+**Multiple overrides:**
+You can specify multiple entries in the same override file:
+```json
+{
+  "customFoodIdOverrides": {
+    "2025-11-30[10]": { "assignedId": -50, ... },
+    "2025-12-05[3]": { "assignedId": -23, ... },
+    "2025-12-15[7]": { "assignedId": -50, ... }
+  }
+}
+```
+
+---
+
+### Step 2c: Re-validate After Cleanup
+
+**Command:**
+```bash
+node analyze-journal-ids.mjs nutrients-restore-PRODUCTION-cleaned.json
+```
+
+**Expected result:**
+- ✅ "All journal entries have consistent ID fields!"
+- No inconsistencies reported
+- All custom foods have customFoodId or are documented as orphans
+- Most database foods have appId (some may be legitimately missing if unmatched)
+
+**If still showing issues:**
+- Review the changelog to see what was changed
+- Check for orphaned custom foods (no matching definition)
+- Check for unmatched database foods (name changed in new database)
+- Consider manual fixes in food-id-overrides.json
+
+---
 
 ### Step 3: User Import
 
@@ -285,6 +533,24 @@ node -e "
 - Check nutrients-restore-PRODUCTION.json has customFoods array
 - Verify custom food IDs start with "custom-"
 
+### ID validation issues
+- Run analyze-journal-ids.mjs to identify specific problems
+- Common issues:
+  - **Custom foods without customFoodId**: Run cleanup script to backfill
+  - **Database foods without appId**: Run cleanup script to backfill
+  - **Legacy positive IDs in customFoodId**: Run cleanup script to move to appId
+  - **Both IDs present**: Run cleanup script to remove incorrect ID
+  - **isCustom flag mismatch**: Run cleanup script to fix flag
+- Always run cleanup with --dry-run first to preview changes
+- Review changelog after cleanup to verify changes are correct
+
+### Food history showing wrong entries
+- This was caused by `undefined === undefined` bug in getFoodHistory
+- Fixed in NutrientService.ts:1061 (changed `food.appId` to `food.id`)
+- Rebuild app and test again
+- If still showing issues, ensure journal entries have correct appId values
+- Run analyze-journal-ids.mjs to verify ID fields are populated
+
 ## Files Reference
 
 ### Keep These Files (Required)
@@ -292,6 +558,8 @@ node -e "
 - `merge_backups.py` - Pre-migration merge script (optional, for combining backups)
 - `migrate-backup-enhanced.mjs` - Stage 1 script (ID mapping)
 - `migrate_to_nutrients.mjs` - Stage 2 script (multi-nutrient transform)
+- `analyze-journal-ids.mjs` - Validation script (analyze ID consistency)
+- `cleanup-journal-ids.mjs` - Cleanup script (fix ID inconsistencies)
 - `calcium-tracker-backup-2025-12-18.json` - Test backup (241KB)
 - `food-id-overrides.json` - Manual mappings (7.5KB)
 - Migration documentation files (*.md)
@@ -299,7 +567,10 @@ node -e "
 ### Generated Files (Can Delete After Import)
 - `merged-output.json` - Intermediate file from Stage 1
 - `merged-output-migration-report.json` - Stage 1 report
-- `nutrients-restore-PRODUCTION.json` - Final output (give to user, then can delete)
+- `nutrients-restore-PRODUCTION.json` - Final output from Stage 2
+- `nutrients-restore-PRODUCTION-cleaned.json` - Final output after cleanup (if needed)
+- `nutrients-restore-PRODUCTION-cleaned-changelog.json` - Cleanup change log (if cleanup was run)
+- Use the cleaned version if cleanup was needed, otherwise use the Stage 2 output
 
 ### Test Files (Already Cleaned Up)
 - Test migration outputs removed in commit f8a4f13
@@ -312,6 +583,24 @@ node -e "
 - **2025-12-18** - Final test run with all 8 fixes applied
 - **2025-12-23** - Documentation updated, ready for production
 - **2025-12-24** - Added Step 0 (Pre-Migration Merge) documentation, updated merge_backups.py with CLI args
+- **2025-12-26** - Added appId field to journal entries for reliable food history
+  - Created analyze-journal-ids.mjs for ID validation
+  - Created cleanup-journal-ids.mjs for ID cleanup
+  - Updated migration workflow with validation and cleanup steps
+  - Enhanced getFoodHistory to use appId matching for database foods
+  - Migration now ensures all entries have correct ID fields (customFoodId or appId)
+- **2025-12-27** - Enhanced cleanup script and app code for data integrity
+  - **Phase 1: Manual Override System**
+    - Added `--overrides` flag to cleanup-journal-ids.mjs
+    - Supports manual ID assignment for name mismatches
+    - Prevents automatic fuzzy matching (user control for ambiguous cases)
+    - Created custom-food-overrides.json format for manual mappings
+  - **Phase 2: Prevent ID Reuse & Edit Restrictions**
+    - Added logical deletion (isDeleted flag) to prevent custom food ID reuse
+    - Modified deleteCustomFood to mark foods as deleted instead of removing
+    - Filtered deleted foods from UI (search, database page) while preserving for ID tracking
+    - Added readonly constraints to journal entry editing (name and nutrients immutable, only serving size editable)
+    - Enforced data philosophy: Journal = historical record; Database = grounded truth
 
 See `MIGRATION-CORRECTED-2025-12-18.md` for complete migration log with all fixes applied.
 
@@ -324,10 +613,20 @@ See `MIGRATION-CORRECTED-2025-12-18.md` for complete migration log with all fixe
 ✅ Nutrient values scaled correctly by quantity
 ✅ Hidden foods and favorites transferred
 ✅ No errors in migration output
+✅ **ID field validation:**
+  - All custom food entries have `customFoodId` (negative IDs) or are documented as orphans
+  - Database food entries have `appId` (positive IDs) where possible
+  - No entries have BOTH `customFoodId` AND `appId`
+  - `isCustom` flag matches ID field type
+  - No legacy positive IDs in `customFoodId` field
+✅ **Food history feature:**
+  - Custom food history works reliably (uses customFoodId matching)
+  - Database food history works reliably (uses appId matching, not name matching)
+  - No duplicate/incorrect entries in food history
 ✅ User can import and use the app normally
 
 ---
 
-**Last Updated:** December 24, 2025
-**Migration Scripts Version:** Enhanced with measure index matching and pre-migration merge
-**Ready for Production:** Yes
+**Last Updated:** December 27, 2025
+**Migration Scripts Version:** Enhanced with appId support, ID validation, manual overrides, and logical deletion
+**Ready for Production:** Yes (requires full migration pass with validation/cleanup)

@@ -475,6 +475,8 @@ function enhanceJournalEntries(journalEntries, databaseLookup, customFoods) {
 
       return {
         name: entry.name,
+        // Preserve appId from stage 1 migration if it exists
+        ...(entry.appId ? { appId: entry.appId } : {}),
         nutrients: {
           calcium: entry.calcium || 0
         },

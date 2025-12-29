@@ -97,7 +97,7 @@
 
       // Try ID lookup first
       if (lookupId) {
-        customFood = $nutrientState.customFoods.find(f => f.id === lookupId);
+        customFood = $nutrientState.customFoods.find(f => f.id === lookupId && !f.isDeleted);
         logger.debug('ADD FOOD', 'Found customFood by ID:', customFood);
       }
 
@@ -105,6 +105,7 @@
       if (!customFood && editingFood.name) {
         logger.debug('ADD FOOD', 'No ID match, trying name+calcium lookup for:', editingFood.name);
         customFood = $nutrientState.customFoods.find(f =>
+          !f.isDeleted &&
           f.name === editingFood.name &&
           Math.abs(f.calcium - editingFood.calcium) < 0.01
         );
@@ -310,16 +311,19 @@
     // Debounce search
     searchTimeout = setTimeout(() => {
       if (foodName.trim().length >= 2) {
+        // Filter out deleted custom foods from search
+        const activeCustomFoods = $nutrientState.customFoods.filter(f => !f.isDeleted);
+
         const allFoods = [
           ...foodDatabase,
-          ...$nutrientState.customFoods,
+          ...activeCustomFoods,
         ];
 
         const results = SearchService.searchFoods(foodName.trim(), allFoods, {
           mode: "add_food",
           favorites: $nutrientState.favorites,
           hiddenFoods: $nutrientState.hiddenFoods,
-          customFoods: $nutrientState.customFoods,
+          customFoods: activeCustomFoods,
           maxResults: 20,
         });
 
@@ -346,8 +350,14 @@
     const calciumValue = selectedMeasure.nutrients?.calcium ?? 0;
     calcium = calciumValue.toString();
 
-    // If this is a custom food, switch to custom mode
-    if (food.isCustom) {
+    // For custom foods, populate nutrients for display (don't switch to custom mode)
+    // Custom mode is for CREATING new foods, not selecting existing ones
+    if (food.isCustom && selectedMeasure.nutrients) {
+      // Keep in normal mode but populate calculated nutrients from the custom food
+      calculatedNutrients = { ...selectedMeasure.nutrients };
+      isCustomMode = false;
+    } else if (food.isCustom) {
+      // Legacy custom food with only calcium - switch to custom mode
       isCustomMode = true;
     }
 
@@ -682,6 +692,9 @@
     logger.debug('ADD FOOD', 'Searching for existing UPC food:', { scannedUPC, scannedSource, calcium, measure });
 
     return $nutrientState.customFoods.find(food => {
+      // Skip deleted foods
+      if (food.isDeleted) return false;
+
       const metadata = food.sourceMetadata;
       if (!metadata || metadata.sourceType !== 'upc_scan') {
         return false;
@@ -794,6 +807,9 @@
         servingQuantity: servingQuantity,
         servingUnit: servingUnit.trim(),
         isCustom: isCustomMode,
+        // Add appId for database foods, customFoodId for custom foods selected from search
+        ...(currentFoodData?.appId && !isCustomMode ? { appId: currentFoodData.appId } : {}),
+        ...(currentFoodData?.id && isCustomMode && isSelectedFromSearch ? { customFoodId: currentFoodData.id } : {}),
       };
 
       if (editingFood) {
@@ -843,13 +859,18 @@
             logger.debug('ADD FOOD', 'Created manual sourceMetadata:', sourceMetadata);
           }
 
-          await nutrientService.saveCustomFood({
+          const savedCustomFood = await nutrientService.saveCustomFood({
             name: foodName.trim(),
             calcium: calciumValue,  // Keep for backward compatibility
             nutrients: nutrients,    // New multi-nutrient support
             measure: `${servingQuantity} ${servingUnit.trim()}`,
             sourceMetadata: sourceMetadata
           });
+
+          // Add customFoodId to foodData for the journal entry
+          if (savedCustomFood && savedCustomFood.id) {
+            foodData.customFoodId = savedCustomFood.id;
+          }
         }
 
         // Handle serving preference for all foods (database and existing custom foods)
@@ -1163,6 +1184,7 @@
               ? "Enter custom food name..."
               : "Start typing to search..."}
             disabled={isSubmitting}
+            readonly={editingFood !== null}
             autocomplete="off"
           />
 
@@ -1246,6 +1268,7 @@
                       max={validationRange.max}
                       step="0.01"
                       disabled={isSubmitting}
+                      readonly={editingFood !== null}
                     />
                     <span class="nutrient-unit">{getNutrientUnit(nutrientId)}</span>
                   </div>
@@ -1279,6 +1302,7 @@
                         max={validationRange.max}
                         step="0.01"
                         disabled={isSubmitting}
+                        readonly={editingFood !== null}
                       />
                       <span class="nutrient-unit">{getNutrientUnit(nutrientId)}</span>
                     </div>

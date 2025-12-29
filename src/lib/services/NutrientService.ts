@@ -392,7 +392,8 @@ export class NutrientService {
    */
   async saveCustomFood(foodData: {
     name: string;
-    calcium: number;
+    calcium?: number; // Legacy field, kept for backward compatibility
+    nutrients?: NutrientValues; // New multi-nutrient format
     measure: string;
     sourceMetadata?: CustomFood['sourceMetadata']
   }): Promise<CustomFood | null> {
@@ -411,11 +412,14 @@ export class NutrientService {
       const store = transaction.objectStore('customFoods');
       let request: IDBRequest;
 
+      // Convert legacy calcium field to nutrients object if needed
+      const nutrients = foodData.nutrients || { calcium: foodData.calcium || 0 };
+
       if (foodData.id && foodData.id < 0) {
         // Updating existing custom food
         const dbObject = {
           name: foodData.name,
-          calcium: foodData.calcium,
+          nutrients: nutrients,
           measure: foodData.measure,
           isCustom: true,
           dateAdded: foodData.dateAdded || new Date().toISOString(),
@@ -430,7 +434,7 @@ export class NutrientService {
         // Creating new custom food with negative ID
         const newFoodObject = {
           name: foodData.name,
-          calcium: foodData.calcium,
+          nutrients: nutrients,
           measure: foodData.measure,
           isCustom: true,
           dateAdded: new Date().toISOString(),
@@ -440,17 +444,17 @@ export class NutrientService {
             dateAdded: new Date().toISOString()
           }
         };
-        
+
         // Decrement for next custom food
         this.nextCustomFoodId--;
-        
+
         request = store.put(newFoodObject); // Use put instead of add for manual ID
       }
 
       request.onsuccess = () => {
         const savedFood: CustomFood = {
           name: foodData.name,
-          calcium: foodData.calcium,
+          nutrients: nutrients,
           measure: foodData.measure,
           isCustom: true,
           dateAdded: foodData.dateAdded || new Date().toISOString(),
@@ -476,7 +480,9 @@ export class NutrientService {
   }
 
   /**
-   * Deletes a custom food from IndexedDB.
+   * Deletes a custom food from IndexedDB (logical deletion).
+   * Marks the food as deleted instead of physically removing it,
+   * which prevents ID reuse and maintains referential integrity.
    * @param id The ID of the custom food to delete
    */
   async deleteCustomFood(id: number): Promise<void> {
@@ -485,23 +491,49 @@ export class NutrientService {
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction(['customFoods'], 'readwrite');
       const store = transaction.objectStore('customFoods');
-      const request = store.delete(id);
 
-      request.onsuccess = () => {
-        nutrientState.update(state => ({
-          ...state,
-          customFoods: state.customFoods.filter(food => food.id !== id)
-        }));
-        resolve();
+      // First, get the food to mark it as deleted
+      const getRequest = store.get(id);
 
-        // Trigger smart sync for persistent data change (delete custom food)
-        SyncTrigger.triggerDataSync('persistent');
+      getRequest.onsuccess = () => {
+        const food = getRequest.result;
+        if (!food) {
+          resolve(); // Food doesn't exist, nothing to delete
+          return;
+        }
+
+        // Mark as deleted instead of physically removing
+        food.isDeleted = true;
+        food.deletedAt = new Date().toISOString();
+
+        // Update in IndexedDB
+        const putRequest = store.put(food);
+
+        putRequest.onsuccess = () => {
+          // Update state to filter out deleted food from UI
+          nutrientState.update(state => ({
+            ...state,
+            customFoods: state.customFoods.map(f =>
+              f.id === id ? { ...f, isDeleted: true, deletedAt: food.deletedAt } : f
+            )
+          }));
+          resolve();
+
+          // Trigger smart sync for persistent data change (delete custom food)
+          SyncTrigger.triggerDataSync('persistent');
+        };
+
+        putRequest.onerror = () => {
+          console.error('Error marking custom food as deleted:', putRequest.error);
+          showToast('Failed to delete custom food', 'error');
+          reject(putRequest.error);
+        };
       };
 
-      request.onerror = () => {
-        console.error('Error deleting custom food:', request.error);
+      getRequest.onerror = () => {
+        console.error('Error retrieving custom food for deletion:', getRequest.error);
         showToast('Failed to delete custom food', 'error');
-        reject(request.error);
+        reject(getRequest.error);
       };
     });
   }
@@ -605,6 +637,11 @@ export class NutrientService {
             food.sourceMetadata = {
               sourceType: null
             };
+          }
+
+          // Ensure backward compatibility: convert old calcium field to nutrients object
+          if (!food.nutrients && food.calcium !== undefined) {
+            food.nutrients = { calcium: food.calcium };
           }
 
           return {
@@ -882,10 +919,17 @@ private async clearAllData(): Promise<void> {
       const request = store.getAll();
 
       request.onsuccess = () => {
-        const customFoods: CustomFood[] = (request.result || []).map((food: any) => ({
-          ...food,
-          isCustom: true
-        }));
+        const customFoods: CustomFood[] = (request.result || []).map((food: any) => {
+          // Ensure backward compatibility: convert old calcium field to nutrients object
+          if (!food.nutrients && food.calcium !== undefined) {
+            food.nutrients = { calcium: food.calcium };
+          }
+
+          return {
+            ...food,
+            isCustom: true
+          };
+        });
         resolve(customFoods);
       };
 
@@ -1055,8 +1099,14 @@ private async clearAllData(): Promise<void> {
         if (food.isCustom && f.customFoodId === food.id) {
           return true;
         }
-        // Database food: match by exact name (exclude custom foods)
-        if (!food.isCustom && f.name === food.name && !f.isCustom) {
+        // Database food: match by appId (preferred method)
+        // Note: USDAFood.id contains the appId value
+        // IMPORTANT: Check that id exists before comparing to avoid matching all undefined appIds
+        if (!food.isCustom && food.id && f.appId === food.id) {
+          return true;
+        }
+        // Fallback: match by name for entries without IDs (backward compatibility)
+        if (!food.isCustom && !f.appId && f.name === food.name && !f.isCustom) {
           return true;
         }
         return false;

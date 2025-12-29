@@ -827,7 +827,7 @@ function createIdMapping(
   return { mapping, matchReport };
 }
 
-// Migrate custom foods to negative IDs
+// Migrate custom foods to negative IDs and transform to nutrients format
 function migrateCustomFoods(customFoods) {
   let nextNegativeId = -1;
   const customFoodMapping = new Map();
@@ -839,10 +839,22 @@ function migrateCustomFoods(customFoods) {
 
     customFoodMapping.set(oldId, newId);
 
-    migratedCustomFoods.push({
-      ...customFood,
+    // Transform old calcium-only format to new nutrients format
+    const migratedFood = {
       id: newId,
-    });
+      name: customFood.name,
+      nutrients: customFood.nutrients || { calcium: customFood.calcium || 0 },
+      measure: customFood.measure,
+      dateAdded: customFood.dateAdded,
+      isCustom: true
+    };
+
+    // Preserve any additional metadata if present
+    if (customFood.sourceMetadata) {
+      migratedFood.sourceMetadata = customFood.sourceMetadata;
+    }
+
+    migratedCustomFoods.push(migratedFood);
 
     console.log(`✅ Custom food: "${customFood.name}" (${oldId}) → ${newId}`);
   }
@@ -988,6 +1000,123 @@ function migrateServingPreferences(servingPrefs, idMapping, customFoodMapping, c
   }
 
   return { migrated, failed, report };
+}
+
+/**
+ * Migrate journal entries to add appId for database foods
+ * Journal entries don't have foodId references in the old format,
+ * but we can match by name to add appIds for reliable food history
+ */
+function migrateJournalEntries(journalEntries, idMapping, customFoodMapping, oldDatabase, curatedDatabase) {
+  if (!journalEntries || typeof journalEntries !== 'object') {
+    return { migrated: {}, stats: { total: 0, withAppId: 0, withCustomFoodId: 0, unmatched: 0 } };
+  }
+
+  // Create lookup maps for matching by name
+  const oldDbByName = new Map();
+  for (const food of oldDatabase) {
+    const name = food.n || food.name;
+    const id = food.i || food.id;
+    if (name && id) {
+      // For duplicate names, store array of foods
+      if (!oldDbByName.has(name)) {
+        oldDbByName.set(name, []);
+      }
+      oldDbByName.get(name).push({ id, food });
+    }
+  }
+
+  const curatedByAppId = new Map();
+  for (const food of curatedDatabase) {
+    const appId = food.i || food.id || food.appId;
+    if (appId) {
+      curatedByAppId.set(appId, food);
+    }
+  }
+
+  const migratedEntries = {};
+  let totalEntries = 0;
+  let entriesWithAppId = 0;
+  let entriesWithCustomFoodId = 0;
+  let entriesUnmatched = 0;
+
+  for (const [date, entries] of Object.entries(journalEntries)) {
+    if (!Array.isArray(entries)) continue;
+
+    migratedEntries[date] = entries.map(entry => {
+      totalEntries++;
+      const migratedEntry = { ...entry };
+
+      // If it's a custom food, ensure it has customFoodId
+      if (entry.isCustom) {
+        // Remap legacy positive customFoodId to new negative ID
+        if (entry.customFoodId && entry.customFoodId > 0) {
+          const oldId = entry.customFoodId;
+          const newId = customFoodMapping.get(oldId);
+          if (newId) {
+            migratedEntry.customFoodId = newId;
+            entriesWithCustomFoodId++;
+          } else {
+            console.log(`⚠️  Custom food entry with unmapped ID ${oldId}: "${entry.name}" on ${date}`);
+          }
+        } else if (entry.customFoodId && entry.customFoodId < 0) {
+          // Already has negative ID (already migrated)
+          entriesWithCustomFoodId++;
+        } else {
+          // Try to match by name to custom foods
+          // This is best effort - custom foods might have been renamed
+          console.log(`⚠️  Custom food entry without customFoodId: "${entry.name}" on ${date}`);
+        }
+        return migratedEntry;
+      }
+
+      // For database foods, try to add appId
+      const entryName = entry.name;
+      if (!entryName) {
+        entriesUnmatched++;
+        return migratedEntry;
+      }
+
+      // Find matching old database food(s) by name
+      const oldFoods = oldDbByName.get(entryName);
+      if (!oldFoods || oldFoods.length === 0) {
+        // Food name not found in old database - might be manually entered
+        entriesUnmatched++;
+        return migratedEntry;
+      }
+
+      // If multiple foods with same name, we can't determine which one without more info
+      // For now, use the first match (most common case is single food per name)
+      const oldFood = oldFoods[0];
+      const oldFoodId = oldFood.id;
+
+      // Look up the new appId from the mapping
+      const newAppId = idMapping.get(oldFoodId);
+      if (newAppId) {
+        migratedEntry.appId = newAppId;
+        entriesWithAppId++;
+      } else {
+        // Food wasn't successfully migrated (unmatched)
+        entriesUnmatched++;
+      }
+
+      return migratedEntry;
+    });
+  }
+
+  const stats = {
+    total: totalEntries,
+    withAppId: entriesWithAppId,
+    withCustomFoodId: entriesWithCustomFoodId,
+    unmatched: entriesUnmatched
+  };
+
+  console.log(`✅ Journal entries: ${totalEntries} processed`);
+  console.log(`   📍 Database foods with appId: ${entriesWithAppId}`);
+  console.log(`   🎨 Custom foods with customFoodId: ${entriesWithCustomFoodId}`);
+  console.log(`   ⚠️  Unmatched entries: ${entriesUnmatched}`);
+
+  return { migrated: migratedEntries, stats };
 }
 
 // Generate detailed migration report
@@ -1188,6 +1317,16 @@ async function migrateBackup(config) {
     curatedDatabase
   );
 
+  // NEW: Migrate journal entries to add appId for database foods
+  console.log("\n📔 Migrating journal entries to add appId...");
+  const migratedJournal = migrateJournalEntries(
+    oldBackup.journalEntries,
+    idMapping,
+    customFoodMapping,
+    oldDatabase,
+    curatedDatabase
+  );
+
   // Generate report
   if (outputPath && !dryRun && !reportOnly) {
     generateReport(matchReport, migratedServingPrefs.report, outputPath);
@@ -1244,7 +1383,7 @@ async function migrateBackup(config) {
     favorites: migratedFavorites.migrated,
     hiddenFoods: migratedHiddenFoods.migrated,
     servingPreferences: migratedServingPrefs.migrated,
-    journalEntries: oldBackup.journalEntries || {}, // Keep as-is since journal entries store names
+    journalEntries: migratedJournal.migrated, // Migrated with appId for database foods
   };
 
   // Write output

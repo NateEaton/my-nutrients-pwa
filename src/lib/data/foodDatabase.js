@@ -299,24 +299,44 @@ export function searchFoods(
  * Helper function to get the primary (first) measure from a food
  * Provides backward compatibility for existing code expecting single measure/calcium
  * @param {Object} food - The food object (with measures array or legacy format)
- * @returns {Object} Object with { measure, calcium } for primary serving
+ * @returns {Object} Object with { measure, nutrients } for primary serving
  */
 export function getPrimaryMeasure(food) {
+  // Database foods with multi-measure format
   if (food.measures && food.measures.length > 0) {
     return food.measures[0];
   }
+
+  // Custom foods have a single measure and nutrients object
+  if (food.isCustom && food.measure) {
+    return {
+      measure: food.measure,
+      nutrients: food.nutrients || { calcium: food.calcium || 0 }
+    };
+  }
+
   return { measure: "", nutrients: {} };
 }
 
 /**
  * Helper function to get all measures from a food
  * @param {Object} food - The food object
- * @returns {Array} Array of { measure, calcium } objects
+ * @returns {Array} Array of { measure, nutrients } objects (or { measure, calcium } for legacy)
  */
 export function getAllMeasures(food) {
+  // Database foods with multi-measure format
   if (food.measures && Array.isArray(food.measures)) {
     return food.measures;
   }
+
+  // Custom foods have a single measure and nutrients object
+  if (food.isCustom && food.measure) {
+    return [{
+      measure: food.measure,
+      nutrients: food.nutrients || { calcium: food.calcium || 0 }
+    }];
+  }
+
   return [];
 }
 
