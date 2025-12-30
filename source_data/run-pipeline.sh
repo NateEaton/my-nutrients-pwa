@@ -14,7 +14,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OUTPUT_DIR="$SCRIPT_DIR"
 
 # Default file names
-FOUNDATION_JSON="FoodData_Central_foundation_food_json_2024-04-24.json"
+FOUNDATION_JSON="FoodData_Central_foundation_food_json_2025-04-24.json"
 SR_LEGACY_JSON="FoodData_Central_sr_legacy_food_json_2018-04.json"
 
 # Pipeline output files

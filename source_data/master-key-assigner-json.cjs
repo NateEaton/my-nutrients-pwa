@@ -108,6 +108,7 @@ function assignMasterKeys(inputData, keyMap) {
     }
 
     // Create mastered food record with appId
+    // Preserve all fields needed by downstream pipeline stages
     const masteredFood = {
       appId,
       id: appId, // Alias for consistency
@@ -115,7 +116,13 @@ function assignMasterKeys(inputData, keyMap) {
       sourceName,
       name: food.name,
       measures: food.measures,
-      nutrientsPer100g: food.nutrientsPer100g
+      nutrientsPer100g: food.nutrientsPer100g,
+      // Preserve fields for hybrid pipeline (candidate-generator.cjs)
+      sourceType: food.sourceType || food.source || sourceName,
+      source: food.source || food.sourceType || sourceName,
+      prepState: food.prepState || 'unspecified',
+      foodCategory: food.foodCategory || null,
+      waterContent: food.waterContent ?? null
     };
 
     masteredFoods.push(masteredFood);
