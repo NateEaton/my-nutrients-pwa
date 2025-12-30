@@ -4,21 +4,31 @@ This directory contains the data processing pipeline for generating the multi-nu
 
 ## Overview
 
-The pipeline processes USDA FoodData Central JSON files to create an optimized, multi-nutrient database with 20+ tracked nutrients including macronutrients, vitamins, minerals, and omega fatty acids.
+The pipeline processes USDA FoodData Central JSON files using a **Hybrid Data Strategy** that:
+- Uses **Foundation Foods** for nutrient values when high-confidence matches exist (~10-12% of foods)
+- Uses **SR Legacy** for serving measures and as the primary source for ~88% of foods
+- Prevents raw/cooked mismatches through state filtering
+- Validates density compatibility when transferring measures between sources
 
 **Pipeline Stages:**
 ```
 USDA JSON Files (Foundation + SR Legacy)
     ↓
-[1] json-data-processor.cjs → Extract nutrients
+[1] json-data-processor.cjs → Extract nutrients + source tagging
     ↓
 [2] master-key-assigner-json.cjs → Assign stable appIds
     ↓
-[3] food-curator-nutrients.cjs → Filter & deduplicate
+[3] candidate-generator.cjs → FF↔SRL matching + state filtering
     ↓
-[4] data-module-generator-nutrients.cjs → Generate app module
+[4] ★ REVIEW: candidates_review.csv (human audit point)
     ↓
-[5] provenance-generator.cjs → Generate source data (optional)
+[5] serving-deriver.cjs → Measure derivation with RACC/density fallback
+    ↓
+[6] food-curator-nutrients.cjs → Filter & deduplicate
+    ↓
+[7] data-module-generator-nutrients.cjs → Generate app module + coverage report
+    ↓
+[8] diff-validator.cjs → Compare against previous version
     ↓
 ../src/lib/data/foodDatabaseData.js (ready for app)
 ```
@@ -27,40 +37,74 @@ USDA JSON Files (Foundation + SR Legacy)
 
 ## Quick Start
 
+### Automated Pipeline (Recommended)
+
 ```bash
-# 1. Download USDA data (see Download section below)
 cd source_data
 
-# 2. Process JSON files
+# Run full pipeline with review checkpoints
+./run-pipeline.sh
+
+# Or skip to specific stage
+./run-pipeline.sh --from-stage 5
+
+# Non-interactive mode (skip review prompts)
+./run-pipeline.sh --non-interactive
+```
+
+### Manual Pipeline
+
+```bash
+cd source_data
+
+# 1. Process JSON files (with source tagging)
 node json-data-processor.cjs \
   --foundation FoodData_Central_foundation_food_json_2024-04-24.json \
   --sr-legacy FoodData_Central_sr_legacy_food_json_2018-04.json \
   --output combined-nutrient-data
 
-# 3. Assign stable IDs
+# 2. Assign stable IDs
 node master-key-assigner-json.cjs \
   --input combined-nutrient-data.json \
   --map master-key-map.json \
   --output mastered-nutrient-data.json
 
-# 4. Curate foods
+# 3. Generate candidates (FF↔SRL matching)
+node candidate-generator.cjs \
+  --input mastered-nutrient-data.json \
+  --output candidates \
+  --threshold 0.70
+
+# ★ REVIEW: Check candidates_review.csv for issues
+#   - Focus on REVIEW actions (low-score matches)
+#   - Verify density warnings
+#   - Optionally add overrides
+
+# 4. Derive serving sizes
+node serving-deriver.cjs \
+  --input candidates.json \
+  --output derived-foods \
+  --data-dir .
+
+# 5. Curate foods
 node food-curator-nutrients.cjs \
-  mastered-nutrient-data.json \
+  derived-foods.json \
   curated-nutrients \
   --keep-list keep-list.txt \
   --exclude-list exclude-list.txt
 
-# 5. Generate app module
+# 6. Generate app module with coverage report
 node data-module-generator-nutrients.cjs \
   curated-nutrients-abridged.json \
   ../src/lib/data/foodDatabaseData.js \
-  --module --minify --minimal
+  --module --minify --minimal \
+  --coverage coverage_report.txt
 
-# 6. Generate provenance data (optional)
-node provenance-generator.cjs \
-  curated-nutrients-abridged.json \
-  mastered-nutrient-data.json \
-  ../static/data/provenance
+# 7. Validate against previous version
+node diff-validator.cjs \
+  --old ../src/lib/data/foodDatabaseData.js.bak \
+  --new ../src/lib/data/foodDatabaseData.js \
+  --output diff_report
 
 echo "✅ Pipeline complete!"
 ```
@@ -105,20 +149,11 @@ curl -O https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_js
 unzip FoodData_Central_sr_legacy_food_json_2018-04.zip
 ```
 
-**Command Line (Windows PowerShell):**
-```powershell
-cd source_data
-Invoke-WebRequest -Uri "https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_foundation_food_json_2024-04-24.zip" -OutFile "foundation.zip"
-Expand-Archive foundation.zip -DestinationPath .
-Invoke-WebRequest -Uri "https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_json_2018-04.zip" -OutFile "srlegacy.zip"
-Expand-Archive srlegacy.zip -DestinationPath .
-```
+## Pipeline Stages (Detailed)
 
-## Pipeline Steps
+### Stage 1: Extract Multi-Nutrient Data
 
-### Step 1: Extract Multi-Nutrient Data
-
-Processes USDA JSON files to extract all nutrients:
+Processes USDA JSON files with enhanced metadata extraction:
 
 ```bash
 node json-data-processor.cjs \
@@ -127,10 +162,15 @@ node json-data-processor.cjs \
   --output combined-nutrient-data
 ```
 
-**Output:** `combined-nutrient-data.json` (~50-100 MB)
-**Time:** 2-5 minutes
+**New in v2.0:**
+- Source type tagging (Foundation vs SR Legacy)
+- Food category extraction (FDC category codes)
+- Preparation state classification (raw, cooked, dry, processed)
+- Water content extraction for density validation
 
-### Step 2: Assign Stable App IDs
+**Output:** `combined-nutrient-data.json` (~50-100 MB)
+
+### Stage 2: Assign Stable App IDs
 
 Assigns permanent IDs to each food:
 
@@ -142,73 +182,174 @@ node master-key-assigner-json.cjs \
 ```
 
 **Output:** `mastered-nutrient-data.json`, `master-key-map.json`
-**Time:** <1 minute
 
-### Step 3: Curate and Filter
+### Stage 3: Generate Candidates (Hybrid Matching)
+
+Matches Foundation Foods to SR Legacy using state filtering:
+
+```bash
+node candidate-generator.cjs \
+  --input mastered-nutrient-data.json \
+  --output candidates \
+  --threshold 0.70
+```
+
+**Key features:**
+- Jaccard similarity scoring (0.70 threshold for FF match)
+- State filtering (prevents raw↔cooked mismatches)
+- Density compatibility checking (20% water content variance threshold)
+- Generates audit CSV for human review
+
+**Output:** `candidates.json`, `candidates_review.csv`
+
+### Stage 4: Human Review (Audit Point) ★
+
+Review `candidates_review.csv` before proceeding:
+
+| Column | Description |
+|--------|-------------|
+| name | Food name |
+| primarySource | "Foundation" or "SR Legacy" |
+| primaryFDC | FDC ID for nutrient source |
+| refFDC | FDC ID for serving source |
+| score | Match score (0.0-1.0) or "N/A" |
+| stateMatch | Whether prep states align |
+| densityWarning | Potential density mismatch |
+| action | ACCEPT, REVIEW, SRL_ONLY, FF_ONLY |
+
+**Focus on:**
+- Foods with action = "REVIEW" (low scores or warnings)
+- Any density warnings (may need manual verification)
+- Low-score matches (<0.75)
+
+### Stage 5: Derive Serving Sizes
+
+Derives household measures with fallback chain:
+
+```bash
+node serving-deriver.cjs \
+  --input candidates.json \
+  --output derived-foods \
+  --data-dir .
+```
+
+**Derivation priority:**
+1. Explicit household measures from Reference source
+2. FDA RACC lookup (`racc_table.json`)
+3. Density-based calculations (`density_defaults.json`)
+4. Unit weight table (`unit_weights.json`)
+5. Fallback to 100g only
+
+**Output:** `derived-foods.json`
+
+### Stage 6: Curate and Filter
 
 Applies filtering, deduplication, and quality checks:
 
 ```bash
 node food-curator-nutrients.cjs \
-  mastered-nutrient-data.json \
+  derived-foods.json \
   curated-nutrients \
   --keep-list keep-list.txt \
   --exclude-list exclude-list.txt
 ```
 
 **Output:** `curated-nutrients-full.json`, `curated-nutrients-abridged.json`
-**Time:** <1 minute
 
-### Step 4: Generate App Module
+### Stage 7: Generate App Module
 
-Creates the production JavaScript module:
+Creates production JavaScript module with coverage report:
 
 ```bash
 node data-module-generator-nutrients.cjs \
   curated-nutrients-abridged.json \
   ../src/lib/data/foodDatabaseData.js \
-  --module --minify --minimal
+  --module --minify --minimal \
+  --coverage coverage_report.txt
 ```
 
-**Output:** `../src/lib/data/foodDatabaseData.js` (2-3 MB)
-**Time:** <1 minute
+**Coverage Report Example:**
+```
+=== Pipeline Coverage Report ===
+Total foods in output: 3,847
 
-### Step 5: Generate Provenance Data (Optional)
+Nutrient Sources:
+  Foundation Foods primary:    423 (11.0%)
+  SR Legacy primary:         3,398 (88.3%)
+  SR Legacy fallback:           26 (0.7%)
 
-Creates chunked JSON files for food source provenance:
+Serving Sources:
+  SR Legacy measures:        3,691 (95.9%)
+  RACC-derived:                 72 (1.9%)
+  100g only:                    42 (1.1%)
+```
+
+**Output:** `../src/lib/data/foodDatabaseData.js` (2-3 MB), `coverage_report.txt`
+
+### Stage 8: Validate Against Previous
+
+Compares new output against previous version:
 
 ```bash
-node provenance-generator.cjs \
-  curated-nutrients-abridged.json \
-  mastered-nutrient-data.json \
-  ../static/data/provenance
+node diff-validator.cjs \
+  --old ../src/lib/data/foodDatabaseData.js.bak \
+  --new ../src/lib/data/foodDatabaseData.js \
+  --output diff_report \
+  --verbose
 ```
 
-**Output:** `../static/data/provenance/provenance_0.json` through `provenance_19.json`
-**Time:** <1 minute
+**Threshold violations:**
+| Metric | Threshold | Indicates |
+|--------|-----------|-----------|
+| Calorie shift per 100g | >15% | Possible raw/cooked mismatch |
+| Serving weight shift | >10% | Density mismatch |
+| Micronutrient drop | >50% | Foundation Foods sparsity |
+| Food count change | >5% | Unexpected filtering |
 
-This enables the app to show users which USDA foods were combined into each app entry.
+**Output:** `diff_report.json`, `diff_report.txt`
 
-## Configuration Files
+## Reference Data Files
 
-### `usda-fdc-json-config.json`
+### `racc_table.json`
 
-Maps USDA nutrient codes to property names:
+FDA Reference Amounts Customarily Consumed by food category:
 
 ```json
 {
-  "nutrientMapping": {
-    "203": "protein",
-    "291": "fiber",
-    "301": "calcium",
-    ...
+  "byCategory": {
+    "0100": { "name": "Dairy and Egg Products", "racc": 240, "unit": "cup" },
+    "1200": { "name": "Nut and Seed Products", "racc": 30, "unit": "whole" }
   }
+}
+```
+
+### `density_defaults.json`
+
+Fallback density values for volumetric foods:
+
+```json
+{
+  "byTexture": {
+    "liquid": { "grams_per_cup": 240, "confidence": "high" },
+    "leafy_raw": { "grams_per_cup": 30, "confidence": "low" }
+  }
+}
+```
+
+### `unit_weights.json`
+
+Standard weights for countable foods:
+
+```json
+{
+  "eggs": { "small": 38, "medium": 44, "large": 50, "default": 50 },
+  "apples": { "small": 150, "medium": 182, "large": 223, "default": 182 }
 }
 ```
 
 ### `keep-list.txt`
 
-Foods to always include (uses normalized names):
+Foods to always include (bypasses all filtering):
 
 ```
 milk, whole
@@ -226,40 +367,36 @@ pet food
 restaurant
 ```
 
-## Data Formats
+## Scripts Reference
 
-### Input (USDA JSON)
+### Core Pipeline Scripts
 
-```json
-{
-  "FoundationFoods": [{
-    "fdcId": 1234,
-    "description": "Milk, whole",
-    "foodNutrients": [{
-      "nutrient": {"number": "301"},
-      "amount": 276.0
-    }],
-    "foodPortions": [{
-      "value": 1.0,
-      "measureUnit": {"name": "cup"},
-      "gramWeight": 244.0
-    }]
-  }]
-}
-```
+| Script | Stage | Purpose |
+|--------|-------|---------|
+| `json-data-processor.cjs` | 1 | Extract nutrients with source tagging |
+| `master-key-assigner-json.cjs` | 2 | Assign stable appIds |
+| `candidate-generator.cjs` | 3 | FF↔SRL matching with state filtering |
+| `serving-deriver.cjs` | 5 | Measure derivation with fallbacks |
+| `food-curator-nutrients.cjs` | 6 | Filter and deduplicate |
+| `data-module-generator-nutrients.cjs` | 7 | Generate production module |
+| `diff-validator.cjs` | 8 | Compare against previous version |
+| `provenance-generator.cjs` | (opt) | Generate source provenance data |
 
-### Output (App Module)
+### Orchestration
 
-```javascript
-export const foodData = [{
-  i: 1,  // id
-  n: "Milk, whole",  // name
-  ms: [{  // measures
-    s: "1 cup",  // serving
-    n: { ca: 276, p: 7.7, ... }  // nutrients
-  }]
-}];
-```
+| Script | Purpose |
+|--------|---------|
+| `run-pipeline.sh` | Automated pipeline with review checkpoints |
+
+### Reference Data
+
+| File | Purpose |
+|------|---------|
+| `racc_table.json` | FDA RACC values by food category |
+| `density_defaults.json` | Fallback densities for volumetric foods |
+| `unit_weights.json` | Standard weights for countable foods |
+| `keep-list.txt` | Foods to always include |
+| `exclude-list.txt` | Terms to exclude |
 
 ## Troubleshooting
 
@@ -271,91 +408,63 @@ Increase Node.js heap size:
 node --max-old-space-size=4096 json-data-processor.cjs ...
 ```
 
-### Missing Nutrients
+### High-Severity Issues in Diff Report
 
-- Check `usda-fdc-json-config.json` nutrient mapping
-- Verify USDA JSON files contain the nutrient data
-- Some foods legitimately don't have all nutrients
+Check for:
+- Raw/cooked mismatches (calorie shifts >15%)
+- Density transfer errors (serving weight shifts >10%)
+- FF nutrient sparsity (micronutrient drops >50%)
 
-### File Size Too Large
+### Low Match Scores
 
-- Use `--minimal` flag (strips metadata)
-- Use `--minify` flag (compresses keys)
-- Adjust filtering in food-curator step
+Foods with scores <0.70 use SR Legacy for nutrients. If a specific food should use Foundation Foods:
+1. Verify the food names are similar enough
+2. Check that preparation states match
+3. Consider adjusting the threshold or adding to keep-list
 
-### Invalid JSON Errors
+### Coverage Below Targets
 
-- Verify download completed successfully
-- Re-download the file
-- Check for disk corruption
+Target: ≥95% of foods with non-100g servings
 
-### Download Fails or Times Out
-
-- Try downloading at a different time
-- Use a download manager with resume support
-- Check available disk space
+If below target:
+- Check RACC table coverage for missing categories
+- Add density defaults for uncovered food types
+- Review unit weights for countable foods
 
 ## Expected Results
+
+### Coverage Targets
+
+| Metric | Target |
+|--------|--------|
+| Foods with household measures | ≥95% |
+| Foundation Foods nutrients | 10-12% |
+| appId stability | 100% (no changes for existing foods) |
 
 ### Nutrient Coverage
 
 | Nutrient | Coverage |
 |----------|----------|
 | Protein | 95%+ |
-| Fiber | 90%+ |
 | Calcium | 95%+ |
-| Magnesium | 90%+ |
-| Potassium | 90%+ |
-| Iron | 90%+ |
-| Zinc | 85%+ |
+| Fiber | 90%+ |
 | Vitamin D | 60%+ |
-| Vitamin B12 | 70%+ |
-| Folate | 85%+ |
-
-Lower coverage for vitamins is normal - not all foods are analyzed for all vitamins.
 
 ### Performance Benchmarks
 
 | Step | Time | Output Size |
 |------|------|-------------|
 | JSON Processing | 2-5 min | 50-100 MB |
-| ID Assignment | <1 min | ~same |
+| Candidate Generation | <1 min | 30-50 MB |
+| Serving Derivation | <1 min | 30-50 MB |
 | Curation | <1 min | 10-30 MB |
 | Module Generation | <1 min | 2-3 MB |
 | **Total** | **5-10 min** | **2-3 MB final** |
 
-## Updating the Database
-
-When USDA releases new data:
-
-1. Download latest USDA JSON files
-2. Run pipeline with same `master-key-map.json`
-3. Stable appIds are preserved for existing foods
-4. New foods get new IDs
-5. Test output thoroughly before deploying
-
-## Scripts Reference
-
-### Core Pipeline Scripts
-
-- `json-data-processor.cjs` - Extract nutrients from USDA JSON
-- `master-key-assigner-json.cjs` - Assign stable appIds
-- `food-curator-nutrients.cjs` - Filter and deduplicate foods
-- `data-module-generator-nutrients.cjs` - Generate production module
-- `provenance-generator.cjs` - Generate source provenance data
-
-### Legacy Scripts (Calcium-only)
-
-The old CSV-based pipeline for calcium-only tracking:
-- `master-key-assigner.cjs` - CSV version
-- `food-curator.cjs` - Calcium-only version
-- `data-module-generator.cjs` - Calcium-only version
-
-Use the `-nutrients` versions for multi-nutrient support.
-
 ## Additional Resources
 
-- **Parent README** - Main project documentation
-- **NUTRIENT_MAPPING.md** - Complete nutrient reference (in `_notes/`)
-- **USDA FDC** - https://fdc.nal.usda.gov/
-- **FDC Downloads** - https://fdc.nal.usda.gov/download-datasets/
+- **Specification**: `rebuild-data-pipeline-final.md` (detailed design)
+- **NUTRIENT_MAPPING.md**: Complete nutrient reference (in `_notes/`)
+- **USDA FDC**: https://fdc.nal.usda.gov/
+- **FDC Downloads**: https://fdc.nal.usda.gov/download-datasets/
+- **FDA RACC**: https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-101/subpart-A/section-101.12
