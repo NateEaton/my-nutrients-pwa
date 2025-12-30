@@ -1,0 +1,253 @@
+{
+  "_metadata": {
+    "description": "FDA Reference Amounts Customarily Consumed (RACC) per eating occasion",
+    "source": "21 CFR 101.12",
+    "url": "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-101/subpart-A/section-101.12",
+    "notes": "Values in grams. Maps FDC food category codes to appropriate RACC values."
+  },
+  "byCategory": {
+    "0100": {
+      "name": "Dairy and Egg Products",
+      "subcategories": {
+        "milk": { "racc": 240, "unit": "cup", "type": "volumetric_liquid" },
+        "cheese_hard": { "racc": 30, "unit": "oz", "type": "weight" },
+        "cheese_soft": { "racc": 30, "unit": "oz", "type": "weight" },
+        "yogurt": { "racc": 170, "unit": "container", "type": "weight" },
+        "cream": { "racc": 15, "unit": "tbsp", "type": "volumetric_liquid" },
+        "butter": { "racc": 14, "unit": "tbsp", "type": "weight" },
+        "eggs": { "racc": 50, "unit": "large", "type": "countable" },
+        "default": { "racc": 30, "unit": "serving", "type": "weight" }
+      }
+    },
+    "0200": {
+      "name": "Spices and Herbs",
+      "racc": 0.5,
+      "unit": "tsp",
+      "type": "volumetric_solid"
+    },
+    "0300": {
+      "name": "Baby Foods",
+      "racc": 110,
+      "unit": "jar",
+      "type": "weight"
+    },
+    "0400": {
+      "name": "Fats and Oils",
+      "subcategories": {
+        "oils": { "racc": 14, "unit": "tbsp", "type": "volumetric_liquid" },
+        "spreads": { "racc": 14, "unit": "tbsp", "type": "amorphous" },
+        "default": { "racc": 14, "unit": "tbsp", "type": "weight" }
+      }
+    },
+    "0500": {
+      "name": "Poultry Products",
+      "racc": 85,
+      "unit": "cooked",
+      "type": "weight"
+    },
+    "0600": {
+      "name": "Soups, Sauces, and Gravies",
+      "subcategories": {
+        "soup": { "racc": 245, "unit": "cup", "type": "volumetric_liquid" },
+        "sauce_main": { "racc": 125, "unit": "serving", "type": "volumetric_liquid" },
+        "sauce_condiment": { "racc": 30, "unit": "serving", "type": "volumetric_liquid" },
+        "gravy": { "racc": 60, "unit": "serving", "type": "volumetric_liquid" },
+        "default": { "racc": 125, "unit": "serving", "type": "volumetric_liquid" }
+      }
+    },
+    "0700": {
+      "name": "Sausages and Luncheon Meats",
+      "racc": 55,
+      "unit": "serving",
+      "type": "weight"
+    },
+    "0800": {
+      "name": "Breakfast Cereals",
+      "subcategories": {
+        "hot": { "racc": 40, "unit": "dry", "type": "volumetric_solid" },
+        "cold_dense": { "racc": 30, "unit": "serving", "type": "volumetric_solid" },
+        "cold_light": { "racc": 30, "unit": "cup", "type": "volumetric_solid" },
+        "default": { "racc": 30, "unit": "serving", "type": "volumetric_solid" }
+      }
+    },
+    "0900": {
+      "name": "Fruits and Fruit Juices",
+      "subcategories": {
+        "juice": { "racc": 240, "unit": "cup", "type": "volumetric_liquid" },
+        "fresh_small": { "racc": 140, "unit": "pieces", "type": "countable" },
+        "fresh_medium": { "racc": 140, "unit": "medium", "type": "countable" },
+        "fresh_large": { "racc": 140, "unit": "serving", "type": "countable" },
+        "dried": { "racc": 40, "unit": "serving", "type": "weight" },
+        "canned": { "racc": 140, "unit": "serving", "type": "weight" },
+        "default": { "racc": 140, "unit": "serving", "type": "weight" }
+      }
+    },
+    "1000": {
+      "name": "Pork Products",
+      "racc": 85,
+      "unit": "cooked",
+      "type": "weight"
+    },
+    "1100": {
+      "name": "Vegetables and Vegetable Products",
+      "subcategories": {
+        "fresh_raw": { "racc": 85, "unit": "serving", "type": "weight" },
+        "cooked": { "racc": 85, "unit": "cooked", "type": "weight" },
+        "juice": { "racc": 240, "unit": "cup", "type": "volumetric_liquid" },
+        "leafy_raw": { "racc": 85, "unit": "cup", "type": "volumetric_solid" },
+        "dried": { "racc": 30, "unit": "serving", "type": "weight" },
+        "default": { "racc": 85, "unit": "serving", "type": "weight" }
+      }
+    },
+    "1200": {
+      "name": "Nut and Seed Products",
+      "racc": 30,
+      "unit": "whole",
+      "type": "weight"
+    },
+    "1300": {
+      "name": "Beef Products",
+      "racc": 85,
+      "unit": "cooked",
+      "type": "weight"
+    },
+    "1400": {
+      "name": "Beverages",
+      "subcategories": {
+        "carbonated": { "racc": 360, "unit": "can", "type": "volumetric_liquid" },
+        "coffee_tea": { "racc": 240, "unit": "cup", "type": "volumetric_liquid" },
+        "water": { "racc": 240, "unit": "cup", "type": "volumetric_liquid" },
+        "default": { "racc": 240, "unit": "cup", "type": "volumetric_liquid" }
+      }
+    },
+    "1500": {
+      "name": "Finfish and Shellfish Products",
+      "subcategories": {
+        "fish": { "racc": 85, "unit": "cooked", "type": "weight" },
+        "shellfish": { "racc": 85, "unit": "cooked", "type": "weight" },
+        "default": { "racc": 85, "unit": "cooked", "type": "weight" }
+      }
+    },
+    "1600": {
+      "name": "Legumes and Legume Products",
+      "subcategories": {
+        "cooked": { "racc": 90, "unit": "cooked", "type": "weight" },
+        "dry": { "racc": 35, "unit": "dry", "type": "weight" },
+        "tofu": { "racc": 85, "unit": "serving", "type": "weight" },
+        "default": { "racc": 90, "unit": "serving", "type": "weight" }
+      }
+    },
+    "1700": {
+      "name": "Lamb, Veal, and Game Products",
+      "racc": 85,
+      "unit": "cooked",
+      "type": "weight"
+    },
+    "1800": {
+      "name": "Baked Products",
+      "subcategories": {
+        "bread": { "racc": 50, "unit": "slice", "type": "weight" },
+        "roll": { "racc": 55, "unit": "roll", "type": "countable" },
+        "muffin": { "racc": 55, "unit": "muffin", "type": "countable" },
+        "cake": { "racc": 80, "unit": "piece", "type": "weight" },
+        "cookie": { "racc": 30, "unit": "cookies", "type": "countable" },
+        "cracker": { "racc": 30, "unit": "crackers", "type": "countable" },
+        "pastry": { "racc": 55, "unit": "piece", "type": "countable" },
+        "default": { "racc": 55, "unit": "serving", "type": "weight" }
+      }
+    },
+    "1900": {
+      "name": "Sweets",
+      "subcategories": {
+        "candy": { "racc": 40, "unit": "pieces", "type": "weight" },
+        "chocolate": { "racc": 40, "unit": "serving", "type": "weight" },
+        "sugar": { "racc": 4, "unit": "tsp", "type": "volumetric_solid" },
+        "honey": { "racc": 21, "unit": "tbsp", "type": "volumetric_liquid" },
+        "jam": { "racc": 20, "unit": "tbsp", "type": "amorphous" },
+        "default": { "racc": 40, "unit": "serving", "type": "weight" }
+      }
+    },
+    "2000": {
+      "name": "Cereal Grains and Pasta",
+      "subcategories": {
+        "pasta_dry": { "racc": 55, "unit": "dry", "type": "weight" },
+        "pasta_cooked": { "racc": 140, "unit": "cooked", "type": "weight" },
+        "rice_dry": { "racc": 45, "unit": "dry", "type": "volumetric_solid" },
+        "rice_cooked": { "racc": 140, "unit": "cooked", "type": "volumetric_solid" },
+        "flour": { "racc": 30, "unit": "serving", "type": "volumetric_solid" },
+        "default": { "racc": 55, "unit": "serving", "type": "weight" }
+      }
+    },
+    "2100": {
+      "name": "Fast Foods",
+      "subcategories": {
+        "sandwich": { "racc": 140, "unit": "sandwich", "type": "weight" },
+        "pizza": { "racc": 140, "unit": "slice", "type": "weight" },
+        "fries": { "racc": 70, "unit": "serving", "type": "weight" },
+        "default": { "racc": 140, "unit": "serving", "type": "weight" }
+      }
+    },
+    "2200": {
+      "name": "Meals, Entrees, and Side Dishes",
+      "subcategories": {
+        "entree": { "racc": 140, "unit": "serving", "type": "weight" },
+        "side": { "racc": 120, "unit": "serving", "type": "weight" },
+        "default": { "racc": 140, "unit": "serving", "type": "weight" }
+      }
+    },
+    "2500": {
+      "name": "Snacks",
+      "subcategories": {
+        "chips": { "racc": 30, "unit": "serving", "type": "weight" },
+        "popcorn": { "racc": 30, "unit": "cup", "type": "volumetric_solid" },
+        "pretzels": { "racc": 30, "unit": "serving", "type": "weight" },
+        "nuts": { "racc": 30, "unit": "serving", "type": "weight" },
+        "default": { "racc": 30, "unit": "serving", "type": "weight" }
+      }
+    },
+    "3500": {
+      "name": "American Indian/Alaska Native Foods",
+      "racc": 85,
+      "unit": "serving",
+      "type": "weight"
+    },
+    "3600": {
+      "name": "Restaurant Foods",
+      "racc": 140,
+      "unit": "serving",
+      "type": "weight"
+    }
+  },
+  "lookupByKeyword": {
+    "milk": { "category": "0100", "subcategory": "milk" },
+    "cheese": { "category": "0100", "subcategory": "cheese_hard" },
+    "yogurt": { "category": "0100", "subcategory": "yogurt" },
+    "cream": { "category": "0100", "subcategory": "cream" },
+    "butter": { "category": "0100", "subcategory": "butter" },
+    "egg": { "category": "0100", "subcategory": "eggs" },
+    "oil": { "category": "0400", "subcategory": "oils" },
+    "juice": { "category": "0900", "subcategory": "juice" },
+    "fruit": { "category": "0900", "subcategory": "fresh_medium" },
+    "vegetable": { "category": "1100", "subcategory": "fresh_raw" },
+    "leafy": { "category": "1100", "subcategory": "leafy_raw" },
+    "bread": { "category": "1800", "subcategory": "bread" },
+    "cookie": { "category": "1800", "subcategory": "cookie" },
+    "cracker": { "category": "1800", "subcategory": "cracker" },
+    "cake": { "category": "1800", "subcategory": "cake" },
+    "pasta": { "category": "2000", "subcategory": "pasta_cooked" },
+    "rice": { "category": "2000", "subcategory": "rice_cooked" },
+    "chip": { "category": "2500", "subcategory": "chips" },
+    "popcorn": { "category": "2500", "subcategory": "popcorn" },
+    "nut": { "category": "1200" },
+    "seed": { "category": "1200" },
+    "beef": { "category": "1300" },
+    "pork": { "category": "1000" },
+    "chicken": { "category": "0500" },
+    "turkey": { "category": "0500" },
+    "fish": { "category": "1500", "subcategory": "fish" },
+    "shellfish": { "category": "1500", "subcategory": "shellfish" },
+    "bean": { "category": "1600", "subcategory": "cooked" },
+    "lentil": { "category": "1600", "subcategory": "cooked" },
+    "tofu": { "category": "1600", "subcategory": "tofu" }
+  }
+}
