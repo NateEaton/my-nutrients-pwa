@@ -26,7 +26,7 @@ CURATED="curated-nutrients"
 FINAL_OUTPUT="../src/lib/data/foodDatabaseData.js"
 COVERAGE_REPORT="coverage_report.txt"
 DIFF_REPORT="diff_report"
-PROVENANCE_DIR="../static/provenance"
+PROVENANCE_DIR="../static/data/provenance"
 
 # --- Colors for output ---
 RED='\033[0;31m'
