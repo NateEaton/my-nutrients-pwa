@@ -1,145 +1,194 @@
 Data Audit Report
-Generated: 2025-12-31T16:55:49.493Z
-Duration: 4.3s
+Generated: 2025-12-31T18:44:59.021Z
+Duration: 5.2s
 
 SUMMARY
 -------
 Total foods: 1000
-Pass: 978 (97.8%)
+Pass: 979 (97.9%)
 Warning: 0 (0.0%)
-Fail: 22 (2.2%)
+Fail: 21 (2.1%)
 
 ISSUES BY TYPE
 --------------
-app_100g_mismatch: 180
+app_100g_mismatch: 185
 
-FAILED FOODS (22)
+FAILED FOODS (21)
 ==================================================
 
-[FAIL] Rice flour, brown (ID: 9769)
-  - 100g measure iron: app=2.000 vs prov=1.500
-  - 100g measure magnesium: app=112.000 vs prov=124.000
-  - 100g measure fat: app=2.800 vs prov=3.850
-  - 100g measure carbohydrates: app=76.500 vs prov=75.500
-  - 100g measure calcium: app=11.000 vs prov=10.000
-  - 100g measure potassium: app=289.000 vs prov=265.000
-  - 100g measure zinc: app=2.500 vs prov=1.910
-  - 100g measure vitaminB6: app=0.700 vs prov=0.132
+[FAIL] Hummus, commercial (ID: 15160)
+  - 100g measure vitaminK: app=23.000 vs prov=17.200
+  - 100g measure saturatedFat: app=2.600 vs prov=2.220
+  - 100g measure omega6: app=8.060 vs prov=6.810
+  - 100g measure omega3ALA: app=0.711 vs prov=0.637
+  - 100g measure protein: app=7.800 vs prov=7.350
+  - 100g measure fiber: app=5.500 vs prov=5.400
+  - 100g measure iron: app=2.500 vs prov=2.410
+  - 100g measure magnesium: app=75.000 vs prov=71.100
+  - 100g measure monounsaturatedFat: app=5.300 vs prov=6.370
+  - 100g measure polyunsaturatedFat: app=8.800 vs prov=7.480
+  - 100g measure fat: app=17.800 vs prov=17.100
+  - 100g measure calcium: app=47.000 vs prov=41.000
+  - 100g measure potassium: app=312.000 vs prov=289.000
+  - 100g measure omega3: app=0.711 vs prov=0.637
 
-[FAIL] Oil, canola (ID: 13207)
-  - 100g measure monounsaturatedFat: app=63.300 vs prov=62.600
-  - 100g measure saturatedFat: app=7.400 vs prov=6.610
-  - 100g measure omega6: app=18.600 vs prov=17.800
-  - 100g measure omega3ALA: app=9.140 vs prov=7.450
-  - 100g measure polyunsaturatedFat: app=28.100 vs prov=25.300
-  - 100g measure omega3: app=9.140 vs prov=7.450
+[FAIL] Pork, fresh, ground, raw (ID: 8773)
+  - 100g measure iron: app=0.880 vs prov=0.788
+  - 100g measure protein: app=16.900 vs prov=17.800
+  - 100g measure saturatedFat: app=7.900 vs prov=6.280
+  - 100g measure fat: app=21.200 vs prov=17.500
+  - 100g measure calcium: app=14.000 vs prov=5.860
+  - 100g measure potassium: app=287.000 vs prov=318.000
+  - 100g measure monounsaturatedFat: app=9.400 vs prov=7.780
+  - 100g measure polyunsaturatedFat: app=1.900 vs prov=2.550
 
-[FAIL] Seeds, sunflower seed kernels, oil roasted, with salt added (ID: 9464)
-  - 100g measure vitaminK: app=3.100 vs prov=1.200
-  - 100g measure fiber: app=10.600 vs prov=10.300
-  - 100g measure iron: app=4.300 vs prov=5.210
-  - 100g measure protein: app=20.100 vs prov=21.000
-  - 100g measure omega6: app=34.100 vs prov=13.000
-  - 100g measure omega3ALA: app=0.076 vs prov=0.059
-  - 100g measure fat: app=51.300 vs prov=56.100
-  - 100g measure calcium: app=87.000 vs prov=78.000
-  - 100g measure magnesium: app=127.000 vs prov=358.000
-  - 100g measure potassium: app=483.000 vs prov=689.000
-  - 100g measure zinc: app=5.200 vs prov=6.000
-  - 100g measure saturatedFat: app=7.100 vs prov=5.360
-  - 100g measure carbohydrates: app=22.900 vs prov=17.100
-  - 100g measure monounsaturatedFat: app=8.100 vs prov=33.400
-  - 100g measure polyunsaturatedFat: app=34.300 vs prov=13.000
-  - 100g measure omega3: app=0.076 vs prov=0.059
+[FAIL] Chicken, broilers or fryers, breast, meat and skin, raw (ID: 12345)
+  - 100g measure iron: app=0.740 vs prov=0.354
+  - 100g measure protein: app=20.800 vs prov=21.400
+  - 100g measure fat: app=9.300 vs prov=4.780
+  - 100g measure calcium: app=11.000 vs prov=6.900
+  - 100g measure potassium: app=220.000 vs prov=332.000
+  - 100g measure zinc: app=0.800 vs prov=0.624
 
-[FAIL] Beef, loin, top loin, separable lean and fat, trimmed to 1/8" fat, choice, raw (ID: 10411)
-  - 100g measure iron: app=1.600 vs prov=1.900
-  - 100g measure magnesium: app=19.000 vs prov=11.300
-  - 100g measure saturatedFat: app=6.900 vs prov=2.560
-  - 100g measure vitaminB12: app=2.800 vs prov=1.720
-  - 100g measure protein: app=19.300 vs prov=22.800
-  - 100g measure fat: app=17.100 vs prov=6.390
-  - 100g measure calcium: app=6.000 vs prov=15.000
-  - 100g measure potassium: app=302.000 vs prov=282.000
-  - 100g measure zinc: app=3.200 vs prov=3.760
-  - 100g measure vitaminB6: app=0.400 vs prov=0.575
-  - 100g measure monounsaturatedFat: app=7.400 vs prov=2.710
-  - 100g measure polyunsaturatedFat: app=0.600 vs prov=0.364
+[FAIL] Peaches, yellow, raw (ID: 10799)
+  - 100g measure carbohydrates: app=9.500 vs prov=10.100
+  - 100g measure potassium: app=190.000 vs prov=122.000
+  - 100g measure vitaminC: app=6.600 vs prov=4.100
+  - 100g measure vitaminK: app=2.600 vs prov=3.000
+  - 100g measure iron: app=0.250 vs prov=0.340
+  - 100g measure magnesium: app=9.000 vs prov=8.000
+  - 100g measure vitaminA: app=16.000 vs prov=24.000
+  - 100g measure calcium: app=6.000 vs prov=4.000
+  - 100g measure zinc: app=0.170 vs prov=0.230
 
-[FAIL] Yogurt, plain, whole milk (ID: 12155)
-  - 100g measure vitaminD: app=0.100 vs prov=0.778
-  - 100g measure saturatedFat: app=2.100 vs prov=2.320
-  - 100g measure protein: app=3.500 vs prov=3.820
-  - 100g measure magnesium: app=12.000 vs prov=11.400
-  - 100g measure fat: app=3.300 vs prov=4.480
-  - 100g measure carbohydrates: app=4.700 vs prov=5.570
-  - 100g measure calcium: app=121.000 vs prov=127.000
-  - 100g measure potassium: app=155.000 vs prov=164.000
-  - 100g measure zinc: app=0.590 vs prov=0.428
+[FAIL] Garlic, raw (ID: 10101)
+  - 100g measure carbohydrates: app=33.100 vs prov=28.200
+  - 100g measure vitaminC: app=31.200 vs prov=10.000
+  - 100g measure fiber: app=2.100 vs prov=2.700
+  - 100g measure protein: app=6.400 vs prov=6.620
+  - 100g measure fat: app=0.500 vs prov=0.380
 
-[FAIL] Broccoli, raw (ID: 11250)
-  - 100g measure carbohydrates: app=6.600 vs prov=6.270
-  - 100g measure fat: app=0.400 vs prov=0.340
-  - 100g measure calcium: app=47.000 vs prov=46.000
-  - 100g measure potassium: app=316.000 vs prov=303.000
-  - 100g measure zinc: app=0.410 vs prov=0.420
-  - 100g measure protein: app=2.800 vs prov=2.570
-  - 100g measure fiber: app=2.600 vs prov=2.400
-  - 100g measure iron: app=0.730 vs prov=0.690
-  - 100g measure vitaminC: app=89.200 vs prov=91.300
-  - 100g measure vitaminA: app=31.000 vs prov=8.000
+[FAIL] Beets, raw (ID: 10016)
+  - 100g measure fiber: app=2.800 vs prov=3.120
+  - 100g measure carbohydrates: app=9.600 vs prov=8.790
+  - 100g measure calcium: app=16.000 vs prov=13.800
+  - 100g measure potassium: app=325.000 vs prov=342.000
+  - 100g measure zinc: app=0.350 vs prov=0.310
+  - 100g measure fat: app=0.200 vs prov=0.302
+  - 100g measure vitaminC: app=4.900 vs prov=4.600
+  - 100g measure protein: app=1.600 vs prov=1.690
+  - 100g measure iron: app=0.800 vs prov=0.428
+  - 100g measure magnesium: app=23.000 vs prov=21.000
 
-[FAIL] Figs, dried, uncooked (ID: 15536)
-  - 100g measure zinc: app=0.550 vs prov=0.660
+[FAIL] Turkey, ground, 93% lean, 7% fat, pan-broiled crumbles (ID: 13722)
+  - 100g measure monounsaturatedFat: app=3.900 vs prov=3.780
+  - 100g measure polyunsaturatedFat: app=3.600 vs prov=3.490
 
-[FAIL] Cheese, swiss (ID: 12122)
-  - 100g measure monounsaturatedFat: app=8.100 vs prov=7.260
-  - 100g measure polyunsaturatedFat: app=1.300 vs prov=1.140
-  - 100g measure potassium: app=72.000 vs prov=71.000
-  - 100g measure vitaminA: app=288.000 vs prov=292.000
-  - 100g measure vitaminB12: app=3.100 vs prov=3.020
+[FAIL] Rice flour, white, unenriched (ID: 10585)
+  - 100g measure vitaminB6: app=0.400 vs prov=0.052
+  - 100g measure calcium: app=10.000 vs prov=6.000
+  - 100g measure potassium: app=76.000 vs prov=75.000
+  - 100g measure zinc: app=0.800 vs prov=1.190
+  - 100g measure fat: app=1.400 vs prov=1.300
+  - 100g measure protein: app=6.000 vs prov=6.940
+  - 100g measure fiber: app=2.400 vs prov=0.500
+  - 100g measure iron: app=0.350 vs prov=0.220
+  - 100g measure magnesium: app=35.000 vs prov=22.900
 
-[FAIL] Bison, ground, grass-fed, raw (ID: 16164)
-  - 100g measure carbohydrates: app=0.100 vs prov=-0.150
-  - 100g measure calcium: app=11.000 vs prov=6.830
-  - 100g measure potassium: app=328.000 vs prov=301.000
-  - 100g measure zinc: app=4.600 vs prov=3.760
-  - 100g measure fat: app=7.200 vs prov=8.880
-  - 100g measure protein: app=20.200 vs prov=19.900
-  - 100g measure iron: app=2.800 vs prov=2.170
-  - 100g measure magnesium: app=21.000 vs prov=18.500
+[FAIL] Beverages, almond milk, unsweetened, shelf stable (ID: 15703)
+  - 100g measure omega6: app=0.252 vs prov=0.276
+  - 100g measure iron: app=0.280 vs prov=0.290
+  - 100g measure magnesium: app=6.000 vs prov=6.780
+  - 100g measure vitaminD: app=1.000 vs prov=0.927
+  - 100g measure protein: app=0.400 vs prov=0.555
+  - 100g measure monounsaturatedFat: app=0.600 vs prov=0.729
+  - 100g measure polyunsaturatedFat: app=0.200 vs prov=0.276
+  - 100g measure zinc: app=0.060 vs prov=0.172
+  - 100g measure fat: app=1.000 vs prov=1.220
+  - 100g measure carbohydrates: app=1.300 vs prov=0.337
+  - 100g measure calcium: app=184.000 vs prov=173.000
+  - 100g measure potassium: app=67.000 vs prov=30.800
 
-[FAIL] Potato flour (ID: 9317)
-  - 100g measure carbohydrates: app=83.100 vs prov=79.900
-  - 100g measure fiber: app=5.900 vs prov=5.400
-  - 100g measure iron: app=1.400 vs prov=12.000
-  - 100g measure magnesium: app=65.000 vs prov=73.600
-  - 100g measure protein: app=6.900 vs prov=8.110
-  - 100g measure calcium: app=65.000 vs prov=44.100
-  - 100g measure potassium: app=1000.000 vs prov=1270.000
-  - 100g measure zinc: app=0.540 vs prov=0.900
-  - 100g measure fat: app=0.300 vs prov=0.951
-  - 100g measure vitaminB6: app=0.800 vs prov=0.582
-
-[FAIL] Nuts, macadamia nuts, raw (ID: 11049)
-  - 100g measure carbohydrates: app=13.800 vs prov=24.100
-  - 100g measure protein: app=7.900 vs prov=7.790
-  - 100g measure fiber: app=8.600 vs prov=7.560
-  - 100g measure iron: app=3.700 vs prov=1.880
-  - 100g measure magnesium: app=130.000 vs prov=107.000
-  - 100g measure calcium: app=85.000 vs prov=52.700
-  - 100g measure potassium: app=368.000 vs prov=373.000
+[FAIL] Egg, whole, raw, frozen, salted, pasteurized (ID: 11764)
+  - 100g measure fat: app=10.100 vs prov=10.300
+  - 100g measure carbohydrates: app=0.800 vs prov=0.910
+  - 100g measure potassium: app=128.000 vs prov=117.000
   - 100g measure zinc: app=1.300 vs prov=1.200
-  - 100g measure fat: app=75.800 vs prov=64.900
+  - 100g measure protein: app=11.000 vs prov=12.300
+  - 100g measure iron: app=1.700 vs prov=1.770
+  - 100g measure magnesium: app=9.000 vs prov=11.200
+  - 100g measure vitaminD: app=1.500 vs prov=2.300
 
-[FAIL] Egg, yolk, raw, frozen, pasteurized (ID: 14292)
-  - 100g measure potassium: app=121.000 vs prov=102.000
-  - 100g measure zinc: app=3.200 vs prov=2.930
-  - 100g measure fat: app=25.600 vs prov=25.100
-  - 100g measure carbohydrates: app=0.800 vs prov=0.590
-  - 100g measure calcium: app=134.000 vs prov=119.000
-  - 100g measure iron: app=4.600 vs prov=4.130
-  - 100g measure vitaminD: app=6.000 vs prov=5.800
+[FAIL] Bread, white, commercially prepared, toasted (ID: 15796)
+  - 100g measure fat: app=4.000 vs prov=3.590
+  - 100g measure calcium: app=119.000 vs prov=211.000
+  - 100g measure potassium: app=131.000 vs prov=117.000
+  - 100g measure zinc: app=0.680 vs prov=0.880
+  - 100g measure monounsaturatedFat: app=0.800 vs prov=0.717
+  - 100g measure polyunsaturatedFat: app=2.100 vs prov=1.870
+  - 100g measure protein: app=9.000 vs prov=9.430
+  - 100g measure iron: app=3.300 vs prov=3.360
+  - 100g measure magnesium: app=26.000 vs prov=26.900
+  - 100g measure fiber: app=2.900 vs prov=2.300
+  - 100g measure carbohydrates: app=54.500 vs prov=49.200
+
+[FAIL] Cheese, cottage, lowfat, 2% milkfat (ID: 13053)
+  - 100g measure vitaminA: app=68.000 vs prov=69.000
+  - 100g measure carbohydrates: app=4.800 vs prov=4.310
+  - 100g measure calcium: app=111.000 vs prov=103.000
+  - 100g measure potassium: app=125.000 vs prov=120.000
+  - 100g measure zinc: app=0.510 vs prov=0.610
+  - 100g measure protein: app=10.400 vs prov=11.000
+  - 100g measure saturatedFat: app=1.200 vs prov=1.260
+  - 100g measure omega6: app=0.047 vs prov=0.049
+  - 100g measure vitaminB12: app=0.470 vs prov=0.420
+  - 100g measure magnesium: app=9.000 vs prov=8.900
+
+[FAIL] Blackberries, raw (ID: 14817)
+  - 100g measure zinc: app=0.530 vs prov=0.189
+  - 100g measure calcium: app=29.000 vs prov=15.400
+  - 100g measure protein: app=1.400 vs prov=1.530
+  - 100g measure iron: app=0.620 vs prov=0.208
+  - 100g measure magnesium: app=20.000 vs prov=20.600
+  - 100g measure potassium: app=162.000 vs prov=167.000
+  - 100g measure vitaminC: app=21.000 vs prov=15.400
+
+[FAIL] Eggplant, raw (ID: 10099)
+  - 100g measure vitaminC: app=2.200 vs prov=0.800
+  - 100g measure calcium: app=9.000 vs prov=11.100
+  - 100g measure potassium: app=229.000 vs prov=222.000
+  - 100g measure zinc: app=0.160 vs prov=0.119
+  - 100g measure fat: app=0.200 vs prov=0.120
+  - 100g measure carbohydrates: app=5.900 vs prov=5.400
+  - 100g measure fiber: app=3.000 vs prov=2.450
+  - 100g measure protein: app=1.000 vs prov=0.852
+
+[FAIL] Nuts, almonds, dry roasted, with salt added (ID: 9467)
+  - 100g measure monounsaturatedFat: app=33.100 vs prov=34.200
+  - 100g measure polyunsaturatedFat: app=13.000 vs prov=14.500
+  - 100g measure calcium: app=268.000 vs prov=273.000
+  - 100g measure potassium: app=713.000 vs prov=684.000
+  - 100g measure zinc: app=3.300 vs prov=2.800
+  - 100g measure fat: app=52.500 vs prov=57.800
+  - 100g measure carbohydrates: app=21.000 vs prov=16.200
+  - 100g measure iron: app=3.700 vs prov=3.170
+  - 100g measure magnesium: app=279.000 vs prov=258.000
+  - 100g measure protein: app=21.000 vs prov=20.400
+  - 100g measure saturatedFat: app=4.100 vs prov=4.560
+  - 100g measure omega6: app=12.900 vs prov=14.500
+  - 100g measure omega3ALA: app=0.006 vs prov=0.050
+  - 100g measure omega3: app=0.006 vs prov=0.052
+
+[FAIL] Chicken, ground, raw (ID: 11987)
+  - 100g measure fat: app=8.100 vs prov=7.160
+  - 100g measure monounsaturatedFat: app=3.600 vs prov=2.170
+  - 100g measure polyunsaturatedFat: app=1.500 vs prov=1.380
+  - 100g measure calcium: app=6.000 vs prov=5.820
+  - 100g measure potassium: app=522.000 vs prov=302.000
+  - 100g measure zinc: app=1.500 vs prov=1.180
+  - 100g measure iron: app=0.820 vs prov=0.593
+  - 100g measure saturatedFat: app=2.300 vs prov=1.560
+  - 100g measure protein: app=17.400 vs prov=17.900
 
 [FAIL] Beef, ground, 90% lean meat / 10% fat, raw (ID: 14901)
   - 100g measure fat: app=10.000 vs prov=12.800
@@ -153,76 +202,26 @@ FAILED FOODS (22)
   - 100g measure monounsaturatedFat: app=4.200 vs prov=4.480
   - 100g measure polyunsaturatedFat: app=0.300 vs prov=0.361
 
-[FAIL] Frankfurter, beef, unheated (ID: 14733)
-  - 100g measure carbohydrates: app=3.000 vs prov=2.890
-  - 100g measure calcium: app=14.000 vs prov=15.000
-  - 100g measure potassium: app=364.000 vs prov=343.000
-  - 100g measure zinc: app=2.000 vs prov=2.060
-  - 100g measure monounsaturatedFat: app=13.600 vs prov=12.100
-  - 100g measure polyunsaturatedFat: app=1.100 vs prov=0.954
-  - 100g measure vitaminB12: app=0.960 vs prov=0.970
-  - 100g measure omega3EPA: app=0.004 vs prov=0.003
-  - 100g measure omega3ALA: app=0.075 vs prov=0.078
-  - 100g measure magnesium: app=11.000 vs prov=11.500
-  - 100g measure omega3: app=0.080 vs prov=0.081
+[FAIL] Melons, cantaloupe, raw (ID: 9963)
+  - 100g measure potassium: app=267.000 vs prov=157.000
+  - 100g measure vitaminC: app=36.700 vs prov=10.900
+  - 100g measure fiber: app=0.900 vs prov=0.800
+  - 100g measure iron: app=0.210 vs prov=0.380
+  - 100g measure magnesium: app=12.000 vs prov=13.000
+  - 100g measure vitaminK: app=2.500 vs prov=2.700
+  - 100g measure vitaminA: app=169.000 vs prov=232.000
+  - 100g measure zinc: app=0.180 vs prov=0.440
 
-[FAIL] Carrots, baby, raw (ID: 9439)
-  - 100g measure carbohydrates: app=8.200 vs prov=9.080
-  - 100g measure fiber: app=2.900 vs prov=2.690
-  - 100g measure iron: app=0.890 vs prov=0.088
-  - 100g measure magnesium: app=10.000 vs prov=11.100
-  - 100g measure protein: app=0.600 vs prov=0.805
-  - 100g measure calcium: app=32.000 vs prov=42.200
-  - 100g measure zinc: app=0.170 vs prov=0.160
-
-[FAIL] Egg, whole, dried (ID: 13059)
-  - 100g measure potassium: app=540.000 vs prov=468.000
-  - 100g measure zinc: app=3.200 vs prov=5.020
-  - 100g measure iron: app=7.200 vs prov=6.970
-  - 100g measure fat: app=43.900 vs prov=39.800
-  - 100g measure carbohydrates: app=1.100 vs prov=1.870
-  - 100g measure calcium: app=244.000 vs prov=220.000
-  - 100g measure vitaminD: app=8.300 vs prov=9.700
-  - 100g measure magnesium: app=34.000 vs prov=44.600
-
-[FAIL] Chicken, broilers or fryers, wing, meat and skin, raw (ID: 13261)
-  - 100g measure iron: app=0.460 vs prov=0.511
-  - 100g measure magnesium: app=16.000 vs prov=16.500
-  - 100g measure protein: app=17.500 vs prov=18.400
-  - 100g measure calcium: app=11.000 vs prov=13.600
-  - 100g measure potassium: app=187.000 vs prov=194.000
-  - 100g measure fat: app=12.800 vs prov=10.600
-
-[FAIL] Beef, round, top round roast, boneless, separable lean and fat, trimmed to 0" fat, select, raw (ID: 12615)
-  - 100g measure fat: app=3.000 vs prov=2.410
-  - 100g measure monounsaturatedFat: app=1.300 vs prov=0.886
-  - 100g measure protein: app=23.400 vs prov=23.700
-  - 100g measure saturatedFat: app=1.200 vs prov=0.924
-  - 100g measure omega6: app=0.145 vs prov=0.136
-  - 100g measure omega3ALA: app=0.004 vs prov=0.003
-  - 100g measure omega3: app=0.008 vs prov=0.007
-
-[FAIL] Potatoes, raw, skin (ID: 10903)
-  - 100g measure protein: app=2.600 vs prov=2.270
-  - 100g measure iron: app=3.200 vs prov=0.384
-  - 100g measure magnesium: app=23.000 vs prov=25.600
-  - 100g measure vitaminC: app=11.400 vs prov=10.900
-  - 100g measure fat: app=0.100 vs prov=0.360
-  - 100g measure carbohydrates: app=12.400 vs prov=17.800
-  - 100g measure calcium: app=30.000 vs prov=7.800
-  - 100g measure potassium: app=413.000 vs prov=450.000
-  - 100g measure zinc: app=0.350 vs prov=0.378
-
-[FAIL] Chicken, ground, raw (ID: 11987)
-  - 100g measure fat: app=8.100 vs prov=7.160
-  - 100g measure monounsaturatedFat: app=3.600 vs prov=2.170
-  - 100g measure polyunsaturatedFat: app=1.500 vs prov=1.380
-  - 100g measure calcium: app=6.000 vs prov=5.820
-  - 100g measure potassium: app=522.000 vs prov=302.000
-  - 100g measure zinc: app=1.500 vs prov=1.180
-  - 100g measure iron: app=0.820 vs prov=0.593
-  - 100g measure saturatedFat: app=2.300 vs prov=1.560
-  - 100g measure protein: app=17.400 vs prov=17.900
+[FAIL] Yogurt, plain, whole milk (ID: 12155)
+  - 100g measure vitaminD: app=0.100 vs prov=0.778
+  - 100g measure saturatedFat: app=2.100 vs prov=2.320
+  - 100g measure protein: app=3.500 vs prov=3.820
+  - 100g measure magnesium: app=12.000 vs prov=11.400
+  - 100g measure fat: app=3.300 vs prov=4.480
+  - 100g measure carbohydrates: app=4.700 vs prov=5.570
+  - 100g measure calcium: app=121.000 vs prov=127.000
+  - 100g measure potassium: app=155.000 vs prov=164.000
+  - 100g measure zinc: app=0.590 vs prov=0.428
 
 [FAIL] Egg, yolk, dried (ID: 14299)
   - 100g measure potassium: app=264.000 vs prov=231.000
@@ -234,11 +233,15 @@ FAILED FOODS (22)
   - 100g measure iron: app=9.600 vs prov=9.280
   - 100g measure vitaminD: app=10.000 vs prov=15.700
 
-[FAIL] Cheese, dry white, queso seco (ID: 13093)
-  - 100g measure vitaminK: app=1.500 vs prov=1.600
-  - 100g measure carbohydrates: app=2.000 vs prov=2.070
-  - 100g measure monounsaturatedFat: app=6.400 vs prov=5.700
-  - 100g measure polyunsaturatedFat: app=1.200 vs prov=1.060
+[FAIL] Pineapple, raw, all varieties (ID: 9995)
+  - 100g measure vitaminC: app=47.800 vs prov=58.600
+  - 100g measure iron: app=0.290 vs prov=0.054
+  - 100g measure magnesium: app=12.000 vs prov=13.400
+  - 100g measure potassium: app=109.000 vs prov=137.000
+  - 100g measure zinc: app=0.120 vs prov=0.107
+  - 100g measure fat: app=0.100 vs prov=0.211
+  - 100g measure fiber: app=1.400 vs prov=0.935
+  - 100g measure carbohydrates: app=13.100 vs prov=14.100
 
 WARNINGS (0)
 ==================================================
