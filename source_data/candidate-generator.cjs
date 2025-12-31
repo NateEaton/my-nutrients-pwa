@@ -267,7 +267,7 @@ function main() {
     if (matchResult) {
       // FF match found - use FF for nutrients, SRL for measures
       candidate = {
-        appId: null, // Will be assigned by master-key-assigner
+        appId: srlFood.appId, // Preserve appId from mastered input
         name: srlFood.name,
         primarySource: 'Foundation',
         primaryFDC: matchResult.match.sourceId,
@@ -296,7 +296,7 @@ function main() {
     } else {
       // No FF match - use SRL for both nutrients and measures
       candidate = {
-        appId: null,
+        appId: srlFood.appId, // Preserve appId from mastered input
         name: srlFood.name,
         primarySource: 'SR Legacy',
         primaryFDC: srlFood.sourceId,
@@ -351,7 +351,7 @@ function main() {
 
     // This is an FF-only food
     const candidate = {
-      appId: null,
+      appId: ffFood.appId, // Preserve appId from mastered input
       name: ffFood.name,
       primarySource: 'Foundation',
       primaryFDC: ffFood.sourceId,
