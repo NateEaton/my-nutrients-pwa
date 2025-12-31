@@ -432,13 +432,17 @@ function main() {
 
     let foodData;
     if (transferValidation.revertToFallback && candidate.fallbackNutrients) {
-      // Use fallback nutrients (SRL) instead of primary (FF)
+      // Use fallback (SR Legacy) for BOTH nutrients AND source ID
+      // This ensures data integrity: the FDC link will match the actual nutrient values
+      // Without this, provenance would show Foundation Foods nutrients while app uses SR Legacy
       foodData = {
         ...candidate,
+        primaryFDC: candidate.refFDC,           // Use SR Legacy FDC ID
         primaryNutrients: candidate.fallbackNutrients,
-        primarySource: 'SR Legacy (fallback)',
+        primarySource: 'SR Legacy',             // Clean source name (was matched but reverted)
         densityRevert: true,
-        revertReason: transferValidation.reason
+        revertReason: transferValidation.reason,
+        originalPrimaryFDC: candidate.primaryFDC  // Keep original FF ID for reference
       };
       stats.densityReverts++;
     } else {
@@ -468,7 +472,9 @@ function main() {
         refSource: foodData.refSource,
         matchScore: foodData.matchScore,
         densityWarning: foodData.densityWarning,
-        densityRevert: foodData.densityRevert
+        densityRevert: foodData.densityRevert,
+        // Track original Foundation Foods ID if density revert occurred
+        originalFoundationFDC: foodData.originalPrimaryFDC || null
       }
     };
 
