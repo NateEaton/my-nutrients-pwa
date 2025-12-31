@@ -1,0 +1,81 @@
+Data Audit Report
+Generated: 2025-12-31T14:53:43.524Z
+Duration: 4.9s
+
+SUMMARY
+-------
+Total foods: 10
+Pass: 2 (20.0%)
+Warning: 0 (0.0%)
+Fail: 8 (80.0%)
+
+ISSUES BY TYPE
+--------------
+app_100g_mismatch: 30
+nutrient_mismatch: 14
+
+FAILED FOODS (8)
+==================================================
+
+[FAIL] Beef, variety meats and by-products, thymus, raw (ID: 11065)
+  - 100g measure vitaminB12: app=2.100 vs prov=2.130
+  - 100g measure zinc: app=2.100 vs prov=2.060
+  - 100g measure vitaminB6: app=0.200 vs prov=0.160
+
+[FAIL] Peas, green, raw (ID: 11290)
+  - 100g measure iron: app=1.500 vs prov=1.470
+  - 100g measure saturatedFat: app=0.100 vs prov=0.071
+  - 100g measure vitaminB6: app=0.200 vs prov=0.169
+  - 100g measure polyunsaturatedFat: app=0.200 vs prov=0.187
+  - 100g measure zinc: app=1.200 vs prov=1.240
+
+[FAIL] Beef, round, outside round, bottom round, steak, separable lean and fat, trimmed to 0" fat, select, raw (ID: 13001)
+  - omega6: prov=0.219 vs fdc=0.247 (11.3% diff)
+  - omega3: prov=0.008 vs fdc=0.062 (87.1% diff)
+  - 100g measure vitaminB6: app=0.700 vs prov=0.724
+  - 100g measure monounsaturatedFat: app=1.600 vs prov=1.630
+  - 100g measure polyunsaturatedFat: app=0.300 vs prov=0.309
+
+[FAIL] Peppered loaf, pork, beef (ID: 15445)
+  - 100g measure vitaminB6: app=0.300 vs prov=0.270
+  - 100g measure iron: app=1.100 vs prov=1.070
+  - 100g measure vitaminB12: app=2.000 vs prov=1.960
+
+[FAIL] Guinea hen, meat and skin, raw (ID: 13287)
+  - omega3DHA: prov=0.030 vs fdc=0.010 (200.0% diff)
+  - omega3EPA: prov=0.010 vs fdc=0.070 (85.7% diff)
+  - omega3: prov=0.040 vs fdc=0.130 (69.2% diff)
+  - 100g measure saturatedFat: app=1.800 vs prov=1.770
+  - 100g measure monounsaturatedFat: app=2.400 vs prov=2.430
+  - 100g measure vitaminB6: app=0.400 vs prov=0.380
+  - 100g measure zinc: app=1.100 vs prov=1.130
+
+[FAIL] Crustaceans, crab, blue, raw (ID: 15075)
+  - omega3EPA: prov=0.170 vs fdc=0.055 (209.1% diff)
+  - omega3DHA: prov=0.150 vs fdc=0.170 (11.8% diff)
+  - omega3: prov=0.320 vs fdc=0.225 (42.2% diff)
+  - omega3EPA: prov=0.101 vs fdc=0.037 (173.0% diff)
+  - omega3DHA: prov=0.067 vs fdc=0.101 (33.7% diff)
+  - omega3: prov=0.168 vs fdc=0.147 (14.3% diff)
+  - 100g measure fat: app=1.100 vs prov=1.080
+  - 100g measure zinc: app=3.500 vs prov=3.540
+  - 100g measure vitaminB6: app=0.200 vs prov=0.150
+  - 100g measure monounsaturatedFat: app=0.200 vs prov=0.192
+  - 100g measure polyunsaturatedFat: app=0.400 vs prov=0.387
+  - 100g measure saturatedFat: app=0.200 vs prov=0.222
+
+[FAIL] Candies, butterscotch (ID: 8843)
+  - 100g measure saturatedFat: app=2.100 vs prov=2.060
+  - 100g measure monounsaturatedFat: app=0.800 vs prov=0.845
+  - 100g measure polyunsaturatedFat: app=0.100 vs prov=0.122
+
+[FAIL] Candies, caramels, chocolate-flavor roll (ID: 8437)
+  - folate: prov=11.000 vs fdc=9.000 (22.2% diff)
+  - omega3ALA: prov=0.016 vs fdc=0.006 (166.7% diff)
+  - omega3: prov=0.016 vs fdc=0.006 (166.7% diff)
+  - 100g measure monounsaturatedFat: app=1.900 vs prov=1.930
+  - 100g measure polyunsaturatedFat: app=0.300 vs prov=0.266
+  - 100g measure saturatedFat: app=1.000 vs prov=0.967
+
+WARNINGS (0)
+==================================================
