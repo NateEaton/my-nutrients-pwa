@@ -1,90 +1,692 @@
 {
   "meta": {
-    "timestamp": "2025-12-31T15:50:23.816Z",
-    "duration": "5.0",
+    "timestamp": "2025-12-31T16:55:49.440Z",
+    "duration": "4.3",
     "config": {
       "nutrientTolerance": 0.01,
       "servingTolerance": 0.02,
-      "sampleSize": 10
+      "sampleSize": 1000
     }
   },
   "summary": {
-    "total": 10,
-    "pass": 0,
+    "total": 1000,
+    "pass": 978,
     "warning": 0,
-    "fail": 10,
+    "fail": 22,
     "issuesByType": {
-      "nutrient_mismatch": 30
+      "app_100g_mismatch": 180
     }
   },
   "results": [
     {
-      "appId": 13528,
-      "name": "Lamb, Australian, imported, fresh, seam fat, raw",
+      "appId": 9769,
+      "name": "Rice flour, brown",
       "status": "fail",
       "issues": [
         {
-          "type": "nutrient_mismatch",
+          "type": "app_100g_mismatch",
+          "nutrient": "iron",
+          "appValue": 2,
+          "provValue": 1.5,
+          "diff": 0.3333333333333333,
+          "message": "100g measure iron: app=2.000 vs prov=1.500"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "magnesium",
+          "appValue": 112,
+          "provValue": 124,
+          "diff": 0.0967741935483871,
+          "message": "100g measure magnesium: app=112.000 vs prov=124.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "fat",
+          "appValue": 2.8,
+          "provValue": 3.85,
+          "diff": 0.2820512820512821,
+          "message": "100g measure fat: app=2.800 vs prov=3.850"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "carbohydrates",
+          "appValue": 76.5,
+          "provValue": 75.5,
+          "diff": 0.013245033112582781,
+          "message": "100g measure carbohydrates: app=76.500 vs prov=75.500"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "calcium",
+          "appValue": 11,
+          "provValue": 10,
+          "diff": 0.1,
+          "message": "100g measure calcium: app=11.000 vs prov=10.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "potassium",
+          "appValue": 289,
+          "provValue": 265,
+          "diff": 0.09056603773584905,
+          "message": "100g measure potassium: app=289.000 vs prov=265.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "zinc",
+          "appValue": 2.5,
+          "provValue": 1.91,
+          "diff": 0.31578947368421056,
+          "message": "100g measure zinc: app=2.500 vs prov=1.910"
+        },
+        {
+          "type": "app_100g_mismatch",
           "nutrient": "vitaminB6",
-          "provValue": 0.29,
-          "fdcValue": 0.29,
-          "diff": 0.03333333333333337,
-          "message": "vitaminB6: prov=0.290 vs fdc=0.290 (3.3% diff)"
+          "appValue": 0.7,
+          "provValue": 0.132,
+          "diff": 5.999999999999999,
+          "message": "100g measure vitaminB6: app=0.700 vs prov=0.132"
         }
       ],
       "details": {
         "provenanceCount": 1,
-        "sourceType": "SR Legacy",
-        "fdcId": 172657,
+        "sourceType": "Foundation",
+        "fdcId": 1104812,
         "nutrientComparisons": {
+          "phosphorus": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 319
+          },
+          "sodium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 1
+          },
+          "copper": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.286
+          },
+          "manganese": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 2.84
+          },
+          "thiamin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.322
+          },
+          "riboflavin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.008
+          },
           "calories": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 459
+            "sourceValue": 365
+          },
+          "niacin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 5.99
           },
           "selenium": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 5.7
+            "sourceValue": 9.68
+          }
+        }
+      }
+    },
+    {
+      "appId": 13207,
+      "name": "Oil, canola",
+      "status": "fail",
+      "issues": [
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "monounsaturatedFat",
+          "appValue": 63.3,
+          "provValue": 62.6,
+          "diff": 0.011182108626198015,
+          "message": "100g measure monounsaturatedFat: app=63.300 vs prov=62.600"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "saturatedFat",
+          "appValue": 7.4,
+          "provValue": 6.61,
+          "diff": 0.12121212121212133,
+          "message": "100g measure saturatedFat: app=7.400 vs prov=6.610"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "omega6",
+          "appValue": 18.6,
+          "provValue": 17.8,
+          "diff": 0.04494382022471914,
+          "message": "100g measure omega6: app=18.600 vs prov=17.800"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "omega3ALA",
+          "appValue": 9.14,
+          "provValue": 7.45,
+          "diff": 0.22684563758389267,
+          "message": "100g measure omega3ALA: app=9.140 vs prov=7.450"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "polyunsaturatedFat",
+          "appValue": 28.1,
+          "provValue": 25.3,
+          "diff": 0.11067193675889331,
+          "message": "100g measure polyunsaturatedFat: app=28.100 vs prov=25.300"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "omega3",
+          "appValue": 9.14,
+          "provValue": 7.45,
+          "diff": 0.22684563758389267,
+          "message": "100g measure omega3: app=9.140 vs prov=7.450"
+        }
+      ],
+      "details": {
+        "provenanceCount": 1,
+        "sourceType": "Foundation",
+        "fdcId": 748278,
+        "nutrientComparisons": {
+          "vitaminE": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 17.3
+          }
+        }
+      }
+    },
+    {
+      "appId": 9464,
+      "name": "Seeds, sunflower seed kernels, oil roasted, with salt added",
+      "status": "fail",
+      "issues": [
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "vitaminK",
+          "appValue": 3.1,
+          "provValue": 1.2,
+          "diff": 1.5833333333333335,
+          "message": "100g measure vitaminK: app=3.100 vs prov=1.200"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "fiber",
+          "appValue": 10.6,
+          "provValue": 10.3,
+          "diff": 0.029126213592232903,
+          "message": "100g measure fiber: app=10.600 vs prov=10.300"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "iron",
+          "appValue": 4.3,
+          "provValue": 5.21,
+          "diff": 0.17307692307692313,
+          "message": "100g measure iron: app=4.300 vs prov=5.210"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "protein",
+          "appValue": 20.1,
+          "provValue": 21,
+          "diff": 0.04285714285714279,
+          "message": "100g measure protein: app=20.100 vs prov=21.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "omega6",
+          "appValue": 34.1,
+          "provValue": 13,
+          "diff": 1.623076923076923,
+          "message": "100g measure omega6: app=34.100 vs prov=13.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "omega3ALA",
+          "appValue": 0.076,
+          "provValue": 0.059,
+          "diff": 0.288135593220339,
+          "message": "100g measure omega3ALA: app=0.076 vs prov=0.059"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "fat",
+          "appValue": 51.3,
+          "provValue": 56.1,
+          "diff": 0.08556149732620329,
+          "message": "100g measure fat: app=51.300 vs prov=56.100"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "calcium",
+          "appValue": 87,
+          "provValue": 78,
+          "diff": 0.11538461538461539,
+          "message": "100g measure calcium: app=87.000 vs prov=78.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "magnesium",
+          "appValue": 127,
+          "provValue": 358,
+          "diff": 0.6452513966480447,
+          "message": "100g measure magnesium: app=127.000 vs prov=358.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "potassium",
+          "appValue": 483,
+          "provValue": 689,
+          "diff": 0.29898403483309144,
+          "message": "100g measure potassium: app=483.000 vs prov=689.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "zinc",
+          "appValue": 5.2,
+          "provValue": 6,
+          "diff": 0.1333333333333333,
+          "message": "100g measure zinc: app=5.200 vs prov=6.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "saturatedFat",
+          "appValue": 7.1,
+          "provValue": 5.36,
+          "diff": 0.31481481481481466,
+          "message": "100g measure saturatedFat: app=7.100 vs prov=5.360"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "carbohydrates",
+          "appValue": 22.9,
+          "provValue": 17.1,
+          "diff": 0.3391812865497074,
+          "message": "100g measure carbohydrates: app=22.900 vs prov=17.100"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "monounsaturatedFat",
+          "appValue": 8.1,
+          "provValue": 33.4,
+          "diff": 0.7574850299401197,
+          "message": "100g measure monounsaturatedFat: app=8.100 vs prov=33.400"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "polyunsaturatedFat",
+          "appValue": 34.3,
+          "provValue": 13,
+          "diff": 1.6384615384615382,
+          "message": "100g measure polyunsaturatedFat: app=34.300 vs prov=13.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "omega3",
+          "appValue": 0.076,
+          "provValue": 0.059,
+          "diff": 0.288135593220339,
+          "message": "100g measure omega3: app=0.076 vs prov=0.059"
+        }
+      ],
+      "details": {
+        "provenanceCount": 1,
+        "sourceType": "Foundation",
+        "fdcId": 325524,
+        "nutrientComparisons": {
+          "vitaminE": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 19.6
+          },
+          "sodium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 532
+          },
+          "niacin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 6.96
+          },
+          "pantothenicAcid": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.84
+          },
+          "calories": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 612
+          },
+          "riboflavin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.507
+          },
+          "copper": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 1.83
+          },
+          "manganese": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 2.89
+          },
+          "thiamin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.473
+          },
+          "phosphorus": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 750
+          },
+          "selenium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 80.4
+          },
+          "choline": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 52
+          }
+        }
+      }
+    },
+    {
+      "appId": 10411,
+      "name": "Beef, loin, top loin, separable lean and fat, trimmed to 1/8\" fat, choice, raw",
+      "status": "fail",
+      "issues": [
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "iron",
+          "appValue": 1.6,
+          "provValue": 1.9,
+          "diff": 0.15789473684210517,
+          "message": "100g measure iron: app=1.600 vs prov=1.900"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "magnesium",
+          "appValue": 19,
+          "provValue": 11.3,
+          "diff": 0.7272727272727273,
+          "message": "100g measure magnesium: app=19.000 vs prov=11.300"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "saturatedFat",
+          "appValue": 6.9,
+          "provValue": 2.56,
+          "diff": 1.653846153846154,
+          "message": "100g measure saturatedFat: app=6.900 vs prov=2.560"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "vitaminB12",
+          "appValue": 2.8,
+          "provValue": 1.72,
+          "diff": 0.6470588235294117,
+          "message": "100g measure vitaminB12: app=2.800 vs prov=1.720"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "protein",
+          "appValue": 19.3,
+          "provValue": 22.8,
+          "diff": 0.15350877192982457,
+          "message": "100g measure protein: app=19.300 vs prov=22.800"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "fat",
+          "appValue": 17.1,
+          "provValue": 6.39,
+          "diff": 1.671875,
+          "message": "100g measure fat: app=17.100 vs prov=6.390"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "calcium",
+          "appValue": 6,
+          "provValue": 15,
+          "diff": 0.6,
+          "message": "100g measure calcium: app=6.000 vs prov=15.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "potassium",
+          "appValue": 302,
+          "provValue": 282,
+          "diff": 0.07092198581560284,
+          "message": "100g measure potassium: app=302.000 vs prov=282.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "zinc",
+          "appValue": 3.2,
+          "provValue": 3.76,
+          "diff": 0.15789473684210517,
+          "message": "100g measure zinc: app=3.200 vs prov=3.760"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "vitaminB6",
+          "appValue": 0.4,
+          "provValue": 0.575,
+          "diff": 0.33333333333333326,
+          "message": "100g measure vitaminB6: app=0.400 vs prov=0.575"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "monounsaturatedFat",
+          "appValue": 7.4,
+          "provValue": 2.71,
+          "diff": 1.7407407407407407,
+          "message": "100g measure monounsaturatedFat: app=7.400 vs prov=2.710"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "polyunsaturatedFat",
+          "appValue": 0.6,
+          "provValue": 0.364,
+          "diff": 0.4999999999999999,
+          "message": "100g measure polyunsaturatedFat: app=0.600 vs prov=0.364"
+        }
+      ],
+      "details": {
+        "provenanceCount": 1,
+        "sourceType": "Foundation",
+        "fdcId": 746759,
+        "nutrientComparisons": {
+          "niacin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 6.88
+          },
+          "pantothenicAcid": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.36
+          },
+          "choline": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 56.3
+          },
+          "calories": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 155
+          },
+          "selenium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 21.3
+          },
+          "vitaminE": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.25
+          },
+          "phosphorus": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 206
+          },
+          "sodium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 45
+          },
+          "copper": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.043
+          },
+          "manganese": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.002
+          },
+          "cholesterol": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 58
+          },
+          "thiamin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.053
+          },
+          "riboflavin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.202
           },
           "vitaminD_IU": {
             "match": false,
             "issue": "missing",
             "sourceValue": 0
-          },
-          "niacin": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 3.94
-          },
-          "pantothenicAcid": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.43
-          },
-          "vitaminB6": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 0.29,
-            "sourceValue": 0.3,
-            "originalSourceValue": 0.29,
-            "diff": 0.010000000000000009,
-            "relDiff": 0.03333333333333337
-          },
+          }
+        }
+      }
+    },
+    {
+      "appId": 12155,
+      "name": "Yogurt, plain, whole milk",
+      "status": "fail",
+      "issues": [
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "vitaminD",
+          "appValue": 0.1,
+          "provValue": 0.778,
+          "diff": 0.8717948717948718,
+          "message": "100g measure vitaminD: app=0.100 vs prov=0.778"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "saturatedFat",
+          "appValue": 2.1,
+          "provValue": 2.32,
+          "diff": 0.08695652173913032,
+          "message": "100g measure saturatedFat: app=2.100 vs prov=2.320"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "protein",
+          "appValue": 3.5,
+          "provValue": 3.82,
+          "diff": 0.07894736842105259,
+          "message": "100g measure protein: app=3.500 vs prov=3.820"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "magnesium",
+          "appValue": 12,
+          "provValue": 11.4,
+          "diff": 0.09090909090909091,
+          "message": "100g measure magnesium: app=12.000 vs prov=11.400"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "fat",
+          "appValue": 3.3,
+          "provValue": 4.48,
+          "diff": 0.2666666666666667,
+          "message": "100g measure fat: app=3.300 vs prov=4.480"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "carbohydrates",
+          "appValue": 4.7,
+          "provValue": 5.57,
+          "diff": 0.16071428571428564,
+          "message": "100g measure carbohydrates: app=4.700 vs prov=5.570"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "calcium",
+          "appValue": 121,
+          "provValue": 127,
+          "diff": 0.047244094488188976,
+          "message": "100g measure calcium: app=121.000 vs prov=127.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "potassium",
+          "appValue": 155,
+          "provValue": 164,
+          "diff": 0.054878048780487805,
+          "message": "100g measure potassium: app=155.000 vs prov=164.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "zinc",
+          "appValue": 0.59,
+          "provValue": 0.428,
+          "diff": 0.3720930232558139,
+          "message": "100g measure zinc: app=0.590 vs prov=0.428"
+        }
+      ],
+      "details": {
+        "provenanceCount": 1,
+        "sourceType": "Foundation",
+        "fdcId": 2259793,
+        "nutrientComparisons": {
           "phosphorus": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 71
+            "sourceValue": 101
           },
           "sodium": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 55
+            "sourceValue": 41.8
           },
           "copper": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 0.031
+            "sourceValue": 0.003
           },
           "manganese": {
             "match": false,
@@ -94,234 +696,233 @@
           "thiamin": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 0.075
+            "sourceValue": 0.055
           },
           "riboflavin": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 0.2
-          },
-          "cholesterol": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 90
-          }
-        }
-      }
-    },
-    {
-      "appId": 11797,
-      "name": "Spices, ginger, ground",
-      "status": "fail",
-      "issues": [
-        {
-          "type": "nutrient_mismatch",
-          "nutrient": "polyunsaturatedFat",
-          "provValue": 0.929,
-          "fdcValue": 0.929,
-          "diff": 0.03222222222222225,
-          "message": "polyunsaturatedFat: prov=0.929 vs fdc=0.929 (3.2% diff)"
-        },
-        {
-          "type": "nutrient_mismatch",
-          "nutrient": "monounsaturatedFat",
-          "provValue": 0.479,
-          "fdcValue": 0.479,
-          "diff": 0.04200000000000004,
-          "message": "monounsaturatedFat: prov=0.479 vs fdc=0.479 (4.2% diff)"
-        },
-        {
-          "type": "nutrient_mismatch",
-          "nutrient": "vitaminB6",
-          "provValue": 0.626,
-          "fdcValue": 0.626,
-          "diff": 0.043333333333333376,
-          "message": "vitaminB6: prov=0.626 vs fdc=0.626 (4.3% diff)"
-        },
-        {
-          "type": "nutrient_mismatch",
-          "nutrient": "zinc",
-          "provValue": 3.64,
-          "fdcValue": 3.64,
-          "diff": 0.01111111111111112,
-          "message": "zinc: prov=3.640 vs fdc=3.640 (1.1% diff)"
-        }
-      ],
-      "details": {
-        "provenanceCount": 1,
-        "sourceType": "SR Legacy",
-        "fdcId": 170926,
-        "nutrientComparisons": {
-          "thiamin": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.046
-          },
-          "cholesterol": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0
-          },
-          "vitaminD_IU": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0
-          },
-          "choline": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 41.2
-          },
-          "riboflavin": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.17
-          },
-          "phosphorus": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 168
-          },
-          "sodium": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 27
-          },
-          "copper": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.48
-          },
-          "manganese": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 33.3
-          },
-          "polyunsaturatedFat": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 0.929,
-            "sourceValue": 0.9,
-            "originalSourceValue": 0.929,
-            "diff": 0.029000000000000026,
-            "relDiff": 0.03222222222222225
-          },
-          "monounsaturatedFat": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 0.479,
-            "sourceValue": 0.5,
-            "originalSourceValue": 0.479,
-            "diff": 0.02100000000000002,
-            "relDiff": 0.04200000000000004
-          },
-          "calories": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 335
+            "sourceValue": 0.243
           },
           "niacin": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 9.62
+            "sourceValue": 0.135
           },
-          "pantothenicAcid": {
+          "cholesterol": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 0.477
+            "sourceValue": 14.2
           },
-          "vitaminB6": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 0.626,
-            "sourceValue": 0.6,
-            "originalSourceValue": 0.626,
-            "diff": 0.026000000000000023,
-            "relDiff": 0.043333333333333376
-          },
-          "zinc": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 3.64,
-            "sourceValue": 3.6,
-            "originalSourceValue": 3.64,
-            "diff": 0.040000000000000036,
-            "relDiff": 0.01111111111111112
-          },
-          "selenium": {
+          "vitaminD_IU": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 55.8
-          },
-          "vitaminE": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0
+            "sourceValue": 31.1
           }
         }
       }
     },
     {
-      "appId": 9029,
-      "name": "Blueberries, dried, sweetened",
+      "appId": 11250,
+      "name": "Broccoli, raw",
       "status": "fail",
       "issues": [
         {
-          "type": "nutrient_mismatch",
-          "nutrient": "vitaminB6",
-          "provValue": 0.152,
-          "fdcValue": 0.152,
-          "diff": 0.24000000000000007,
-          "message": "vitaminB6: prov=0.152 vs fdc=0.152 (24.0% diff)"
+          "type": "app_100g_mismatch",
+          "nutrient": "carbohydrates",
+          "appValue": 6.6,
+          "provValue": 6.27,
+          "diff": 0.047619047619047596,
+          "message": "100g measure carbohydrates: app=6.600 vs prov=6.270"
         },
         {
-          "type": "nutrient_mismatch",
-          "nutrient": "monounsaturatedFat",
-          "provValue": 0.405,
-          "fdcValue": 0.405,
-          "diff": 0.012500000000000011,
-          "message": "monounsaturatedFat: prov=0.405 vs fdc=0.405 (1.3% diff)"
+          "type": "app_100g_mismatch",
+          "nutrient": "fat",
+          "appValue": 0.4,
+          "provValue": 0.34,
+          "diff": 0.3333333333333335,
+          "message": "100g measure fat: app=0.400 vs prov=0.340"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "calcium",
+          "appValue": 47,
+          "provValue": 46,
+          "diff": 0.021739130434782608,
+          "message": "100g measure calcium: app=47.000 vs prov=46.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "potassium",
+          "appValue": 316,
+          "provValue": 303,
+          "diff": 0.0429042904290429,
+          "message": "100g measure potassium: app=316.000 vs prov=303.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "zinc",
+          "appValue": 0.41,
+          "provValue": 0.42,
+          "diff": 0.023809523809523832,
+          "message": "100g measure zinc: app=0.410 vs prov=0.420"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "protein",
+          "appValue": 2.8,
+          "provValue": 2.57,
+          "diff": 0.07692307692307682,
+          "message": "100g measure protein: app=2.800 vs prov=2.570"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "fiber",
+          "appValue": 2.6,
+          "provValue": 2.4,
+          "diff": 0.08333333333333341,
+          "message": "100g measure fiber: app=2.600 vs prov=2.400"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "iron",
+          "appValue": 0.73,
+          "provValue": 0.69,
+          "diff": 0.05797101449275368,
+          "message": "100g measure iron: app=0.730 vs prov=0.690"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "vitaminC",
+          "appValue": 89.2,
+          "provValue": 91.3,
+          "diff": 0.023001095290251856,
+          "message": "100g measure vitaminC: app=89.200 vs prov=91.300"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "vitaminA",
+          "appValue": 31,
+          "provValue": 8,
+          "diff": 2.875,
+          "message": "100g measure vitaminA: app=31.000 vs prov=8.000"
         }
       ],
       "details": {
         "provenanceCount": 1,
-        "sourceType": "SR Legacy",
-        "fdcId": 168158,
+        "sourceType": "Foundation",
+        "fdcId": 747447,
         "nutrientComparisons": {
+          "calories": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 31
+          },
+          "selenium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 1.6
+          },
+          "vitaminE": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.15
+          },
+          "niacin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.639
+          },
+          "pantothenicAcid": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.61
+          },
           "phosphorus": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 36
+            "sourceValue": 67
           },
           "sodium": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 3
+            "sourceValue": 36
           },
           "copper": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 0.16
+            "sourceValue": 0.059
+          },
+          "manganese": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.197
           },
           "thiamin": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 0.092
+            "sourceValue": 0.077
           },
           "riboflavin": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 0.127
-          },
-          "cholesterol": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0
-          },
+            "sourceValue": 0.114
+          }
+        }
+      }
+    },
+    {
+      "appId": 15536,
+      "name": "Figs, dried, uncooked",
+      "status": "fail",
+      "issues": [
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "zinc",
+          "appValue": 0.55,
+          "provValue": 0.66,
+          "diff": 0.16666666666666663,
+          "message": "100g measure zinc: app=0.550 vs prov=0.660"
+        }
+      ],
+      "details": {
+        "provenanceCount": 1,
+        "sourceType": "Foundation",
+        "fdcId": 746768,
+        "nutrientComparisons": {
           "calories": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 317
+            "sourceValue": 249
+          },
+          "thiamin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.085
+          },
+          "riboflavin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.082
+          },
+          "phosphorus": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 67
+          },
+          "sodium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 10
+          },
+          "copper": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.287
+          },
+          "manganese": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.51
           },
           "selenium": {
             "match": false,
@@ -331,961 +932,955 @@
           "vitaminE": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 2.35
-          },
-          "vitaminD_IU": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0
+            "sourceValue": 0.36
           },
           "niacin": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 1.15
+            "sourceValue": 0.619
           },
-          "vitaminB6": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 0.152,
-            "sourceValue": 0.2,
-            "originalSourceValue": 0.152,
-            "diff": 0.048000000000000015,
-            "relDiff": 0.24000000000000007
-          },
-          "choline": {
+          "pantothenicAcid": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 18.5
-          },
-          "monounsaturatedFat": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 0.405,
-            "sourceValue": 0.4,
-            "originalSourceValue": 0.405,
-            "diff": 0.0050000000000000044,
-            "relDiff": 0.012500000000000011
+            "sourceValue": 0.434
           }
         }
       }
     },
     {
-      "appId": 12199,
-      "name": "Spices, oregano, dried",
+      "appId": 12122,
+      "name": "Cheese, swiss",
       "status": "fail",
       "issues": [
         {
-          "type": "nutrient_mismatch",
+          "type": "app_100g_mismatch",
           "nutrient": "monounsaturatedFat",
-          "provValue": 0.716,
-          "fdcValue": 0.716,
-          "diff": 0.022857142857142878,
-          "message": "monounsaturatedFat: prov=0.716 vs fdc=0.716 (2.3% diff)"
+          "appValue": 8.1,
+          "provValue": 7.26,
+          "diff": 0.10958904109589039,
+          "message": "100g measure monounsaturatedFat: app=8.100 vs prov=7.260"
         },
         {
-          "type": "nutrient_mismatch",
+          "type": "app_100g_mismatch",
           "nutrient": "polyunsaturatedFat",
-          "provValue": 1.37,
-          "fdcValue": 1.37,
-          "diff": 0.02142857142857129,
-          "message": "polyunsaturatedFat: prov=1.370 vs fdc=1.370 (2.1% diff)"
+          "appValue": 1.3,
+          "provValue": 1.14,
+          "diff": 0.18181818181818177,
+          "message": "100g measure polyunsaturatedFat: app=1.300 vs prov=1.140"
         },
         {
-          "type": "nutrient_mismatch",
-          "nutrient": "vitaminB6",
-          "provValue": 1.04,
-          "fdcValue": 1.04,
-          "diff": 0.040000000000000036,
-          "message": "vitaminB6: prov=1.040 vs fdc=1.040 (4.0% diff)"
+          "type": "app_100g_mismatch",
+          "nutrient": "potassium",
+          "appValue": 72,
+          "provValue": 71,
+          "diff": 0.014084507042253521,
+          "message": "100g measure potassium: app=72.000 vs prov=71.000"
         },
         {
-          "type": "nutrient_mismatch",
-          "nutrient": "saturatedFat",
-          "provValue": 1.55,
-          "fdcValue": 1.55,
-          "diff": 0.03125000000000003,
-          "message": "saturatedFat: prov=1.550 vs fdc=1.550 (3.1% diff)"
-        }
-      ],
-      "details": {
-        "provenanceCount": 1,
-        "sourceType": "SR Legacy",
-        "fdcId": 171328,
-        "nutrientComparisons": {
-          "cholesterol": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0
-          },
-          "vitaminD_IU": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0
-          },
-          "choline": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 32.3
-          },
-          "monounsaturatedFat": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 0.716,
-            "sourceValue": 0.7,
-            "originalSourceValue": 0.716,
-            "diff": 0.016000000000000014,
-            "relDiff": 0.022857142857142878
-          },
-          "polyunsaturatedFat": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 1.37,
-            "sourceValue": 1.4,
-            "originalSourceValue": 1.37,
-            "diff": 0.029999999999999805,
-            "relDiff": 0.02142857142857129
-          },
-          "niacin": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 4.64
-          },
-          "pantothenicAcid": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.921
-          },
-          "vitaminB6": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 1.04,
-            "sourceValue": 1,
-            "originalSourceValue": 1.04,
-            "diff": 0.040000000000000036,
-            "relDiff": 0.040000000000000036
-          },
-          "calories": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 265
-          },
-          "selenium": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 4.5
-          },
-          "vitaminE": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 18.3
-          },
-          "phosphorus": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 148
-          },
-          "sodium": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 25
-          },
-          "copper": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.633
-          },
-          "manganese": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 4.99
-          },
-          "thiamin": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.177
-          },
-          "riboflavin": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.528
-          },
-          "saturatedFat": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 1.55,
-            "sourceValue": 1.6,
-            "originalSourceValue": 1.55,
-            "diff": 0.050000000000000044,
-            "relDiff": 0.03125000000000003
-          }
-        }
-      }
-    },
-    {
-      "appId": 10535,
-      "name": "Toppings, marshmallow cream",
-      "status": "fail",
-      "issues": [
-        {
-          "type": "nutrient_mismatch",
-          "nutrient": "saturatedFat",
-          "provValue": 0.056,
-          "fdcValue": 0.056,
-          "diff": 0.44,
-          "message": "saturatedFat: prov=0.056 vs fdc=0.056 (44.0% diff)"
+          "type": "app_100g_mismatch",
+          "nutrient": "vitaminA",
+          "appValue": 288,
+          "provValue": 292,
+          "diff": 0.0136986301369863,
+          "message": "100g measure vitaminA: app=288.000 vs prov=292.000"
         },
         {
-          "type": "nutrient_mismatch",
-          "nutrient": "monounsaturatedFat",
-          "provValue": 0.08,
-          "fdcValue": 0.08,
-          "diff": 0.20000000000000004,
-          "message": "monounsaturatedFat: prov=0.080 vs fdc=0.080 (20.0% diff)"
-        }
-      ],
-      "details": {
-        "provenanceCount": 1,
-        "sourceType": "SR Legacy",
-        "fdcId": 169664,
-        "nutrientComparisons": {
-          "vitaminE": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0
-          },
-          "saturatedFat": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 0.056,
-            "sourceValue": 0.1,
-            "originalSourceValue": 0.056,
-            "diff": 0.044000000000000004,
-            "relDiff": 0.44
-          },
-          "sodium": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 80
-          },
-          "vitaminD_IU": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0
-          },
-          "cholesterol": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0
-          },
-          "thiamin": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.001
-          },
-          "riboflavin": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.001
-          },
-          "copper": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.095
-          },
-          "manganese": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.008
-          },
-          "phosphorus": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 8
-          },
-          "niacin": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.076
-          },
-          "pantothenicAcid": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.005
-          },
-          "monounsaturatedFat": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 0.08,
-            "sourceValue": 0.1,
-            "originalSourceValue": 0.08,
-            "diff": 0.020000000000000004,
-            "relDiff": 0.20000000000000004
-          },
-          "polyunsaturatedFat": {
-            "match": false,
-            "issue": "unexpected_value",
-            "appValue": 0.047,
-            "sourceValue": 0,
-            "originalSourceValue": 0.047,
-            "diff": 0.047
-          },
-          "selenium": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 1.9
-          },
-          "calories": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 322
-          },
-          "choline": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.1
-          }
-        }
-      }
-    },
-    {
-      "appId": 9293,
-      "name": "Mushrooms, Chanterelle, raw",
-      "status": "fail",
-      "issues": [
-        {
-          "type": "nutrient_mismatch",
-          "nutrient": "sugars",
-          "provValue": 1.16,
-          "fdcValue": 1.16,
-          "diff": 0.03333333333333337,
-          "message": "sugars: prov=1.160 vs fdc=1.160 (3.3% diff)"
-        },
-        {
-          "type": "nutrient_mismatch",
-          "nutrient": "fat",
-          "provValue": 0.53,
-          "fdcValue": 0.53,
-          "diff": 0.06000000000000005,
-          "message": "fat: prov=0.530 vs fdc=0.530 (6.0% diff)"
-        }
-      ],
-      "details": {
-        "provenanceCount": 1,
-        "sourceType": "SR Legacy",
-        "fdcId": 168422,
-        "nutrientComparisons": {
-          "calories": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 32
-          },
-          "sugars": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 1.16,
-            "sourceValue": 1.2,
-            "originalSourceValue": 1.16,
-            "diff": 0.040000000000000036,
-            "relDiff": 0.03333333333333337
-          },
-          "thiamin": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.015
-          },
-          "riboflavin": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.215
-          },
-          "phosphorus": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 57
-          },
-          "sodium": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 9
-          },
-          "copper": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.353
-          },
-          "manganese": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.286
-          },
-          "fat": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 0.53,
-            "sourceValue": 0.5,
-            "originalSourceValue": 0.53,
-            "diff": 0.030000000000000027,
-            "relDiff": 0.06000000000000005
-          },
-          "selenium": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 2.2
-          },
-          "niacin": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 4.08
-          },
-          "pantothenicAcid": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 1.08
-          },
-          "vitaminB6": {
-            "match": false,
-            "issue": "unexpected_value",
-            "appValue": 0.044,
-            "sourceValue": 0,
-            "originalSourceValue": 0.044,
-            "diff": 0.044
-          },
-          "vitaminD_IU": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 212
-          }
-        }
-      }
-    },
-    {
-      "appId": 16389,
-      "name": "Flour, buckwheat",
-      "status": "fail",
-      "issues": [
-        {
-          "type": "nutrient_mismatch",
-          "nutrient": "iron",
-          "provValue": 3.84,
-          "fdcValue": 3.84,
-          "diff": 0.010526315789473694,
-          "message": "iron: prov=3.840 vs fdc=3.840 (1.1% diff)"
-        },
-        {
-          "type": "nutrient_mismatch",
-          "nutrient": "zinc",
-          "provValue": 1.76,
-          "fdcValue": 1.76,
-          "diff": 0.02222222222222224,
-          "message": "zinc: prov=1.760 vs fdc=1.760 (2.2% diff)"
-        },
-        {
-          "type": "nutrient_mismatch",
-          "nutrient": "vitaminB6",
-          "provValue": 0.17,
-          "fdcValue": 0.17,
-          "diff": 0.15,
-          "message": "vitaminB6: prov=0.170 vs fdc=0.170 (15.0% diff)"
-        },
-        {
-          "type": "nutrient_mismatch",
-          "nutrient": "calcium",
-          "provValue": 30.6,
-          "fdcValue": 30.6,
-          "diff": 0.012903225806451568,
-          "message": "calcium: prov=30.600 vs fdc=30.600 (1.3% diff)"
+          "type": "app_100g_mismatch",
+          "nutrient": "vitaminB12",
+          "appValue": 3.1,
+          "provValue": 3.02,
+          "diff": 0.03333333333333336,
+          "message": "100g measure vitaminB12: app=3.100 vs prov=3.020"
         }
       ],
       "details": {
         "provenanceCount": 1,
         "sourceType": "Foundation",
-        "fdcId": 2512374,
+        "fdcId": 746767,
         "nutrientComparisons": {
-          "iron": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 3.84,
-            "sourceValue": 3.8,
-            "originalSourceValue": 3.84,
-            "diff": 0.040000000000000036,
-            "relDiff": 0.010526315789473694
-          },
-          "phosphorus": {
+          "choline": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 282
-          },
-          "sodium": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0
-          },
-          "zinc": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 1.76,
-            "sourceValue": 1.8,
-            "originalSourceValue": 1.76,
-            "diff": 0.040000000000000036,
-            "relDiff": 0.02222222222222224
-          },
-          "copper": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.53
-          },
-          "manganese": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 1.54
-          },
-          "thiamin": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.241
-          },
-          "riboflavin": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.16
-          },
-          "niacin": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 3.84
-          },
-          "vitaminB6": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 0.17,
-            "sourceValue": 0.2,
-            "originalSourceValue": 0.17,
-            "diff": 0.03,
-            "relDiff": 0.15
-          },
-          "calcium": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 30.6,
-            "sourceValue": 31,
-            "originalSourceValue": 30.6,
-            "diff": 0.3999999999999986,
-            "relDiff": 0.012903225806451568
-          },
-          "selenium": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 15.7
-          }
-        }
-      }
-    },
-    {
-      "appId": 9812,
-      "name": "Wheat flour, white (industrial), 11.5% protein, unbleached, enriched",
-      "status": "fail",
-      "issues": [
-        {
-          "type": "nutrient_mismatch",
-          "nutrient": "saturatedFat",
-          "provValue": 0.268,
-          "fdcValue": 0.268,
-          "diff": 0.10666666666666658,
-          "message": "saturatedFat: prov=0.268 vs fdc=0.268 (10.7% diff)"
-        },
-        {
-          "type": "nutrient_mismatch",
-          "nutrient": "monounsaturatedFat",
-          "provValue": 0.166,
-          "fdcValue": 0.166,
-          "diff": 0.17,
-          "message": "monounsaturatedFat: prov=0.166 vs fdc=0.166 (17.0% diff)"
-        },
-        {
-          "type": "nutrient_mismatch",
-          "nutrient": "polyunsaturatedFat",
-          "provValue": 0.749,
-          "fdcValue": 0.749,
-          "diff": 0.07000000000000006,
-          "message": "polyunsaturatedFat: prov=0.749 vs fdc=0.749 (7.0% diff)"
-        },
-        {
-          "type": "nutrient_mismatch",
-          "nutrient": "fat",
-          "provValue": 1.45,
-          "fdcValue": 1.45,
-          "diff": 0.03333333333333336,
-          "message": "fat: prov=1.450 vs fdc=1.450 (3.3% diff)"
-        },
-        {
-          "type": "nutrient_mismatch",
-          "nutrient": "sugars",
-          "provValue": 1.12,
-          "fdcValue": 1.12,
-          "diff": 0.018181818181818195,
-          "message": "sugars: prov=1.120 vs fdc=1.120 (1.8% diff)"
-        }
-      ],
-      "details": {
-        "provenanceCount": 1,
-        "sourceType": "SR Legacy",
-        "fdcId": 168941,
-        "nutrientComparisons": {
-          "vitaminD_IU": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0
-          },
-          "sodium": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 2
-          },
-          "saturatedFat": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 0.268,
-            "sourceValue": 0.3,
-            "originalSourceValue": 0.268,
-            "diff": 0.03199999999999997,
-            "relDiff": 0.10666666666666658
+            "sourceValue": 13.8
           },
           "calories": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 363
-          },
-          "monounsaturatedFat": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 0.166,
-            "sourceValue": 0.2,
-            "originalSourceValue": 0.166,
-            "diff": 0.034,
-            "relDiff": 0.17
-          },
-          "polyunsaturatedFat": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 0.749,
-            "sourceValue": 0.7,
-            "originalSourceValue": 0.749,
-            "diff": 0.049000000000000044,
-            "relDiff": 0.07000000000000006
-          },
-          "phosphorus": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 112
-          },
-          "thiamin": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.736
-          },
-          "riboflavin": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.445
-          },
-          "copper": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.161
-          },
-          "manganese": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.679
-          },
-          "fat": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 1.45,
-            "sourceValue": 1.5,
-            "originalSourceValue": 1.45,
-            "diff": 0.050000000000000044,
-            "relDiff": 0.03333333333333336
-          },
-          "sugars": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 1.12,
-            "sourceValue": 1.1,
-            "originalSourceValue": 1.12,
-            "diff": 0.020000000000000018,
-            "relDiff": 0.018181818181818195
+            "sourceValue": 393
           },
           "selenium": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 27.5
+            "sourceValue": 30.1
           },
           "vitaminE": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 0.38
-          },
-          "niacin": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 5.95
-          },
-          "pantothenicAcid": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.405
-          },
-          "vitaminB6": {
-            "match": false,
-            "issue": "unexpected_value",
-            "appValue": 0.032,
-            "sourceValue": 0,
-            "originalSourceValue": 0.032,
-            "diff": 0.032
-          },
-          "choline": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 10.4
-          }
-        }
-      }
-    },
-    {
-      "appId": 11778,
-      "name": "Yogurt, Greek, vanilla, lowfat",
-      "status": "fail",
-      "issues": [
-        {
-          "type": "nutrient_mismatch",
-          "nutrient": "vitaminB6",
-          "provValue": 0.05,
-          "fdcValue": 0.05,
-          "diff": 0.5,
-          "message": "vitaminB6: prov=0.050 vs fdc=0.050 (50.0% diff)"
-        },
-        {
-          "type": "nutrient_mismatch",
-          "nutrient": "saturatedFat",
-          "provValue": 1.46,
-          "fdcValue": 1.46,
-          "diff": 0.02666666666666669,
-          "message": "saturatedFat: prov=1.460 vs fdc=1.460 (2.7% diff)"
-        },
-        {
-          "type": "nutrient_mismatch",
-          "nutrient": "monounsaturatedFat",
-          "provValue": 0.846,
-          "fdcValue": 0.846,
-          "diff": 0.05749999999999991,
-          "message": "monounsaturatedFat: prov=0.846 vs fdc=0.846 (5.7% diff)"
-        },
-        {
-          "type": "nutrient_mismatch",
-          "nutrient": "polyunsaturatedFat",
-          "provValue": 0.203,
-          "fdcValue": 0.203,
-          "diff": 0.015000000000000013,
-          "message": "polyunsaturatedFat: prov=0.203 vs fdc=0.203 (1.5% diff)"
-        }
-      ],
-      "details": {
-        "provenanceCount": 1,
-        "sourceType": "SR Legacy",
-        "fdcId": 170907,
-        "nutrientComparisons": {
-          "selenium": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 9.7
-          },
-          "vitaminE": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.02
+            "sourceValue": 0.6
           },
           "vitaminD_IU": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 35
+            "sourceValue": 0
           },
           "niacin": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 0.201
+            "sourceValue": 0.06
           },
           "pantothenicAcid": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 0.386
-          },
-          "vitaminB6": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 0.05,
-            "sourceValue": 0.1,
-            "originalSourceValue": 0.05,
-            "diff": 0.05,
-            "relDiff": 0.5
-          },
-          "choline": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 33.4
+            "sourceValue": 0.352
           },
           "phosphorus": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 119
+            "sourceValue": 574
           },
           "sodium": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 40
+            "sourceValue": 185
           },
           "copper": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 0.018
+            "sourceValue": 0.047
           },
           "manganese": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 0.008
+            "sourceValue": 0.027
           },
           "thiamin": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 0.038
+            "sourceValue": 0.011
           },
           "riboflavin": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 0.24
+            "sourceValue": 0.303
           },
           "cholesterol": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 5
-          },
-          "saturatedFat": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 1.46,
-            "sourceValue": 1.5,
-            "originalSourceValue": 1.46,
-            "diff": 0.040000000000000036,
-            "relDiff": 0.02666666666666669
-          },
-          "monounsaturatedFat": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 0.846,
-            "sourceValue": 0.8,
-            "originalSourceValue": 0.846,
-            "diff": 0.04599999999999993,
-            "relDiff": 0.05749999999999991
-          },
-          "polyunsaturatedFat": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 0.203,
-            "sourceValue": 0.2,
-            "originalSourceValue": 0.203,
-            "diff": 0.0030000000000000027,
-            "relDiff": 0.015000000000000013
-          },
-          "calories": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 95
+            "sourceValue": 93
           }
         }
       }
     },
     {
-      "appId": 13071,
-      "name": "Cheese sauce, prepared from recipe",
+      "appId": 16164,
+      "name": "Bison, ground, grass-fed, raw",
       "status": "fail",
       "issues": [
         {
-          "type": "nutrient_mismatch",
-          "nutrient": "sugars",
-          "provValue": 0.19,
-          "fdcValue": 0.19,
-          "diff": 0.050000000000000044,
-          "message": "sugars: prov=0.190 vs fdc=0.190 (5.0% diff)"
+          "type": "app_100g_mismatch",
+          "nutrient": "carbohydrates",
+          "appValue": 0.1,
+          "provValue": -0.15,
+          "diff": 2,
+          "message": "100g measure carbohydrates: app=0.100 vs prov=-0.150"
         },
         {
-          "type": "nutrient_mismatch",
+          "type": "app_100g_mismatch",
+          "nutrient": "calcium",
+          "appValue": 11,
+          "provValue": 6.83,
+          "diff": 0.6176470588235294,
+          "message": "100g measure calcium: app=11.000 vs prov=6.830"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "potassium",
+          "appValue": 328,
+          "provValue": 301,
+          "diff": 0.08970099667774087,
+          "message": "100g measure potassium: app=328.000 vs prov=301.000"
+        },
+        {
+          "type": "app_100g_mismatch",
           "nutrient": "zinc",
-          "provValue": 1.26,
-          "fdcValue": 1.26,
-          "diff": 0.030769230769230795,
-          "message": "zinc: prov=1.260 vs fdc=1.260 (3.1% diff)"
+          "appValue": 4.6,
+          "provValue": 3.76,
+          "diff": 0.21052631578947364,
+          "message": "100g measure zinc: app=4.600 vs prov=3.760"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "fat",
+          "appValue": 7.2,
+          "provValue": 8.88,
+          "diff": 0.1910112359550562,
+          "message": "100g measure fat: app=7.200 vs prov=8.880"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "protein",
+          "appValue": 20.2,
+          "provValue": 19.9,
+          "diff": 0.015075376884422148,
+          "message": "100g measure protein: app=20.200 vs prov=19.900"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "iron",
+          "appValue": 2.8,
+          "provValue": 2.17,
+          "diff": 0.27272727272727254,
+          "message": "100g measure iron: app=2.800 vs prov=2.170"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "magnesium",
+          "appValue": 21,
+          "provValue": 18.5,
+          "diff": 0.10526315789473684,
+          "message": "100g measure magnesium: app=21.000 vs prov=18.500"
         }
       ],
       "details": {
         "provenanceCount": 1,
-        "sourceType": "SR Legacy",
-        "fdcId": 172200,
+        "sourceType": "Foundation",
+        "fdcId": 2727571,
         "nutrientComparisons": {
-          "choline": {
+          "phosphorus": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 5.1
+            "sourceValue": 166
           },
-          "sugars": {
-            "match": false,
-            "issue": "value_mismatch",
-            "appValue": 0.19,
-            "sourceValue": 0.2,
-            "originalSourceValue": 0.19,
-            "diff": 0.010000000000000009,
-            "relDiff": 0.050000000000000044
-          },
-          "vitaminE": {
+          "cholesterol": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 0.09
+            "sourceValue": 64.5
           },
-          "vitaminD_IU": {
+          "sodium": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 41
+            "sourceValue": 55.7
           },
-          "calories": {
+          "copper": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.078
+          },
+          "manganese": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.002
+          }
+        }
+      }
+    },
+    {
+      "appId": 9317,
+      "name": "Potato flour",
+      "status": "fail",
+      "issues": [
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "carbohydrates",
+          "appValue": 83.1,
+          "provValue": 79.9,
+          "diff": 0.040050062578222634,
+          "message": "100g measure carbohydrates: app=83.100 vs prov=79.900"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "fiber",
+          "appValue": 5.9,
+          "provValue": 5.4,
+          "diff": 0.09259259259259259,
+          "message": "100g measure fiber: app=5.900 vs prov=5.400"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "iron",
+          "appValue": 1.4,
+          "provValue": 12,
+          "diff": 0.8833333333333333,
+          "message": "100g measure iron: app=1.400 vs prov=12.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "magnesium",
+          "appValue": 65,
+          "provValue": 73.6,
+          "diff": 0.12162162162162163,
+          "message": "100g measure magnesium: app=65.000 vs prov=73.600"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "protein",
+          "appValue": 6.9,
+          "provValue": 8.11,
+          "diff": 0.14814814814814806,
+          "message": "100g measure protein: app=6.900 vs prov=8.110"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "calcium",
+          "appValue": 65,
+          "provValue": 44.1,
+          "diff": 0.4772727272727273,
+          "message": "100g measure calcium: app=65.000 vs prov=44.100"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "potassium",
+          "appValue": 1000,
+          "provValue": 1270,
+          "diff": 0.2125984251968504,
+          "message": "100g measure potassium: app=1000.000 vs prov=1270.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "zinc",
+          "appValue": 0.54,
+          "provValue": 0.9,
+          "diff": 0.39999999999999997,
+          "message": "100g measure zinc: app=0.540 vs prov=0.900"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "fat",
+          "appValue": 0.3,
+          "provValue": 0.951,
+          "diff": 0.7,
+          "message": "100g measure fat: app=0.300 vs prov=0.951"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "vitaminB6",
+          "appValue": 0.8,
+          "provValue": 0.582,
+          "diff": 0.3333333333333335,
+          "message": "100g measure vitaminB6: app=0.800 vs prov=0.582"
+        }
+      ],
+      "details": {
+        "provenanceCount": 1,
+        "sourceType": "Foundation",
+        "fdcId": 2261422,
+        "nutrientComparisons": {
+          "phosphorus": {
             "match": false,
             "issue": "missing",
             "sourceValue": 197
           },
+          "sodium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 47.7
+          },
+          "copper": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.231
+          },
+          "manganese": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.676
+          },
+          "thiamin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.198
+          },
+          "riboflavin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.115
+          },
           "niacin": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 0.204
+            "sourceValue": 5.63
+          },
+          "selenium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 1.42
+          }
+        }
+      }
+    },
+    {
+      "appId": 11049,
+      "name": "Nuts, macadamia nuts, raw",
+      "status": "fail",
+      "issues": [
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "carbohydrates",
+          "appValue": 13.8,
+          "provValue": 24.1,
+          "diff": 0.42738589211618255,
+          "message": "100g measure carbohydrates: app=13.800 vs prov=24.100"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "protein",
+          "appValue": 7.9,
+          "provValue": 7.79,
+          "diff": 0.01282051282051289,
+          "message": "100g measure protein: app=7.900 vs prov=7.790"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "fiber",
+          "appValue": 8.6,
+          "provValue": 7.56,
+          "diff": 0.13157894736842105,
+          "message": "100g measure fiber: app=8.600 vs prov=7.560"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "iron",
+          "appValue": 3.7,
+          "provValue": 1.88,
+          "diff": 0.9473684210526317,
+          "message": "100g measure iron: app=3.700 vs prov=1.880"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "magnesium",
+          "appValue": 130,
+          "provValue": 107,
+          "diff": 0.21495327102803738,
+          "message": "100g measure magnesium: app=130.000 vs prov=107.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "calcium",
+          "appValue": 85,
+          "provValue": 52.7,
+          "diff": 0.6037735849056604,
+          "message": "100g measure calcium: app=85.000 vs prov=52.700"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "potassium",
+          "appValue": 368,
+          "provValue": 373,
+          "diff": 0.013404825737265416,
+          "message": "100g measure potassium: app=368.000 vs prov=373.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "zinc",
+          "appValue": 1.3,
+          "provValue": 1.2,
+          "diff": 0.08333333333333341,
+          "message": "100g measure zinc: app=1.300 vs prov=1.200"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "fat",
+          "appValue": 75.8,
+          "provValue": 64.9,
+          "diff": 0.16795069337442203,
+          "message": "100g measure fat: app=75.800 vs prov=64.900"
+        }
+      ],
+      "details": {
+        "provenanceCount": 1,
+        "sourceType": "Foundation",
+        "fdcId": 2515378,
+        "nutrientComparisons": {
+          "phosphorus": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 208
+          },
+          "sodium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0
+          },
+          "copper": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.446
+          },
+          "manganese": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 11.3
+          },
+          "selenium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 32.6
+          }
+        }
+      }
+    },
+    {
+      "appId": 14292,
+      "name": "Egg, yolk, raw, frozen, pasteurized",
+      "status": "fail",
+      "issues": [
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "potassium",
+          "appValue": 121,
+          "provValue": 102,
+          "diff": 0.18627450980392157,
+          "message": "100g measure potassium: app=121.000 vs prov=102.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "zinc",
+          "appValue": 3.2,
+          "provValue": 2.93,
+          "diff": 0.10344827586206906,
+          "message": "100g measure zinc: app=3.200 vs prov=2.930"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "fat",
+          "appValue": 25.6,
+          "provValue": 25.1,
+          "diff": 0.0199203187250996,
+          "message": "100g measure fat: app=25.600 vs prov=25.100"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "carbohydrates",
+          "appValue": 0.8,
+          "provValue": 0.59,
+          "diff": 0.3333333333333335,
+          "message": "100g measure carbohydrates: app=0.800 vs prov=0.590"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "calcium",
+          "appValue": 134,
+          "provValue": 119,
+          "diff": 0.12605042016806722,
+          "message": "100g measure calcium: app=134.000 vs prov=119.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "iron",
+          "appValue": 4.6,
+          "provValue": 4.13,
+          "diff": 0.12195121951219513,
+          "message": "100g measure iron: app=4.600 vs prov=4.130"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "vitaminD",
+          "appValue": 6,
+          "provValue": 5.8,
+          "diff": 0.03448275862068969,
+          "message": "100g measure vitaminD: app=6.000 vs prov=5.800"
+        }
+      ],
+      "details": {
+        "provenanceCount": 1,
+        "sourceType": "Foundation",
+        "fdcId": 329596,
+        "nutrientComparisons": {
+          "manganese": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.068
+          },
+          "phosphorus": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 443
+          },
+          "sodium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 66
+          },
+          "vitaminD_IU": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 231
+          },
+          "calories": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 296
+          },
+          "copper": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0
+          },
+          "cholesterol": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 1000
+          }
+        }
+      }
+    },
+    {
+      "appId": 14901,
+      "name": "Beef, ground, 90% lean meat / 10% fat, raw",
+      "status": "fail",
+      "issues": [
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "fat",
+          "appValue": 10,
+          "provValue": 12.8,
+          "diff": 0.21875000000000006,
+          "message": "100g measure fat: app=10.000 vs prov=12.800"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "potassium",
+          "appValue": 321,
+          "provValue": 281,
+          "diff": 0.1423487544483986,
+          "message": "100g measure potassium: app=321.000 vs prov=281.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "zinc",
+          "appValue": 4.8,
+          "provValue": 4.19,
+          "diff": 0.14285714285714277,
+          "message": "100g measure zinc: app=4.800 vs prov=4.190"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "protein",
+          "appValue": 20,
+          "provValue": 18.2,
+          "diff": 0.09890109890109894,
+          "message": "100g measure protein: app=20.000 vs prov=18.200"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "iron",
+          "appValue": 2.2,
+          "provValue": 2.13,
+          "diff": 0.04761904761904766,
+          "message": "100g measure iron: app=2.200 vs prov=2.130"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "magnesium",
+          "appValue": 20,
+          "provValue": 16.5,
+          "diff": 0.17647058823529413,
+          "message": "100g measure magnesium: app=20.000 vs prov=16.500"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "calcium",
+          "appValue": 12,
+          "provValue": 7.14,
+          "diff": 0.6901408450704226,
+          "message": "100g measure calcium: app=12.000 vs prov=7.140"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "saturatedFat",
+          "appValue": 3.9,
+          "provValue": 5.05,
+          "diff": 0.2352941176470588,
+          "message": "100g measure saturatedFat: app=3.900 vs prov=5.050"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "monounsaturatedFat",
+          "appValue": 4.2,
+          "provValue": 4.48,
+          "diff": 0.06666666666666662,
+          "message": "100g measure monounsaturatedFat: app=4.200 vs prov=4.480"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "polyunsaturatedFat",
+          "appValue": 0.3,
+          "provValue": 0.361,
+          "diff": 0.25000000000000006,
+          "message": "100g measure polyunsaturatedFat: app=0.300 vs prov=0.361"
+        }
+      ],
+      "details": {
+        "provenanceCount": 1,
+        "sourceType": "Foundation",
+        "fdcId": 2514743,
+        "nutrientComparisons": {
+          "phosphorus": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 148
+          },
+          "cholesterol": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 65.9
+          },
+          "sodium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 61.6
+          },
+          "copper": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.056
+          },
+          "manganese": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0
+          }
+        }
+      }
+    },
+    {
+      "appId": 14733,
+      "name": "Frankfurter, beef, unheated",
+      "status": "fail",
+      "issues": [
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "carbohydrates",
+          "appValue": 3,
+          "provValue": 2.89,
+          "diff": 0.03448275862068969,
+          "message": "100g measure carbohydrates: app=3.000 vs prov=2.890"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "calcium",
+          "appValue": 14,
+          "provValue": 15,
+          "diff": 0.06666666666666667,
+          "message": "100g measure calcium: app=14.000 vs prov=15.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "potassium",
+          "appValue": 364,
+          "provValue": 343,
+          "diff": 0.061224489795918366,
+          "message": "100g measure potassium: app=364.000 vs prov=343.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "zinc",
+          "appValue": 2,
+          "provValue": 2.06,
+          "diff": 0.04761904761904766,
+          "message": "100g measure zinc: app=2.000 vs prov=2.060"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "monounsaturatedFat",
+          "appValue": 13.6,
+          "provValue": 12.1,
+          "diff": 0.12396694214876033,
+          "message": "100g measure monounsaturatedFat: app=13.600 vs prov=12.100"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "polyunsaturatedFat",
+          "appValue": 1.1,
+          "provValue": 0.954,
+          "diff": 0.10000000000000009,
+          "message": "100g measure polyunsaturatedFat: app=1.100 vs prov=0.954"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "vitaminB12",
+          "appValue": 0.96,
+          "provValue": 0.97,
+          "diff": 0.010309278350515474,
+          "message": "100g measure vitaminB12: app=0.960 vs prov=0.970"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "omega3EPA",
+          "appValue": 0.004,
+          "provValue": 0.003,
+          "diff": 0.3333333333333333,
+          "message": "100g measure omega3EPA: app=0.004 vs prov=0.003"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "omega3ALA",
+          "appValue": 0.075,
+          "provValue": 0.078,
+          "diff": 0.0384615384615385,
+          "message": "100g measure omega3ALA: app=0.075 vs prov=0.078"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "magnesium",
+          "appValue": 11,
+          "provValue": 11.5,
+          "diff": 0.08333333333333333,
+          "message": "100g measure magnesium: app=11.000 vs prov=11.500"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "omega3",
+          "appValue": 0.08,
+          "provValue": 0.081,
+          "diff": 0.012345679012345689,
+          "message": "100g measure omega3: app=0.080 vs prov=0.081"
+        }
+      ],
+      "details": {
+        "provenanceCount": 1,
+        "sourceType": "Foundation",
+        "fdcId": 323121,
+        "nutrientComparisons": {
+          "calories": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 314
+          },
+          "vitaminE": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.51
+          },
+          "niacin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 2.25
           },
           "pantothenicAcid": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 0.233
+            "sourceValue": 0.263
           },
-          "vitaminB6": {
+          "thiamin": {
             "match": false,
-            "issue": "unexpected_value",
-            "appValue": 0.045,
-            "sourceValue": 0,
-            "originalSourceValue": 0.045,
-            "diff": 0.045
+            "issue": "missing",
+            "sourceValue": 0.033
           },
-          "zinc": {
+          "riboflavin": {
             "match": false,
-            "issue": "value_mismatch",
-            "appValue": 1.26,
-            "sourceValue": 1.3,
-            "originalSourceValue": 1.26,
-            "diff": 0.040000000000000036,
-            "relDiff": 0.030769230769230795
+            "issue": "missing",
+            "sourceValue": 0.154
+          },
+          "phosphorus": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 128
+          },
+          "sodium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 872
+          },
+          "copper": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.046
+          },
+          "manganese": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.031
+          }
+        }
+      }
+    },
+    {
+      "appId": 9439,
+      "name": "Carrots, baby, raw",
+      "status": "fail",
+      "issues": [
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "carbohydrates",
+          "appValue": 8.2,
+          "provValue": 9.08,
+          "diff": 0.09890109890109894,
+          "message": "100g measure carbohydrates: app=8.200 vs prov=9.080"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "fiber",
+          "appValue": 2.9,
+          "provValue": 2.69,
+          "diff": 0.07407407407407397,
+          "message": "100g measure fiber: app=2.900 vs prov=2.690"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "iron",
+          "appValue": 0.89,
+          "provValue": 0.088,
+          "diff": 8.88888888888889,
+          "message": "100g measure iron: app=0.890 vs prov=0.088"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "magnesium",
+          "appValue": 10,
+          "provValue": 11.1,
+          "diff": 0.09090909090909091,
+          "message": "100g measure magnesium: app=10.000 vs prov=11.100"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "protein",
+          "appValue": 0.6,
+          "provValue": 0.805,
+          "diff": 0.25000000000000006,
+          "message": "100g measure protein: app=0.600 vs prov=0.805"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "calcium",
+          "appValue": 32,
+          "provValue": 42.2,
+          "diff": 0.23809523809523808,
+          "message": "100g measure calcium: app=32.000 vs prov=42.200"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "zinc",
+          "appValue": 0.17,
+          "provValue": 0.16,
+          "diff": 0.06250000000000006,
+          "message": "100g measure zinc: app=0.170 vs prov=0.160"
+        }
+      ],
+      "details": {
+        "provenanceCount": 1,
+        "sourceType": "Foundation",
+        "fdcId": 2258587,
+        "nutrientComparisons": {
+          "phosphorus": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 29.6
+          },
+          "sodium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 62.7
+          },
+          "copper": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.041
+          },
+          "manganese": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.093
           },
           "thiamin": {
             "match": false,
@@ -1295,37 +1890,818 @@
           "riboflavin": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 0.243
+            "sourceValue": 0.116
           },
-          "cholesterol": {
+          "niacin": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 38
-          },
-          "phosphorus": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 229
-          },
-          "sodium": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 493
-          },
-          "copper": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.019
-          },
-          "manganese": {
-            "match": false,
-            "issue": "missing",
-            "sourceValue": 0.04
+            "sourceValue": 0.741
           },
           "selenium": {
             "match": false,
             "issue": "missing",
-            "sourceValue": 6.6
+            "sourceValue": 0
+          }
+        }
+      }
+    },
+    {
+      "appId": 13059,
+      "name": "Egg, whole, dried",
+      "status": "fail",
+      "issues": [
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "potassium",
+          "appValue": 540,
+          "provValue": 468,
+          "diff": 0.15384615384615385,
+          "message": "100g measure potassium: app=540.000 vs prov=468.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "zinc",
+          "appValue": 3.2,
+          "provValue": 5.02,
+          "diff": 0.36,
+          "message": "100g measure zinc: app=3.200 vs prov=5.020"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "iron",
+          "appValue": 7.2,
+          "provValue": 6.97,
+          "diff": 0.0285714285714286,
+          "message": "100g measure iron: app=7.200 vs prov=6.970"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "fat",
+          "appValue": 43.9,
+          "provValue": 39.8,
+          "diff": 0.10301507537688447,
+          "message": "100g measure fat: app=43.900 vs prov=39.800"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "carbohydrates",
+          "appValue": 1.1,
+          "provValue": 1.87,
+          "diff": 0.4210526315789473,
+          "message": "100g measure carbohydrates: app=1.100 vs prov=1.870"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "calcium",
+          "appValue": 244,
+          "provValue": 220,
+          "diff": 0.10909090909090909,
+          "message": "100g measure calcium: app=244.000 vs prov=220.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "vitaminD",
+          "appValue": 8.3,
+          "provValue": 9.7,
+          "diff": 0.14432989690721637,
+          "message": "100g measure vitaminD: app=8.300 vs prov=9.700"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "magnesium",
+          "appValue": 34,
+          "provValue": 44.6,
+          "diff": 0.24444444444444444,
+          "message": "100g measure magnesium: app=34.000 vs prov=44.600"
+        }
+      ],
+      "details": {
+        "provenanceCount": 1,
+        "sourceType": "Foundation",
+        "fdcId": 329490,
+        "nutrientComparisons": {
+          "manganese": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0
+          },
+          "phosphorus": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 770
+          },
+          "copper": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0
+          },
+          "sodium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 485
+          },
+          "calories": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 575
+          },
+          "vitaminD_IU": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 388
+          },
+          "cholesterol": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 1700
+          }
+        }
+      }
+    },
+    {
+      "appId": 13261,
+      "name": "Chicken, broilers or fryers, wing, meat and skin, raw",
+      "status": "fail",
+      "issues": [
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "iron",
+          "appValue": 0.46,
+          "provValue": 0.511,
+          "diff": 0.09803921568627448,
+          "message": "100g measure iron: app=0.460 vs prov=0.511"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "magnesium",
+          "appValue": 16,
+          "provValue": 16.5,
+          "diff": 0.058823529411764705,
+          "message": "100g measure magnesium: app=16.000 vs prov=16.500"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "protein",
+          "appValue": 17.5,
+          "provValue": 18.4,
+          "diff": 0.048913043478260795,
+          "message": "100g measure protein: app=17.500 vs prov=18.400"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "calcium",
+          "appValue": 11,
+          "provValue": 13.6,
+          "diff": 0.21428571428571427,
+          "message": "100g measure calcium: app=11.000 vs prov=13.600"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "potassium",
+          "appValue": 187,
+          "provValue": 194,
+          "diff": 0.03608247422680412,
+          "message": "100g measure potassium: app=187.000 vs prov=194.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "fat",
+          "appValue": 12.8,
+          "provValue": 10.6,
+          "diff": 0.20754716981132088,
+          "message": "100g measure fat: app=12.800 vs prov=10.600"
+        }
+      ],
+      "details": {
+        "provenanceCount": 1,
+        "sourceType": "Foundation",
+        "fdcId": 2727568,
+        "nutrientComparisons": {
+          "phosphorus": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 133
+          },
+          "cholesterol": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 98.9
+          },
+          "sodium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 84.1
+          },
+          "copper": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.011
+          },
+          "manganese": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.003
+          }
+        }
+      }
+    },
+    {
+      "appId": 12615,
+      "name": "Beef, round, top round roast, boneless, separable lean and fat, trimmed to 0\" fat, select, raw",
+      "status": "fail",
+      "issues": [
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "fat",
+          "appValue": 3,
+          "provValue": 2.41,
+          "diff": 0.25000000000000006,
+          "message": "100g measure fat: app=3.000 vs prov=2.410"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "monounsaturatedFat",
+          "appValue": 1.3,
+          "provValue": 0.886,
+          "diff": 0.4444444444444445,
+          "message": "100g measure monounsaturatedFat: app=1.300 vs prov=0.886"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "protein",
+          "appValue": 23.4,
+          "provValue": 23.7,
+          "diff": 0.012658227848101297,
+          "message": "100g measure protein: app=23.400 vs prov=23.700"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "saturatedFat",
+          "appValue": 1.2,
+          "provValue": 0.924,
+          "diff": 0.33333333333333326,
+          "message": "100g measure saturatedFat: app=1.200 vs prov=0.924"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "omega6",
+          "appValue": 0.145,
+          "provValue": 0.136,
+          "diff": 0.06617647058823514,
+          "message": "100g measure omega6: app=0.145 vs prov=0.136"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "omega3ALA",
+          "appValue": 0.004,
+          "provValue": 0.003,
+          "diff": 0.3333333333333333,
+          "message": "100g measure omega3ALA: app=0.004 vs prov=0.003"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "omega3",
+          "appValue": 0.008,
+          "provValue": 0.007,
+          "diff": 0.14285714285714285,
+          "message": "100g measure omega3: app=0.008 vs prov=0.007"
+        }
+      ],
+      "details": {
+        "provenanceCount": 1,
+        "sourceType": "Foundation",
+        "fdcId": 746761,
+        "nutrientComparisons": {
+          "calories": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 123
+          },
+          "selenium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 22.7
+          },
+          "vitaminE": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.21
+          },
+          "vitaminD_IU": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0
+          },
+          "niacin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 6.16
+          },
+          "pantothenicAcid": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.37
+          },
+          "choline": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 64.1
+          },
+          "phosphorus": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 220
+          },
+          "sodium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 55
+          },
+          "copper": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.047
+          },
+          "manganese": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.003
+          },
+          "thiamin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.064
+          },
+          "riboflavin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.25
+          },
+          "cholesterol": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 63
+          }
+        }
+      }
+    },
+    {
+      "appId": 10903,
+      "name": "Potatoes, raw, skin",
+      "status": "fail",
+      "issues": [
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "protein",
+          "appValue": 2.6,
+          "provValue": 2.27,
+          "diff": 0.1304347826086958,
+          "message": "100g measure protein: app=2.600 vs prov=2.270"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "iron",
+          "appValue": 3.2,
+          "provValue": 0.384,
+          "diff": 7.421052631578948,
+          "message": "100g measure iron: app=3.200 vs prov=0.384"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "magnesium",
+          "appValue": 23,
+          "provValue": 25.6,
+          "diff": 0.11538461538461539,
+          "message": "100g measure magnesium: app=23.000 vs prov=25.600"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "vitaminC",
+          "appValue": 11.4,
+          "provValue": 10.9,
+          "diff": 0.04587155963302752,
+          "message": "100g measure vitaminC: app=11.400 vs prov=10.900"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "fat",
+          "appValue": 0.1,
+          "provValue": 0.36,
+          "diff": 0.7500000000000001,
+          "message": "100g measure fat: app=0.100 vs prov=0.360"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "carbohydrates",
+          "appValue": 12.4,
+          "provValue": 17.8,
+          "diff": 0.30337078651685395,
+          "message": "100g measure carbohydrates: app=12.400 vs prov=17.800"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "calcium",
+          "appValue": 30,
+          "provValue": 7.8,
+          "diff": 2.8461538461538463,
+          "message": "100g measure calcium: app=30.000 vs prov=7.800"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "potassium",
+          "appValue": 413,
+          "provValue": 450,
+          "diff": 0.08222222222222222,
+          "message": "100g measure potassium: app=413.000 vs prov=450.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "zinc",
+          "appValue": 0.35,
+          "provValue": 0.378,
+          "diff": 0.0789473684210527,
+          "message": "100g measure zinc: app=0.350 vs prov=0.378"
+        }
+      ],
+      "details": {
+        "provenanceCount": 1,
+        "sourceType": "Foundation",
+        "fdcId": 2346401,
+        "nutrientComparisons": {
+          "phosphorus": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 55.2
+          },
+          "sodium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 2.74
+          },
+          "copper": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.091
+          },
+          "manganese": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.152
+          },
+          "thiamin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.074
+          },
+          "selenium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0
+          },
+          "niacin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 1.5
+          }
+        }
+      }
+    },
+    {
+      "appId": 11987,
+      "name": "Chicken, ground, raw",
+      "status": "fail",
+      "issues": [
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "fat",
+          "appValue": 8.1,
+          "provValue": 7.16,
+          "diff": 0.12499999999999992,
+          "message": "100g measure fat: app=8.100 vs prov=7.160"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "monounsaturatedFat",
+          "appValue": 3.6,
+          "provValue": 2.17,
+          "diff": 0.6363636363636362,
+          "message": "100g measure monounsaturatedFat: app=3.600 vs prov=2.170"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "polyunsaturatedFat",
+          "appValue": 1.5,
+          "provValue": 1.38,
+          "diff": 0.0714285714285715,
+          "message": "100g measure polyunsaturatedFat: app=1.500 vs prov=1.380"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "calcium",
+          "appValue": 6,
+          "provValue": 5.82,
+          "diff": 0.03448275862068969,
+          "message": "100g measure calcium: app=6.000 vs prov=5.820"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "potassium",
+          "appValue": 522,
+          "provValue": 302,
+          "diff": 0.7284768211920529,
+          "message": "100g measure potassium: app=522.000 vs prov=302.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "zinc",
+          "appValue": 1.5,
+          "provValue": 1.18,
+          "diff": 0.25000000000000006,
+          "message": "100g measure zinc: app=1.500 vs prov=1.180"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "iron",
+          "appValue": 0.82,
+          "provValue": 0.593,
+          "diff": 0.3898305084745763,
+          "message": "100g measure iron: app=0.820 vs prov=0.593"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "saturatedFat",
+          "appValue": 2.3,
+          "provValue": 1.56,
+          "diff": 0.43749999999999983,
+          "message": "100g measure saturatedFat: app=2.300 vs prov=1.560"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "protein",
+          "appValue": 17.4,
+          "provValue": 17.9,
+          "diff": 0.02793296089385475,
+          "message": "100g measure protein: app=17.400 vs prov=17.900"
+        }
+      ],
+      "details": {
+        "provenanceCount": 1,
+        "sourceType": "Foundation",
+        "fdcId": 2514746,
+        "nutrientComparisons": {
+          "phosphorus": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 166
+          },
+          "cholesterol": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 81.7
+          },
+          "sodium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 63
+          },
+          "copper": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.036
+          },
+          "manganese": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.005
+          }
+        }
+      }
+    },
+    {
+      "appId": 14299,
+      "name": "Egg, yolk, dried",
+      "status": "fail",
+      "issues": [
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "potassium",
+          "appValue": 264,
+          "provValue": 231,
+          "diff": 0.14285714285714285,
+          "message": "100g measure potassium: app=264.000 vs prov=231.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "zinc",
+          "appValue": 7.7,
+          "provValue": 7.11,
+          "diff": 0.08450704225352121,
+          "message": "100g measure zinc: app=7.700 vs prov=7.110"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "calcium",
+          "appValue": 289,
+          "provValue": 270,
+          "diff": 0.07037037037037037,
+          "message": "100g measure calcium: app=289.000 vs prov=270.000"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "fat",
+          "appValue": 59.1,
+          "provValue": 55.5,
+          "diff": 0.0648648648648649,
+          "message": "100g measure fat: app=59.100 vs prov=55.500"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "carbohydrates",
+          "appValue": 0.7,
+          "provValue": 1.07,
+          "diff": 0.3636363636363637,
+          "message": "100g measure carbohydrates: app=0.700 vs prov=1.070"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "protein",
+          "appValue": 33.6,
+          "provValue": 34.2,
+          "diff": 0.017543859649122848,
+          "message": "100g measure protein: app=33.600 vs prov=34.200"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "iron",
+          "appValue": 9.6,
+          "provValue": 9.28,
+          "diff": 0.03225806451612891,
+          "message": "100g measure iron: app=9.600 vs prov=9.280"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "vitaminD",
+          "appValue": 10,
+          "provValue": 15.7,
+          "diff": 0.375,
+          "message": "100g measure vitaminD: app=10.000 vs prov=15.700"
+        }
+      ],
+      "details": {
+        "provenanceCount": 1,
+        "sourceType": "Foundation",
+        "fdcId": 329716,
+        "nutrientComparisons": {
+          "manganese": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0
+          },
+          "phosphorus": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 982
+          },
+          "sodium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 149
+          },
+          "vitaminD_IU": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 628
+          },
+          "calories": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 654
+          },
+          "copper": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0
+          },
+          "cholesterol": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 2340
+          }
+        }
+      }
+    },
+    {
+      "appId": 13093,
+      "name": "Cheese, dry white, queso seco",
+      "status": "fail",
+      "issues": [
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "vitaminK",
+          "appValue": 1.5,
+          "provValue": 1.6,
+          "diff": 0.06250000000000006,
+          "message": "100g measure vitaminK: app=1.500 vs prov=1.600"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "carbohydrates",
+          "appValue": 2,
+          "provValue": 2.07,
+          "diff": 0.04761904761904766,
+          "message": "100g measure carbohydrates: app=2.000 vs prov=2.070"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "monounsaturatedFat",
+          "appValue": 6.4,
+          "provValue": 5.7,
+          "diff": 0.12280701754385967,
+          "message": "100g measure monounsaturatedFat: app=6.400 vs prov=5.700"
+        },
+        {
+          "type": "app_100g_mismatch",
+          "nutrient": "polyunsaturatedFat",
+          "appValue": 1.2,
+          "provValue": 1.06,
+          "diff": 0.09090909090909079,
+          "message": "100g measure polyunsaturatedFat: app=1.200 vs prov=1.060"
+        }
+      ],
+      "details": {
+        "provenanceCount": 1,
+        "sourceType": "Foundation",
+        "fdcId": 746765,
+        "nutrientComparisons": {
+          "phosphorus": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 475
+          },
+          "sodium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 1810
+          },
+          "copper": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.027
+          },
+          "manganese": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.018
+          },
+          "thiamin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.038
+          },
+          "riboflavin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.23
+          },
+          "cholesterol": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 78
+          },
+          "calories": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 326
+          },
+          "selenium": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 22.4
+          },
+          "vitaminE": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.49
+          },
+          "vitaminD_IU": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 73.3
+          },
+          "niacin": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.083
+          },
+          "pantothenicAcid": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 0.398
+          },
+          "choline": {
+            "match": false,
+            "issue": "missing",
+            "sourceValue": 18.4
           }
         }
       }
