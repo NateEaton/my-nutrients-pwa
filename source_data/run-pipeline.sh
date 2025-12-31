@@ -26,6 +26,7 @@ CURATED="curated-nutrients"
 FINAL_OUTPUT="../src/lib/data/foodDatabaseData.js"
 COVERAGE_REPORT="coverage_report.txt"
 DIFF_REPORT="diff_report"
+PROVENANCE_DIR="../static/provenance"
 
 # --- Colors for output ---
 RED='\033[0;31m'
@@ -82,6 +83,7 @@ wait_for_review() {
 FROM_STAGE=1
 NON_INTERACTIVE=false
 SKIP_DIFF=false
+SKIP_PROVENANCE=false
 HELP=false
 
 while [[ $# -gt 0 ]]; do
@@ -96,6 +98,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --skip-diff)
             SKIP_DIFF=true
+            shift
+            ;;
+        --skip-provenance)
+            SKIP_PROVENANCE=true
             shift
             ;;
         --foundation)
@@ -124,9 +130,10 @@ if [ "$HELP" = true ]; then
     echo "Run the hybrid food database pipeline with review checkpoints."
     echo ""
     echo "Options:"
-    echo "  --from-stage N      Start from stage N (1-8, default: 1)"
+    echo "  --from-stage N      Start from stage N (1-9, default: 1)"
     echo "  --non-interactive   Skip review prompts (for automated runs)"
     echo "  --skip-diff         Skip diff validation (stage 8)"
+    echo "  --skip-provenance   Skip provenance generation (stage 9)"
     echo "  --foundation FILE   Foundation Foods JSON file name"
     echo "  --sr-legacy FILE    SR Legacy JSON file name"
     echo "  --help, -h          Show this help message"
@@ -140,6 +147,7 @@ if [ "$HELP" = true ]; then
     echo "  6: Curate and filter foods"
     echo "  7: Generate app module + coverage report"
     echo "  8: Validate against previous version"
+    echo "  9: Generate provenance data for UI"
     echo ""
     echo "Examples:"
     echo "  ./run-pipeline.sh                    # Full pipeline with reviews"
@@ -353,6 +361,33 @@ if [ "$FROM_STAGE" -le 8 ] && [ "$SKIP_DIFF" = false ]; then
     fi
 fi
 
+# Stage 9: Generate provenance data
+if [ "$FROM_STAGE" -le 9 ] && [ "$SKIP_PROVENANCE" = false ]; then
+    print_stage 9 "Generate Provenance Data"
+
+    if [ ! -f "${CURATED}-abridged.json" ]; then
+        print_error "Input file not found: ${CURATED}-abridged.json"
+        echo "Run from stage 6 first."
+        exit 1
+    fi
+
+    if [ ! -f "$MASTERED_DATA" ]; then
+        print_error "Input file not found: $MASTERED_DATA"
+        echo "Run from stage 2 first."
+        exit 1
+    fi
+
+    # Create provenance directory if needed
+    mkdir -p "$PROVENANCE_DIR"
+
+    node provenance-generator.cjs \
+        "${CURATED}-abridged.json" \
+        "$MASTERED_DATA" \
+        "$PROVENANCE_DIR"
+
+    print_success "Created provenance data in $PROVENANCE_DIR"
+fi
+
 # --- Complete ---
 print_header "Pipeline Complete!"
 
@@ -363,6 +398,9 @@ if [ -f "$COVERAGE_REPORT" ]; then
 fi
 if [ -f "${DIFF_REPORT}.txt" ]; then
     echo "  - Diff report: ${DIFF_REPORT}.txt"
+fi
+if [ -d "$PROVENANCE_DIR" ]; then
+    echo "  - Provenance: $PROVENANCE_DIR"
 fi
 
 echo ""
