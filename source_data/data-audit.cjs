@@ -458,13 +458,13 @@ function extractFDCPortions(fdcFood) {
 
 /**
  * Compare two nutrient values with tolerance
- * Applies the same rounding used by the generator to source value before comparison
  * @param {string} nutrientKey - The nutrient name for rounding lookup
- * @param {number} appValue - Value from app database (already rounded)
- * @param {number} sourceValue - Value from source (needs rounding)
+ * @param {number} appValue - Value from app database or provenance
+ * @param {number} sourceValue - Value from source
  * @param {number} tolerance - Allowed relative difference
+ * @param {boolean} applyRounding - If true, apply generator rounding to sourceValue (for app vs prov/fdc comparisons)
  */
-function compareNutrients(nutrientKey, appValue, sourceValue, tolerance) {
+function compareNutrients(nutrientKey, appValue, sourceValue, tolerance, applyRounding = true) {
   if (appValue === undefined && sourceValue === undefined) return { match: true };
   if (appValue === undefined || sourceValue === undefined) {
     return {
@@ -475,31 +475,31 @@ function compareNutrients(nutrientKey, appValue, sourceValue, tolerance) {
     };
   }
 
-  // Apply the same rounding the generator uses to the source value
-  const roundedSourceValue = roundNutrientValue(nutrientKey, sourceValue);
+  // Optionally apply rounding to source value (only for app-to-source comparisons)
+  const compareValue = applyRounding ? roundNutrientValue(nutrientKey, sourceValue) : sourceValue;
 
   // Handle zero cases
-  if (roundedSourceValue === 0 && appValue === 0) return { match: true };
-  if (roundedSourceValue === 0) {
+  if (compareValue === 0 && appValue === 0) return { match: true };
+  if (compareValue === 0) {
     return {
       match: appValue < 0.01, // Allow tiny values when source is 0
       issue: appValue >= 0.01 ? 'unexpected_value' : null,
       appValue,
-      sourceValue: roundedSourceValue,
-      originalSourceValue: sourceValue,
+      sourceValue: compareValue,
+      originalSourceValue: applyRounding ? sourceValue : undefined,
       diff: appValue
     };
   }
 
-  const diff = Math.abs(appValue - roundedSourceValue);
-  const relDiff = diff / Math.abs(roundedSourceValue);
+  const diff = Math.abs(appValue - compareValue);
+  const relDiff = diff / Math.abs(compareValue);
 
   return {
     match: relDiff <= tolerance,
     issue: relDiff > tolerance ? 'value_mismatch' : null,
     appValue,
-    sourceValue: roundedSourceValue,
-    originalSourceValue: sourceValue,
+    sourceValue: compareValue,
+    originalSourceValue: applyRounding ? sourceValue : undefined,
     diff,
     relDiff
   };
@@ -566,11 +566,13 @@ function auditFood(appFood, provenance, fdcSources, config) {
     const allNutrients = new Set([...Object.keys(fdcNutrients), ...Object.keys(provNutrients)]);
 
     for (const nutrient of allNutrients) {
+      // Compare provenance to FDC without rounding - both should have original values
       const comparison = compareNutrients(
         nutrient,
         provNutrients[nutrient],
         fdcNutrients[nutrient],
-        config.nutrientTolerance
+        config.nutrientTolerance,
+        false  // Don't apply rounding - comparing two original sources
       );
 
       if (!comparison.match) {
