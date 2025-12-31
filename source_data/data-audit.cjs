@@ -59,7 +59,7 @@ const NUTRIENT_MAPPING = {
   '406': 'niacin',
   '410': 'pantothenicAcid',
   '415': 'vitaminB6',
-  '417': 'folate',
+  '435': 'folate',    // Folate, DFE (matches usda-fdc-json-config.json)
   '418': 'vitaminB12',
   '421': 'choline',
   '430': 'vitaminK',
@@ -67,12 +67,94 @@ const NUTRIENT_MAPPING = {
   '606': 'saturatedFat',
   '645': 'monounsaturatedFat',
   '646': 'polyunsaturatedFat',
-  '618': 'omega6',
-  '619': 'omega3ALA',
-  '620': 'omega3EPA',
-  '621': 'omega3DPA',
-  '629': 'omega3DHA',
+  // Omega fatty acids - IDs must match usda-fdc-json-config.json
+  '851': 'omega3ALA',   // 18:3 n-3 (alpha-linolenic)
+  '629': 'omega3EPA',   // 20:5 n-3 (eicosapentaenoic)
+  '621': 'omega3DHA',   // 22:6 n-3 (docosahexaenoic)
+  '675': 'omega6',      // 18:2 n-6 (linoleic acid)
 };
+
+// --- Rounding Logic (must match data-module-generator-nutrients.cjs) ---
+
+/**
+ * Nutrient precision configuration - copied from generator
+ */
+const NUTRIENT_PRECISION = {
+  // Macronutrients (g) - 1 decimal place
+  protein: 1,
+  fiber: 1,
+  carbohydrates: 1,
+  sugars: 1,
+  fat: 1,
+  saturatedFat: 1,
+  monounsaturatedFat: 1,
+  polyunsaturatedFat: 1,
+
+  // Omega fatty acids (g) - 3 decimal places
+  omega3: 3,
+  omega3ALA: 3,
+  omega3EPA: 3,
+  omega3DHA: 3,
+  omega6: 3,
+
+  // Minerals (mg) - dynamic based on magnitude
+  calcium: 'dynamic',
+  magnesium: 'dynamic',
+  potassium: 'dynamic',
+  iron: 'dynamic',
+  zinc: 'dynamic',
+
+  // Vitamins in mcg - dynamic
+  vitaminD: 'dynamic',
+  vitaminB12: 'dynamic',
+  folate: 'dynamic',
+  vitaminA: 'dynamic',
+  vitaminK: 'dynamic',
+
+  // Vitamins in mg - 1 decimal place
+  vitaminB6: 1,
+  vitaminC: 1,
+};
+
+/**
+ * Round nutrient value using same logic as generator
+ */
+function roundNutrientValue(nutrientKey, value) {
+  if (value == null || isNaN(value)) return 0;
+  if (value === 0) return 0;
+
+  const precision = NUTRIENT_PRECISION[nutrientKey];
+
+  // Dynamic precision based on magnitude
+  if (precision === 'dynamic') {
+    if (value >= 10) {
+      return Math.round(value);
+    } else if (value >= 1) {
+      return Math.round(value * 10) / 10;
+    } else {
+      return Math.round(value * 100) / 100;
+    }
+  }
+
+  // Fixed precision (or default to 2 decimals if unknown nutrient)
+  const factor = Math.pow(10, precision || 2);
+  return Math.round(value * factor) / factor;
+}
+
+/**
+ * Round all nutrients in an object using generator logic
+ */
+function roundNutrients(nutrients) {
+  if (!nutrients || typeof nutrients !== 'object') return {};
+
+  const rounded = {};
+  for (const [key, value] of Object.entries(nutrients)) {
+    if (typeof value === 'number') {
+      rounded[key] = roundNutrientValue(key, value);
+    }
+  }
+  return rounded;
+}
 
 // --- Argument Parsing ---
 function parseArgs() {
@@ -376,8 +458,13 @@ function extractFDCPortions(fdcFood) {
 
 /**
  * Compare two nutrient values with tolerance
+ * Applies the same rounding used by the generator to source value before comparison
+ * @param {string} nutrientKey - The nutrient name for rounding lookup
+ * @param {number} appValue - Value from app database (already rounded)
+ * @param {number} sourceValue - Value from source (needs rounding)
+ * @param {number} tolerance - Allowed relative difference
  */
-function compareNutrients(appValue, sourceValue, tolerance) {
+function compareNutrients(nutrientKey, appValue, sourceValue, tolerance) {
   if (appValue === undefined && sourceValue === undefined) return { match: true };
   if (appValue === undefined || sourceValue === undefined) {
     return {
@@ -388,26 +475,31 @@ function compareNutrients(appValue, sourceValue, tolerance) {
     };
   }
 
+  // Apply the same rounding the generator uses to the source value
+  const roundedSourceValue = roundNutrientValue(nutrientKey, sourceValue);
+
   // Handle zero cases
-  if (sourceValue === 0 && appValue === 0) return { match: true };
-  if (sourceValue === 0) {
+  if (roundedSourceValue === 0 && appValue === 0) return { match: true };
+  if (roundedSourceValue === 0) {
     return {
       match: appValue < 0.01, // Allow tiny values when source is 0
       issue: appValue >= 0.01 ? 'unexpected_value' : null,
       appValue,
-      sourceValue,
+      sourceValue: roundedSourceValue,
+      originalSourceValue: sourceValue,
       diff: appValue
     };
   }
 
-  const diff = Math.abs(appValue - sourceValue);
-  const relDiff = diff / Math.abs(sourceValue);
+  const diff = Math.abs(appValue - roundedSourceValue);
+  const relDiff = diff / Math.abs(roundedSourceValue);
 
   return {
     match: relDiff <= tolerance,
     issue: relDiff > tolerance ? 'value_mismatch' : null,
     appValue,
-    sourceValue,
+    sourceValue: roundedSourceValue,
+    originalSourceValue: sourceValue,
     diff,
     relDiff
   };
@@ -475,6 +567,7 @@ function auditFood(appFood, provenance, fdcSources, config) {
 
     for (const nutrient of allNutrients) {
       const comparison = compareNutrients(
+        nutrient,
         provNutrients[nutrient],
         fdcNutrients[nutrient],
         config.nutrientTolerance
@@ -512,7 +605,7 @@ function auditFood(appFood, provenance, fdcSources, config) {
         for (const [nutrient, appValue] of Object.entries(appNutrients)) {
           const provValue = provNutrients[nutrient];
           if (provValue !== undefined) {
-            const comparison = compareNutrients(appValue, provValue, config.nutrientTolerance);
+            const comparison = compareNutrients(nutrient, appValue, provValue, config.nutrientTolerance);
             if (!comparison.match && comparison.issue === 'value_mismatch') {
               result.issues.push({
                 type: 'app_100g_mismatch',
@@ -541,7 +634,7 @@ function auditFood(appFood, provenance, fdcSources, config) {
         if (baseValue === undefined) continue;
 
         const expectedValue = baseValue * scaleFactor;
-        const comparison = compareNutrients(appValue, expectedValue, config.servingTolerance);
+        const comparison = compareNutrients(nutrient, appValue, expectedValue, config.servingTolerance);
 
         if (!comparison.match && comparison.issue === 'value_mismatch' && Math.abs(comparison.diff) > 0.5) {
           result.issues.push({
