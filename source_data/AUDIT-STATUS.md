@@ -1,8 +1,8 @@
 # Data Pipeline Audit Status
 
-**Last Updated:** 2026-01-01
+**Last Updated:** 2026-01-01 (Bison case study added)
 **Branch:** `claude/rebuild-data-pipeline-dKBip`
-**Status:** Ready for PR/merge, with known ~2% variance pending future investigation
+**Status:** Ready for PR/merge, with known ~2% variance pending pipeline re-run
 
 ---
 
@@ -138,6 +138,61 @@ The provenance generator looks up `food.sourceId` in the **master file** and rec
 | 9963 | Melons, cantaloupe, raw | vitaminC 36.7→10.9, potassium 267→157 |
 | 9769 | Rice flour, brown | vitaminB6 0.7→0.132 |
 | ... | (14 more in audit_report.txt) | |
+
+---
+
+## Case Study: Bison (appId 16164)
+
+**Investigated:** 2026-01-01
+
+This case study demonstrates the exact root cause of `app_100g_mismatch` failures.
+
+### The Discrepancy
+
+| Source | Calcium per 100g | FDC ID |
+|--------|------------------|--------|
+| **App database** | **11 mg** | (uses SR Legacy nutrients) |
+| **Provenance data** | 6.83 mg | #2727571 (Foundation Foods) |
+| **FDC portal page** | 7 mg | #2727571 (Foundation Foods) |
+
+Provenance and FDC portal match (6.83 ≈ 7mg), but app has different value (11mg).
+
+### Root Cause Analysis
+
+**Master Key Map entries:**
+```
+SR Legacy_175293    → appId 16164  ← App uses this source
+Foundation_2727571  → appId 16497
+usda-fdc_2727571    → appId 8056
+```
+
+**What happened:**
+1. Pipeline matched Foundation Foods bison (#2727571) with SR Legacy bison (#175293) as "same food"
+2. During serving derivation, nutrients reverted to SR Legacy (density mismatch or other reason)
+3. **BUG:** `sourceId` was NOT updated to SR Legacy FDC ID (#175293)
+4. Provenance generator used the stale `sourceId` (#2727571) → wrong FDC link
+
+### Nutrient Comparison
+
+| Nutrient | App (SRL #175293) | Provenance (FF #2727571) |
+|----------|-------------------|--------------------------|
+| Calcium | **11 mg** | 6.83 mg |
+| Protein | 20.2g | 19.9g |
+| Fat | 7.2g | 8.88g |
+| Iron | 2.8mg | 2.17mg |
+
+Significant differences across multiple nutrients confirm different sources.
+
+### Expected Fix
+
+Re-running the pipeline with the density revert fix (`8849caf`) should:
+1. Detect density mismatch between FF and SRL
+2. Revert to SRL nutrients AND update `sourceId` to #175293
+3. Provenance will link to SR Legacy page showing 11mg calcium
+
+**Verification:** After pipeline re-run, check that:
+- Provenance for appId 16164 shows `fdcId: 175293`
+- Provenance calcium matches app calcium (11mg)
 
 ---
 
