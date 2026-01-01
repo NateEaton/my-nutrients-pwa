@@ -2,6 +2,41 @@
 
 **Last Updated:** 2026-01-01
 **Branch:** `claude/rebuild-data-pipeline-dKBip`
+**Status:** Ready for PR/merge, with known ~2% variance pending future investigation
+
+---
+
+## Executive Summary
+
+This session implemented a comprehensive data audit system and fixed several pipeline issues. The hybrid data pipeline now produces **98.1% verifiable data** (981/1000 foods pass audit). The remaining 1.9% (19 foods) have `app_100g_mismatch` issues where app nutrients differ from provenance - a known limitation of the hybrid approach that requires further investigation.
+
+**Key Achievement:** When users click an FDC link in provenance, the values they see on the USDA portal should match the app data for 98% of foods.
+
+---
+
+## Hybrid Pipeline Overview
+
+The pipeline implements a "Hybrid Data Strategy":
+- **Foundation Foods (FF):** Higher quality, more recent analytical data (~450 foods)
+- **SR Legacy (SRL):** More comprehensive serving measures (cups, tablespoons, etc.) (~7000+ foods)
+
+**Goal:** Use FF nutrients when available, with SRL serving measures.
+
+### Pipeline Stages
+
+```
+Stage 1: json-data-processor.cjs      → combined-nutrient-data.json
+Stage 2: master-key-assigner-json.cjs → mastered-nutrient-data.json
+Stage 3: candidate-generator.cjs      → candidates.json (matches FF↔SRL)
+Stage 4: serving-deriver.cjs          → derived-foods.json
+Stage 5: food-curator-nutrients.cjs   → curated-nutrients-abridged.json
+Stage 6: data-module-generator.cjs    → foodDatabaseData.js
+Stage 7: diff-validator.cjs           → (validation)
+Stage 8: (reserved)
+Stage 9: provenance-generator.cjs     → provenance_*.json chunks
+```
+
+Run with: `./run-pipeline.sh [--from-stage N] [--non-interactive]`
 
 ---
 
@@ -10,33 +45,66 @@
 | Metric | Value |
 |--------|-------|
 | Total Foods Sampled | 1,000 |
-| Pass | 981 (98.1%) |
+| **Pass** | **981 (98.1%)** |
 | Fail | 19 (1.9%) |
 | Issue Type | `app_100g_mismatch` |
+
+### Running the Audit
+
+```bash
+cd source_data
+
+# Full audit (all ~4000 foods)
+node data-audit.cjs
+
+# Sample audit (faster)
+node data-audit.cjs --sample 100
+
+# With FDC source files for prov→FDC validation
+node data-audit.cjs \
+  --foundation FoodData_Central_foundation_food_json_2025-04-24.json \
+  --sr-legacy FoodData_Central_sr_legacy_food_json_2018-04.json
+```
+
+**Output:** `audit_report.txt` (human-readable) and `audit_report.json` (detailed)
 
 ---
 
 ## Fixes Applied This Session
 
-### 1. Audit Tool Fixes
+### 1. Audit Tool Creation & Fixes
 
 | Fix | Description | Commit |
 |-----|-------------|--------|
-| Omega-3 Nutrient IDs | Changed from 619/620/621/629 to 851/629/621/675 to match `usda-fdc-json-config.json` | `2aeec43` |
-| Folate Nutrient ID | Changed from 417 to 435 (DFE form) | `2aeec43` |
-| Rounding Logic | Added `NUTRIENT_PRECISION` and `roundNutrientValue()` matching generator | `2aeec43` |
+| Created audit tool | `data-audit.cjs` - comprehensive validator | `22bc10b` |
+| Omega-3 Nutrient IDs | Changed 619/620/629→851/629/621 to match config | `2aeec43` |
+| Omega-6 Nutrient ID | Changed 618→675 to match config | `2aeec43` |
+| Folate Nutrient ID | Changed 417→435 (DFE form) | `2aeec43` |
+| Rounding Logic | Added `NUTRIENT_PRECISION` matching generator | `2aeec43` |
 | Prov-to-FDC Comparison | Disabled rounding (both have original values) | `f9534cb` |
 
-### 2. Pipeline Fix (Option 1)
+### 2. Pipeline Fixes
 
 | Fix | Description | Commit |
 |-----|-------------|--------|
-| Density Revert Source ID | When density revert occurs, now uses SR Legacy FDC ID (not just nutrients) | `8849caf` |
+| Missing fields | `master-key-assigner-json.cjs` now preserves `sourceType`, `prepState`, `foodCategory`, `waterContent` | (earlier) |
+| Null appId | `candidate-generator.cjs` now preserves appId instead of setting null | `4507c39` |
+| Provenance path | Fixed output directory to `static/data/provenance` | `f86f1f7` |
+| Density revert | **Option 1 implemented** - uses SRL FDC ID when density revert occurs | `8849caf` |
 
-**What this means:** When the hybrid pipeline detects a density mismatch between Foundation Foods and SR Legacy (suggesting unreliable match), it now:
-- Uses SR Legacy FDC ID (`candidate.refFDC`)
-- Uses SR Legacy nutrients (`candidate.fallbackNutrients`)
-- Preserves original FF ID in `originalFoundationFDC` for reference
+### 3. Density Revert Fix (Option 1) - Key Decision
+
+**Problem:** When density mismatch detected between FF and SRL (suggesting unreliable match), pipeline reverted to SRL nutrients but kept FF FDC ID. This meant:
+- User clicks provenance link → sees FF values on USDA portal
+- App shows SRL values → **MISMATCH**
+
+**Solution:** When density revert occurs, now use SRL for EVERYTHING:
+- `primaryFDC` = `candidate.refFDC` (SRL FDC ID)
+- `primaryNutrients` = `candidate.fallbackNutrients` (SRL nutrients)
+- `primarySource` = `'SR Legacy'`
+- `originalFoundationFDC` preserved for reference
+
+**Rationale:** Data integrity > data quality. Better to show verifiable SRL data than unverifiable FF data.
 
 ---
 
@@ -44,136 +112,130 @@
 
 ### Problem Description
 
-19 foods (1.9%) still show mismatches between app database nutrients and provenance nutrients.
+19 foods (1.9%) show mismatches between app database nutrients and provenance nutrients.
 
-### Root Cause Analysis
+### Root Cause
 
-The provenance generator (`provenance-generator.cjs`) looks up `food.sourceId` in the **master file** and records the master record's nutrients. However, the app database uses the **curated file's** nutrients (which may differ due to hybrid source selection).
+The provenance generator looks up `food.sourceId` in the **master file** and records those nutrients. But the app database uses **curated file** nutrients. For hybrid-matched foods, these can differ.
 
-**Data Flow:**
 ```
-App Database: Uses curated nutrients (from serving-deriver output)
-Provenance:   Looks up sourceId in master file → gets MASTER nutrients
-FDC Portal:   Shows original USDA values for that FDC ID
+┌─────────────────────────────────────────────────────────┐
+│ App Database    → curated nutrients (post-pipeline)    │
+│ Provenance      → master lookup nutrients (pre-hybrid) │
+│ FDC Portal      → original USDA values                 │
+│                                                         │
+│ When these differ, user can't verify app data          │
+└─────────────────────────────────────────────────────────┘
 ```
-
-When hybrid selection chooses Foundation Foods nutrients but provenance looks up from master (which may have slightly different values or be from a different analytical batch), mismatches occur.
 
 ### Failing Foods (19)
 
-| ID | Food Name | Key Discrepancies |
-|----|-----------|-------------------|
-| 10166 | Squash, winter, butternut, raw | calcium (48 vs 21.7), vitaminC (21 vs 7.6) |
-| 10120 | Lettuce, green leaf, raw | potassium (194 vs 277), iron (0.86 vs 0.32) |
-| 12155 | Yogurt, plain, whole milk | vitaminD (0.1 vs 0.778), fat (3.3 vs 4.48) |
-| 15471 | Sausage, turkey, breakfast links | carbohydrates (3.2 vs 0.93), calcium (55 vs 32) |
-| 13721 | Turkey, ground, 93% lean, raw | protein (18.7 vs 17.3), fat (8.3 vs 9.59) |
-| 10099 | Eggplant, raw | vitaminC (2.2 vs 0.8), fiber (3.0 vs 2.45) |
-| 11055 | Nuts, pistachio nuts, raw | fiber (10.6 vs 6.97), iron (3.9 vs 3.46) |
-| 15146 | Soy flour, defatted | calcium (241 vs 338), zinc (2.5 vs 4.44) |
-| 9769 | Rice flour, brown | vitaminB6 (0.7 vs 0.132), zinc (2.5 vs 1.91) |
-| 9963 | Melons, cantaloupe, raw | vitaminC (36.7 vs 10.9), potassium (267 vs 157) |
-| 10597 | Wild rice, raw | magnesium (177 vs 108), calcium (21 vs 7.97) |
-| 14817 | Blackberries, raw | zinc (0.53 vs 0.189), iron (0.62 vs 0.208) |
-| 12175 | Yogurt, Greek, plain, whole milk | monounsaturatedFat (2.1 vs 0.958) |
-| 9807 | Wheat flour, white, all-purpose | protein (10.3 vs 13.1), magnesium (22 vs 33.3) |
-| 10785 | Nectarines, raw | potassium (201 vs 131), calcium (6 vs 2) |
-| 10585 | Rice flour, white, unenriched | vitaminB6 (0.4 vs 0.052), fiber (2.4 vs 0.5) |
-| 8773 | Pork, fresh, ground, raw | fat (21.2 vs 17.5), calcium (14 vs 5.86) |
-| 13722 | Turkey, ground, pan-broiled | monounsaturatedFat (3.9 vs 3.78) |
-| 14907 | Beef, ground, 80% lean, raw | calcium (18 vs 6.89), saturatedFat (7.6 vs 6.84) |
+| ID | Food Name | Notable Discrepancies |
+|----|-----------|----------------------|
+| 10166 | Squash, winter, butternut, raw | calcium 48→21.7, vitaminC 21→7.6 |
+| 10120 | Lettuce, green leaf, raw | potassium 194→277, iron 0.86→0.32 |
+| 12155 | Yogurt, plain, whole milk | vitaminD 0.1→0.778, fat 3.3→4.48 |
+| 9963 | Melons, cantaloupe, raw | vitaminC 36.7→10.9, potassium 267→157 |
+| 9769 | Rice flour, brown | vitaminB6 0.7→0.132 |
+| ... | (14 more in audit_report.txt) | |
 
 ---
 
-## Potential Fix Options
+## Potential Future Fixes
 
-### Option A: Use Curated Nutrients in Provenance
+### Option A: Use Curated Nutrients in Provenance (Simple)
 
-Modify `provenance-generator.cjs` to use `food.nutrientsPer100g` directly instead of looking up in master file.
+Modify `provenance-generator.cjs` to use `food.nutrientsPer100g` directly:
 
-**Pros:**
-- App ↔ Provenance always match
-- Simple fix
+```javascript
+// Instead of:
+sourceItems.push(formatSourceEntry(masterMap.get(primarySourceId)));
 
-**Cons:**
-- Provenance becomes "what app uses" not "what source says"
-- FDC portal link may show different values than provenance
+// Use:
+sourceItems.push(formatSourceEntry(food));  // Uses curated nutrients
+```
 
-### Option B: Ensure Pipeline Uses Consistent Source
+**Trade-off:** App↔Provenance always match, but FDC portal link may show different values.
 
-Debug why the curated nutrients differ from master nutrients for these specific foods. Possible causes:
-1. Hybrid matching using different FF record than provenance lookup
-2. Master file has different version of data than what pipeline uses
-3. Nutrient processing/rounding differences
+### Option B: Debug Pipeline Consistency (Thorough)
 
-**Pros:**
-- Maintains data integrity (link → source → app all match)
-- Addresses root cause
+Investigate why curated differs from master for these foods:
+1. Is it using different FF records?
+2. Is there nutrient processing/transformation?
+3. Is the master file out of sync?
 
-**Cons:**
-- Requires deeper investigation
-- May be complex if multiple causes
+### Option C: Accept ~2% Variance (Pragmatic)
 
-### Option C: Accept ~2% Variance
-
-Document that ~2% of foods have minor discrepancies due to hybrid data source selection.
-
-**Pros:**
-- No code changes needed
-- 98% accuracy is acceptable for many use cases
-
-**Cons:**
-- User clicking FDC link may see different values
-- Defensibility concern
+Document the limitation and move on. 98% accuracy is acceptable for nutrition tracking.
 
 ---
 
-## Recommendation
+## Data Integrity Discussion
 
-Before choosing a fix, investigate one failing food end-to-end:
+**User's Goal:** "If the user clicks the link on Provenance page to go out and look at the actual data in the FDC online portal, what's in the app will align to that."
 
-1. Check its provenance FDC ID
-2. Look up that ID in both Foundation Foods and SR Legacy source files
-3. Compare those nutrients to what's in the app database
-4. Determine if the mismatch is due to:
-   - Different FDC records being used
-   - Same record but different processing
-   - Master file vs source file differences
+**Current State:**
+- 98.1% of foods: FDC link → portal values match app ✓
+- 1.9% of foods: FDC link → portal values may differ ✗
+
+**Decision Made:** Prioritize accuracy over completeness. When match quality is uncertain (density revert), use the verifiable SRL source rather than potentially-inaccurate FF source.
 
 ---
 
-## Session Timeline
+## Key Files Reference
 
-| Time | Action |
-|------|--------|
-| Start | Continued from previous session on hybrid pipeline implementation |
-| | Created `run-pipeline.sh` orchestration script |
-| | Fixed phase 3 producing 0 records (missing sourceType fields) |
-| | Fixed only 1 food output (appId being set to null) |
-| | Added provenance generation as stage 9 |
-| | Created `data-audit.cjs` comprehensive validator |
-| | Fixed audit nutrient IDs (omega-3, folate) |
-| | Added rounding logic to audit tool |
-| | Disabled rounding for prov-to-FDC comparison |
-| | Implemented Option 1: Use SR Legacy source ID on density revert |
-| Current | 98.1% pass rate, 19 foods with `app_100g_mismatch` |
+### Pipeline Scripts
+- `run-pipeline.sh` - Orchestration script with stages
+- `json-data-processor.cjs` - Parses USDA JSON files
+- `master-key-assigner-json.cjs` - Assigns stable appIds
+- `candidate-generator.cjs` - Matches FF↔SRL foods
+- `serving-deriver.cjs` - Derives serving sizes, **handles density revert**
+- `food-curator-nutrients.cjs` - Filters and cleans foods
+- `data-module-generator-nutrients.cjs` - Generates final JS module
+- `provenance-generator.cjs` - Generates provenance data
 
----
+### Validation
+- `data-audit.cjs` - Comprehensive audit tool
+- `diff-validator.cjs` - Pipeline diff validation
 
-## Files Modified
+### Output
+- `src/lib/data/foodDatabaseData.js` - Final app database
+- `static/data/provenance/provenance_*.json` - Provenance chunks
 
-- `source_data/serving-deriver.cjs` - Density revert fix
-- `source_data/data-audit.cjs` - Nutrient ID fixes, rounding logic
-- `source_data/run-pipeline.sh` - Pipeline orchestration
-- `source_data/master-key-assigner-json.cjs` - Preserve hybrid pipeline fields
-- `source_data/candidate-generator.cjs` - Preserve appId
+### Config
+- `usda-fdc-json-config.json` - Nutrient ID mappings (source of truth)
 
 ---
 
-## Next Steps
+## Commits This Session
 
-1. User to test pipeline locally and re-run audit
-2. If acceptable, proceed with PR and merge
-3. User has separate branch for data migration work
-4. Goal: Merge both branches by end of day
-5. Final review of complete data solution in merged state
+| Commit | Description |
+|--------|-------------|
+| `22bc10b` | feat: Add comprehensive data audit script |
+| `f86f1f7` | fix: Correct provenance output directory |
+| `506a32b` | feat: Add provenance generation as stage 9 |
+| `4507c39` | fix: Preserve appId in candidate-generator |
+| `2aeec43` | fix: Correct audit tool nutrient IDs and add rounding |
+| `f9534cb` | fix: Disable rounding in prov-to-FDC comparison |
+| `8849caf` | fix: Use SR Legacy source ID when density revert occurs |
+
+---
+
+## Next Steps (Future Session)
+
+1. **Investigate remaining 19 failures** - Trace one food end-to-end to understand root cause
+2. **Decide on fix approach** - Option A (quick) vs Option B (thorough) vs Option C (accept)
+3. **Consider audit improvements** - Add more detailed diagnostics for mismatch cases
+4. **Integration testing** - Verify provenance page in app shows correct links
+
+---
+
+## Related Work
+
+User has a separate branch in progress for:
+- Data migration refinements
+- Journal food ID handling (appId for database foods, custom ID for custom foods)
+- Upgrading from August version to current
+- Ensuring June journal data imports correctly
+
+Both branches planned for merge, then final review of complete data solution.
