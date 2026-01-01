@@ -182,6 +182,14 @@ Document the limitation and move on. 98% accuracy is acceptable for nutrition tr
 
 ---
 
+## Audit Acceptance Threshold
+
+- ≥97% of foods must have app ↔ provenance ↔ portal agreement
+- Remaining discrepancies must be explainable by documented hybrid logic
+- No silent corruption or non-deterministic variance permitted
+
+---
+
 ## Key Files Reference
 
 ### Pipeline Scripts
