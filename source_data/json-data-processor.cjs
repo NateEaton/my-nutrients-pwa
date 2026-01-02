@@ -1,17 +1,94 @@
 #!/usr/bin/env node
 
 /*
- * USDA FDC JSON Data Processor
+ * USDA FDC JSON Data Processor (v2.0 - Hybrid Pipeline)
  *
  * Processes USDA FoodData Central JSON files (Foundation Foods and SR Legacy)
  * and extracts multi-nutrient data for use in the My Nutrients application.
  *
+ * Enhanced for hybrid data pipeline:
+ * - Source type tagging (Foundation vs SR Legacy)
+ * - Food category extraction (FDC category codes)
+ * - Preparation state classification (raw, cooked, dry)
+ * - Water content extraction for density validation
+ *
  * Input: Foundation Foods JSON and SR Legacy JSON files
- * Output: Unified JSON format with all nutrients calculated per serving
+ * Output: Unified JSON format with all nutrients and metadata
  */
 
 const fs = require('fs');
 const path = require('path');
+
+// Preparation state classification patterns
+const STATE_PATTERNS = {
+  raw: /\b(raw|fresh|uncooked)\b/i,
+  cooked: /\b(cooked|boiled|baked|fried|roasted|steamed|grilled|braised|broiled|sauteed|stewed|poached|simmered)\b/i,
+  dry: /\b(dry|dried|dehydrated|uncooked)\b/i,
+  processed: /\b(canned|frozen|prepared|pickled|smoked|cured)\b/i
+};
+
+// Classify food preparation state
+function classifyState(name) {
+  const nameLower = name.toLowerCase();
+
+  // Check for raw indicators
+  if (STATE_PATTERNS.raw.test(nameLower)) {
+    // Make sure it's not also cooked
+    if (!STATE_PATTERNS.cooked.test(nameLower)) {
+      return 'raw';
+    }
+  }
+
+  // Check for cooked indicators
+  if (STATE_PATTERNS.cooked.test(nameLower)) {
+    return 'cooked';
+  }
+
+  // Check for dry indicators (but not if also cooked)
+  if (STATE_PATTERNS.dry.test(nameLower) && !STATE_PATTERNS.cooked.test(nameLower)) {
+    return 'dry';
+  }
+
+  // Check for processed indicators
+  if (STATE_PATTERNS.processed.test(nameLower)) {
+    return 'processed';
+  }
+
+  return 'unspecified';
+}
+
+// Extract FDC food category from food object
+function extractFoodCategory(food) {
+  // Foundation Foods use foodCategory object
+  if (food.foodCategory) {
+    return {
+      code: food.foodCategory.code || food.foodCategory.id?.toString(),
+      description: food.foodCategory.description || food.foodCategory.name
+    };
+  }
+
+  // SR Legacy may use fdcCategory or similar
+  if (food.fdcCategory) {
+    return {
+      code: food.fdcCategory.code || food.fdcCategory.id?.toString(),
+      description: food.fdcCategory.description
+    };
+  }
+
+  // Try to get from ndbNumber prefix (SR Legacy pattern)
+  if (food.ndbNumber) {
+    const prefix = food.ndbNumber.toString().substring(0, 2);
+    return {
+      code: prefix + '00',
+      description: null
+    };
+  }
+
+  return null;
+}
+
+// USDA water content nutrient number
+const WATER_NUTRIENT_NUMBER = '255';
 
 // Parse command line arguments
 function parseArgs() {
@@ -89,11 +166,13 @@ function loadJsonFile(filePath) {
 }
 
 // Extract nutrients from foodNutrients array
+// Returns { nutrients, waterContent } where waterContent is used for density validation
 function extractNutrients(foodNutrients, nutrientMapping) {
   const nutrients = {};
+  let waterContent = null;
 
   if (!foodNutrients || !Array.isArray(foodNutrients)) {
-    return nutrients;
+    return { nutrients, waterContent };
   }
 
   for (const nutrientData of foodNutrients) {
@@ -104,6 +183,11 @@ function extractNutrients(foodNutrients, nutrientMapping) {
       const propertyName = nutrientMapping[nutrientNumber];
       if (propertyName) {
         nutrients[propertyName] = parseFloat(amount);
+      }
+
+      // Also extract water content (nutrient 255) for density validation
+      if (nutrientNumber === WATER_NUTRIENT_NUMBER || nutrientNumber === '255') {
+        waterContent = parseFloat(amount);
       }
     }
   }
@@ -116,7 +200,7 @@ function extractNutrients(foodNutrients, nutrientMapping) {
       (nutrients.omega3DHA || 0);
   }
 
-  return nutrients;
+  return { nutrients, waterContent };
 }
 
 // Calculate nutrients for a specific portion
@@ -168,13 +252,19 @@ function processFood(food, nutrientMapping, sourceType) {
     return null;
   }
 
-  // Extract nutrients per 100g
-  const nutrientsPer100g = extractNutrients(food.foodNutrients, nutrientMapping);
+  // Extract nutrients per 100g (now returns object with waterContent)
+  const { nutrients: nutrientsPer100g, waterContent } = extractNutrients(food.foodNutrients, nutrientMapping);
 
   // Check if we have any nutrients at all
   if (Object.keys(nutrientsPer100g).length === 0) {
     return null;
   }
+
+  // Extract food category
+  const foodCategory = extractFoodCategory(food);
+
+  // Classify preparation state
+  const prepState = classifyState(name);
 
   // Process portions
   const measures = [];
@@ -212,14 +302,33 @@ function processFood(food, nutrientMapping, sourceType) {
   // Sort measures by sequence number
   measures.sort((a, b) => a.sequenceNumber - b.sequenceNumber);
 
-  return {
+  // Build the food object with enhanced metadata
+  const processedFood = {
     id: fdcId,
     sourceId: fdcId,
     name,
     measures,
     source: sourceType,
-    nutrientsPer100g
+    sourceType: sourceType, // Explicit source type for hybrid pipeline
+    nutrientsPer100g,
+    prepState // Preparation state classification
   };
+
+  // Add optional metadata if available
+  if (foodCategory) {
+    processedFood.foodCategory = foodCategory;
+  }
+
+  if (waterContent !== null) {
+    processedFood.waterContent = waterContent; // For density validation
+  }
+
+  // Add NDB number if available (SR Legacy)
+  if (food.ndbNumber) {
+    processedFood.ndbNumber = food.ndbNumber;
+  }
+
+  return processedFood;
 }
 
 // Process all foods from a dataset
@@ -334,4 +443,11 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { processFood, extractNutrients, calculatePortionNutrients };
+module.exports = {
+  processFood,
+  extractNutrients,
+  calculatePortionNutrients,
+  classifyState,
+  extractFoodCategory,
+  STATE_PATTERNS
+};

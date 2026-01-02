@@ -1,0 +1,290 @@
+{
+  "_metadata": {
+    "description": "Standard weights for countable foods (items with discrete units)",
+    "source": "USDA FoodData Central, FDA Nutrition Facts guidelines",
+    "notes": "All weights in grams. Used when household measures reference 'medium', 'large', etc."
+  },
+  "eggs": {
+    "peewee": 35,
+    "small": 38,
+    "medium": 44,
+    "large": 50,
+    "extra_large": 56,
+    "jumbo": 63,
+    "default": 50,
+    "yolk_large": 17,
+    "white_large": 33
+  },
+  "apples": {
+    "small": 150,
+    "medium": 182,
+    "large": 223,
+    "default": 182,
+    "slice": 15
+  },
+  "bananas": {
+    "extra_small": 81,
+    "small": 101,
+    "medium": 118,
+    "large": 136,
+    "extra_large": 152,
+    "default": 118,
+    "slice": 7
+  },
+  "oranges": {
+    "small": 96,
+    "medium": 131,
+    "large": 184,
+    "default": 131,
+    "section": 11
+  },
+  "lemons": {
+    "small": 58,
+    "medium": 84,
+    "large": 108,
+    "default": 84,
+    "wedge": 7,
+    "slice": 6
+  },
+  "limes": {
+    "small": 44,
+    "medium": 67,
+    "large": 88,
+    "default": 67,
+    "wedge": 8
+  },
+  "grapefruits": {
+    "small": 200,
+    "medium": 246,
+    "large": 333,
+    "default": 246,
+    "section": 12
+  },
+  "peaches": {
+    "small": 79,
+    "medium": 150,
+    "large": 175,
+    "default": 150,
+    "slice": 15
+  },
+  "pears": {
+    "small": 148,
+    "medium": 178,
+    "large": 209,
+    "default": 178,
+    "slice": 18
+  },
+  "plums": {
+    "small": 50,
+    "medium": 66,
+    "large": 83,
+    "default": 66
+  },
+  "avocados": {
+    "small": 136,
+    "medium": 201,
+    "large": 304,
+    "default": 201,
+    "slice": 20,
+    "california": 170,
+    "florida": 304
+  },
+  "potatoes": {
+    "small": 170,
+    "medium": 213,
+    "large": 299,
+    "default": 213
+  },
+  "sweet_potatoes": {
+    "small": 60,
+    "medium": 114,
+    "large": 180,
+    "default": 114
+  },
+  "tomatoes": {
+    "cherry": 17,
+    "grape": 8,
+    "plum": 62,
+    "small": 91,
+    "medium": 123,
+    "large": 182,
+    "default": 123,
+    "slice": 20
+  },
+  "onions": {
+    "small": 70,
+    "medium": 110,
+    "large": 150,
+    "default": 110,
+    "slice": 14
+  },
+  "garlic": {
+    "clove": 3,
+    "head": 40,
+    "default": 3
+  },
+  "carrots": {
+    "baby": 10,
+    "small": 50,
+    "medium": 61,
+    "large": 72,
+    "default": 61,
+    "stick": 8
+  },
+  "celery": {
+    "stalk_small": 17,
+    "stalk_medium": 40,
+    "stalk_large": 64,
+    "default": 40
+  },
+  "cucumbers": {
+    "small": 158,
+    "medium": 201,
+    "large": 280,
+    "default": 201,
+    "slice": 7
+  },
+  "bell_peppers": {
+    "small": 74,
+    "medium": 119,
+    "large": 164,
+    "default": 119,
+    "ring": 10,
+    "strip": 8
+  },
+  "mushrooms": {
+    "small": 9,
+    "medium": 18,
+    "large": 23,
+    "default": 18,
+    "slice": 5
+  },
+  "broccoli": {
+    "floret": 11,
+    "spear": 37,
+    "stalk_medium": 180,
+    "bunch": 608,
+    "default": 37
+  },
+  "cauliflower": {
+    "floret": 13,
+    "head_small": 400,
+    "head_medium": 588,
+    "head_large": 840,
+    "default": 13
+  },
+  "bread": {
+    "slice_thin": 23,
+    "slice_regular": 28,
+    "slice_thick": 38,
+    "slice": 28,
+    "default": 28
+  },
+  "bagels": {
+    "mini": 26,
+    "small": 55,
+    "medium": 84,
+    "large": 105,
+    "default": 84
+  },
+  "muffins": {
+    "mini": 28,
+    "small": 57,
+    "medium": 113,
+    "large": 139,
+    "jumbo": 184,
+    "default": 57
+  },
+  "rolls": {
+    "dinner": 28,
+    "hamburger": 43,
+    "hoagie": 76,
+    "kaiser": 57,
+    "default": 43
+  },
+  "tortillas": {
+    "corn_6inch": 26,
+    "corn_8inch": 44,
+    "flour_6inch": 30,
+    "flour_8inch": 46,
+    "flour_10inch": 72,
+    "default": 46
+  },
+  "crackers": {
+    "saltine": 3,
+    "graham_square": 7,
+    "ritz": 4,
+    "triscuit": 5,
+    "default": 4
+  },
+  "cookies": {
+    "chocolate_chip": 16,
+    "oreo": 11,
+    "sugar": 15,
+    "oatmeal": 15,
+    "default": 15
+  },
+  "chicken_pieces": {
+    "breast_bone_in": 174,
+    "breast_boneless": 172,
+    "thigh_bone_in": 116,
+    "thigh_boneless": 83,
+    "drumstick": 76,
+    "wing": 34,
+    "tender": 33,
+    "default": 120
+  },
+  "sausages": {
+    "breakfast_link": 27,
+    "breakfast_patty": 45,
+    "italian_link": 83,
+    "bratwurst": 85,
+    "hot_dog": 45,
+    "kielbasa_slice": 26,
+    "default": 45
+  },
+  "bacon": {
+    "slice_regular": 8,
+    "slice_thick": 12,
+    "default": 8
+  },
+  "deli_meats": {
+    "slice_thin": 14,
+    "slice_regular": 21,
+    "slice_thick": 28,
+    "default": 21
+  },
+  "cheese_slices": {
+    "american": 21,
+    "swiss": 28,
+    "cheddar": 28,
+    "provolone": 28,
+    "mozzarella": 28,
+    "default": 28
+  },
+  "shrimp": {
+    "small": 6,
+    "medium": 10,
+    "large": 17,
+    "jumbo": 21,
+    "colossal": 28,
+    "default": 10
+  },
+  "fish_fillets": {
+    "small": 85,
+    "medium": 113,
+    "large": 170,
+    "default": 113
+  },
+  "nuts_individual": {
+    "almond": 1.2,
+    "cashew": 1.6,
+    "walnut_half": 2.5,
+    "pecan_half": 2.3,
+    "peanut": 0.6,
+    "macadamia": 2.5,
+    "pistachio": 0.6,
+    "brazil_nut": 5,
+    "hazelnut": 1.3
+  }
+}

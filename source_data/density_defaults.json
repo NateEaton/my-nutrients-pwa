@@ -1,0 +1,229 @@
+{
+  "_metadata": {
+    "description": "Default density values for volumetric foods when explicit measures are unavailable",
+    "notes": "Grams per cup (240ml). Based on USDA common food volume-to-weight conversions.",
+    "confidence_levels": {
+      "high": "Well-established, consistent across sources",
+      "medium": "Generally reliable, some variation expected",
+      "low": "Approximate, high variability depending on form"
+    }
+  },
+  "byTexture": {
+    "liquid": {
+      "grams_per_cup": 240,
+      "confidence": "high",
+      "examples": ["water", "milk", "juice", "broth"]
+    },
+    "liquid_dense": {
+      "grams_per_cup": 255,
+      "confidence": "high",
+      "examples": ["honey", "molasses", "corn syrup"]
+    },
+    "oil": {
+      "grams_per_cup": 218,
+      "confidence": "high",
+      "examples": ["vegetable oil", "olive oil", "canola oil"]
+    },
+    "cream": {
+      "grams_per_cup": 232,
+      "confidence": "high",
+      "examples": ["heavy cream", "light cream", "half and half"]
+    },
+    "powder_fine": {
+      "grams_per_cup": 125,
+      "confidence": "medium",
+      "examples": ["all-purpose flour", "cake flour", "powdered sugar"]
+    },
+    "powder_dense": {
+      "grams_per_cup": 200,
+      "confidence": "medium",
+      "examples": ["whole wheat flour", "cocoa powder"]
+    },
+    "granular_fine": {
+      "grams_per_cup": 200,
+      "confidence": "high",
+      "examples": ["granulated sugar", "table salt"]
+    },
+    "granular_coarse": {
+      "grams_per_cup": 185,
+      "confidence": "medium",
+      "examples": ["rice (uncooked)", "quinoa", "couscous dry"]
+    },
+    "granular_cooked": {
+      "grams_per_cup": 175,
+      "confidence": "medium",
+      "examples": ["cooked rice", "cooked quinoa", "cooked pasta"]
+    },
+    "shredded": {
+      "grams_per_cup": 110,
+      "confidence": "medium",
+      "examples": ["shredded cheese", "shredded cabbage", "shredded carrot"]
+    },
+    "chopped": {
+      "grams_per_cup": 150,
+      "confidence": "low",
+      "examples": ["chopped onion", "chopped celery", "diced vegetables"]
+    },
+    "leafy_raw": {
+      "grams_per_cup": 30,
+      "confidence": "low",
+      "examples": ["lettuce", "spinach raw", "arugula", "mixed greens"]
+    },
+    "leafy_packed": {
+      "grams_per_cup": 55,
+      "confidence": "medium",
+      "examples": ["packed spinach", "packed kale", "packed herbs"]
+    },
+    "leafy_cooked": {
+      "grams_per_cup": 180,
+      "confidence": "medium",
+      "examples": ["cooked spinach", "cooked kale", "sauteed greens"]
+    },
+    "berries": {
+      "grams_per_cup": 145,
+      "confidence": "medium",
+      "examples": ["blueberries", "raspberries", "strawberries sliced"]
+    },
+    "cubed_fruit": {
+      "grams_per_cup": 160,
+      "confidence": "medium",
+      "examples": ["cubed melon", "cubed mango", "pineapple chunks"]
+    },
+    "sliced_fruit": {
+      "grams_per_cup": 165,
+      "confidence": "medium",
+      "examples": ["sliced banana", "sliced apple", "sliced peaches"]
+    },
+    "dried_fruit": {
+      "grams_per_cup": 160,
+      "confidence": "medium",
+      "examples": ["raisins", "dried cranberries", "dried apricots"]
+    },
+    "nuts_whole": {
+      "grams_per_cup": 140,
+      "confidence": "medium",
+      "examples": ["almonds", "cashews", "peanuts"]
+    },
+    "nuts_chopped": {
+      "grams_per_cup": 120,
+      "confidence": "medium",
+      "examples": ["chopped walnuts", "chopped pecans", "slivered almonds"]
+    },
+    "dense_solid": {
+      "grams_per_cup": 225,
+      "confidence": "low",
+      "examples": ["mashed potatoes", "cottage cheese", "ricotta"]
+    },
+    "soft_solid": {
+      "grams_per_cup": 230,
+      "confidence": "medium",
+      "examples": ["yogurt", "sour cream", "mayonnaise"]
+    },
+    "spread": {
+      "grams_per_cup": 227,
+      "confidence": "medium",
+      "examples": ["peanut butter", "butter", "cream cheese"]
+    },
+    "cooked_meat": {
+      "grams_per_cup": 140,
+      "confidence": "medium",
+      "examples": ["diced chicken", "ground beef cooked", "shredded pork"]
+    },
+    "cooked_beans": {
+      "grams_per_cup": 177,
+      "confidence": "high",
+      "examples": ["cooked black beans", "cooked chickpeas", "cooked lentils"]
+    },
+    "cereal_flakes": {
+      "grams_per_cup": 30,
+      "confidence": "low",
+      "examples": ["corn flakes", "bran flakes", "wheat flakes"]
+    },
+    "cereal_granola": {
+      "grams_per_cup": 115,
+      "confidence": "medium",
+      "examples": ["granola", "muesli", "grape nuts"]
+    },
+    "cereal_puffed": {
+      "grams_per_cup": 15,
+      "confidence": "medium",
+      "examples": ["puffed rice", "puffed wheat"]
+    }
+  },
+  "byFoodCategory": {
+    "0100": {
+      "milk": { "grams_per_cup": 244, "confidence": "high" },
+      "yogurt": { "grams_per_cup": 245, "confidence": "high" },
+      "cheese_shredded": { "grams_per_cup": 113, "confidence": "medium" },
+      "cottage_cheese": { "grams_per_cup": 226, "confidence": "high" },
+      "cream": { "grams_per_cup": 238, "confidence": "high" },
+      "default": { "grams_per_cup": 244, "confidence": "medium" }
+    },
+    "0200": {
+      "dried_herbs": { "grams_per_tsp": 0.7, "confidence": "medium" },
+      "ground_spice": { "grams_per_tsp": 2.3, "confidence": "medium" },
+      "default": { "grams_per_tsp": 2, "confidence": "low" }
+    },
+    "0400": {
+      "oil": { "grams_per_tbsp": 14, "confidence": "high" },
+      "butter": { "grams_per_tbsp": 14, "confidence": "high" },
+      "margarine": { "grams_per_tbsp": 14, "confidence": "high" },
+      "default": { "grams_per_tbsp": 14, "confidence": "high" }
+    },
+    "0900": {
+      "juice": { "grams_per_cup": 248, "confidence": "high" },
+      "berries": { "grams_per_cup": 148, "confidence": "medium" },
+      "sliced": { "grams_per_cup": 165, "confidence": "medium" },
+      "dried": { "grams_per_cup": 160, "confidence": "medium" },
+      "default": { "grams_per_cup": 150, "confidence": "medium" }
+    },
+    "1100": {
+      "leafy_raw": { "grams_per_cup": 35, "confidence": "low" },
+      "leafy_cooked": { "grams_per_cup": 180, "confidence": "medium" },
+      "chopped_raw": { "grams_per_cup": 130, "confidence": "medium" },
+      "cooked": { "grams_per_cup": 155, "confidence": "medium" },
+      "juice": { "grams_per_cup": 242, "confidence": "high" },
+      "default": { "grams_per_cup": 130, "confidence": "medium" }
+    },
+    "1200": {
+      "whole": { "grams_per_cup": 140, "confidence": "medium" },
+      "chopped": { "grams_per_cup": 120, "confidence": "medium" },
+      "ground": { "grams_per_cup": 95, "confidence": "medium" },
+      "butter": { "grams_per_tbsp": 16, "confidence": "high" },
+      "default": { "grams_per_cup": 135, "confidence": "medium" }
+    },
+    "1400": {
+      "water": { "grams_per_cup": 237, "confidence": "high" },
+      "coffee_brewed": { "grams_per_cup": 237, "confidence": "high" },
+      "tea_brewed": { "grams_per_cup": 237, "confidence": "high" },
+      "carbonated": { "grams_per_cup": 240, "confidence": "high" },
+      "default": { "grams_per_cup": 240, "confidence": "high" }
+    },
+    "1600": {
+      "cooked": { "grams_per_cup": 177, "confidence": "high" },
+      "dry": { "grams_per_cup": 200, "confidence": "medium" },
+      "default": { "grams_per_cup": 177, "confidence": "medium" }
+    },
+    "2000": {
+      "rice_cooked": { "grams_per_cup": 158, "confidence": "high" },
+      "rice_dry": { "grams_per_cup": 185, "confidence": "high" },
+      "pasta_cooked": { "grams_per_cup": 140, "confidence": "medium" },
+      "pasta_dry": { "grams_per_cup": 100, "confidence": "medium" },
+      "oats_dry": { "grams_per_cup": 80, "confidence": "medium" },
+      "oats_cooked": { "grams_per_cup": 234, "confidence": "high" },
+      "flour": { "grams_per_cup": 125, "confidence": "medium" },
+      "default": { "grams_per_cup": 150, "confidence": "low" }
+    }
+  },
+  "tablespoonToGrams": {
+    "liquid": 15,
+    "oil": 14,
+    "honey": 21,
+    "butter": 14,
+    "peanut_butter": 16,
+    "flour": 8,
+    "sugar": 12.5,
+    "salt": 18,
+    "default": 15
+  }
+}
