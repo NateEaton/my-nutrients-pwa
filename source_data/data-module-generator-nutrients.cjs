@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * data-module-generator-nutrients.cjs
+ * data-module-generator-nutrients.cjs (v2.0 - Hybrid Pipeline)
  *
- * **Multi-Nutrient Version**
+ * **Multi-Nutrient Version with Coverage Reporting**
  * Generates app-ready database modules from curated multi-nutrient JSON data.
  *
  * Features:
@@ -11,6 +11,7 @@
  * - Generates ready-to-use JS modules with exports
  * - Optional minification for smaller bundle size
  * - Minimal output option (strips metadata)
+ * - Coverage report generation for pipeline validation
  */
 
 const fs = require("fs");
@@ -22,6 +23,8 @@ const fileArgs = [];
 let moduleOutput = false;
 let minify = false;
 let minimal = false;
+let generateCoverageReport = false;
+let coverageReportPath = null;
 
 for (let i = 0; i < args.length; i++) {
   const arg = args[i];
@@ -35,10 +38,16 @@ for (let i = 0; i < args.length; i++) {
     case "--minimal":
       minimal = true;
       break;
+    case "--coverage":
+      generateCoverageReport = true;
+      if (i + 1 < args.length && !args[i + 1].startsWith("--")) {
+        coverageReportPath = args[++i];
+      }
+      break;
     default:
       if (arg.startsWith("--") || arg.startsWith("-")) {
         console.error(`❌ Error: Unknown parameter '${arg}'`);
-        console.error(`Valid parameters: --module, --minify, --minimal`);
+        console.error(`Valid parameters: --module, --minify, --minimal, --coverage [path]`);
         process.exit(1);
       } else {
         fileArgs.push(arg);
@@ -52,11 +61,12 @@ const outputFile = fileArgs[1] || "foodDatabaseData.js";
 
 if (!inputFile) {
   console.error(
-    "Usage: node data-module-generator-nutrients.cjs <curated.json> [output.js] [--module] [--minify] [--minimal]"
+    "Usage: node data-module-generator-nutrients.cjs <curated.json> [output.js] [--module] [--minify] [--minimal] [--coverage [path]]"
   );
   console.error("  --module: Generate JS module with exports (recommended)");
   console.error("  --minify: Compress object keys to reduce bundle size");
   console.error("  --minimal: Strip metadata fields for smaller app bundle");
+  console.error("  --coverage [path]: Generate coverage report (default: coverage_report.txt)");
   process.exit(1);
 }
 
@@ -277,6 +287,157 @@ function processFood(food, options) {
   return processed;
 }
 
+/**
+ * Generate coverage report for pipeline validation
+ */
+function generateCoverageReportData(foods, metadata) {
+  const stats = {
+    totalFoods: foods.length,
+    nutrientSources: {
+      foundation: 0,
+      srLegacy: 0,
+      srLegacyFallback: 0
+    },
+    servingSources: {
+      srLegacy: 0,
+      foundation: 0,
+      raccDerived: 0,
+      densityDerived: 0,
+      only100g: 0
+    },
+    servingCoverage: {
+      withHouseholdMeasure: 0,
+      only100g: 0
+    },
+    nutrientCoverage: {}
+  };
+
+  // Key nutrients to track coverage for
+  const keyNutrients = ['protein', 'calcium', 'fiber', 'vitaminD', 'iron', 'potassium'];
+
+  // Initialize nutrient coverage tracking
+  for (const nutrient of keyNutrients) {
+    stats.nutrientCoverage[nutrient] = { present: 0, missing: 0 };
+  }
+
+  for (const food of foods) {
+    // Track nutrient source
+    const sourceName = food.sourceName || food.source || '';
+    if (sourceName.includes('Foundation')) {
+      if (sourceName.includes('fallback')) {
+        stats.nutrientSources.srLegacyFallback++;
+      } else {
+        stats.nutrientSources.foundation++;
+      }
+    } else {
+      stats.nutrientSources.srLegacy++;
+    }
+
+    // Track serving source
+    const derivationSource = food.derivationSource;
+    if (derivationSource === 'RACC') {
+      stats.servingSources.raccDerived++;
+    } else if (derivationSource === 'density') {
+      stats.servingSources.densityDerived++;
+    } else if (food.provenance?.refSource?.includes('Foundation')) {
+      stats.servingSources.foundation++;
+    } else {
+      stats.servingSources.srLegacy++;
+    }
+
+    // Check if has household measure
+    const hasHouseholdMeasure = food.measures?.some(m => {
+      const measure = m.measure?.toLowerCase() || m.s?.toLowerCase() || '';
+      return !measure.includes('100 g') &&
+             (measure.includes('cup') ||
+              measure.includes('oz') ||
+              measure.includes('tbsp') ||
+              measure.includes('tsp') ||
+              measure.includes('slice') ||
+              measure.includes('piece'));
+    });
+
+    if (hasHouseholdMeasure) {
+      stats.servingCoverage.withHouseholdMeasure++;
+    } else {
+      stats.servingCoverage.only100g++;
+      stats.servingSources.only100g++;
+    }
+
+    // Track nutrient coverage
+    const nutrients = food.nutrientsPer100g || food.n100 || {};
+    for (const nutrient of keyNutrients) {
+      if (nutrients[nutrient] !== undefined && nutrients[nutrient] !== null && nutrients[nutrient] > 0) {
+        stats.nutrientCoverage[nutrient].present++;
+      } else {
+        stats.nutrientCoverage[nutrient].missing++;
+      }
+    }
+  }
+
+  return stats;
+}
+
+/**
+ * Format coverage report as text
+ */
+function formatCoverageReport(stats, metadata) {
+  const lines = [];
+  const now = new Date().toISOString();
+
+  lines.push('=== Pipeline Coverage Report ===');
+  lines.push(`Generated: ${now}`);
+  lines.push(`Total foods in output: ${stats.totalFoods}`);
+  lines.push('');
+
+  lines.push('Nutrient Sources:');
+  const ffPct = (stats.nutrientSources.foundation / stats.totalFoods * 100).toFixed(1);
+  const srlPct = (stats.nutrientSources.srLegacy / stats.totalFoods * 100).toFixed(1);
+  const fallbackPct = (stats.nutrientSources.srLegacyFallback / stats.totalFoods * 100).toFixed(1);
+  lines.push(`  Foundation Foods primary: ${stats.nutrientSources.foundation.toString().padStart(6)} (${ffPct}%)`);
+  lines.push(`  SR Legacy primary:        ${stats.nutrientSources.srLegacy.toString().padStart(6)} (${srlPct}%)`);
+  lines.push(`  SR Legacy fallback:       ${stats.nutrientSources.srLegacyFallback.toString().padStart(6)} (${fallbackPct}%)`);
+  lines.push('');
+
+  lines.push('Serving Sources:');
+  const srlServPct = (stats.servingSources.srLegacy / stats.totalFoods * 100).toFixed(1);
+  const ffServPct = (stats.servingSources.foundation / stats.totalFoods * 100).toFixed(1);
+  const raccPct = (stats.servingSources.raccDerived / stats.totalFoods * 100).toFixed(1);
+  const densityPct = (stats.servingSources.densityDerived / stats.totalFoods * 100).toFixed(1);
+  const only100gPct = (stats.servingSources.only100g / stats.totalFoods * 100).toFixed(1);
+  lines.push(`  SR Legacy measures:       ${stats.servingSources.srLegacy.toString().padStart(6)} (${srlServPct}%)`);
+  lines.push(`  Foundation Foods measures:${stats.servingSources.foundation.toString().padStart(6)} (${ffServPct}%)`);
+  lines.push(`  RACC-derived:             ${stats.servingSources.raccDerived.toString().padStart(6)} (${raccPct}%)`);
+  lines.push(`  Density-derived:          ${stats.servingSources.densityDerived.toString().padStart(6)} (${densityPct}%)`);
+  lines.push(`  100g only:                ${stats.servingSources.only100g.toString().padStart(6)} (${only100gPct}%)`);
+  lines.push('');
+
+  lines.push('Serving Coverage:');
+  const householdPct = (stats.servingCoverage.withHouseholdMeasure / stats.totalFoods * 100).toFixed(1);
+  lines.push(`  With household measure:   ${stats.servingCoverage.withHouseholdMeasure.toString().padStart(6)} (${householdPct}%)`);
+  lines.push(`  100g only:                ${stats.servingCoverage.only100g.toString().padStart(6)} (${only100gPct}%)`);
+  lines.push('');
+
+  lines.push('Key Nutrient Coverage:');
+  for (const [nutrient, coverage] of Object.entries(stats.nutrientCoverage)) {
+    const pct = (coverage.present / stats.totalFoods * 100).toFixed(1);
+    lines.push(`  ${nutrient.padEnd(15)}: ${coverage.present.toString().padStart(6)} foods (${pct}%)`);
+  }
+  lines.push('');
+
+  // Add metadata stats if available
+  if (metadata?.stats) {
+    lines.push('Pipeline Stats (from metadata):');
+    for (const [key, value] of Object.entries(metadata.stats)) {
+      if (typeof value === 'number') {
+        lines.push(`  ${key}: ${value}`);
+      }
+    }
+  }
+
+  return lines.join('\n');
+}
+
 function generateModule(foods, metadata, options) {
   const processedFoods = foods.map((food) => processFood(food, options));
 
@@ -399,6 +560,21 @@ function generateModule(foods, metadata, options) {
     console.log(`   Total measures: ${totalMeasures}`);
     console.log(`   Nutrients tracked: ${totalNutrients}`);
     console.log(`   Avg measures/food: ${(totalMeasures / inputData.foods.length).toFixed(1)}`);
+
+    // Generate coverage report if requested
+    if (generateCoverageReport) {
+      const reportPath = coverageReportPath || 'coverage_report.txt';
+      console.log(`\n📋 Generating coverage report...`);
+
+      const coverageStats = generateCoverageReportData(inputData.foods, inputData.metadata);
+      const reportText = formatCoverageReport(coverageStats, inputData.metadata);
+
+      fs.writeFileSync(reportPath, reportText, 'utf-8');
+      console.log(`✅ Coverage report: ${reportPath}`);
+
+      // Also print report to console
+      console.log('\n' + reportText);
+    }
 
     console.log("\n🎉 Module generation complete!");
 

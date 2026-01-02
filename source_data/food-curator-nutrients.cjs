@@ -272,6 +272,9 @@ function containsBrand(foodName, keepSet) {
     "Applebee's", "Chick-fil-A", "Oscar Mayer", "Pepperidge Farm",
     "Martha White", "Silk", "Nestle", "Snackwell", "York",
     "Reddi Wip", "Schar", "Rudi's", "Heinz", "Clif Z",
+    // Added 2026-01-02: brands that slipped through
+    "George Weston", "Thomas", "Brownberry", "Gamesa", "La Moderna",
+    "Bimbo", "La Ricura", "Powerade", "Monster", "Muscle Milk",
   ]);
 
   for (const brand of knownBrandBases) {
