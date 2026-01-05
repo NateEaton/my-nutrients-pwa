@@ -97,8 +97,8 @@ function normalizeName(originalName) {
   // Stage 5: Final cleanup
   norm = norm
     .replace(/\s+/g, " ")
+    .replace(/,(\s*,)+/g, ",")      // Remove duplicate commas (with optional whitespace)
     .replace(/\s*,\s*/g, ", ")
-    .replace(/,+/g, ",")
     .replace(/,\s*$/g, "")
     .replace(/^\s*,/g, "")
     .replace(/\s\s+/g, " ")
@@ -533,7 +533,7 @@ function applyAbridge(data) {
     console.log(`[ABRIDGE] ${step}: ${before} → ${after} (-${before - after})`);
   };
 
-  const stapleFoodRegex = /\b(milk|cheese|yogurt|fruit|vegetable|juice|melon|bread|egg|butter)\b/i;
+  const stapleFoodRegex = /\b(milk|cheese|yogurt|fruit|vegetable|juice|melon|bread|egg|butter|apple|apples|pepper|peppers|tomato|tomatoes|orange|oranges|banana|bananas|berry|berries|lettuce|carrot|carrots|broccoli|spinach)\b/i;
 
   // Step 1: Collapse cooking methods
   const methodWords = /\b(roasted|boiled|fried|grilled|braised|steamed|baked|cooked|broiled|raw|pan-fried|not breaded|breaded)\b/gi;
@@ -544,8 +544,8 @@ function applyAbridge(data) {
     const baseName = f.name
       .replace(methodWords, "")
       .replace(/\(\)/g, "")
-      .replace(/, ,/g, ",")
-      .replace(/,+/g, ",")
+      .replace(/,(\s*,)+/g, ",")      // Remove duplicate commas (with optional whitespace)
+      .replace(/\s*,\s*/g, ", ")      // Normalize comma spacing
       .replace(/,\s*$/g, "")
       .replace(/\s\s+/g, " ")
       .trim();
@@ -571,7 +571,8 @@ function applyAbridge(data) {
     const simplerName = f.name
       .replace(cutWords, "")
       .replace(/\(\)/g, "")
-      .replace(/,+/g, ",")
+      .replace(/,(\s*,)+/g, ",")      // Remove duplicate commas (with optional whitespace)
+      .replace(/\s*,\s*/g, ", ")      // Normalize comma spacing
       .replace(/,\s*$/g, "")
       .replace(/\s\s+/g, " ")
       .trim();

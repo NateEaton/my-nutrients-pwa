@@ -20,6 +20,7 @@ if (args.length < 2) {
   console.error('Converts filled-in CSV to JSON mapping format for cleanup script.');
   console.error('');
   console.error('CSV should have columns: name, targetAppId, convertToCustom');
+  console.error('Optional: addedToKeepList column to mark foods to ignore (Y to skip)');
   console.error('Fill in either targetAppId OR convertToCustom=TRUE for each food.');
   process.exit(1);
 }
@@ -43,10 +44,15 @@ const header = lines[0].split(',');
 const nameIdx = header.indexOf('name');
 const targetAppIdIdx = header.indexOf('targetAppId');
 const convertToCustomIdx = header.indexOf('convertToCustom');
+const addedToKeepListIdx = header.indexOf('addedToKeepList');
 
 if (nameIdx === -1 || targetAppIdIdx === -1 || convertToCustomIdx === -1) {
   console.error('❌ Error: CSV missing required columns (name, targetAppId, convertToCustom)');
   process.exit(1);
+}
+
+if (addedToKeepListIdx !== -1) {
+  console.log('📋 Found addedToKeepList column - will skip foods marked with Y');
 }
 
 // Build mapping object
@@ -57,6 +63,7 @@ const mapping = {
 let mappedCount = 0;
 let customCount = 0;
 let skippedCount = 0;
+let keepListCount = 0;
 
 for (let i = 1; i < lines.length; i++) {
   const line = lines[i];
@@ -83,8 +90,15 @@ for (let i = 1; i < lines.length; i++) {
   const name = cols[nameIdx].replace(/^"|"$/g, ''); // Remove surrounding quotes
   const targetAppId = cols[targetAppIdIdx]?.trim();
   const convertToCustom = cols[convertToCustomIdx]?.trim().toUpperCase();
+  const addedToKeepList = addedToKeepListIdx !== -1 ? cols[addedToKeepListIdx]?.trim().toUpperCase() : '';
 
   if (!name) continue;
+
+  // Skip foods marked to keep (ignore)
+  if (addedToKeepList === 'Y' || addedToKeepList === 'YES') {
+    keepListCount++;
+    continue;
+  }
 
   // Check if either field is filled in
   if (targetAppId && targetAppId !== '') {
@@ -108,6 +122,7 @@ try {
   console.log(`✅ Conversion complete!`);
   console.log(`   Mapped to appId: ${mappedCount}`);
   console.log(`   Convert to custom: ${customCount}`);
+  console.log(`   Kept as-is (addedToKeepList): ${keepListCount}`);
   console.log(`   Skipped (no mapping): ${skippedCount}`);
   console.log(`\n📁 Output: ${outputJson}`);
   console.log(`\n📝 Next step:`);

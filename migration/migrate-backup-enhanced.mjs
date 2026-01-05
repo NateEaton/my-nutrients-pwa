@@ -59,7 +59,7 @@ function getPrimaryMeasure(food) {
     // New multi-measure format - return first measure
     return {
       measure: food.measures[0].measure,
-      calcium: food.measures[0].calcium
+      calcium: parseFloat(food.measures[0].nutrients?.calcium || food.measures[0].calcium || 0)
     };
   } else if (food.m && food.c !== undefined) {
     // Legacy minified format
@@ -87,7 +87,7 @@ function getAllMeasures(food) {
     // New multi-measure format
     return food.measures.map(m => ({
       measure: m.measure,
-      calcium: parseFloat(m.calcium)
+      calcium: parseFloat(m.nutrients?.calcium || m.calcium || 0)
     }));
   } else {
     // Legacy format - return single measure as array

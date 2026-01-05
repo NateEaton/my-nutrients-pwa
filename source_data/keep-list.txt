@@ -15,6 +15,10 @@ Broccoli, frozen, chopped, cooked, boiled, drained, without salt
 Cabbage, bok choy, raw
 Arugula, baby, raw
 Spinach, baby
+Peppers, bell, yellow, raw
+Peppers, bell, green, raw
+Peppers, bell, orange, raw
+Peppers, bell, red, raw
 
 # Legumes and beans
 Edamame, frozen, unprepared
@@ -24,6 +28,8 @@ Peas, edible-podded, cooked, boiled, drained, with salt
 # Fruits
 Avocado, Hass, peeled, raw
 Pineapple, raw
+Apples, fuji, with skin, raw
+Pear, Anjou, green, with skin, raw
 
 # Lettuce varieties
 Lettuce, romaine, green, raw
@@ -36,10 +42,13 @@ Mushrooms, shiitake, cooked, without salt
 # Grains and starches
 Potatoes, mashed, dehydrated, prepared from granules with milk
 Rice, brown, long grain, unenriched, raw
+Rice, white, long-grain, parboiled, unenriched, cooked
 
 # Dairy and fats
 Butter, salted
+Butter, stick, salted
 Cheese, parmesan, grated, refrigerated
+Cheese, mozzarella, whole milk, low moisture
 
 # Nuts and seeds
 Peanut butter, smooth style, without salt
