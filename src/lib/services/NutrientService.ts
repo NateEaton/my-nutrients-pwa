@@ -335,7 +335,7 @@ export class NutrientService {
   async getNutrientSettings(): Promise<NutrientSettings> {
     const storedGoals = localStorage.getItem('nutrient_goals');
     const storedDisplayed = localStorage.getItem('nutrient_displayed');
-    const theme = localStorage.getItem('nutient_theme') || 'auto';
+    const theme = localStorage.getItem('nutrient_theme') || 'auto';
     const colorScheme = localStorage.getItem('nutrient_color_scheme') || 'blue';
 
     const nutrientGoals = storedGoals ? JSON.parse(storedGoals) : DEFAULT_NUTRIENT_GOALS;

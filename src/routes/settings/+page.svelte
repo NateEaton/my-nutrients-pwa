@@ -354,81 +354,81 @@
         </div>
       </div>
 
-      <div class="setting-item inline">
-        <span class="material-icons setting-icon">palette</span>
-        <div class="setting-info">
-          <span class="setting-title">Color</span>
-          <span class="setting-subtitle">Choose your accent color</span>
-        </div>
-        <div class="setting-control">
-          <div class="color-scheme-selector">
-            <button
-              class="color-swatch"
-              class:active={selectedColorScheme === 'blue'}
-              style="--swatch-color: #1976d2;"
-              on:click={() => updateColorScheme('blue')}
-              aria-label="Blue color scheme"
-            >
-              {#if selectedColorScheme === 'blue'}
-                <span class="material-icons">check</span>
-              {/if}
-            </button>
-            <button
-              class="color-swatch"
-              class:active={selectedColorScheme === 'purple'}
-              style="--swatch-color: #7b1fa2;"
-              on:click={() => updateColorScheme('purple')}
-              aria-label="Purple color scheme"
-            >
-              {#if selectedColorScheme === 'purple'}
-                <span class="material-icons">check</span>
-              {/if}
-            </button>
-            <button
-              class="color-swatch"
-              class:active={selectedColorScheme === 'green'}
-              style="--swatch-color: #388e3c;"
-              on:click={() => updateColorScheme('green')}
-              aria-label="Green color scheme"
-            >
-              {#if selectedColorScheme === 'green'}
-                <span class="material-icons">check</span>
-              {/if}
-            </button>
-            <button
-              class="color-swatch"
-              class:active={selectedColorScheme === 'orange'}
-              style="--swatch-color: #f57c00;"
-              on:click={() => updateColorScheme('orange')}
-              aria-label="Orange color scheme"
-            >
-              {#if selectedColorScheme === 'orange'}
-                <span class="material-icons">check</span>
-              {/if}
-            </button>
-            <button
-              class="color-swatch"
-              class:active={selectedColorScheme === 'red'}
-              style="--swatch-color: #d32f2f;"
-              on:click={() => updateColorScheme('red')}
-              aria-label="Red color scheme"
-            >
-              {#if selectedColorScheme === 'red'}
-                <span class="material-icons">check</span>
-              {/if}
-            </button>
-            <button
-              class="color-swatch"
-              class:active={selectedColorScheme === 'teal'}
-              style="--swatch-color: #00796b;"
-              on:click={() => updateColorScheme('teal')}
-              aria-label="Teal color scheme"
-            >
-              {#if selectedColorScheme === 'teal'}
-                <span class="material-icons">check</span>
-              {/if}
-            </button>
+      <div class="setting-item stacked">
+        <div class="setting-header">
+          <span class="material-icons setting-icon">palette</span>
+          <div class="setting-info">
+            <span class="setting-title">Color</span>
+            <span class="setting-subtitle">Choose your accent color</span>
           </div>
+        </div>
+        <div class="color-scheme-selector">
+          <button
+            class="color-swatch"
+            class:active={selectedColorScheme === 'blue'}
+            style="--swatch-color: #1976d2;"
+            on:click={() => updateColorScheme('blue')}
+            aria-label="Blue color scheme"
+          >
+            {#if selectedColorScheme === 'blue'}
+              <span class="material-icons">check</span>
+            {/if}
+          </button>
+          <button
+            class="color-swatch"
+            class:active={selectedColorScheme === 'purple'}
+            style="--swatch-color: #7b1fa2;"
+            on:click={() => updateColorScheme('purple')}
+            aria-label="Purple color scheme"
+          >
+            {#if selectedColorScheme === 'purple'}
+              <span class="material-icons">check</span>
+            {/if}
+          </button>
+          <button
+            class="color-swatch"
+            class:active={selectedColorScheme === 'green'}
+            style="--swatch-color: #388e3c;"
+            on:click={() => updateColorScheme('green')}
+            aria-label="Green color scheme"
+          >
+            {#if selectedColorScheme === 'green'}
+              <span class="material-icons">check</span>
+            {/if}
+          </button>
+          <button
+            class="color-swatch"
+            class:active={selectedColorScheme === 'orange'}
+            style="--swatch-color: #f57c00;"
+            on:click={() => updateColorScheme('orange')}
+            aria-label="Orange color scheme"
+          >
+            {#if selectedColorScheme === 'orange'}
+              <span class="material-icons">check</span>
+            {/if}
+          </button>
+          <button
+            class="color-swatch"
+            class:active={selectedColorScheme === 'red'}
+            style="--swatch-color: #d32f2f;"
+            on:click={() => updateColorScheme('red')}
+            aria-label="Red color scheme"
+          >
+            {#if selectedColorScheme === 'red'}
+              <span class="material-icons">check</span>
+            {/if}
+          </button>
+          <button
+            class="color-swatch"
+            class:active={selectedColorScheme === 'teal'}
+            style="--swatch-color: #00796b;"
+            on:click={() => updateColorScheme('teal')}
+            aria-label="Teal color scheme"
+          >
+            {#if selectedColorScheme === 'teal'}
+              <span class="material-icons">check</span>
+            {/if}
+          </button>
         </div>
       </div>
     </div>
@@ -518,6 +518,27 @@
 
   .setting-item.inline .setting-icon {
     margin-right: var(--spacing-sm);
+  }
+
+  /* Stacked Setting Items (for color selector) */
+  .setting-item.stacked {
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-md);
+    background: var(--surface-variant);
+    border-radius: var(--spacing-sm);
+    gap: var(--spacing-md);
+  }
+
+  .setting-item.stacked .setting-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+
+  .setting-item.stacked .color-scheme-selector {
+    justify-content: center;
+    padding-bottom: var(--spacing-sm);
   }
 
   .setting-info {
