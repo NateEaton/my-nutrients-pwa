@@ -1,7 +1,7 @@
 # My Nutrients PWA - Guide for Claude (AI Assistant)
 
-**Version**: 1.1.0
-**Last Updated**: December 23, 2025
+**Version**: 1.2.0
+**Last Updated**: January 17, 2026
 
 ---
 
@@ -327,7 +327,7 @@ export let displayedNutrients = []; // string[]
 - Backward compatible with legacy calcium-only data
 - Shows preview of nutrients based on selected serving size
 
-**Critical**: Always load `displayedNutrients` from `calciumService.getNutrientSettings()` in `onMount()`
+**Critical**: Always load `displayedNutrients` from `nutrientService.getNutrientSettings()` in `onMount()`
 
 ---
 
@@ -434,6 +434,11 @@ refactor: Extract nutrient formatting to helper function
 - ✅ 8 migration fixes applied (serving bugs, nutrient scaling, etc.)
 - ✅ Backward compatibility maintained
 
+**Recent Enhancements**:
+- ✅ Journal entry food IDs (`appId` for database foods, `customFoodId` for custom foods)
+- ✅ Database browser page with food details and provenance
+- ✅ Multi-document cloud sync (partitioned by month for efficiency)
+
 **Migration Documentation**:
 - `migration/MIGRATION-CORRECTED-2025-12-18.md` - Complete migration log with all fixes
 - `migration/MY-NUTRIENTS-MIGRATION-PLAN.md` - Original migration plan
@@ -443,23 +448,62 @@ See `_notes/IMPLEMENTATION_PLAN.md` for detailed phase breakdown.
 
 ---
 
+## Food ID System
+
+Journal entries now track food references using stable IDs:
+
+```typescript
+interface FoodEntry {
+  name: string;
+  nutrients: NutrientValues;
+  servingQuantity: number;
+  servingUnit: string;
+  timestamp: string;
+  isCustom?: boolean;
+  appId?: number;        // For database foods (positive integers)
+  customFoodId?: number; // For custom foods (negative integers: -1, -2, -3...)
+}
+```
+
+**ID Conventions**:
+- **Database foods**: Use `appId` with positive integers from the curated database
+- **Custom foods**: Use `customFoodId` with negative integers (-1, -2, -3...)
+- **Logical deletion**: Custom foods are marked `isDeleted: true` rather than removed (preserves referential integrity)
+
+**Looking up foods**:
+```typescript
+// In NutrientService
+findFoodById(foodId: number, customFoods: CustomFood[]): any | null {
+  if (foodId < 0) {
+    return customFoods.find(f => f.id === foodId) || null;
+  } else {
+    return this.foodDatabase.find(f => f.id === foodId) || null;
+  }
+}
+```
+
+---
+
 ## Key Files Reference
 
 ### Core Application
 - `src/routes/+page.svelte` - Main page with food journal
-- `src/lib/stores/calcium.ts` - Global state management
-- `src/lib/services/CalciumService.ts` - Business logic layer
+- `src/lib/stores/nutrients.ts` - Global state management (Svelte stores)
+- `src/lib/services/NutrientService.ts` - Business logic layer (IndexedDB, CRUD operations)
+- `src/lib/services/SyncService.ts` - Cross-device sync with encryption
 - `src/lib/data/foodDatabase.js` - Database loader/rehydrator
 
 ### Components
 - `src/lib/components/SummaryCard.svelte` - Daily progress summary
 - `src/lib/components/FoodEntry.svelte` - Individual food display
 - `src/lib/components/AddFoodModal.svelte` - Add/edit food modal
-- `src/lib/components/SettingsModal.svelte` - User settings
+- `src/lib/components/NutrientSettingsModal.svelte` - Nutrient goals and display settings
+- `src/lib/components/SyncSettingsModal.svelte` - Cloud sync configuration
 
 ### Configuration
 - `src/lib/config/nutrientDefaults.ts` - Nutrient metadata, defaults, helpers
-- `src/lib/types/nutrients.ts` - TypeScript interfaces
+- `src/lib/types/nutrients.ts` - TypeScript interfaces for foods and entries
+- `src/lib/types/sync.ts` - TypeScript interfaces for sync functionality
 
 ### Data Pipeline
 - `source_data/json-parser.cjs` - Parse USDA JSON files
@@ -513,5 +557,5 @@ node data-module-generator-nutrients.cjs \
 
 ---
 
-**Last Updated**: December 11, 2025
+**Last Updated**: January 17, 2026
 **Maintained By**: Nathan A. Eaton Jr.
