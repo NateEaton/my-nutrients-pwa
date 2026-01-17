@@ -408,26 +408,20 @@
     const weekEndDate = new Date(weekStart);
     weekEndDate.setDate(weekStart.getDate() + 6);
 
-    // Conditionally include year based on screen size
-    const isSmallScreen =
-      typeof window !== "undefined" && window.innerWidth <= 480;
+    // Format date range: show month once if same month, otherwise show both
+    const startMonth = weekStart.toLocaleDateString("en-US", { month: "short" });
+    const endMonth = weekEndDate.toLocaleDateString("en-US", { month: "short" });
+    const startDay = weekStart.getDate();
+    const endDay = weekEndDate.getDate();
 
-    let subtitle = isSmallScreen
-      ? `${weekStart.toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-        })} - ${weekEndDate.toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-        })}`
-      : `${weekStart.toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-        })} - ${weekEndDate.toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        })}`;
+    let subtitle;
+    if (startMonth === endMonth) {
+      // Same month: "Dec 21 - 27"
+      subtitle = `${startMonth} ${startDay} - ${endDay}`;
+    } else {
+      // Different months: "Dec 28 - Jan 3"
+      subtitle = `${startMonth} ${startDay} - ${endMonth} ${endDay}`;
+    }
 
     return {
       title: "Average",
