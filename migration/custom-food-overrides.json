@@ -1,0 +1,12 @@
+{
+  "customFoodIdOverrides": {
+    "2025-11-30[10]": {
+      "entryName": "Oikos Pro Plain Yogurt",
+      "assignedId": -50,
+      "matchedTo": "Oikos Yogurt, plain , nonfat",
+      "reason": "User edited journal entry name after creation - same food, different name variant",
+      "calcium": 270,
+      "serving": "0.75 cups"
+    }
+  }
+}

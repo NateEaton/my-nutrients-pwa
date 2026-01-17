@@ -38,13 +38,36 @@ try {
 
 // Parse CSV
 const lines = csvContent.split('\n').filter(line => line.trim());
-const header = lines[0].split(',');
+// Handle quoted headers
+const headerLine = lines[0];
+const header = [];
+let current = '';
+let inQuotes = false;
+
+for (let j = 0; j < headerLine.length; j++) {
+  const char = headerLine[j];
+  if (char === '"') {
+    inQuotes = !inQuotes;
+  } else if (char === ',' && !inQuotes) {
+    header.push(current.trim());
+    current = '';
+  } else {
+    current += char;
+  }
+}
+header.push(current.trim());
+
+// Clean up header names (remove surrounding quotes if present)
+for (let i = 0; i < header.length; i++) {
+  header[i] = header[i].replace(/^"|"$/g, '').trim();
+}
 
 // Find column indices
 const nameIdx = header.indexOf('name');
 const targetAppIdIdx = header.indexOf('targetAppId');
 const convertToCustomIdx = header.indexOf('convertToCustom');
 const addedToKeepListIdx = header.indexOf('addedToKeepList');
+const preferredServingIdx = header.indexOf('preferredServing');
 
 if (nameIdx === -1 || targetAppIdIdx === -1 || convertToCustomIdx === -1) {
   console.error('❌ Error: CSV missing required columns (name, targetAppId, convertToCustom)');
@@ -52,7 +75,11 @@ if (nameIdx === -1 || targetAppIdIdx === -1 || convertToCustomIdx === -1) {
 }
 
 if (addedToKeepListIdx !== -1) {
-  console.log('📋 Found addedToKeepList column - will skip foods marked with Y');
+  console.log('Found addedToKeepList column - will skip foods marked with Y');
+}
+
+if (preferredServingIdx !== -1) {
+  console.log('Found preferredServing column - will include in mapping for nutrient calculation');
 }
 
 // Build mapping object
@@ -91,6 +118,7 @@ for (let i = 1; i < lines.length; i++) {
   const targetAppId = cols[targetAppIdIdx]?.trim();
   const convertToCustom = cols[convertToCustomIdx]?.trim().toUpperCase();
   const addedToKeepList = addedToKeepListIdx !== -1 ? cols[addedToKeepListIdx]?.trim().toUpperCase() : '';
+  const preferredServing = preferredServingIdx !== -1 ? cols[preferredServingIdx]?.trim() : '';
 
   if (!name) continue;
 
@@ -102,9 +130,14 @@ for (let i = 1; i < lines.length; i++) {
 
   // Check if either field is filled in
   if (targetAppId && targetAppId !== '') {
-    mapping.databaseFoodMappings[name] = {
+    const mappingEntry = {
       targetAppId: parseInt(targetAppId, 10)
     };
+    // Include preferredServing if provided
+    if (preferredServing) {
+      mappingEntry.preferredServing = preferredServing;
+    }
+    mapping.databaseFoodMappings[name] = mappingEntry;
     mappedCount++;
   } else if (convertToCustom === 'TRUE' || convertToCustom === 'T' || convertToCustom === 'YES' || convertToCustom === 'Y') {
     mapping.databaseFoodMappings[name] = {

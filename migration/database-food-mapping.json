@@ -1,0 +1,76 @@
+{
+  "databaseFoodMappings": {
+    "Lettuce, leaf, green, raw": {
+      "targetAppId": 10120,
+      "preferredServing": "1 cup shredded"
+    },
+    "Eggplant, cooked, boiled, drained, with salt": {
+      "targetAppId": 10100,
+      "preferredServing": "1 cup"
+    },
+    "Beans, snap, green, cooked, boiled, drained, with salt": {
+      "targetAppId": 10012,
+      "preferredServing": "1 cup"
+    },
+    "Squash, winter, butternut, cooked, baked, with salt": {
+      "targetAppId": 10167,
+      "preferredServing": "0.5 cup, cubes"
+    },
+    "Butter, salted": {
+      "targetAppId": 16285,
+      "preferredServing": "1 tablespoon"
+    },
+    "Bison": {
+      "targetAppId": 16164,
+      "preferredServing": "3 oz"
+    },
+    "Pineapple, raw": {
+      "targetAppId": 9995,
+      "preferredServing": "2 oz"
+    },
+    "Tomatoes, red, ripe, canned, packed in tomato juice": {
+      "targetAppId": 11009,
+      "preferredServing": "1 cup"
+    },
+    "Potatoes, mashed, dehydrated, prepared from granules with milk": {
+      "targetAppId": 10913,
+      "preferredServing": "0.5 cup"
+    },
+    "Squash, winter, spaghetti, cooked, boiled, drained, or baked, with salt": {
+      "targetAppId": 10170,
+      "preferredServing": "1 cup"
+    },
+    "Biscuits, plain or buttermilk, refrigerated dough, higher fat, baked": {
+      "targetAppId": 13539,
+      "preferredServing": "1 biscuit"
+    },
+    "Beef, tenderloin, steak, separable lean only, trimmed to 1/8 fat, all grades, raw": {
+      "targetAppId": 14914,
+      "preferredServing": "4 oz"
+    },
+    "Cereals, corn grits, white, regular and quick, enriched, cooked with water, with salt": {
+      "targetAppId": 12526,
+      "preferredServing": "1 cup"
+    },
+    "Beef, top sirloin, steak, separable lean only, trimmed to 1/8 fat, choice, raw": {
+      "targetAppId": 9599,
+      "preferredServing": "4 oz"
+    },
+    "Cauliflower, cooked, boiled, drained, with salt": {
+      "targetAppId": 11268,
+      "preferredServing": "0.5 cup"
+    },
+    "Sweet rolls, cinnamon, refrigerated dough with frosting, baked": {
+      "targetAppId": 13669,
+      "preferredServing": "1 roll"
+    },
+    "Rice, white, long-grain, parboiled, unenriched, cooked": {
+      "targetAppId": 10579,
+      "preferredServing": "1 cup"
+    },
+    "Apples, fuji, with skin, raw": {
+      "targetAppId": 8664,
+      "preferredServing": "1 small"
+    }
+  }
+}

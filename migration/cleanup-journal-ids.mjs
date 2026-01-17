@@ -162,6 +162,7 @@ if (customFoodsFile) {
 // Load database (if provided)
 let database = [];
 let databaseLookup = new Map();
+let databaseById = new Map();  // NEW: Lookup by appId for full nutrient data
 
 if (databaseFile) {
   try {
@@ -194,6 +195,9 @@ if (databaseFile) {
           databaseLookup.set(name, []);
         }
         databaseLookup.get(name).push({ food, appId });
+
+        // Also build lookup by ID for nutrient calculation
+        databaseById.set(appId, food);
       }
     }
 
@@ -253,12 +257,218 @@ let stats = {
   customFoodIdBackfilled: 0,
   appIdBackfilled: 0,
   dbFoodMapped: 0,
+  dbFoodMappedWithNutrients: 0,
   dbFoodConvertedToCustom: 0,
   positiveIdMoved: 0,
   isCustomFlagFixed: 0,
   bothIdsRemoved: 0,
   noChanges: 0,
 };
+
+// Migration audit log for tracking original → new entry changes
+const migrationAudit = {
+  migrationDate: new Date().toISOString(),
+  summary: {
+    entriesRemapped: 0,
+    daysAffected: new Set(),
+    netCalciumChange: 0
+  },
+  entries: []
+};
+
+// Track original calcium by date for comparison report
+const originalCalciumByDate = {};
+const newCalciumByDate = {};
+
+/**
+ * Parse a serving string like "3 oz" into { quantity, unit }
+ */
+function parseServing(servingStr) {
+  if (!servingStr) return null;
+  const match = servingStr.trim().match(/^([\d.]+)\s+(.+)$/);
+  if (!match) return null;
+  return {
+    quantity: parseFloat(match[1]),
+    unit: match[2].trim()
+  };
+}
+
+/**
+ * Unit conversion tables for weight units
+ */
+const weightConversions = {
+  g: 1,
+  gram: 1,
+  grams: 1,
+  oz: 28.3495,
+  ounce: 28.3495,
+  ounces: 28.3495,
+  lb: 453.592,
+  pound: 453.592,
+  pounds: 453.592,
+  kg: 1000,
+  kilogram: 1000,
+  kilograms: 1000
+};
+
+/**
+ * Unit conversion tables for volume units (to ml as base)
+ */
+const volumeConversions = {
+  ml: 1,
+  milliliter: 1,
+  milliliters: 1,
+  l: 1000,
+  liter: 1000,
+  liters: 1000,
+  cup: 236.588,
+  cups: 236.588,
+  tablespoon: 14.787,
+  tablespoons: 14.787,
+  tbsp: 14.787,
+  teaspoon: 4.929,
+  teaspoons: 4.929,
+  tsp: 4.929,
+  'fl oz': 29.574,
+  'fluid ounce': 29.574,
+  'fluid ounces': 29.574
+};
+
+/**
+ * Parse a database measure string like "1 oz" or "1 cup (244g)" or "100 g"
+ */
+function parseMeasureString(measureStr) {
+  if (!measureStr) return null;
+  const cleaned = measureStr.toLowerCase().trim();
+
+  // Try to extract quantity and unit
+  const match = cleaned.match(/^([\d.]+)\s+(.+?)(?:\s*\([^)]*\))?$/);
+  if (!match) {
+    // Try without parentheses content
+    const simpleMatch = cleaned.match(/^([\d.]+)\s+(.+)$/);
+    if (simpleMatch) {
+      return {
+        quantity: parseFloat(simpleMatch[1]),
+        unit: simpleMatch[2].trim().replace(/\s*\([^)]*\)$/, '')
+      };
+    }
+    return null;
+  }
+  return {
+    quantity: parseFloat(match[1]),
+    unit: match[2].trim()
+  };
+}
+
+/**
+ * Check if two units are the same type and can be converted
+ */
+function canConvertUnits(unit1, unit2) {
+  const u1 = unit1.toLowerCase().trim();
+  const u2 = unit2.toLowerCase().trim();
+
+  const isWeight1 = weightConversions[u1] !== undefined;
+  const isWeight2 = weightConversions[u2] !== undefined;
+  const isVolume1 = volumeConversions[u1] !== undefined;
+  const isVolume2 = volumeConversions[u2] !== undefined;
+
+  return (isWeight1 && isWeight2) || (isVolume1 && isVolume2);
+}
+
+/**
+ * Convert quantity from one unit to another (same type only)
+ */
+function convertUnits(quantity, fromUnit, toUnit) {
+  const from = fromUnit.toLowerCase().trim();
+  const to = toUnit.toLowerCase().trim();
+
+  // Check weight conversions
+  if (weightConversions[from] !== undefined && weightConversions[to] !== undefined) {
+    const grams = quantity * weightConversions[from];
+    return grams / weightConversions[to];
+  }
+
+  // Check volume conversions
+  if (volumeConversions[from] !== undefined && volumeConversions[to] !== undefined) {
+    const ml = quantity * volumeConversions[from];
+    return ml / volumeConversions[to];
+  }
+
+  // Can't convert, return original
+  return quantity;
+}
+
+/**
+ * Find the best matching measure in the database food for a given serving
+ * Returns the measure and a scale factor to apply to nutrients
+ */
+function findBestMeasure(dbFood, targetQuantity, targetUnit) {
+  const measures = dbFood.ms || dbFood.measures || [];
+  if (measures.length === 0) return null;
+
+  const targetUnitLower = targetUnit.toLowerCase().trim();
+
+  // First, try exact unit match
+  for (const measure of measures) {
+    const measureStr = measure.s || measure.measure;
+    const parsed = parseMeasureString(measureStr);
+    if (parsed && parsed.unit.toLowerCase() === targetUnitLower) {
+      // Exact unit match - calculate scale factor
+      const scaleFactor = targetQuantity / parsed.quantity;
+      return { measure, scaleFactor, matchType: 'exact' };
+    }
+  }
+
+  // Second, try convertible unit match
+  for (const measure of measures) {
+    const measureStr = measure.s || measure.measure;
+    const parsed = parseMeasureString(measureStr);
+    if (parsed && canConvertUnits(parsed.unit, targetUnit)) {
+      // Convert target to measure's unit
+      const convertedQuantity = convertUnits(targetQuantity, targetUnit, parsed.unit);
+      const scaleFactor = convertedQuantity / parsed.quantity;
+      return { measure, scaleFactor, matchType: 'converted' };
+    }
+  }
+
+  // Third, try "100 g" measure (common fallback)
+  for (const measure of measures) {
+    const measureStr = measure.s || measure.measure;
+    if (measureStr.toLowerCase().includes('100 g')) {
+      const parsed = parseMeasureString(measureStr);
+      if (parsed && canConvertUnits(parsed.unit, targetUnit)) {
+        const convertedQuantity = convertUnits(targetQuantity, targetUnit, 'g');
+        const scaleFactor = convertedQuantity / 100;
+        return { measure, scaleFactor, matchType: '100g-fallback' };
+      }
+    }
+  }
+
+  // Fallback: use first measure with scale factor 1
+  console.log(`    Warning: No matching measure found for ${targetQuantity} ${targetUnit}, using first measure`);
+  return { measure: measures[0], scaleFactor: 1, matchType: 'fallback' };
+}
+
+/**
+ * Calculate nutrients from a database measure for a given serving
+ */
+function calculateNutrientsForServing(dbFood, targetQuantity, targetUnit) {
+  const result = findBestMeasure(dbFood, targetQuantity, targetUnit);
+  if (!result) return null;
+
+  const { measure, scaleFactor, matchType } = result;
+  const measureNutrients = measure.n || measure.nutrients || {};
+
+  // Scale all nutrients
+  const scaledNutrients = {};
+  for (const [nutrientId, value] of Object.entries(measureNutrients)) {
+    if (typeof value === 'number') {
+      scaledNutrients[nutrientId] = parseFloat((value * scaleFactor).toFixed(2));
+    }
+  }
+
+  return { nutrients: scaledNutrients, matchType, scaleFactor };
+}
 
 // Track next custom food ID for conversions
 let nextCustomFoodId = -1;
@@ -360,14 +570,80 @@ for (const [date, entries] of Object.entries(backup.journalEntries)) {
       if (mapping) {
         if (mapping.targetAppId) {
           // Map to specified appId
-          entry.appId = mapping.targetAppId;
-          entryChanges.push(`Mapped to appId: ${mapping.targetAppId} (from mapping file)`);
+          const targetAppId = mapping.targetAppId;
+          const dbFood = databaseById.get(targetAppId);
+
+          // Store original entry data for audit
+          const originalEntryData = {
+            name: entry.name,
+            servingQuantity: entry.servingQuantity,
+            servingUnit: entry.servingUnit,
+            nutrients: { ...entry.nutrients }
+          };
+
+          // Track original calcium for this date
+          const originalCalcium = entry.nutrients?.calcium || 0;
+          if (!originalCalciumByDate[date]) originalCalciumByDate[date] = 0;
+          originalCalciumByDate[date] += originalCalcium;
+
+          entry.appId = targetAppId;
           stats.dbFoodMapped++;
           modified = true;
 
-          // TODO: Recalculate nutrients from database based on serving size
-          // For now, just adding the appId. Nutrient recalculation would require
-          // looking up the food in database and scaling nutrients.
+          // If we have database food data and preferredServing, replace with database data
+          if (dbFood && mapping.preferredServing) {
+            const serving = parseServing(mapping.preferredServing);
+            if (serving) {
+              const dbFoodName = dbFood.n || dbFood.name;
+              const calcResult = calculateNutrientsForServing(dbFood, serving.quantity, serving.unit);
+
+              if (calcResult) {
+                // Update entry with database data
+                entry.name = dbFoodName;
+                entry.nutrients = calcResult.nutrients;
+                entry.servingQuantity = serving.quantity;
+                entry.servingUnit = serving.unit;
+                entry.note = "adjusted during data migration";
+
+                // Track new calcium for this date
+                const newCalcium = calcResult.nutrients.calcium || 0;
+                if (!newCalciumByDate[date]) newCalciumByDate[date] = 0;
+                newCalciumByDate[date] += newCalcium;
+
+                // Record in audit log
+                migrationAudit.entries.push({
+                  date,
+                  timestamp: entry.timestamp,
+                  original: originalEntryData,
+                  new: {
+                    name: dbFoodName,
+                    appId: targetAppId,
+                    servingQuantity: serving.quantity,
+                    servingUnit: serving.unit,
+                    nutrients: { calcium: calcResult.nutrients.calcium || 0 }
+                  },
+                  calciumChange: (newCalcium - originalCalcium)
+                });
+                migrationAudit.summary.entriesRemapped++;
+                migrationAudit.summary.daysAffected.add(date);
+                migrationAudit.summary.netCalciumChange += (newCalcium - originalCalcium);
+
+                entryChanges.push(`Replaced with database food: "${dbFoodName}" (appId: ${targetAppId})`);
+                entryChanges.push(`  Serving: ${serving.quantity} ${serving.unit} (match: ${calcResult.matchType})`);
+                entryChanges.push(`  Calcium: ${originalCalcium} → ${newCalcium} mg`);
+                entryChanges.push(`  Added note: "adjusted during data migration"`);
+                stats.dbFoodMappedWithNutrients++;
+              } else {
+                entryChanges.push(`Mapped to appId: ${targetAppId} (nutrients not calculated - no matching measure)`);
+              }
+            } else {
+              entryChanges.push(`Mapped to appId: ${targetAppId} (could not parse serving: "${mapping.preferredServing}")`);
+            }
+          } else if (dbFood && !mapping.preferredServing) {
+            entryChanges.push(`Mapped to appId: ${targetAppId} (no preferredServing specified)`);
+          } else {
+            entryChanges.push(`Mapped to appId: ${targetAppId} (database food not found)`);
+          }
         } else if (mapping.convertToCustom) {
           // Convert to custom food
           const customFoodId = nextCustomFoodId--;
@@ -451,6 +727,7 @@ console.log(`   Changes applied:`);
 console.log(`     customFoodId backfilled:     ${stats.customFoodIdBackfilled}`);
 console.log(`     appId backfilled:            ${stats.appIdBackfilled}`);
 console.log(`     DB foods mapped to appId:    ${stats.dbFoodMapped}`);
+console.log(`       - with nutrient recalc:    ${stats.dbFoodMappedWithNutrients}`);
 console.log(`     DB foods converted to custom: ${stats.dbFoodConvertedToCustom}`);
 console.log(`     Positive ID moved to appId:  ${stats.positiveIdMoved}`);
 console.log(`     isCustom flag fixed:         ${stats.isCustomFlagFixed}`);
@@ -523,6 +800,100 @@ if (dryRun) {
   } catch (error) {
     console.error(`\n❌ Error writing output file: ${error.message}`);
     process.exit(1);
+  }
+}
+
+// Generate calcium comparison report if any entries were remapped with nutrients
+if (migrationAudit.entries.length > 0) {
+  console.log(`\n${'═'.repeat(70)}`);
+  console.log('📊 MIGRATION CALCIUM COMPARISON REPORT');
+  console.log('═'.repeat(70));
+
+  // Group entries by date
+  const entriesByDate = {};
+  for (const entry of migrationAudit.entries) {
+    if (!entriesByDate[entry.date]) {
+      entriesByDate[entry.date] = [];
+    }
+    entriesByDate[entry.date].push(entry);
+  }
+
+  // Sort dates
+  const sortedDates = Object.keys(entriesByDate).sort();
+
+  for (const date of sortedDates) {
+    const dayEntries = entriesByDate[date];
+    const dayOriginalCalcium = dayEntries.reduce((sum, e) => sum + (e.original.nutrients?.calcium || 0), 0);
+    const dayNewCalcium = dayEntries.reduce((sum, e) => sum + (e.new.nutrients?.calcium || 0), 0);
+    const dayDiff = dayNewCalcium - dayOriginalCalcium;
+    const dayPct = dayOriginalCalcium > 0 ? ((dayDiff / dayOriginalCalcium) * 100).toFixed(1) : 0;
+
+    console.log(`\n📅 ${date} (${dayEntries.length} ${dayEntries.length === 1 ? 'entry' : 'entries'} remapped)`);
+    console.log('─'.repeat(60));
+    console.log(`   Original Calcium Total: ${dayOriginalCalcium.toFixed(1)} mg`);
+    console.log(`   New Calcium Total:      ${dayNewCalcium.toFixed(1)} mg`);
+    console.log(`   Difference:             ${dayDiff >= 0 ? '+' : ''}${dayDiff.toFixed(1)} mg (${dayDiff >= 0 ? '+' : ''}${dayPct}%)`);
+
+    console.log('\n   Remapped Entries:');
+    for (const entry of dayEntries) {
+      const origCalcium = entry.original.nutrients?.calcium || 0;
+      const newCalcium = entry.new.nutrients?.calcium || 0;
+      const diff = newCalcium - origCalcium;
+      console.log(`   ┌─────────────────────────────────────────────────────────┐`);
+      console.log(`   │ Original: "${entry.original.name.substring(0, 40)}${entry.original.name.length > 40 ? '...' : ''}"`);
+      console.log(`   │          (${entry.original.servingQuantity} ${entry.original.servingUnit}) → ${origCalcium.toFixed(1)} mg calcium`);
+      console.log(`   │ New:      "${entry.new.name.substring(0, 40)}${entry.new.name.length > 40 ? '...' : ''}"`);
+      console.log(`   │          (${entry.new.servingQuantity} ${entry.new.servingUnit}) → ${newCalcium.toFixed(1)} mg calcium`);
+      console.log(`   │ Difference: ${diff >= 0 ? '+' : ''}${diff.toFixed(1)} mg`);
+      console.log(`   └─────────────────────────────────────────────────────────┘`);
+    }
+  }
+
+  console.log(`\n${'═'.repeat(70)}`);
+  console.log('SUMMARY');
+  console.log('═'.repeat(70));
+  console.log(`Days with remapped entries: ${migrationAudit.summary.daysAffected.size}`);
+  console.log(`Total entries remapped:     ${migrationAudit.summary.entriesRemapped}`);
+  console.log(`Net calcium change:         ${migrationAudit.summary.netCalciumChange >= 0 ? '+' : ''}${migrationAudit.summary.netCalciumChange.toFixed(1)} mg across all affected days`);
+
+  // Save audit file and report
+  if (!dryRun) {
+    // Convert Set to array for JSON serialization
+    const auditToSave = {
+      ...migrationAudit,
+      summary: {
+        ...migrationAudit.summary,
+        daysAffected: Array.from(migrationAudit.summary.daysAffected)
+      }
+    };
+
+    const auditPath = outputFile.replace(/\.json$/, '-migration-audit.json');
+    fs.writeFileSync(auditPath, JSON.stringify(auditToSave, null, 2));
+    console.log(`\n📄 Migration audit saved to: ${auditPath}`);
+
+    // Save calcium report as text file
+    const reportPath = outputFile.replace(/\.json$/, '-calcium-report.txt');
+    let reportContent = `MIGRATION CALCIUM COMPARISON REPORT\n`;
+    reportContent += `Generated: ${new Date().toISOString()}\n`;
+    reportContent += `${'='.repeat(70)}\n\n`;
+    reportContent += `SUMMARY\n`;
+    reportContent += `Days with remapped entries: ${migrationAudit.summary.daysAffected.size}\n`;
+    reportContent += `Total entries remapped:     ${migrationAudit.summary.entriesRemapped}\n`;
+    reportContent += `Net calcium change:         ${migrationAudit.summary.netCalciumChange >= 0 ? '+' : ''}${migrationAudit.summary.netCalciumChange.toFixed(1)} mg\n\n`;
+
+    for (const date of sortedDates) {
+      const dayEntries = entriesByDate[date];
+      reportContent += `\n${date} (${dayEntries.length} entries)\n`;
+      reportContent += `${'─'.repeat(50)}\n`;
+      for (const entry of dayEntries) {
+        const origCalcium = entry.original.nutrients?.calcium || 0;
+        const newCalcium = entry.new.nutrients?.calcium || 0;
+        reportContent += `  "${entry.original.name}" → "${entry.new.name}"\n`;
+        reportContent += `    Calcium: ${origCalcium.toFixed(1)} → ${newCalcium.toFixed(1)} mg\n`;
+      }
+    }
+    fs.writeFileSync(reportPath, reportContent);
+    console.log(`📄 Calcium report saved to: ${reportPath}`);
   }
 }
 

@@ -536,11 +536,18 @@ function applyAbridge(data) {
   const stapleFoodRegex = /\b(milk|cheese|yogurt|fruit|vegetable|juice|melon|bread|egg|butter|apple|apples|pepper|peppers|tomato|tomatoes|orange|oranges|banana|bananas|berry|berries|lettuce|carrot|carrots|broccoli|spinach)\b/i;
 
   // Step 1: Collapse cooking methods
+  // Note: We preserve "drained" and "with/without salt" distinctions since these
+  // represent meaningfully different preparations (not just cooking method variants)
   const methodWords = /\b(roasted|boiled|fried|grilled|braised|steamed|baked|cooked|broiled|raw|pan-fried|not breaded|breaded)\b/gi;
   let before = filtered.length;
   const groupedByCooking = {};
 
   filtered.forEach((f) => {
+    // Extract distinguishing preparation features before collapsing
+    const hasSalt = /\bwith salt\b/i.test(f.name);
+    const noSalt = /\bwithout salt\b/i.test(f.name);
+    const isDrained = /\bdrained\b/i.test(f.name);
+
     const baseName = f.name
       .replace(methodWords, "")
       .replace(/\(\)/g, "")
@@ -549,9 +556,15 @@ function applyAbridge(data) {
       .replace(/,\s*$/g, "")
       .replace(/\s\s+/g, " ")
       .trim();
-    const norm = normalizeName(baseName);
-    if (!groupedByCooking[norm]) groupedByCooking[norm] = [];
-    groupedByCooking[norm].push(f);
+
+    // Create grouping key that preserves salt/drained distinctions
+    let groupKey = normalizeName(baseName);
+    if (hasSalt) groupKey += "|with-salt";
+    if (noSalt) groupKey += "|no-salt";
+    if (isDrained) groupKey += "|drained";
+
+    if (!groupedByCooking[groupKey]) groupedByCooking[groupKey] = [];
+    groupedByCooking[groupKey].push(f);
   });
 
   filtered = Object.values(groupedByCooking).map(

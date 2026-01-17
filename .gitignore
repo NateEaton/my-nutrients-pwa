@@ -68,6 +68,8 @@ source_data/FoodData_Central_*_food_csv_*/
 source_data/FoodData_Central_*_food_json_*.json
 source_data/*.sav
 source_data/*nutrient*.json
+source_data/*.bak
+source_data/*.png
 
 # Cloudflare Workers secrets
 worker/wrangler.toml
@@ -75,6 +77,7 @@ worker/.env*
 !worker/.env.example
 
 # Misc dev files
+*.bak
 /upgrade_migration/
 /tmp/
 /test/
@@ -91,10 +94,18 @@ source_data/canada-nutrition-config.json
 source_data/iof-calcium-config.json
 source_data/iof-calcium-parsed.csv
 source_data/migrated-migration-report.json
+source_data/*report.txt
+source_data/*report.json
 
 migration/merged-output-migration-report.json
 migration/merged-output.json
 migration/nutrients-restore-*.json
+migration/*.bak
+migration/*.txt
+migration/*.png
+migration/*.sav
+migration/merged-output*.*
+migration/*backup*.json
 
 ocr/*
 !ocr/fetch_labels.js
