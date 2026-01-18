@@ -31,6 +31,9 @@
   import { FEATURES } from '$lib/utils/featureFlags';
   import { logger } from '$lib/utils/logger';
   import TestDataCollector from './TestDataCollector.svelte';
+  import UPCComparisonView from './UPCComparisonView.svelte';
+  import { getDefaultDisplayedNutrients } from '$lib/config/nutrientDefaults';
+  import { nutrientService } from '$lib/stores/nutrients';
 
   export let show = false;
 
@@ -46,7 +49,11 @@
   let isProcessingBarcode = false;
   let scannerControls = null;
   let manualUPC = '';
-  let selectedSource = 'usda';
+
+  // --- UPC Comparison State ---
+  let comparisonResults = null; // { usda: ParsedProduct | null, off: ParsedProduct | null, upcCode: string }
+  let lookupPhase = 'idle'; // 'idle' | 'scanning' | 'lookingUp' | 'comparing'
+  let displayedNutrients = getDefaultDisplayedNutrients();
 
   // --- Camera Enhancement State ---
   let torchEnabled = false;
@@ -87,7 +94,7 @@
   const ocrService = new OCRService(OCR_CONFIG.API_KEY);
 
   // --- Lifecycle ---
-  onMount(() => {
+  onMount(async () => {
     // Load sticky preferences
     const lastTab = localStorage.getItem('scan-default-tab');
     if (lastTab) {
@@ -99,8 +106,15 @@
       }
     }
 
-    const lastSource = localStorage.getItem('upc-data-source');
-    if (lastSource) selectedSource = lastSource;
+    // Load user's displayed nutrients from settings
+    try {
+      const settings = await nutrientService.getNutrientSettings();
+      if (settings?.displayedNutrients?.length > 0) {
+        displayedNutrients = settings.displayedNutrients;
+      }
+    } catch (err) {
+      logger.debug('SMART SCAN', 'Could not load nutrient settings, using defaults');
+    }
 
     // Initialize test mode
     isTestMode = import.meta.env.DEV || window.location.search.includes('testmode=1');
@@ -130,6 +144,9 @@
     manualUPCValue = '';
     debugMode = false; // Reset debug mode when closing
     debugData = null;
+    // Reset comparison state
+    comparisonResults = null;
+    lookupPhase = 'idle';
     show = false;
     if (!didScan) {
       dispatch('close');
@@ -373,81 +390,121 @@
     isProcessingBarcode = true;
     stopScanning();
     isLoading = true;
+    lookupPhase = 'lookingUp';
     error = null;
 
     try {
-      let productResult = null;
-      if (selectedSource === 'usda') {
-        productResult = await fdcService.searchByUPC(code);
-      } else {
-        productResult = await openFoodFactsService.searchByUPC(code);
+      // Parallel API calls to both sources
+      const [usdaResult, offResult] = await Promise.allSettled([
+        fdcService.searchByUPC(code),
+        openFoodFactsService.searchByUPC(code)
+      ]);
+
+      const usda = usdaResult.status === 'fulfilled' ? usdaResult.value : null;
+      const off = offResult.status === 'fulfilled' ? offResult.value : null;
+
+      logger.debug('SCAN', 'USDA result:', usda ? 'found' : 'not found');
+      logger.debug('SCAN', 'OFF result:', off ? 'found' : 'not found');
+
+      // Log any errors from the API calls
+      if (usdaResult.status === 'rejected') {
+        logger.debug('SCAN', 'USDA lookup failed:', usdaResult.reason);
+      }
+      if (offResult.status === 'rejected') {
+        logger.debug('SCAN', 'OFF lookup failed:', offResult.reason);
       }
 
-      if (productResult) {
-        // Notify test collector if in test mode
-        if (isTestMode && testCollectorRef) {
-          testCollectorRef.handleUPCScan({
-            detail: {
-              upc: code,
-              product_name: productResult.productName,
-              brands: productResult.brandName || productResult.brandOwner,
-              serving_size: productResult.servingSize,
-              nutrients: {
-                calcium_serving: productResult.calciumPerServing,
-                calcium_100g: null, // Not available from FDC/OFF in this format
-                calcium_unit: 'mg'
-              }
+      if (!usda && !off) {
+        throw new Error('Product not found in either USDA or OpenFoodFacts database.');
+      }
+
+      // If only one source has data, still show comparison view
+      // (allows user to confirm the single result before using it)
+      comparisonResults = { usda, off, upcCode: code };
+      lookupPhase = 'comparing';
+
+      // Notify test collector if in test mode
+      if (isTestMode && testCollectorRef && (usda || off)) {
+        const result = usda || off;
+        testCollectorRef.handleUPCScan({
+          detail: {
+            upc: code,
+            product_name: result.productName,
+            brands: result.brandName || result.brandOwner,
+            serving_size: result.servingSize,
+            nutrients: {
+              calcium_serving: result.calciumPerServing,
+              calcium_100g: null,
+              calcium_unit: 'mg'
             }
-          });
-
-          // In test mode, don't close the modal - let user continue to OCR scan
-        } else {
-          // Normal mode - dispatch and close
-          const scanData = { ...productResult, method: 'UPC' };
-          logger.debug('SCAN', 'Dispatching scanComplete event with data:', scanData);
-          dispatch('scanComplete', scanData);
-          // Add small delay to ensure event is processed before modal closes
-          setTimeout(() => closeModal(true), 100);
-        }
-      } else {
-        throw new Error(`Product not found in ${selectedSource === 'usda' ? 'USDA' : 'OpenFoodFacts'} database.`);
+          }
+        });
       }
+
     } catch (err) {
       error = err.message || 'Product lookup failed.';
+      lookupPhase = 'idle';
     } finally {
       isLoading = false;
       isProcessingBarcode = false;
     }
   }
 
-  function handleSourceChange(event) {
-    selectedSource = event.target.value;
-    localStorage.setItem('upc-data-source', selectedSource);
+  // Handle source selection from comparison view
+  function handleComparisonSelect(event) {
+    const { source, result } = event.detail;
+    logger.debug('SCAN', `User selected ${source} data`);
+
+    const scanData = { ...result, method: 'UPC' };
+    dispatch('scanComplete', scanData);
+    setTimeout(() => closeModal(true), 100);
+  }
+
+  // Handle rescan from comparison view
+  function handleComparisonRescan() {
+    logger.debug('SCAN', 'User requested rescan');
+    comparisonResults = null;
+    lookupPhase = 'idle';
+    error = null;
+    // Restart camera and scanning
+    activateCameraForMode('upc');
+  }
+
+  // Handle cancel from comparison view
+  function handleComparisonCancel() {
+    closeModal(false);
   }
 
   async function handleManualUPCLookup() {
     if (!manualUPCValue.trim()) return;
 
+    const code = manualUPCValue.trim();
     isLoading = true;
+    lookupPhase = 'lookingUp';
     error = null;
 
     try {
-      let productResult = null;
-      if (selectedSource === 'usda') {
-        productResult = await fdcService.searchByUPC(manualUPCValue.trim());
-      } else {
-        productResult = await openFoodFactsService.searchByUPC(manualUPCValue.trim());
+      // Parallel API calls to both sources
+      const [usdaResult, offResult] = await Promise.allSettled([
+        fdcService.searchByUPC(code),
+        openFoodFactsService.searchByUPC(code)
+      ]);
+
+      const usda = usdaResult.status === 'fulfilled' ? usdaResult.value : null;
+      const off = offResult.status === 'fulfilled' ? offResult.value : null;
+
+      if (!usda && !off) {
+        throw new Error('Product not found in either USDA or OpenFoodFacts database.');
       }
 
-      if (productResult) {
-        dispatch('scanComplete', { ...productResult, method: 'Manual UPC' });
-        // Add small delay to ensure event is processed before modal closes
-        setTimeout(() => closeModal(true), 100);
-      } else {
-        throw new Error(`Product not found in ${selectedSource === 'usda' ? 'USDA' : 'OpenFoodFacts'} database.`);
-      }
+      // Show comparison view
+      comparisonResults = { usda, off, upcCode: code };
+      lookupPhase = 'comparing';
+      showManualUPCEntry = false; // Hide manual entry, show comparison
+
     } catch (err) {
       error = err.message || 'Product lookup failed.';
+      lookupPhase = 'idle';
     } finally {
       isLoading = false;
     }
@@ -757,17 +814,26 @@
       <div class="modal-body">
         {#if activeTab === 'upc'}
           <!-- Barcode Scanning UI -->
-          <div class="source-selection">
-             <label class="source-option">
-              <input type="radio" bind:group={selectedSource} value="usda" on:change={handleSourceChange} disabled={isLoading} />
-              <span class="source-label">USDA</span>
-            </label>
-            <label class="source-option">
-              <input type="radio" bind:group={selectedSource} value="openfoodfacts" on:change={handleSourceChange} disabled={isLoading} />
-              <span class="source-label">OpenFoodFacts</span>
-            </label>
-          </div>
-          <div class="camera-section"
+          {#if lookupPhase === 'comparing' && comparisonResults}
+            <!-- Show comparison view -->
+            <UPCComparisonView
+              usdaResult={comparisonResults.usda}
+              offResult={comparisonResults.off}
+              upcCode={comparisonResults.upcCode}
+              {displayedNutrients}
+              on:select={handleComparisonSelect}
+              on:rescan={handleComparisonRescan}
+              on:cancel={handleComparisonCancel}
+            />
+          {:else if lookupPhase === 'lookingUp'}
+            <!-- Show loading state while looking up both sources -->
+            <div class="lookup-loading">
+              <div class="loading-spinner"></div>
+              <p>Searching USDA and OpenFoodFacts...</p>
+            </div>
+          {:else}
+            <!-- Normal scanning view -->
+            <div class="camera-section"
                class:upc-mode={activeTab === 'upc'}
                class:ocr-mode={activeTab === 'ocr'}>
             {#if !showManualUPCEntry}
@@ -879,8 +945,9 @@
             <div class="error-section">
               <span class="material-icons">error</span>
               <p>{error}</p>
-              <button class="retry-btn" on:click={() => activateCameraForMode(activeTab)} disabled={isLoading}>Try Again</button>
+              <button class="retry-btn" on:click={() => handleComparisonRescan()} disabled={isLoading}>Try Again</button>
             </div>
+          {/if}
           {/if}
         {:else if activeTab === 'ocr' && FEATURES.OCR_ENABLED}
           <!-- OCR Scanning UI - Uses shared camera section -->
@@ -1196,7 +1263,25 @@
     min-height: 0; /* Allow flexbox to calculate natural size */
   }
 
-  /* Barcode Tab Styles */
+  /* UPC Lookup Loading State */
+  .lookup-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl);
+    gap: var(--spacing-md);
+    flex: 1;
+  }
+
+  .lookup-loading p {
+    color: var(--text-secondary);
+    font-size: var(--font-size-md);
+    text-align: center;
+    margin: 0;
+  }
+
+  /* Barcode Tab Styles - Legacy, can be removed */
   .source-selection {
     display: flex;
     gap: var(--spacing-md);

@@ -26,12 +26,56 @@ export const OPENFOODFACTS_CONFIG = {
   USER_AGENT: 'MyNutrients/1.0 (nutrient tracking PWA)',
 
   // Nutrition data field mappings
+  // OpenFoodFacts nutriments object uses snake_case with _100g and _serving suffixes
   NUTRITION_FIELDS: {
-    // Calcium fields in nutriments object
-    CALCIUM_100G: 'calcium_100g',        // Calcium per 100g
-    CALCIUM_SERVING: 'calcium_serving',  // Calcium per serving
-    CALCIUM_UNIT: 'calcium_unit',        // Unit (usually 'g' for grams)
+    // Legacy calcium fields (for backward compatibility)
+    CALCIUM_100G: 'calcium_100g',
+    CALCIUM_SERVING: 'calcium_serving',
+    CALCIUM_UNIT: 'calcium_unit',
   },
+
+  // Map of our nutrient IDs to OpenFoodFacts field names (without _100g/_serving suffix)
+  // Values are in grams/mg depending on nutrient type
+  NUTRIENT_FIELD_MAP: {
+    // Macronutrients (values in g)
+    protein: 'proteins',
+    fiber: 'fiber',
+    carbohydrates: 'carbohydrates',
+    sugars: 'sugars',
+    fat: 'fat',
+    saturatedFat: 'saturated-fat',
+    monounsaturatedFat: 'monounsaturated-fat',
+    polyunsaturatedFat: 'polyunsaturated-fat',
+
+    // Omega fatty acids (values in g)
+    omega3: 'omega-3-fat',
+    omega3ALA: 'alpha-linolenic-acid',
+    omega3EPA: 'eicosapentaenoic-acid',
+    omega3DHA: 'docosahexaenoic-acid',
+    omega6: 'omega-6-fat',
+
+    // Minerals (values often in g, need conversion to mg)
+    calcium: 'calcium',
+    magnesium: 'magnesium',
+    potassium: 'potassium',
+    iron: 'iron',
+    zinc: 'zinc',
+
+    // Vitamins (various units)
+    vitaminD: 'vitamin-d',
+    vitaminB12: 'vitamin-b12',
+    folate: 'folate',        // Also check 'vitamin-b9'
+    vitaminB6: 'vitamin-b6',
+    vitaminA: 'vitamin-a',
+    vitaminC: 'vitamin-c',
+    vitaminK: 'vitamin-k',
+  },
+
+  // Nutrients that need g→mg conversion (minerals typically stored as grams in OFF)
+  NUTRIENTS_NEEDING_MG_CONVERSION: ['calcium', 'magnesium', 'potassium', 'iron', 'zinc'],
+
+  // Nutrients in mcg (vitamins typically stored correctly)
+  NUTRIENTS_IN_MCG: ['vitaminD', 'vitaminB12', 'folate', 'vitaminA', 'vitaminK'],
 
   // Serving size fields
   SERVING_FIELDS: {
