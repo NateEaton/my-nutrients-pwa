@@ -466,8 +466,16 @@
     comparisonResults = null;
     lookupPhase = 'idle';
     error = null;
-    // Restart camera and scanning
-    activateCameraForMode('upc');
+
+    // Force camera reinitialization by stopping current stream first
+    // This ensures video element gets a fresh stream after DOM re-render
+    stopCamera();
+
+    // Use setTimeout to allow Svelte to re-render the video element
+    // before we try to attach the camera stream to it
+    setTimeout(() => {
+      activateCameraForMode('upc');
+    }, 100);
   }
 
   // Handle cancel from comparison view

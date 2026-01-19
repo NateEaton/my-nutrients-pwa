@@ -1880,21 +1880,36 @@ private async clearAllData(): Promise<void> {
       metadata.upcSource = 'openfoodfacts';
     }
 
-    // Add scan processing details
-    if (scanData.brandOwner || scanData.brandName || scanData.ingredients) {
-      metadata.scanData = {
-        originalName: scanData.productName || null,
-        brandName: scanData.brandOwner || scanData.brandName || null,
-        ingredients: scanData.ingredients || null,
-        householdMeasure: scanData.servingDisplayText || null,
-        calciumPer100g: scanData.calciumValue || null
-      };
-    }
+    // Add scan processing details including all nutrients
+    metadata.scanData = {
+      originalName: scanData.productName || null,
+      brandName: scanData.brandOwner || scanData.brandName || null,
+      ingredients: scanData.ingredients || null,
+      householdMeasure: scanData.servingDisplayText || null,
+      // Include per-100g nutrient data for reference
+      nutrientsPer100g: scanData.nutrients || null,
+      // Legacy calcium field for backward compatibility
+      calciumPer100g: scanData.calciumValue || scanData.nutrients?.calcium || null
+    };
 
     // Add processing notes for serving conversions
     if (scanData.finalServingQuantity && scanData.finalServingUnit) {
+      const servingNote = `Serving: ${scanData.finalServingQuantity} ${scanData.finalServingUnit}`;
+
+      // Build nutrient conversion notes
+      let nutrientConversionNote = null;
+      if (scanData.nutrientsPerServing && scanData.nutrients) {
+        const nutrientCount = Object.keys(scanData.nutrientsPerServing).length;
+        nutrientConversionNote = `Calculated ${nutrientCount} nutrients per serving from per-100g values`;
+      } else if (scanData.calciumPerServing) {
+        // Legacy calcium-only note
+        nutrientConversionNote = `Calculated ${scanData.calciumPerServing}mg calcium per serving from ${scanData.calciumValue}mg per 100g`;
+      }
+
       metadata.processingNotes = {
-        measureConversion: `Serving: ${scanData.finalServingQuantity} ${scanData.finalServingUnit}`,
+        measureConversion: servingNote,
+        nutrientConversion: nutrientConversionNote,
+        // Legacy field for backward compatibility
         calciumConversion: scanData.calciumPerServing
           ? `Calculated ${scanData.calciumPerServing}mg per serving from ${scanData.calciumValue}mg per 100g`
           : null
