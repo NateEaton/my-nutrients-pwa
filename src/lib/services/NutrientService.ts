@@ -1877,33 +1877,24 @@ private async clearAllData(): Promise<void> {
       brandName: scanData.brandOwner || scanData.brandName || null,
       ingredients: scanData.ingredients || null,
       householdMeasure: scanData.servingDisplayText || null,
-      // Include per-100g nutrient data for reference
-      nutrientsPer100g: scanData.nutrients || null,
-      // Legacy calcium field for backward compatibility
-      calciumPer100g: scanData.calciumValue || scanData.nutrients?.calcium || null
+      // Per-100g nutrient data from the API (source reference)
+      nutrientsPer100g: scanData.nutrients || null
     };
 
     // Add processing notes for serving conversions
     if (scanData.finalServingQuantity && scanData.finalServingUnit) {
       const servingNote = `Serving: ${scanData.finalServingQuantity} ${scanData.finalServingUnit}`;
 
-      // Build nutrient conversion notes
+      // Build nutrient conversion note
       let nutrientConversionNote = null;
       if (scanData.nutrientsPerServing && scanData.nutrients) {
         const nutrientCount = Object.keys(scanData.nutrientsPerServing).length;
         nutrientConversionNote = `Calculated ${nutrientCount} nutrients per serving from per-100g values`;
-      } else if (scanData.calciumPerServing) {
-        // Legacy calcium-only note
-        nutrientConversionNote = `Calculated ${scanData.calciumPerServing}mg calcium per serving from ${scanData.calciumValue}mg per 100g`;
       }
 
       metadata.processingNotes = {
         measureConversion: servingNote,
-        nutrientConversion: nutrientConversionNote,
-        // Legacy field for backward compatibility
-        calciumConversion: scanData.calciumPerServing
-          ? `Calculated ${scanData.calciumPerServing}mg per serving from ${scanData.calciumValue}mg per 100g`
-          : null
+        nutrientConversion: nutrientConversionNote
       };
     }
 
