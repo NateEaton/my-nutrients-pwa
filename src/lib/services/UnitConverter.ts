@@ -243,9 +243,10 @@ export class UnitConverter {
    * Parses a USDA measure string into components for unit conversion.
    */
   parseUSDAMeasure(measureString: string): ParsedMeasure {
-    // Clean the string: normalize all whitespace to regular spaces, then lowercase and trim
+    // Clean the string: remove BOM and invisible characters, normalize whitespace
     let cleaned = measureString
-      .replace(/[\u00a0\u2009\u202f\u2007\u2008\u200a\u200b]/g, ' ')  // Normalize unicode whitespace
+      .replace(/^\uFEFF/, '')  // Remove BOM (Byte Order Mark)
+      .replace(/[\u200B-\u200F\u2028-\u202F\u00a0\u2007\u2008\u2009\u200a]/g, ' ')  // Normalize all invisible/special whitespace
       .replace(/\s+/g, ' ')  // Collapse multiple spaces
       .toLowerCase()
       .trim();
@@ -254,26 +255,23 @@ export class UnitConverter {
     cleaned = this.convertUnicodeFractions(cleaned);
 
     // Extract the numeric part (handles "1.0", "0.5", "78", etc.)
-    // Match: digits, optional decimal, optional more digits, followed by optional whitespace
-    const numericMatch = cleaned.match(/^(\d+\.?\d*)(\s*)/);
+    // Match: digits, optional decimal, optional more digits, followed by whitespace or word boundary
+    const numericMatch = cleaned.match(/^(\d+\.?\d*)\s*/);
     const quantity = numericMatch ? parseFloat(numericMatch[1]) : 1;
 
     // Remove the numeric part to get the unit portion
-    // Use the match length to slice instead of replace for more reliability
     let unitPortion: string;
-    if (numericMatch && numericMatch[0].length > 0) {
-      unitPortion = cleaned.slice(numericMatch[0].length).trim();
+    if (numericMatch && numericMatch[0]) {
+      unitPortion = cleaned.substring(numericMatch[0].length).trim();
     } else {
       unitPortion = cleaned;
     }
 
-    // Extra safety: ensure no leading digit remains in the unit portion
-    // This handles edge cases where the regex might not match as expected
-    if (unitPortion && /^\d/.test(unitPortion)) {
-      const fallbackMatch = unitPortion.match(/^\d+\.?\d*\s*/);
-      if (fallbackMatch) {
-        unitPortion = unitPortion.slice(fallbackMatch[0].length).trim();
-      }
+    // Extra safety: if unit still starts with a digit followed by space/word, strip it
+    // This handles any edge cases where the primary regex didn't match
+    const leadingNumMatch = unitPortion.match(/^(\d+\.?\d*)\s+/);
+    if (leadingNumMatch) {
+      unitPortion = unitPortion.substring(leadingNumMatch[0].length).trim();
     }
 
     // Check for compound measurements like "package (10 oz)" or "container (6 fl oz)"
