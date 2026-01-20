@@ -1249,7 +1249,7 @@
         <!-- Nutrient Inputs (Custom Mode only) -->
         {#if isCustomMode}
           <div class="form-group">
-            <label class="form-label">Nutrients (enter at least one)</label>
+            <label class="form-label">Nutrients</label>
             <div class="nutrient-inputs-grid">
               {#each displayedNutrients as nutrientId}
                 {@const validationRange = getNutrientValidationRange(nutrientId)}
