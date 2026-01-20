@@ -199,11 +199,51 @@ export class UnitConverter {
   }
 
   /**
+   * Convert Unicode fraction characters to decimal values.
+   * Handles: ½ ⅓ ⅔ ¼ ¾ ⅕ ⅖ ⅗ ⅘ ⅙ ⅚ ⅛ ⅜ ⅝ ⅞
+   */
+  private convertUnicodeFractions(text: string): string {
+    const fractionMap: Record<string, number> = {
+      '½': 0.5,
+      '⅓': 1/3,
+      '⅔': 2/3,
+      '¼': 0.25,
+      '¾': 0.75,
+      '⅕': 0.2,
+      '⅖': 0.4,
+      '⅗': 0.6,
+      '⅘': 0.8,
+      '⅙': 1/6,
+      '⅚': 5/6,
+      '⅛': 0.125,
+      '⅜': 0.375,
+      '⅝': 0.625,
+      '⅞': 0.875,
+    };
+
+    let result = text;
+
+    // Handle mixed numbers like "1 ½" or "1½" → "1.5"
+    for (const [fraction, value] of Object.entries(fractionMap)) {
+      // Pattern: digit + optional space + fraction → decimal
+      const mixedPattern = new RegExp(`(\\d+)\\s*${fraction}`, 'g');
+      result = result.replace(mixedPattern, (_, whole) => {
+        return String(parseInt(whole) + value);
+      });
+
+      // Pattern: standalone fraction → decimal
+      result = result.replace(new RegExp(fraction, 'g'), String(value));
+    }
+
+    return result;
+  }
+
+  /**
    * Parses a USDA measure string into components for unit conversion.
    */
   parseUSDAMeasure(measureString: string): ParsedMeasure {
-    // Clean the string
-    let cleaned = measureString.toLowerCase().trim();
+    // Clean the string and convert Unicode fractions
+    let cleaned = this.convertUnicodeFractions(measureString.toLowerCase().trim());
 
     // Extract the numeric part (handles "1.0", "0.5", etc.)
     const numericMatch = cleaned.match(/^(\d+\.?\d*)\s*/);
