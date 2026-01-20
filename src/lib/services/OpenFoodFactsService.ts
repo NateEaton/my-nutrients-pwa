@@ -19,6 +19,7 @@
 // OpenFoodFacts API Service for UPC lookup
 // Provides same interface as FDCService for seamless source switching
 import { HouseholdMeasureService } from './HouseholdMeasureService';
+import { UnitConverter } from './UnitConverter';
 import { OPENFOODFACTS_CONFIG } from '$lib/config/openfoodfacts.js';
 import { logger } from '$lib/utils/logger';
 import type { NutrientValues } from '$lib/types/nutrients';
@@ -86,10 +87,12 @@ interface ParsedProduct {
 export class OpenFoodFactsService {
   private baseUrl: string;
   private householdMeasureService: HouseholdMeasureService;
+  private unitConverter: UnitConverter;
 
   constructor() {
     this.baseUrl = OPENFOODFACTS_CONFIG.API_BASE_URL;
     this.householdMeasureService = new HouseholdMeasureService();
+    this.unitConverter = new UnitConverter();
   }
 
   /**
@@ -175,60 +178,63 @@ export class OpenFoodFactsService {
       logger.debug('OFF', 'Product name:', productName);
       logger.debug('OFF', 'Brand:', brandName);
 
-      // Extract serving size information
+      // ============================================================================
+      // SERVING SIZE PARSING - Use same approach as internal database
+      // Parse serving_size text directly with parseUSDAMeasure() for consistency
+      // ============================================================================
       let servingSize = '';
-      let servingCount = 1;
-      let servingUnit = '';
-      let smartServingResult = null;
+      let servingCount = 1;  // Metric value for nutrient calculation
+      let servingUnit = '';  // Metric unit for nutrient calculation
+      let finalServingQuantity = 1;
+      let finalServingUnit = 'serving';
 
       logger.debug('OFF', 'Extracting serving size information...');
+      logger.debug('OFF', 'Raw serving_size:', product.serving_size);
+      logger.debug('OFF', 'Raw serving_quantity:', product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.QUANTITY]);
+      logger.debug('OFF', 'Raw serving_quantity_unit:', product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.UNIT]);
 
-      if (product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.QUANTITY] && product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.UNIT]) {
-        logger.debug('OFF', 'Found serving_quantity and serving_quantity_unit in product data');
-        servingCount = parseFloat(product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.QUANTITY]) || 1;
-        // Standardize the unit from OpenFoodFacts API
-        servingUnit = this.householdMeasureService.standardizeUnit(product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.UNIT]);
+      if (product.serving_size) {
+        // Parse serving_size text directly (like internal DB measures)
+        // Examples: "1 cup (240g)", "78 g", "2 tbsp (30g)", "12 fl oz"
+        const parsed = this.unitConverter.parseUSDAMeasure(product.serving_size);
 
-        logger.debug('OFF', 'Parsed serving - count:', servingCount, 'unit:', servingUnit);
-        logger.debug('OFF', 'Generating smart serving size with serving_size text:', product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.SIZE_TEXT]);
-
-        // Generate smart serving size using household measure if available
-        smartServingResult = this.householdMeasureService.generateSmartServingSize(
-          servingCount,
-          servingUnit,
-          product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.SIZE_TEXT],
-          productName
-        );
-
-        logger.debug('OFF', 'Smart serving result - isEnhanced:', smartServingResult.isEnhanced, 'text:', smartServingResult.text);
-
-        // Set servingSize based on whether smart serving was enhanced or not
-        if (smartServingResult.isEnhanced) {
-          servingSize = smartServingResult.text; // e.g., "2 tbsp (11g)"
-          logger.debug('OFF', 'Using enhanced serving size:', servingSize);
-        } else {
-          // Use standardized format for fallback, omit count if it's 1
-          if (servingCount === 1) {
-            servingSize = servingUnit; // e.g., "g" instead of "1 g"
-          } else {
-            servingSize = `${servingCount} ${servingUnit}`; // e.g., "240 ml"
-          }
-          logger.debug('OFF', 'Using standard serving size:', servingSize);
-        }
-
-
-      } else if (product.serving_size) {
-        logger.debug('OFF', 'No quantity/unit fields, using serving_size text:', product.serving_size);
+        finalServingQuantity = parsed.originalQuantity;
+        finalServingUnit = parsed.originalUnit;
         servingSize = product.serving_size;
-        // Try to parse count and unit from text like "11 g" or "1 cup"
-        const match = servingSize.match(/^(\d+(?:\.\d+)?)\s*(.+)$/);
-        if (match) {
-          servingCount = parseFloat(match[1]);
-          servingUnit = this.householdMeasureService.standardizeUnit(match[2].trim());
-          logger.debug('OFF', 'Parsed from serving_size text - count:', servingCount, 'unit:', servingUnit);
-        } else {
-          logger.debug('OFF', 'Could not parse serving_size text into count and unit');
+
+        logger.debug('OFF', 'Parsed serving_size with parseUSDAMeasure:', {
+          originalQuantity: parsed.originalQuantity,
+          originalUnit: parsed.originalUnit,
+          cleanedUnit: parsed.cleanedUnit,
+          unitType: parsed.unitType
+        });
+
+        // Extract metric value for nutrient calculations
+        // Look for metric value in parentheses like "(240g)" or "(30ml)"
+        const metricMatch = product.serving_size.match(/\((\d+(?:\.\d+)?)\s*(g|ml|gr|gm|gram|grams|milliliter|milliliters)\)/i);
+        if (metricMatch) {
+          servingCount = parseFloat(metricMatch[1]);
+          servingUnit = this.householdMeasureService.standardizeUnit(metricMatch[2]);
+          logger.debug('OFF', 'Extracted metric from parentheses:', servingCount, servingUnit);
+        } else if (product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.QUANTITY] && product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.UNIT]) {
+          // Use serving_quantity/serving_quantity_unit for metric calculation
+          servingCount = parseFloat(product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.QUANTITY]) || 1;
+          servingUnit = this.householdMeasureService.standardizeUnit(product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.UNIT]);
+          logger.debug('OFF', 'Using serving_quantity fields for metric:', servingCount, servingUnit);
+        } else if (parsed.unitType === 'weight' || parsed.unitType === 'volume') {
+          // serving_size is already in metric (e.g., "78 g", "240 ml")
+          servingCount = parsed.originalQuantity;
+          servingUnit = parsed.cleanedUnit || parsed.originalUnit;
+          logger.debug('OFF', 'serving_size is metric:', servingCount, servingUnit);
         }
+      } else if (product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.QUANTITY] && product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.UNIT]) {
+        // No serving_size text, but have quantity/unit fields
+        servingCount = parseFloat(product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.QUANTITY]) || 1;
+        servingUnit = this.householdMeasureService.standardizeUnit(product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.UNIT]);
+        finalServingQuantity = servingCount;
+        finalServingUnit = servingUnit;
+        servingSize = `${servingCount} ${servingUnit}`;
+        logger.debug('OFF', 'Using quantity/unit fields only:', servingCount, servingUnit);
       } else {
         logger.debug('OFF', 'No serving size information available in product data');
       }
@@ -251,45 +257,18 @@ export class OpenFoodFactsService {
       const calcium = calciumValue ? `${calciumValue} mg` : '';
       const calciumPerServing = nutrientsPerServing.calcium || null;
 
-      // ============================================================================
-      // CENTRALIZED SERVING DECISION LOGIC (same as FDCService)
-      // Determine final serving format for AddFoodModal (single source of truth)
-      // ============================================================================
-      let finalServingQuantity: number;
-      let finalServingUnit: string;
-      let servingDisplayText: string;
-      let servingSource: 'enhanced' | 'standard';
+      // Determine serving display text and source
+      const servingDisplayText = servingSize || `${finalServingQuantity} ${finalServingUnit}`;
+      const servingSource: 'enhanced' | 'standard' =
+        finalServingUnit !== servingUnit ? 'enhanced' : 'standard';
 
-      logger.debug('OFF', 'Making final serving decision...');
-
-      if (smartServingResult && smartServingResult.isEnhanced) {
-        // ENHANCED: Use household measure format
-        finalServingQuantity = smartServingResult.householdAmount || 1;
-
-        // Extract just the unit part from parsed household measure
-        const parsedMeasure = this.householdMeasureService.parseHouseholdMeasure(product.serving_size || '');
-        const householdUnit = parsedMeasure?.unit || 'serving';
-        finalServingUnit = `${householdUnit} (${servingCount}${servingUnit})`;
-
-        servingDisplayText = smartServingResult.text;
-        servingSource = 'enhanced';
-
-        logger.debug('OFF', 'Final serving decision - ENHANCED mode');
-        logger.debug('OFF', 'Final serving - quantity:', finalServingQuantity, 'unit:', finalServingUnit);
-        logger.debug('OFF', 'Display text:', servingDisplayText);
-
-      } else {
-        // STANDARD: Use raw API serving format
-        finalServingQuantity = servingCount;
-        finalServingUnit = servingUnit;
-        servingDisplayText = servingSize;
-        servingSource = 'standard';
-
-        logger.debug('OFF', 'Final serving decision - STANDARD mode');
-        logger.debug('OFF', 'Final serving - quantity:', finalServingQuantity, 'unit:', finalServingUnit);
-        logger.debug('OFF', 'Display text:', servingDisplayText);
-      }
-
+      logger.debug('OFF', 'Final serving decision:', {
+        finalServingQuantity,
+        finalServingUnit,
+        servingDisplayText,
+        servingSource,
+        metricForCalc: `${servingCount} ${servingUnit}`
+      });
 
       // Determine confidence based on data completeness
       const completeness = product[OPENFOODFACTS_CONFIG.PRODUCT_FIELDS.COMPLETENESS] || 0;
@@ -323,7 +302,7 @@ export class OpenFoodFactsService {
         servingCount: servingCount,
         servingUnit: servingUnit,
         householdServingFullText: product.serving_size,
-        smartServing: smartServingResult,
+        smartServing: null, // Deprecated - using parseUSDAMeasure() now
 
         // Multi-nutrient support
         nutrients: nutrients,
