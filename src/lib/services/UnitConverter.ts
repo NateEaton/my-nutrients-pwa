@@ -243,15 +243,38 @@ export class UnitConverter {
    * Parses a USDA measure string into components for unit conversion.
    */
   parseUSDAMeasure(measureString: string): ParsedMeasure {
-    // Clean the string and convert Unicode fractions
-    let cleaned = this.convertUnicodeFractions(measureString.toLowerCase().trim());
+    // Clean the string: normalize all whitespace to regular spaces, then lowercase and trim
+    let cleaned = measureString
+      .replace(/[\u00a0\u2009\u202f\u2007\u2008\u200a\u200b]/g, ' ')  // Normalize unicode whitespace
+      .replace(/\s+/g, ' ')  // Collapse multiple spaces
+      .toLowerCase()
+      .trim();
 
-    // Extract the numeric part (handles "1.0", "0.5", etc.)
-    const numericMatch = cleaned.match(/^(\d+\.?\d*)\s*/);
+    // Convert Unicode fractions (e.g., "1½" → "1.5")
+    cleaned = this.convertUnicodeFractions(cleaned);
+
+    // Extract the numeric part (handles "1.0", "0.5", "78", etc.)
+    // Match: digits, optional decimal, optional more digits, followed by optional whitespace
+    const numericMatch = cleaned.match(/^(\d+\.?\d*)(\s*)/);
     const quantity = numericMatch ? parseFloat(numericMatch[1]) : 1;
 
     // Remove the numeric part to get the unit portion
-    let unitPortion = cleaned.replace(/^(\d+\.?\d*)\s*/, "").trim();
+    // Use the match length to slice instead of replace for more reliability
+    let unitPortion: string;
+    if (numericMatch && numericMatch[0].length > 0) {
+      unitPortion = cleaned.slice(numericMatch[0].length).trim();
+    } else {
+      unitPortion = cleaned;
+    }
+
+    // Extra safety: ensure no leading digit remains in the unit portion
+    // This handles edge cases where the regex might not match as expected
+    if (unitPortion && /^\d/.test(unitPortion)) {
+      const fallbackMatch = unitPortion.match(/^\d+\.?\d*\s*/);
+      if (fallbackMatch) {
+        unitPortion = unitPortion.slice(fallbackMatch[0].length).trim();
+      }
+    }
 
     // Check for compound measurements like "package (10 oz)" or "container (6 fl oz)"
     const compoundMatch = unitPortion.match(/^(\w+)\s*\(([^)]+)\)/);
