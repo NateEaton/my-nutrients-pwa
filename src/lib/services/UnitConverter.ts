@@ -55,6 +55,25 @@ export interface ConversionTables {
   count: ConversionTable;
 }
 
+// Unicode fraction character to decimal value mapping (module-level constant)
+const UNICODE_FRACTIONS: Record<string, number> = {
+  '½': 0.5,
+  '⅓': 1/3,
+  '⅔': 2/3,
+  '¼': 0.25,
+  '¾': 0.75,
+  '⅕': 0.2,
+  '⅖': 0.4,
+  '⅗': 0.6,
+  '⅘': 0.8,
+  '⅙': 1/6,
+  '⅚': 5/6,
+  '⅛': 0.125,
+  '⅜': 0.375,
+  '⅝': 0.625,
+  '⅞': 0.875,
+};
+
 export class UnitConverter {
   private nonConvertiblePatterns: RegExp[];
   private conversions: ConversionTables;
@@ -203,28 +222,10 @@ export class UnitConverter {
    * Handles: ½ ⅓ ⅔ ¼ ¾ ⅕ ⅖ ⅗ ⅘ ⅙ ⅚ ⅛ ⅜ ⅝ ⅞
    */
   private convertUnicodeFractions(text: string): string {
-    const fractionMap: Record<string, number> = {
-      '½': 0.5,
-      '⅓': 1/3,
-      '⅔': 2/3,
-      '¼': 0.25,
-      '¾': 0.75,
-      '⅕': 0.2,
-      '⅖': 0.4,
-      '⅗': 0.6,
-      '⅘': 0.8,
-      '⅙': 1/6,
-      '⅚': 5/6,
-      '⅛': 0.125,
-      '⅜': 0.375,
-      '⅝': 0.625,
-      '⅞': 0.875,
-    };
-
     let result = text;
 
     // Handle mixed numbers like "1 ½" or "1½" → "1.5"
-    for (const [fraction, value] of Object.entries(fractionMap)) {
+    for (const [fraction, value] of Object.entries(UNICODE_FRACTIONS)) {
       // Pattern: digit + optional space + fraction → decimal
       const mixedPattern = new RegExp(`(\\d+)\\s*${fraction}`, 'g');
       result = result.replace(mixedPattern, (_, whole) => {

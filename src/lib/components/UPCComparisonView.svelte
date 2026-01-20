@@ -33,6 +33,30 @@
 
   const dispatch = createEventDispatcher();
 
+  // Short labels for nutrients (module-level constant for efficiency)
+  const SHORT_LABELS = {
+    protein: 'Prot',
+    calcium: 'Ca',
+    fiber: 'Fiber',
+    vitaminD: 'Vit D',
+    vitaminA: 'Vit A',
+    vitaminC: 'Vit C',
+    vitaminK: 'Vit K',
+    vitaminB6: 'B6',
+    vitaminB12: 'B12',
+    folate: 'Folate',
+    iron: 'Iron',
+    zinc: 'Zinc',
+    magnesium: 'Mg',
+    potassium: 'K',
+    carbohydrates: 'Carbs',
+    sugars: 'Sugar',
+    fat: 'Fat',
+    saturatedFat: 'Sat Fat',
+    omega3: 'Omega-3',
+    omega6: 'Omega-6'
+  };
+
   // Format nutrient value with unit
   function formatNutrientValue(result, nutrientKey) {
     if (!result) return null;
@@ -61,29 +85,7 @@
 
   // Get short label for nutrient (for compact display)
   function getShortLabel(nutrientKey) {
-    const shortLabels = {
-      protein: 'Prot',
-      calcium: 'Ca',
-      fiber: 'Fiber',
-      vitaminD: 'Vit D',
-      vitaminA: 'Vit A',
-      vitaminC: 'Vit C',
-      vitaminK: 'Vit K',
-      vitaminB6: 'B6',
-      vitaminB12: 'B12',
-      folate: 'Folate',
-      iron: 'Iron',
-      zinc: 'Zinc',
-      magnesium: 'Mg',
-      potassium: 'K',
-      carbohydrates: 'Carbs',
-      sugars: 'Sugar',
-      fat: 'Fat',
-      saturatedFat: 'Sat Fat',
-      omega3: 'Omega-3',
-      omega6: 'Omega-6'
-    };
-    return shortLabels[nutrientKey] || getNutrientLabel(nutrientKey);
+    return SHORT_LABELS[nutrientKey] || getNutrientLabel(nutrientKey);
   }
 
   // Handle card selection
@@ -109,14 +111,6 @@
     if (!confidence) return 'none';
     return confidence.toLowerCase();
   }
-
-  // Check if result has any nutrient data
-  function hasNutrientData(result) {
-    if (!result) return false;
-    return displayedNutrients.some(key =>
-      formatNutrientValue(result, key) !== null
-    );
-  }
 </script>
 
 <div class="comparison-container">
@@ -132,6 +126,7 @@
         class="source-card usda"
         on:click={() => selectSource('usda')}
         type="button"
+        aria-label="Select USDA data for {usdaResult.productName}"
       >
         <div class="card-header">
           <span class="source-badge usda">USDA</span>
@@ -186,6 +181,7 @@
         class="source-card off"
         on:click={() => selectSource('off')}
         type="button"
+        aria-label="Select OpenFoodFacts data for {offResult.productName}"
       >
         <div class="card-header">
           <span class="source-badge off">OpenFoodFacts</span>
@@ -301,6 +297,17 @@
   .source-card:not(.not-found):active {
     transform: translateY(0);
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Focus styles for keyboard navigation */
+  .source-card:not(.not-found):focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+  }
+
+  .source-card:not(.not-found):focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
   }
 
   .source-card.not-found {
@@ -528,6 +535,13 @@
     cursor: pointer;
     transition: all 0.2s ease;
     border: none;
+    /* Accessibility: minimum touch target 44x44px */
+    min-height: 44px;
+  }
+
+  .action-btn:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
   }
 
   .action-btn.secondary {
@@ -579,5 +593,26 @@
   :global(.dark) .confidence-badge.low {
     background: #7f1d1d;
     color: #fca5a5;
+  }
+
+  /* Large font / enlarged display support */
+  @media (min-width: 400px) {
+    .nutrients-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* When user prefers larger text, stack nutrients vertically */
+  @media (max-width: 399px), (prefers-reduced-motion: reduce) {
+    .nutrients-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Support for user font scaling - use relative units */
+  @media screen and (min-resolution: 1.5dppx) {
+    .product-name {
+      -webkit-line-clamp: 3; /* Allow more lines on high-DPI displays */
+    }
   }
 </style>
