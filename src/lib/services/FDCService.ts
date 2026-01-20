@@ -19,6 +19,7 @@
 // USDA FoodData Central API Service for UPC lookup
 import { FDC_CONFIG } from '$lib/config/fdc.js';
 import { HouseholdMeasureService } from './HouseholdMeasureService';
+import { UnitConverter } from './UnitConverter';
 import { logger } from '$lib/utils/logger';
 import { FDC_TO_NUTRIENT_MAP } from '$lib/config/nutrientDefaults';
 import type { NutrientValues } from '$lib/types/nutrients';
@@ -79,12 +80,14 @@ export class FDCService {
   private baseUrl: string;
   private searchEndpoint: string;
   private householdMeasureService: HouseholdMeasureService;
+  private unitConverter: UnitConverter;
 
   constructor(apiKey: string) {
     this.apiKey = apiKey;
     this.baseUrl = FDC_CONFIG.API_BASE_URL;
     this.searchEndpoint = FDC_CONFIG.SEARCH_ENDPOINT;
     this.householdMeasureService = new HouseholdMeasureService();
+    this.unitConverter = new UnitConverter();
   }
 
   /**
@@ -204,56 +207,62 @@ export class FDCService {
       const brandName = product.brandName || product.brandOwner || '';
       const ingredients = product.ingredients || '';
 
-      // Extract serving size information
+      // ============================================================================
+      // SERVING SIZE PARSING - Use same approach as internal database
+      // Parse householdServingFullText with parseUSDAMeasure() for consistency
+      // ============================================================================
       let servingSize = '';
-      let servingCount = 1;
-      let servingUnit = '';
-      let smartServingResult = null;
+      let servingCount = 1;  // Metric value for nutrient calculation
+      let servingUnit = '';  // Metric unit for nutrient calculation
+      let finalServingQuantity = 1;
+      let finalServingUnit = 'serving';
 
-      if (product.servingSize && product.servingSizeUnit) {
-        servingCount = product.servingSize;
-        // Standardize the unit from USDA API (MLT → ml, GRM → g, etc.)
-        servingUnit = this.householdMeasureService.standardizeUnit(product.servingSizeUnit);
-
-        // Generate smart serving size using household measure if available
-        smartServingResult = this.householdMeasureService.generateSmartServingSize(
-          product.servingSize,
-          servingUnit, // Use standardized unit
-          product.householdServingFullText,
-          productName
-        );
-
-        // Set servingSize based on whether smart serving was enhanced or not
-        if (smartServingResult.isEnhanced) {
-          servingSize = smartServingResult.text; // e.g., "cup (240ml)"
-        } else {
-          // Use standardized format for fallback, omit count if it's 1
-          if (servingCount === 1) {
-            servingSize = servingUnit; // e.g., "ml" instead of "1 ml"
-          } else {
-            servingSize = `${servingCount} ${servingUnit}`; // e.g., "240 ml"
-          }
-        }
-
-        logger.debug('FDC', 'Smart serving size result:', smartServingResult);
-        logger.debug('FDC', `Unit standardization: "${product.servingSizeUnit}" → "${servingUnit}"`);
-
-      } else if (product.householdServingFullText) {
-        servingSize = product.householdServingFullText;
-        // Try to parse count and unit from text like "11 g" or "1 cup"
-        const match = servingSize.match(/^(\d+(?:\.\d+)?)\s*(.+)$/);
-        if (match) {
-          servingCount = parseFloat(match[1]);
-          servingUnit = match[2].trim();
-        }
-      }
-
-      logger.debug('FDC', 'Serving info - count:', servingCount, 'unit:', servingUnit, 'full:', servingSize);
       logger.debug('FDC', 'Raw serving data from API:', {
         servingSize: product.servingSize,
         servingSizeUnit: product.servingSizeUnit,
         householdServingFullText: product.householdServingFullText
       });
+
+      // First, extract metric values for nutrient calculation
+      if (product.servingSize && product.servingSizeUnit) {
+        servingCount = product.servingSize;
+        servingUnit = this.householdMeasureService.standardizeUnit(product.servingSizeUnit);
+        logger.debug('FDC', `Metric serving: ${servingCount} ${servingUnit}`);
+      }
+
+      // Now determine final serving display (household measure preferred)
+      if (product.householdServingFullText) {
+        // Parse household measure directly (like internal DB measures)
+        // Examples: "1 cup", "2 tbsp", "3 pieces"
+        const parsed = this.unitConverter.parseUSDAMeasure(product.householdServingFullText);
+
+        finalServingQuantity = parsed.originalQuantity;
+
+        // Append metric weight if available: "cup" → "cup (240g)"
+        if (servingCount && servingUnit) {
+          finalServingUnit = `${parsed.originalUnit} (${servingCount}${servingUnit})`;
+          servingSize = `${parsed.originalQuantity} ${parsed.originalUnit} (${servingCount}${servingUnit})`;
+        } else {
+          finalServingUnit = parsed.originalUnit;
+          servingSize = product.householdServingFullText;
+        }
+
+        logger.debug('FDC', 'Parsed householdServingFullText with parseUSDAMeasure:', {
+          originalQuantity: parsed.originalQuantity,
+          originalUnit: parsed.originalUnit,
+          finalServingUnit,
+          servingSize
+        });
+
+      } else if (servingCount && servingUnit) {
+        // No household measure, use metric values
+        finalServingQuantity = servingCount;
+        finalServingUnit = servingUnit;
+        servingSize = servingCount === 1 ? servingUnit : `${servingCount} ${servingUnit}`;
+        logger.debug('FDC', `Using metric serving: ${finalServingQuantity} ${finalServingUnit}`);
+      }
+
+      logger.debug('FDC', 'Serving info - metric:', servingCount, servingUnit, 'display:', servingSize);
 
       // Extract all nutrients from the product
       const nutrients = this.extractNutrients(product);
@@ -288,49 +297,18 @@ export class FDCService {
         }
       }
 
-      // ============================================================================
-      // CENTRALIZED SERVING DECISION LOGIC
-      // Determine final serving format for AddFoodModal (single source of truth)
-      // ============================================================================
-      let finalServingQuantity: number;
-      let finalServingUnit: string;
-      let servingDisplayText: string;
-      let servingSource: 'enhanced' | 'standard';
+      // Determine serving display text and source
+      const servingDisplayText = servingSize || `${finalServingQuantity} ${finalServingUnit}`;
+      const servingSource: 'enhanced' | 'standard' =
+        product.householdServingFullText ? 'enhanced' : 'standard';
 
-      logger.debug('FDC', 'Making centralized serving decision...');
-      logger.debug('FDC', `  - smartServingResult.isEnhanced: ${smartServingResult?.isEnhanced}`);
-      logger.debug('FDC', `  - smartServingResult.householdAmount: ${smartServingResult?.householdAmount}`);
-
-      if (smartServingResult && smartServingResult.isEnhanced) {
-        // ENHANCED: Use household measure format
-        // Example: "2 tbsp" → quantity=2, unit="tbsp (11g)"
-        finalServingQuantity = smartServingResult.householdAmount || 1;
-
-        // Extract just the unit part from parsed household measure
-        const parsedMeasure = this.householdMeasureService.parseHouseholdMeasure(product.householdServingFullText || '');
-        const householdUnit = parsedMeasure?.unit || 'serving';
-        finalServingUnit = `${householdUnit} (${servingCount}${servingUnit})`;
-
-        servingDisplayText = smartServingResult.text; // e.g., "2 tbsp (11g)"
-        servingSource = 'enhanced';
-
-        logger.debug('FDC', `✅ Enhanced serving - quantity: ${finalServingQuantity}, unit: "${finalServingUnit}"`);
-      } else {
-        // STANDARD: Use raw API serving format
-        // Example: "170 g" → quantity=170, unit="g"
-        finalServingQuantity = servingCount;
-        finalServingUnit = servingUnit;
-        servingDisplayText = servingSize; // Already formatted above
-        servingSource = 'standard';
-
-        logger.debug('FDC', `⚡ Standard serving - quantity: ${finalServingQuantity}, unit: "${finalServingUnit}"`);
-      }
-
-      logger.debug('FDC', 'Final serving decision:');
-      logger.debug('FDC', `  - finalServingQuantity: ${finalServingQuantity}`);
-      logger.debug('FDC', `  - finalServingUnit: "${finalServingUnit}"`);
-      logger.debug('FDC', `  - servingDisplayText: "${servingDisplayText}"`);
-      logger.debug('FDC', `  - servingSource: "${servingSource}"`);
+      logger.debug('FDC', 'Final serving decision:', {
+        finalServingQuantity,
+        finalServingUnit,
+        servingDisplayText,
+        servingSource,
+        metricForCalc: `${servingCount} ${servingUnit}`
+      });
 
       const result = {
         source: 'USDA FDC',
@@ -351,7 +329,7 @@ export class FDCService {
         servingCount: servingCount,
         servingUnit: servingUnit,
         householdServingFullText: product.householdServingFullText,
-        smartServing: smartServingResult, // Include smart serving analysis
+        smartServing: null, // Deprecated - using parseUSDAMeasure() now
 
         // Multi-nutrient support
         nutrients: nutrients, // Per 100g values

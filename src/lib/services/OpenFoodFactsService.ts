@@ -19,8 +19,10 @@
 // OpenFoodFacts API Service for UPC lookup
 // Provides same interface as FDCService for seamless source switching
 import { HouseholdMeasureService } from './HouseholdMeasureService';
+import { UnitConverter } from './UnitConverter';
 import { OPENFOODFACTS_CONFIG } from '$lib/config/openfoodfacts.js';
 import { logger } from '$lib/utils/logger';
+import type { NutrientValues } from '$lib/types/nutrients';
 
 interface OpenFoodFactsProduct {
   product_name?: string;
@@ -67,6 +69,11 @@ interface ParsedProduct {
   householdServingFullText?: string;
   smartServing?: any;
 
+  // Multi-nutrient support
+  nutrients: NutrientValues;
+  nutrientsPerServing: NutrientValues;
+
+  // Legacy calcium fields (for backward compatibility)
   calcium: string;
   calciumValue: number | null;
   calciumPercentDV?: number | null;
@@ -80,10 +87,12 @@ interface ParsedProduct {
 export class OpenFoodFactsService {
   private baseUrl: string;
   private householdMeasureService: HouseholdMeasureService;
+  private unitConverter: UnitConverter;
 
   constructor() {
     this.baseUrl = OPENFOODFACTS_CONFIG.API_BASE_URL;
     this.householdMeasureService = new HouseholdMeasureService();
+    this.unitConverter = new UnitConverter();
   }
 
   /**
@@ -169,157 +178,97 @@ export class OpenFoodFactsService {
       logger.debug('OFF', 'Product name:', productName);
       logger.debug('OFF', 'Brand:', brandName);
 
-      // Extract serving size information
+      // ============================================================================
+      // SERVING SIZE PARSING - Use same approach as internal database
+      // Parse serving_size text directly with parseUSDAMeasure() for consistency
+      // ============================================================================
       let servingSize = '';
-      let servingCount = 1;
-      let servingUnit = '';
-      let smartServingResult = null;
+      let servingCount = 1;  // Metric value for nutrient calculation
+      let servingUnit = '';  // Metric unit for nutrient calculation
+      let finalServingQuantity = 1;
+      let finalServingUnit = 'serving';
 
       logger.debug('OFF', 'Extracting serving size information...');
+      logger.debug('OFF', 'Raw serving_size:', product.serving_size);
+      logger.debug('OFF', 'Raw serving_quantity:', product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.QUANTITY]);
+      logger.debug('OFF', 'Raw serving_quantity_unit:', product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.UNIT]);
 
-      if (product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.QUANTITY] && product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.UNIT]) {
-        logger.debug('OFF', 'Found serving_quantity and serving_quantity_unit in product data');
-        servingCount = parseFloat(product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.QUANTITY]) || 1;
-        // Standardize the unit from OpenFoodFacts API
-        servingUnit = this.householdMeasureService.standardizeUnit(product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.UNIT]);
+      if (product.serving_size) {
+        // Parse serving_size text directly (like internal DB measures)
+        // Examples: "1 cup (240g)", "78 g", "2 tbsp (30g)", "12 fl oz"
+        const parsed = this.unitConverter.parseUSDAMeasure(product.serving_size);
 
-        logger.debug('OFF', 'Parsed serving - count:', servingCount, 'unit:', servingUnit);
-        logger.debug('OFF', 'Generating smart serving size with serving_size text:', product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.SIZE_TEXT]);
-
-        // Generate smart serving size using household measure if available
-        smartServingResult = this.householdMeasureService.generateSmartServingSize(
-          servingCount,
-          servingUnit,
-          product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.SIZE_TEXT],
-          productName
-        );
-
-        logger.debug('OFF', 'Smart serving result - isEnhanced:', smartServingResult.isEnhanced, 'text:', smartServingResult.text);
-
-        // Set servingSize based on whether smart serving was enhanced or not
-        if (smartServingResult.isEnhanced) {
-          servingSize = smartServingResult.text; // e.g., "2 tbsp (11g)"
-          logger.debug('OFF', 'Using enhanced serving size:', servingSize);
-        } else {
-          // Use standardized format for fallback, omit count if it's 1
-          if (servingCount === 1) {
-            servingSize = servingUnit; // e.g., "g" instead of "1 g"
-          } else {
-            servingSize = `${servingCount} ${servingUnit}`; // e.g., "240 ml"
-          }
-          logger.debug('OFF', 'Using standard serving size:', servingSize);
-        }
-
-
-      } else if (product.serving_size) {
-        logger.debug('OFF', 'No quantity/unit fields, using serving_size text:', product.serving_size);
+        finalServingQuantity = parsed.originalQuantity;
+        finalServingUnit = parsed.originalUnit;
         servingSize = product.serving_size;
-        // Try to parse count and unit from text like "11 g" or "1 cup"
-        const match = servingSize.match(/^(\d+(?:\.\d+)?)\s*(.+)$/);
-        if (match) {
-          servingCount = parseFloat(match[1]);
-          servingUnit = this.householdMeasureService.standardizeUnit(match[2].trim());
-          logger.debug('OFF', 'Parsed from serving_size text - count:', servingCount, 'unit:', servingUnit);
-        } else {
-          logger.debug('OFF', 'Could not parse serving_size text into count and unit');
+
+        logger.debug('OFF', 'Parsed serving_size with parseUSDAMeasure:', {
+          originalQuantity: parsed.originalQuantity,
+          originalUnit: parsed.originalUnit,
+          cleanedUnit: parsed.cleanedUnit,
+          unitType: parsed.unitType
+        });
+
+        // Extract metric value for nutrient calculations
+        // Look for metric value in parentheses like "(240g)" or "(30ml)"
+        const metricMatch = product.serving_size.match(/\((\d+(?:\.\d+)?)\s*(g|ml|gr|gm|gram|grams|milliliter|milliliters)\)/i);
+        if (metricMatch) {
+          servingCount = parseFloat(metricMatch[1]);
+          servingUnit = this.householdMeasureService.standardizeUnit(metricMatch[2]);
+          logger.debug('OFF', 'Extracted metric from parentheses:', servingCount, servingUnit);
+        } else if (product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.QUANTITY] && product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.UNIT]) {
+          // Use serving_quantity/serving_quantity_unit for metric calculation
+          servingCount = parseFloat(product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.QUANTITY]) || 1;
+          servingUnit = this.householdMeasureService.standardizeUnit(product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.UNIT]);
+          logger.debug('OFF', 'Using serving_quantity fields for metric:', servingCount, servingUnit);
+        } else if (parsed.unitType === 'weight' || parsed.unitType === 'volume') {
+          // serving_size is already in metric (e.g., "78 g", "240 ml")
+          servingCount = parsed.originalQuantity;
+          servingUnit = parsed.cleanedUnit || parsed.originalUnit;
+          logger.debug('OFF', 'serving_size is metric:', servingCount, servingUnit);
         }
+      } else if (product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.QUANTITY] && product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.UNIT]) {
+        // No serving_size text, but have quantity/unit fields
+        servingCount = parseFloat(product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.QUANTITY]) || 1;
+        servingUnit = this.householdMeasureService.standardizeUnit(product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.UNIT]);
+        finalServingQuantity = servingCount;
+        finalServingUnit = servingUnit;
+        servingSize = `${servingCount} ${servingUnit}`;
+        logger.debug('OFF', 'Using quantity/unit fields only:', servingCount, servingUnit);
       } else {
         logger.debug('OFF', 'No serving size information available in product data');
       }
 
 
-      // Extract calcium from nutriments
-      let calcium = '';
-      let calciumValue = null;
-      let calciumPerServing = null;
+      // Extract all nutrients from nutriments
+      const nutrients = this.extractNutrients(product);
+      logger.debug('OFF', 'Extracted nutrients (per 100g):', nutrients);
 
-      logger.debug('OFF', 'Extracting calcium from nutriments...');
+      // Calculate per-serving nutrients
+      const nutrientsPerServing = this.calculateNutrientsPerServing(
+        nutrients,
+        servingCount,
+        servingUnit
+      );
+      logger.debug('OFF', 'Calculated per-serving nutrients:', nutrientsPerServing);
 
-      if (product.nutriments) {
-        // IMPORTANT: OpenFoodFacts calcium units are inconsistent!
-        // calcium_unit may say "mg" but values are often fractional grams (e.g., 0.158)
-        // The OpenFoodFacts website shows these as milligrams after conversion
-        // Therefore, we ALWAYS apply 1000x conversion regardless of stated unit
-        const calciumUnit = product.nutriments[OPENFOODFACTS_CONFIG.NUTRITION_FIELDS.CALCIUM_UNIT] || 'unknown';
-        const conversionFactor = OPENFOODFACTS_CONFIG.UNIT_CONVERSION.GRAMS_TO_MG; // Always 1000x
+      // Legacy calcium support (for backward compatibility)
+      const calciumValue = nutrients.calcium || null;
+      const calcium = calciumValue ? `${calciumValue} mg` : '';
+      const calciumPerServing = nutrientsPerServing.calcium || null;
 
-        logger.debug('OFF', 'Calcium unit detected:', calciumUnit, 'using conversion factor:', conversionFactor);
+      // Determine serving display text and source
+      const servingDisplayText = servingSize || `${finalServingQuantity} ${finalServingUnit}`;
+      const servingSource: 'enhanced' | 'standard' =
+        finalServingUnit !== servingUnit ? 'enhanced' : 'standard';
 
-        // Try calcium_100g first (per 100g value)
-        if (product.nutriments[OPENFOODFACTS_CONFIG.NUTRITION_FIELDS.CALCIUM_100G]) {
-          const rawCalciumValue = parseFloat(product.nutriments[OPENFOODFACTS_CONFIG.NUTRITION_FIELDS.CALCIUM_100G].toString()) || null;
-          logger.debug('OFF', 'Raw calcium_100g value:', rawCalciumValue);
-          if (rawCalciumValue !== null) {
-            calciumValue = rawCalciumValue * conversionFactor; // Always convert g→mg
-            calcium = `${calciumValue} mg`;
-            logger.debug('OFF', 'Converted calcium value:', calciumValue, 'mg (per 100g)');
-          }
-        } else {
-          logger.debug('OFF', 'No calcium_100g value found in nutriments');
-        }
-
-        // Try calcium_serving if available
-        if (product.nutriments[OPENFOODFACTS_CONFIG.NUTRITION_FIELDS.CALCIUM_SERVING]) {
-          const rawCalciumServing = parseFloat(product.nutriments[OPENFOODFACTS_CONFIG.NUTRITION_FIELDS.CALCIUM_SERVING].toString()) || null;
-          logger.debug('OFF', 'Raw calcium_serving value:', rawCalciumServing);
-          if (rawCalciumServing !== null) {
-            calciumPerServing = rawCalciumServing * conversionFactor; // Always convert g→mg
-            logger.debug('OFF', 'Converted calcium per serving:', calciumPerServing, 'mg');
-          }
-        } else {
-          logger.debug('OFF', 'No calcium_serving value found in nutriments');
-        }
-      } else {
-        logger.debug('OFF', 'No nutriments data available in product');
-      }
-
-      // Calculate per-serving calcium if we have the data
-      if (!calciumPerServing && calciumValue && servingCount && this.householdMeasureService.isVolumeOrMassUnit(servingUnit)) {
-        logger.debug('OFF', 'Calculating calcium per serving from 100g value...');
-        // OpenFoodFacts calcium is per 100g, calculate for actual serving size
-        calciumPerServing = Math.round((calciumValue * servingCount) / 100);
-        logger.debug('OFF', 'Calculated calcium per serving:', calciumPerServing, 'mg', '(from', calciumValue, 'mg per 100g * serving of', servingCount, servingUnit, ')');
-      }
-
-      // ============================================================================
-      // CENTRALIZED SERVING DECISION LOGIC (same as FDCService)
-      // Determine final serving format for AddFoodModal (single source of truth)
-      // ============================================================================
-      let finalServingQuantity: number;
-      let finalServingUnit: string;
-      let servingDisplayText: string;
-      let servingSource: 'enhanced' | 'standard';
-
-      logger.debug('OFF', 'Making final serving decision...');
-
-      if (smartServingResult && smartServingResult.isEnhanced) {
-        // ENHANCED: Use household measure format
-        finalServingQuantity = smartServingResult.householdAmount || 1;
-
-        // Extract just the unit part from parsed household measure
-        const parsedMeasure = this.householdMeasureService.parseHouseholdMeasure(product.serving_size || '');
-        const householdUnit = parsedMeasure?.unit || 'serving';
-        finalServingUnit = `${householdUnit} (${servingCount}${servingUnit})`;
-
-        servingDisplayText = smartServingResult.text;
-        servingSource = 'enhanced';
-
-        logger.debug('OFF', 'Final serving decision - ENHANCED mode');
-        logger.debug('OFF', 'Final serving - quantity:', finalServingQuantity, 'unit:', finalServingUnit);
-        logger.debug('OFF', 'Display text:', servingDisplayText);
-
-      } else {
-        // STANDARD: Use raw API serving format
-        finalServingQuantity = servingCount;
-        finalServingUnit = servingUnit;
-        servingDisplayText = servingSize;
-        servingSource = 'standard';
-
-        logger.debug('OFF', 'Final serving decision - STANDARD mode');
-        logger.debug('OFF', 'Final serving - quantity:', finalServingQuantity, 'unit:', finalServingUnit);
-        logger.debug('OFF', 'Display text:', servingDisplayText);
-      }
-
+      logger.debug('OFF', 'Final serving decision:', {
+        finalServingQuantity,
+        finalServingUnit,
+        servingDisplayText,
+        servingSource,
+        metricForCalc: `${servingCount} ${servingUnit}`
+      });
 
       // Determine confidence based on data completeness
       const completeness = product[OPENFOODFACTS_CONFIG.PRODUCT_FIELDS.COMPLETENESS] || 0;
@@ -353,8 +302,13 @@ export class OpenFoodFactsService {
         servingCount: servingCount,
         servingUnit: servingUnit,
         householdServingFullText: product.serving_size,
-        smartServing: smartServingResult,
+        smartServing: null, // Deprecated - using parseUSDAMeasure() now
 
+        // Multi-nutrient support
+        nutrients: nutrients,
+        nutrientsPerServing: nutrientsPerServing,
+
+        // Legacy calcium fields (for backward compatibility)
         calcium: calcium,
         calciumValue: calciumValue,
         calciumPercentDV: null, // OpenFoodFacts doesn't provide percent DV
@@ -384,6 +338,84 @@ export class OpenFoodFactsService {
   private cleanUPCCode(upcCode: string): string {
     // Remove all non-digit characters
     return upcCode.replace(/\D/g, '');
+  }
+
+  /**
+   * Extract all nutrients from OpenFoodFacts nutriments data
+   * @param product - Raw product data from OpenFoodFacts API
+   * @returns NutrientValues object with all available nutrients (per 100g)
+   */
+  private extractNutrients(product: OpenFoodFactsProduct): NutrientValues {
+    const nutrients: NutrientValues = {};
+
+    if (!product.nutriments) {
+      logger.debug('OFF', 'No nutriments data available');
+      return nutrients;
+    }
+
+    const nutriments = product.nutriments;
+    const fieldMap = OPENFOODFACTS_CONFIG.NUTRIENT_FIELD_MAP;
+    const needsMgConversion = OPENFOODFACTS_CONFIG.NUTRIENTS_NEEDING_MG_CONVERSION || [];
+
+    for (const [nutrientKey, offFieldName] of Object.entries(fieldMap)) {
+      // OpenFoodFacts uses _100g suffix for per-100g values
+      const fieldName100g = `${offFieldName}_100g`;
+      const rawValue = nutriments[fieldName100g];
+
+      if (rawValue !== undefined && rawValue !== null && rawValue !== '') {
+        let value = parseFloat(rawValue.toString());
+
+        if (!isNaN(value)) {
+          // Apply g→mg conversion for minerals
+          if (needsMgConversion.includes(nutrientKey)) {
+            // OpenFoodFacts often stores mineral values as grams (e.g., 0.158 for 158mg)
+            // Check if value seems to be in grams (very small number)
+            if (value < 10) {
+              value = value * OPENFOODFACTS_CONFIG.UNIT_CONVERSION.GRAMS_TO_MG;
+              logger.debug('OFF', `Converted ${nutrientKey} from ${rawValue}g to ${value}mg`);
+            }
+          }
+
+          // Round to reasonable precision
+          nutrients[nutrientKey] = Math.round(value * 100) / 100;
+        }
+      }
+    }
+
+    logger.debug('OFF', `Extracted ${Object.keys(nutrients).length} nutrients from OpenFoodFacts data`);
+    return nutrients;
+  }
+
+  /**
+   * Calculate per-serving nutrient values from per-100g values
+   * @param nutrients - Nutrient values per 100g
+   * @param servingCount - Serving size value (e.g., 240)
+   * @param servingUnit - Serving unit (e.g., "ml" or "g")
+   * @returns NutrientValues calculated for the serving size
+   */
+  private calculateNutrientsPerServing(
+    nutrients: NutrientValues,
+    servingCount: number,
+    servingUnit: string
+  ): NutrientValues {
+    const perServing: NutrientValues = {};
+
+    // Only calculate if we have valid serving size in mass/volume units
+    if (!servingCount || !this.householdMeasureService.isVolumeOrMassUnit(servingUnit)) {
+      logger.debug('OFF', 'Cannot calculate per-serving nutrients - invalid serving size');
+      return nutrients; // Return original per-100g values as fallback
+    }
+
+    // Calculate per-serving for each nutrient
+    // API values are per 100g, so: (value * servingCount) / 100
+    for (const [key, value] of Object.entries(nutrients)) {
+      if (value != null) {
+        perServing[key] = Math.round((value * servingCount) / 100 * 10) / 10; // Round to 1 decimal
+      }
+    }
+
+    logger.debug('OFF', `Calculated per-serving from ${servingCount}${servingUnit} (${Object.keys(perServing).length} nutrients)`);
+    return perServing;
   }
 
   /**

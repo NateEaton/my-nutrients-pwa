@@ -43,14 +43,8 @@ export class NutrientService {
     await this.initializeIndexedDB();
     await this.initializeCustomFoodIdCounter();
 
-    // Restore current date from localStorage if available
-    const savedDate = localStorage.getItem('nutrient_current_date');
-    if (savedDate) {
-      nutrientState.update(state => ({
-        ...state,
-        currentDate: savedDate
-      }));
-    }
+    // Always start with today's date (default from store initialization)
+    // Do NOT restore saved date - user expects to see current day on app open
 
     // Load all data
     await this.loadSettings();
@@ -295,9 +289,6 @@ export class NutrientService {
       currentDate: newDate,
       foods: []
     }));
-
-    // Persist current date to localStorage so it's restored on page reload
-    localStorage.setItem('nutrient_current_date', newDate);
 
     await this.loadDailyFoods();
     await this.applySortToFoods();
@@ -1880,24 +1871,30 @@ private async clearAllData(): Promise<void> {
       metadata.upcSource = 'openfoodfacts';
     }
 
-    // Add scan processing details
-    if (scanData.brandOwner || scanData.brandName || scanData.ingredients) {
-      metadata.scanData = {
-        originalName: scanData.productName || null,
-        brandName: scanData.brandOwner || scanData.brandName || null,
-        ingredients: scanData.ingredients || null,
-        householdMeasure: scanData.servingDisplayText || null,
-        calciumPer100g: scanData.calciumValue || null
-      };
-    }
+    // Add scan processing details including all nutrients
+    metadata.scanData = {
+      originalName: scanData.productName || null,
+      brandName: scanData.brandOwner || scanData.brandName || null,
+      ingredients: scanData.ingredients || null,
+      householdMeasure: scanData.servingDisplayText || null,
+      // Per-100g nutrient data from the API (source reference)
+      nutrientsPer100g: scanData.nutrients || null
+    };
 
     // Add processing notes for serving conversions
     if (scanData.finalServingQuantity && scanData.finalServingUnit) {
+      const servingNote = `Serving: ${scanData.finalServingQuantity} ${scanData.finalServingUnit}`;
+
+      // Build nutrient conversion note
+      let nutrientConversionNote = null;
+      if (scanData.nutrientsPerServing && scanData.nutrients) {
+        const nutrientCount = Object.keys(scanData.nutrientsPerServing).length;
+        nutrientConversionNote = `Calculated ${nutrientCount} nutrients per serving from per-100g values`;
+      }
+
       metadata.processingNotes = {
-        measureConversion: `Serving: ${scanData.finalServingQuantity} ${scanData.finalServingUnit}`,
-        calciumConversion: scanData.calciumPerServing
-          ? `Calculated ${scanData.calciumPerServing}mg per serving from ${scanData.calciumValue}mg per 100g`
-          : null
+        measureConversion: servingNote,
+        nutrientConversion: nutrientConversionNote
       };
     }
 
