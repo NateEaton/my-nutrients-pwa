@@ -51,6 +51,101 @@ interface CategoryKeywords {
   [key: string]: string[];
 }
 
+/**
+ * Standardized serving data structure used by both FDC and OFF services.
+ * This ensures consistent output format regardless of data source.
+ */
+export interface StandardizedServing {
+  quantity: number;           // e.g., 1, 2, 0.5
+  householdUnit: string;      // e.g., "mini cup", "tbsp", "slice"
+  metricValue: number | null; // e.g., 57, 240 (grams or ml)
+  metricUnit: string | null;  // e.g., "g", "ml"
+}
+
+/**
+ * Result from buildServingFromStandardized()
+ */
+export interface ServingResult {
+  quantity: number;           // The serving quantity (e.g., 1)
+  unit: string;               // The formatted unit (e.g., "mini cup (57g)")
+  displayText: string;        // Full display text (e.g., "1 mini cup (57g)")
+}
+
+/**
+ * Build consistent serving output from standardized serving data.
+ * This ensures both FDC and OFF services produce identical output format.
+ *
+ * @param serving - Standardized serving data
+ * @returns ServingResult with formatted quantity, unit, and display text
+ *
+ * @example
+ * // Input: { quantity: 1, householdUnit: "mini cup", metricValue: 57, metricUnit: "g" }
+ * // Output: { quantity: 1, unit: "mini cup (57g)", displayText: "1 mini cup (57g)" }
+ */
+export function buildServingFromStandardized(serving: StandardizedServing): ServingResult {
+  const { quantity, householdUnit, metricValue, metricUnit } = serving;
+
+  let unit: string;
+
+  if (metricValue !== null && metricUnit !== null) {
+    // Format metric consistently: no space between value and unit (e.g., "57g" not "57 g")
+    unit = `${householdUnit} (${metricValue}${metricUnit})`;
+  } else {
+    unit = householdUnit;
+  }
+
+  const displayText = `${quantity} ${unit}`;
+
+  return {
+    quantity,
+    unit,
+    displayText
+  };
+}
+
+/**
+ * Extract metric value and unit from a parenthetical in serving text.
+ * Handles formats like "(57g)", "(240 ml)", "(30 grams)"
+ *
+ * @param text - Text potentially containing parenthetical metric
+ * @returns Object with metricValue and metricUnit, or nulls if not found
+ */
+export function extractMetricFromParenthetical(text: string): { metricValue: number | null; metricUnit: string | null } {
+  if (!text) return { metricValue: null, metricUnit: null };
+
+  // Match metric in parentheses: (57g), (240 ml), (30 grams), etc.
+  const metricMatch = text.match(/\((\d+(?:\.\d+)?)\s*(g|ml|gr|gm|gram|grams|milliliter|milliliters)\)/i);
+
+  if (metricMatch) {
+    const value = parseFloat(metricMatch[1]);
+    // Normalize unit
+    let unit = metricMatch[2].toLowerCase();
+    if (['gr', 'gm', 'gram', 'grams'].includes(unit)) {
+      unit = 'g';
+    } else if (['milliliter', 'milliliters'].includes(unit)) {
+      unit = 'ml';
+    }
+    return { metricValue: value, metricUnit: unit };
+  }
+
+  return { metricValue: null, metricUnit: null };
+}
+
+/**
+ * Extract household unit from serving text, removing any metric parenthetical.
+ *
+ * @param text - Text like "mini cup (57 g)" or "tbsp"
+ * @returns The household unit without parenthetical (e.g., "mini cup" or "tbsp")
+ */
+export function extractHouseholdUnit(text: string): string {
+  if (!text) return 'serving';
+
+  // Remove parenthetical metric portion
+  const withoutMetric = text.replace(/\s*\([^)]*\d+[^)]*\)\s*$/, '').trim();
+
+  return withoutMetric || 'serving';
+}
+
 export class HouseholdMeasureService {
   private unitStandardization: UnitConversions;
   private categoryDensities: UnitConversions;

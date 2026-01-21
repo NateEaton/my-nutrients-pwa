@@ -18,7 +18,12 @@
 
 // USDA FoodData Central API Service for UPC lookup
 import { FDC_CONFIG } from '$lib/config/fdc.js';
-import { HouseholdMeasureService } from './HouseholdMeasureService';
+import {
+  HouseholdMeasureService,
+  buildServingFromStandardized,
+  extractHouseholdUnit,
+  type StandardizedServing
+} from './HouseholdMeasureService';
 import { UnitConverter } from './UnitConverter';
 import { logger } from '$lib/utils/logger';
 import { FDC_TO_NUTRIENT_MAP } from '$lib/config/nutrientDefaults';
@@ -208,8 +213,8 @@ export class FDCService {
       const ingredients = product.ingredients || '';
 
       // ============================================================================
-      // SERVING SIZE PARSING - Use same approach as internal database
-      // Parse householdServingFullText with parseUSDAMeasure() for consistency
+      // SERVING SIZE PARSING - Standardized approach shared with OpenFoodFactsService
+      // Extract to StandardizedServing, then use buildServingFromStandardized()
       // ============================================================================
       let servingSize = '';
       let servingCount = 1;  // Metric value for nutrient calculation
@@ -230,32 +235,36 @@ export class FDCService {
         logger.debug('FDC', `Metric serving: ${servingCount} ${servingUnit}`);
       }
 
-      // Now determine final serving display (household measure preferred)
+      // Build StandardizedServing and use shared formatter
       if (product.householdServingFullText) {
         // Parse household measure directly (like internal DB measures)
-        // Examples: "1 cup", "2 tbsp", "3 pieces"
+        // FDC's householdServingFullText typically doesn't include metric (e.g., "1 mini cup")
         const parsed = this.unitConverter.parseUSDAMeasure(product.householdServingFullText);
 
-        finalServingQuantity = parsed.originalQuantity;
+        // Extract just the household unit (without any parenthetical metric that might exist)
+        const householdUnit = extractHouseholdUnit(parsed.originalUnit);
 
-        // Append metric weight if available: "cup" → "cup (240g)"
-        if (servingCount && servingUnit) {
-          finalServingUnit = `${parsed.originalUnit} (${servingCount}${servingUnit})`;
-          servingSize = `${parsed.originalQuantity} ${parsed.originalUnit} (${servingCount}${servingUnit})`;
-        } else {
-          finalServingUnit = parsed.originalUnit;
-          servingSize = product.householdServingFullText;
-        }
+        // Build standardized serving
+        const standardized: StandardizedServing = {
+          quantity: parsed.originalQuantity,
+          householdUnit: householdUnit,
+          metricValue: servingCount || null,
+          metricUnit: servingUnit || null
+        };
 
-        logger.debug('FDC', 'Parsed householdServingFullText with parseUSDAMeasure:', {
-          originalQuantity: parsed.originalQuantity,
-          originalUnit: parsed.originalUnit,
-          finalServingUnit,
-          servingSize
+        // Use shared formatter for consistent output
+        const servingResult = buildServingFromStandardized(standardized);
+        finalServingQuantity = servingResult.quantity;
+        finalServingUnit = servingResult.unit;
+        servingSize = servingResult.displayText;
+
+        logger.debug('FDC', 'Standardized serving result:', {
+          standardized,
+          servingResult
         });
 
       } else if (servingCount && servingUnit) {
-        // No household measure, use metric values
+        // No household measure, use metric values directly
         finalServingQuantity = servingCount;
         finalServingUnit = servingUnit;
         servingSize = servingCount === 1 ? servingUnit : `${servingCount} ${servingUnit}`;
