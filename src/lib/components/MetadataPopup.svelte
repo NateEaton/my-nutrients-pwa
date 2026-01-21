@@ -19,6 +19,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import { nutrientService } from "$lib/stores/nutrients";
+  import { getNutrientLabel, getNutrientUnit } from "$lib/config/nutrientDefaults";
   import SourceIndicator from "./SourceIndicator.svelte";
   import { logger } from '$lib/utils/logger';
 
@@ -95,7 +96,13 @@
       <div class="modal-body">
         <div class="food-info">
           <h4>{food.name}</h4>
-          <p class="food-details">{food.nutrients?.calcium || 0}mg calcium per {food.measure}</p>
+          <p class="food-details">
+            {#if food.servingQuantity && food.servingUnit}
+              {food.servingQuantity} {food.servingUnit}
+            {:else if food.measure}
+              {food.measure}
+            {/if}
+          </p>
         </div>
 
         <div class="metadata-section">
@@ -158,24 +165,25 @@
               </div>
             {/if}
 
-            {#if scanData.selectedNutrientPer}
+            {#if scanData.householdMeasure}
               <div class="info-item">
-                <span class="label">Standard Measure:</span>
-                <span class="value">{scanData.selectedNutrientPer}</span>
+                <span class="label">Household Measure:</span>
+                <span class="value">{scanData.householdMeasure}</span>
               </div>
             {/if}
 
-            {#if food.nutrients?.calcium}
-              <div class="info-item">
-                <span class="label">Calcium per Serving:</span>
-                <span class="value">{food.nutrients.calcium}mg</span>
-              </div>
-            {/if}
-
-            {#if scanData.calciumPer100g}
-              <div class="info-item">
-                <span class="label">Calcium per 100g:</span>
-                <span class="value">{scanData.calciumPer100g}mg</span>
+            {#if scanData.nutrientsPer100g && Object.keys(scanData.nutrientsPer100g).length > 0}
+              <div class="info-item nutrient-list">
+                <span class="label">Nutrients per 100g:</span>
+                <div class="value nutrient-values">
+                  {#each Object.entries(scanData.nutrientsPer100g) as [nutrientId, value]}
+                    {#if value !== null && value !== undefined}
+                      <span class="nutrient-chip">
+                        {getNutrientLabel(nutrientId)}: {typeof value === 'number' ? value.toFixed(1) : value}{getNutrientUnit(nutrientId)}
+                      </span>
+                    {/if}
+                  {/each}
+                </div>
               </div>
             {/if}
 
@@ -350,6 +358,33 @@
   .ingredients {
     font-size: 0.8125rem;
     line-height: 1.4;
+  }
+
+  .nutrient-list {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .nutrient-values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .nutrient-chip {
+    display: inline-block;
+    background: var(--surface-variant, #f5f5f5);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  :global(.dark) .nutrient-chip {
+    background: var(--surface-variant, #2a2a2a);
   }
 
   .confidence-scores {

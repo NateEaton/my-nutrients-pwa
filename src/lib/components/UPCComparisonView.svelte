@@ -23,7 +23,7 @@
  * User taps a card to select and use that data source
 -->
 <script>
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, onMount } from 'svelte';
   import { getNutrientLabel, getNutrientUnit } from '$lib/config/nutrientDefaults';
 
   export let usdaResult = null;
@@ -32,6 +32,46 @@
   export let displayedNutrients = ['protein', 'calcium', 'fiber', 'vitaminD'];
 
   const dispatch = createEventDispatcher();
+
+  // Track if this is user's first time seeing the comparison view
+  let showFirstUseHint = false;
+
+  onMount(() => {
+    // Show hint if user hasn't seen it before
+    const hasSeenHint = localStorage.getItem('upc-comparison-hint-seen');
+    if (!hasSeenHint) {
+      showFirstUseHint = true;
+    }
+  });
+
+  function dismissHint() {
+    showFirstUseHint = false;
+    localStorage.setItem('upc-comparison-hint-seen', 'true');
+  }
+
+  // Short labels for nutrients (module-level constant for efficiency)
+  const SHORT_LABELS = {
+    protein: 'Prot',
+    calcium: 'Ca',
+    fiber: 'Fiber',
+    vitaminD: 'Vit D',
+    vitaminA: 'Vit A',
+    vitaminC: 'Vit C',
+    vitaminK: 'Vit K',
+    vitaminB6: 'B6',
+    vitaminB12: 'B12',
+    folate: 'Folate',
+    iron: 'Iron',
+    zinc: 'Zinc',
+    magnesium: 'Mg',
+    potassium: 'K',
+    carbohydrates: 'Carbs',
+    sugars: 'Sugar',
+    fat: 'Fat',
+    saturatedFat: 'Sat Fat',
+    omega3: 'Omega-3',
+    omega6: 'Omega-6'
+  };
 
   // Format nutrient value with unit
   function formatNutrientValue(result, nutrientKey) {
@@ -61,35 +101,14 @@
 
   // Get short label for nutrient (for compact display)
   function getShortLabel(nutrientKey) {
-    const shortLabels = {
-      protein: 'Prot',
-      calcium: 'Ca',
-      fiber: 'Fiber',
-      vitaminD: 'Vit D',
-      vitaminA: 'Vit A',
-      vitaminC: 'Vit C',
-      vitaminK: 'Vit K',
-      vitaminB6: 'B6',
-      vitaminB12: 'B12',
-      folate: 'Folate',
-      iron: 'Iron',
-      zinc: 'Zinc',
-      magnesium: 'Mg',
-      potassium: 'K',
-      carbohydrates: 'Carbs',
-      sugars: 'Sugar',
-      fat: 'Fat',
-      saturatedFat: 'Sat Fat',
-      omega3: 'Omega-3',
-      omega6: 'Omega-6'
-    };
-    return shortLabels[nutrientKey] || getNutrientLabel(nutrientKey);
+    return SHORT_LABELS[nutrientKey] || getNutrientLabel(nutrientKey);
   }
 
   // Handle card selection
   function selectSource(source) {
     const result = source === 'usda' ? usdaResult : offResult;
     if (result) {
+      dismissHint(); // Dismiss hint on first selection
       dispatch('select', { source, result });
     }
   }
@@ -109,29 +128,33 @@
     if (!confidence) return 'none';
     return confidence.toLowerCase();
   }
-
-  // Check if result has any nutrient data
-  function hasNutrientData(result) {
-    if (!result) return false;
-    return displayedNutrients.some(key =>
-      formatNutrientValue(result, key) !== null
-    );
-  }
 </script>
 
 <div class="comparison-container">
   <div class="comparison-header">
-    <h3>Select Data Source</h3>
+    <h3>Select a Data Source</h3>
     <p class="upc-display">UPC: {upcCode}</p>
   </div>
+
+  <!-- First-use hint overlay -->
+  {#if showFirstUseHint}
+    <div class="first-use-hint" role="alert">
+      <span class="material-icons hint-icon">info</span>
+      <p>Select the best match. You can adjust any values on the next screen.</p>
+      <button class="hint-dismiss" on:click={dismissHint} aria-label="Dismiss hint">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+  {/if}
 
   <div class="cards-container">
     <!-- USDA Card -->
     {#if usdaResult}
       <button
-        class="source-card usda"
+        class="source-card usda clickable"
         on:click={() => selectSource('usda')}
         type="button"
+        aria-label="Select USDA data for {usdaResult.productName}"
       >
         <div class="card-header">
           <span class="source-badge usda">USDA</span>
@@ -164,18 +187,20 @@
           </div>
         </div>
 
-        <div class="card-footer">
-          <span class="tap-hint">Tap to use this data</span>
+        <div class="card-action">
+          <span class="action-text">Use this data</span>
+          <span class="material-icons action-icon">chevron_right</span>
         </div>
       </button>
     {:else}
-      <div class="source-card usda not-found">
+      <div class="source-card usda not-found" aria-disabled="true">
         <div class="card-header">
-          <span class="source-badge usda">USDA</span>
+          <span class="source-badge usda faded">USDA</span>
           <span class="not-found-badge">Not Found</span>
         </div>
         <div class="card-body empty">
-          <span class="empty-message">No product data available</span>
+          <span class="material-icons empty-icon">search_off</span>
+          <span class="empty-message">No data in USDA database</span>
         </div>
       </div>
     {/if}
@@ -183,9 +208,10 @@
     <!-- OpenFoodFacts Card -->
     {#if offResult}
       <button
-        class="source-card off"
+        class="source-card off clickable"
         on:click={() => selectSource('off')}
         type="button"
+        aria-label="Select OpenFoodFacts data for {offResult.productName}"
       >
         <div class="card-header">
           <span class="source-badge off">OpenFoodFacts</span>
@@ -218,18 +244,20 @@
           </div>
         </div>
 
-        <div class="card-footer">
-          <span class="tap-hint">Tap to use this data</span>
+        <div class="card-action">
+          <span class="action-text">Use this data</span>
+          <span class="material-icons action-icon">chevron_right</span>
         </div>
       </button>
     {:else}
-      <div class="source-card off not-found">
+      <div class="source-card off not-found" aria-disabled="true">
         <div class="card-header">
-          <span class="source-badge off">OpenFoodFacts</span>
+          <span class="source-badge off faded">OpenFoodFacts</span>
           <span class="not-found-badge">Not Found</span>
         </div>
         <div class="card-body empty">
-          <span class="empty-message">No product data available</span>
+          <span class="material-icons empty-icon">search_off</span>
+          <span class="empty-message">No data in OpenFoodFacts</span>
         </div>
       </div>
     {/if}
@@ -273,6 +301,48 @@
     font-family: monospace;
   }
 
+  /* First-use hint */
+  .first-use-hint {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--primary-color);
+    color: white;
+    border-radius: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+  }
+
+  .first-use-hint p {
+    margin: 0;
+    flex: 1;
+  }
+
+  .hint-icon {
+    font-size: 20px;
+    opacity: 0.9;
+  }
+
+  .hint-dismiss {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hint-dismiss:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .hint-dismiss .material-icons {
+    font-size: 18px;
+  }
+
   .cards-container {
     display: flex;
     flex-direction: column;
@@ -285,43 +355,63 @@
     border: 2px solid var(--divider);
     border-radius: var(--spacing-sm);
     padding: 0;
-    cursor: pointer;
-    transition: all 0.2s ease;
     text-align: left;
     width: 100%;
     font-family: inherit;
+    overflow: hidden;
   }
 
-  .source-card:not(.not-found):hover {
-    border-color: var(--primary-color);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transform: translateY(-1px);
+  /* Clickable cards - make them obviously interactive */
+  .source-card.clickable {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   }
 
-  .source-card:not(.not-found):active {
+  .source-card.clickable:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+
+  .source-card.clickable:active {
     transform: translateY(0);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   }
 
-  .source-card.not-found {
-    cursor: default;
-    opacity: 0.6;
+  /* Focus styles for keyboard navigation */
+  .source-card.clickable:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
   }
 
-  .source-card.usda:not(.not-found) {
-    border-color: #2563eb20;
+  .source-card.clickable:focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
   }
 
-  .source-card.usda:not(.not-found):hover {
+  /* Source-specific accent colors for clickable cards */
+  .source-card.usda.clickable {
+    border-left: 4px solid #2563eb;
+  }
+
+  .source-card.usda.clickable:hover {
     border-color: #2563eb;
   }
 
-  .source-card.off:not(.not-found) {
-    border-color: #16a34a20;
+  .source-card.off.clickable {
+    border-left: 4px solid #16a34a;
   }
 
-  .source-card.off:not(.not-found):hover {
+  .source-card.off.clickable:hover {
     border-color: #16a34a;
+  }
+
+  /* Not-found cards - clearly disabled */
+  .source-card.not-found {
+    cursor: not-allowed;
+    opacity: 0.5;
+    background: var(--surface-variant);
+    border-style: dashed;
   }
 
   /* Card Header */
@@ -332,7 +422,6 @@
     padding: var(--spacing-sm) var(--spacing-md);
     border-bottom: 1px solid var(--divider);
     background: var(--surface-variant);
-    border-radius: var(--spacing-sm) var(--spacing-sm) 0 0;
   }
 
   .source-badge {
@@ -352,6 +441,10 @@
   .source-badge.off {
     background: #dcfce7;
     color: #15803d;
+  }
+
+  .source-badge.faded {
+    opacity: 0.6;
   }
 
   .confidence-badge {
@@ -401,14 +494,22 @@
   }
 
   .card-body.empty {
-    padding: var(--spacing-lg);
+    padding: var(--spacing-lg) var(--spacing-md);
     align-items: center;
     justify-content: center;
+    gap: var(--spacing-sm);
+  }
+
+  .empty-icon {
+    font-size: 32px;
+    color: var(--text-secondary);
+    opacity: 0.5;
   }
 
   .empty-message {
     color: var(--text-secondary);
     font-style: italic;
+    font-size: var(--font-size-sm);
   }
 
   .product-info {
@@ -459,11 +560,6 @@
     gap: var(--spacing-xs) var(--spacing-md);
   }
 
-  /* For 1-2 nutrients, use single column */
-  .nutrients-grid:has(.nutrient-item:nth-child(2):last-child) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .nutrient-item {
     display: flex;
     justify-content: space-between;
@@ -486,26 +582,36 @@
     color: var(--text-primary);
   }
 
-  /* Card Footer */
-  .card-footer {
-    padding: var(--spacing-xs) var(--spacing-md);
+  /* Card Action - replaces old footer */
+  .card-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
     background: var(--surface-variant);
     border-top: 1px solid var(--divider);
-    border-radius: 0 0 var(--spacing-sm) var(--spacing-sm);
-    text-align: center;
+    font-weight: 500;
+    font-size: var(--font-size-sm);
   }
 
-  .tap-hint {
-    font-size: var(--font-size-xs);
-    color: var(--text-secondary);
-  }
-
-  .source-card.usda:not(.not-found) .tap-hint {
+  .source-card.usda.clickable .card-action {
     color: #1d4ed8;
+    background: #eff6ff;
   }
 
-  .source-card.off:not(.not-found) .tap-hint {
+  .source-card.off.clickable .card-action {
     color: #15803d;
+    background: #f0fdf4;
+  }
+
+  .action-icon {
+    font-size: 20px;
+    transition: transform 0.2s ease;
+  }
+
+  .source-card.clickable:hover .action-icon {
+    transform: translateX(4px);
   }
 
   /* Action Buttons */
@@ -528,6 +634,13 @@
     cursor: pointer;
     transition: all 0.2s ease;
     border: none;
+    /* Accessibility: minimum touch target 44x44px */
+    min-height: 44px;
+  }
+
+  .action-btn:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
   }
 
   .action-btn.secondary {
@@ -556,6 +669,29 @@
   }
 
   /* Dark mode adjustments */
+  :global(.dark) .source-card {
+    background: #1f2937; /* Slightly lighter than typical dark background */
+  }
+
+  :global(.dark) .source-card.not-found {
+    background: #111827;
+  }
+
+  :global(.dark) .card-header,
+  :global(.dark) .card-action {
+    background: #374151;
+  }
+
+  :global(.dark) .source-card.usda.clickable .card-action {
+    background: #1e3a5f;
+    color: #93c5fd;
+  }
+
+  :global(.dark) .source-card.off.clickable .card-action {
+    background: #14532d;
+    color: #86efac;
+  }
+
   :global(.dark) .source-badge.usda {
     background: #1e3a5f;
     color: #93c5fd;
@@ -579,5 +715,37 @@
   :global(.dark) .confidence-badge.low {
     background: #7f1d1d;
     color: #fca5a5;
+  }
+
+  :global(.dark) .confidence-badge.none,
+  :global(.dark) .confidence-badge.unknown,
+  :global(.dark) .not-found-badge {
+    background: #374151;
+    color: #9ca3af;
+  }
+
+  :global(.dark) .first-use-hint {
+    background: #3b82f6;
+  }
+
+  /* Large font / enlarged display support */
+  @media (min-width: 400px) {
+    .nutrients-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* When user prefers larger text, stack nutrients vertically */
+  @media (max-width: 399px) {
+    .nutrients-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Support for user font scaling - use relative units */
+  @media screen and (min-resolution: 1.5dppx) {
+    .product-name {
+      -webkit-line-clamp: 3; /* Allow more lines on high-DPI displays */
+    }
   }
 </style>

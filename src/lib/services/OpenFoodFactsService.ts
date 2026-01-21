@@ -18,7 +18,13 @@
 
 // OpenFoodFacts API Service for UPC lookup
 // Provides same interface as FDCService for seamless source switching
-import { HouseholdMeasureService } from './HouseholdMeasureService';
+import {
+  HouseholdMeasureService,
+  buildServingFromStandardized,
+  extractHouseholdUnit,
+  extractMetricFromParenthetical,
+  type StandardizedServing
+} from './HouseholdMeasureService';
 import { UnitConverter } from './UnitConverter';
 import { OPENFOODFACTS_CONFIG } from '$lib/config/openfoodfacts.js';
 import { logger } from '$lib/utils/logger';
@@ -179,8 +185,8 @@ export class OpenFoodFactsService {
       logger.debug('OFF', 'Brand:', brandName);
 
       // ============================================================================
-      // SERVING SIZE PARSING - Use same approach as internal database
-      // Parse serving_size text directly with parseUSDAMeasure() for consistency
+      // SERVING SIZE PARSING - Standardized approach shared with FDCService
+      // Extract to StandardizedServing, then use buildServingFromStandardized()
       // ============================================================================
       let servingSize = '';
       let servingCount = 1;  // Metric value for nutrient calculation
@@ -195,12 +201,8 @@ export class OpenFoodFactsService {
 
       if (product.serving_size) {
         // Parse serving_size text directly (like internal DB measures)
-        // Examples: "1 cup (240g)", "78 g", "2 tbsp (30g)", "12 fl oz"
+        // OFF's serving_size often includes metric in parentheses: "1 mini cup (57 g)"
         const parsed = this.unitConverter.parseUSDAMeasure(product.serving_size);
-
-        finalServingQuantity = parsed.originalQuantity;
-        finalServingUnit = parsed.originalUnit;
-        servingSize = product.serving_size;
 
         logger.debug('OFF', 'Parsed serving_size with parseUSDAMeasure:', {
           originalQuantity: parsed.originalQuantity,
@@ -209,12 +211,16 @@ export class OpenFoodFactsService {
           unitType: parsed.unitType
         });
 
+        // Extract household unit (remove any metric parenthetical)
+        const householdUnit = extractHouseholdUnit(parsed.originalUnit);
+
         // Extract metric value for nutrient calculations
-        // Look for metric value in parentheses like "(240g)" or "(30ml)"
-        const metricMatch = product.serving_size.match(/\((\d+(?:\.\d+)?)\s*(g|ml|gr|gm|gram|grams|milliliter|milliliters)\)/i);
-        if (metricMatch) {
-          servingCount = parseFloat(metricMatch[1]);
-          servingUnit = this.householdMeasureService.standardizeUnit(metricMatch[2]);
+        // First, try to get from parentheses in serving_size like "(57 g)" or "(240ml)"
+        let metricExtracted = extractMetricFromParenthetical(product.serving_size);
+
+        if (metricExtracted.metricValue !== null) {
+          servingCount = metricExtracted.metricValue;
+          servingUnit = metricExtracted.metricUnit!;
           logger.debug('OFF', 'Extracted metric from parentheses:', servingCount, servingUnit);
         } else if (product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.QUANTITY] && product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.UNIT]) {
           // Use serving_quantity/serving_quantity_unit for metric calculation
@@ -227,6 +233,26 @@ export class OpenFoodFactsService {
           servingUnit = parsed.cleanedUnit || parsed.originalUnit;
           logger.debug('OFF', 'serving_size is metric:', servingCount, servingUnit);
         }
+
+        // Build standardized serving
+        const standardized: StandardizedServing = {
+          quantity: parsed.originalQuantity,
+          householdUnit: householdUnit,
+          metricValue: servingCount || null,
+          metricUnit: servingUnit || null
+        };
+
+        // Use shared formatter for consistent output
+        const servingResult = buildServingFromStandardized(standardized);
+        finalServingQuantity = servingResult.quantity;
+        finalServingUnit = servingResult.unit;
+        servingSize = servingResult.displayText;
+
+        logger.debug('OFF', 'Standardized serving result:', {
+          standardized,
+          servingResult
+        });
+
       } else if (product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.QUANTITY] && product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.UNIT]) {
         // No serving_size text, but have quantity/unit fields
         servingCount = parseFloat(product[OPENFOODFACTS_CONFIG.SERVING_FIELDS.QUANTITY]) || 1;

@@ -55,6 +55,25 @@ export interface ConversionTables {
   count: ConversionTable;
 }
 
+// Unicode fraction character to decimal value mapping (module-level constant)
+const UNICODE_FRACTIONS: Record<string, number> = {
+  '½': 0.5,
+  '⅓': 1/3,
+  '⅔': 2/3,
+  '¼': 0.25,
+  '¾': 0.75,
+  '⅕': 0.2,
+  '⅖': 0.4,
+  '⅗': 0.6,
+  '⅘': 0.8,
+  '⅙': 1/6,
+  '⅚': 5/6,
+  '⅛': 0.125,
+  '⅜': 0.375,
+  '⅝': 0.625,
+  '⅞': 0.875,
+};
+
 export class UnitConverter {
   private nonConvertiblePatterns: RegExp[];
   private conversions: ConversionTables;
@@ -70,7 +89,6 @@ export class UnitConverter {
     ];
 
     // Base conversion tables - all conversions to base units
-    // FIXED: Using original working ratios from attached UnitConverter.js
     this.conversions = {
       // Volume conversions (to cups as base)
       volume: {
@@ -203,28 +221,10 @@ export class UnitConverter {
    * Handles: ½ ⅓ ⅔ ¼ ¾ ⅕ ⅖ ⅗ ⅘ ⅙ ⅚ ⅛ ⅜ ⅝ ⅞
    */
   private convertUnicodeFractions(text: string): string {
-    const fractionMap: Record<string, number> = {
-      '½': 0.5,
-      '⅓': 1/3,
-      '⅔': 2/3,
-      '¼': 0.25,
-      '¾': 0.75,
-      '⅕': 0.2,
-      '⅖': 0.4,
-      '⅗': 0.6,
-      '⅘': 0.8,
-      '⅙': 1/6,
-      '⅚': 5/6,
-      '⅛': 0.125,
-      '⅜': 0.375,
-      '⅝': 0.625,
-      '⅞': 0.875,
-    };
-
     let result = text;
 
     // Handle mixed numbers like "1 ½" or "1½" → "1.5"
-    for (const [fraction, value] of Object.entries(fractionMap)) {
+    for (const [fraction, value] of Object.entries(UNICODE_FRACTIONS)) {
       // Pattern: digit + optional space + fraction → decimal
       const mixedPattern = new RegExp(`(\\d+)\\s*${fraction}`, 'g');
       result = result.replace(mixedPattern, (_, whole) => {
@@ -242,26 +242,50 @@ export class UnitConverter {
    * Parses a USDA measure string into components for unit conversion.
    */
   parseUSDAMeasure(measureString: string): ParsedMeasure {
-    // Clean the string and convert Unicode fractions
-    let cleaned = this.convertUnicodeFractions(measureString.toLowerCase().trim());
+    // Clean the string: remove BOM and invisible characters, normalize whitespace
+    let cleaned = measureString
+      .replace(/^\uFEFF/, '')  // Remove BOM (Byte Order Mark)
+      .replace(/[\u200B-\u200F\u2028-\u202F\u00a0\u2007\u2008\u2009\u200a]/g, ' ')  // Normalize all invisible/special whitespace
+      .replace(/\s+/g, ' ')  // Collapse multiple spaces
+      .toLowerCase()
+      .trim();
 
-    // Extract the numeric part (handles "1.0", "0.5", etc.)
+    // Convert Unicode fractions (e.g., "1½" → "1.5")
+    cleaned = this.convertUnicodeFractions(cleaned);
+
+    // Extract the numeric part (handles "1.0", "0.5", "78", etc.)
+    // Match: digits, optional decimal, optional more digits, followed by whitespace or word boundary
     const numericMatch = cleaned.match(/^(\d+\.?\d*)\s*/);
     const quantity = numericMatch ? parseFloat(numericMatch[1]) : 1;
 
     // Remove the numeric part to get the unit portion
-    let unitPortion = cleaned.replace(/^(\d+\.?\d*)\s*/, "").trim();
+    let unitPortion: string;
+    if (numericMatch && numericMatch[0]) {
+      unitPortion = cleaned.substring(numericMatch[0].length).trim();
+    } else {
+      unitPortion = cleaned;
+    }
+
+    // Extra safety: if unit still starts with a digit followed by space/word, strip it
+    // This handles any edge cases where the primary regex didn't match
+    const leadingNumMatch = unitPortion.match(/^(\d+\.?\d*)\s+/);
+    if (leadingNumMatch) {
+      unitPortion = unitPortion.substring(leadingNumMatch[0].length).trim();
+    }
 
     // Check for compound measurements like "package (10 oz)" or "container (6 fl oz)"
-    const compoundMatch = unitPortion.match(/^(\w+)\s*\(([^)]+)\)/);
+    // Allow multi-word container names like "mini cup" by using [\w\s]+?
+    const compoundMatch = unitPortion.match(/^([\w\s]+?)\s*\(([^)]+)\)/);
     if (compoundMatch) {
-      const containerType = compoundMatch[1]; // "package"
-      const innerMeasure = compoundMatch[2]; // "10 oz"
+      const containerType = compoundMatch[1]; // "package" or "mini cup"
+      const innerMeasure = compoundMatch[2]; // "10 oz" or "57 g"
 
       logger.debug('UNIT CONVERTER', `Detected compound measure: ${containerType} (${innerMeasure})`);
 
-      // If the inner measure has a convertible unit, use that instead
-      const innerParsed = this.parseSimpleMeasure(innerMeasure);
+      // Recursively parse the inner measure to handle "10 oz" -> quantity: 10, unit: "oz"
+      // parseSimpleMeasure is not enough because innerMeasure often contains quantities
+      const innerParsed = this.parseUSDAMeasure(innerMeasure);
+      
       if (innerParsed.unitType !== "unknown") {
         logger.debug('UNIT CONVERTER', `Parsed compound measure to: ${innerParsed.detectedUnit} (${innerParsed.unitType})`);
         return {
@@ -272,7 +296,7 @@ export class UnitConverter {
           isCompound: true,
           containerType: containerType,
           innerMeasure: innerMeasure,
-          cleanedUnit: innerParsed.detectedUnit,
+          cleanedUnit: innerParsed.detectedUnit, // Pass through the clean inner unit
         };
       }
 
@@ -281,10 +305,10 @@ export class UnitConverter {
       return {
         originalQuantity: quantity,
         originalUnit: unitPortion,
-        detectedUnit: unitPortion,  // ✓ FIXED - was referencing undefined cleanUnit
+        detectedUnit: unitPortion,
         unitType: "unknown",
         isCompound: true,
-        cleanedUnit: unitPortion,  // ✓ This is the key fix
+        cleanedUnit: unitPortion,
       };
     }
 
