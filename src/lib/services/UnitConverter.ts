@@ -89,7 +89,6 @@ export class UnitConverter {
     ];
 
     // Base conversion tables - all conversions to base units
-    // FIXED: Using original working ratios from attached UnitConverter.js
     this.conversions = {
       // Volume conversions (to cups as base)
       volume: {
@@ -275,15 +274,18 @@ export class UnitConverter {
     }
 
     // Check for compound measurements like "package (10 oz)" or "container (6 fl oz)"
-    const compoundMatch = unitPortion.match(/^(\w+)\s*\(([^)]+)\)/);
+    // Allow multi-word container names like "mini cup" by using [\w\s]+?
+    const compoundMatch = unitPortion.match(/^([\w\s]+?)\s*\(([^)]+)\)/);
     if (compoundMatch) {
-      const containerType = compoundMatch[1]; // "package"
-      const innerMeasure = compoundMatch[2]; // "10 oz"
+      const containerType = compoundMatch[1]; // "package" or "mini cup"
+      const innerMeasure = compoundMatch[2]; // "10 oz" or "57 g"
 
       logger.debug('UNIT CONVERTER', `Detected compound measure: ${containerType} (${innerMeasure})`);
 
-      // If the inner measure has a convertible unit, use that instead
-      const innerParsed = this.parseSimpleMeasure(innerMeasure);
+      // Recursively parse the inner measure to handle "10 oz" -> quantity: 10, unit: "oz"
+      // parseSimpleMeasure is not enough because innerMeasure often contains quantities
+      const innerParsed = this.parseUSDAMeasure(innerMeasure);
+      
       if (innerParsed.unitType !== "unknown") {
         logger.debug('UNIT CONVERTER', `Parsed compound measure to: ${innerParsed.detectedUnit} (${innerParsed.unitType})`);
         return {
@@ -294,7 +296,7 @@ export class UnitConverter {
           isCompound: true,
           containerType: containerType,
           innerMeasure: innerMeasure,
-          cleanedUnit: innerParsed.detectedUnit,
+          cleanedUnit: innerParsed.detectedUnit, // Pass through the clean inner unit
         };
       }
 
@@ -303,10 +305,10 @@ export class UnitConverter {
       return {
         originalQuantity: quantity,
         originalUnit: unitPortion,
-        detectedUnit: unitPortion,  // ✓ FIXED - was referencing undefined cleanUnit
+        detectedUnit: unitPortion,
         unitType: "unknown",
         isCompound: true,
-        cleanedUnit: unitPortion,  // ✓ This is the key fix
+        cleanedUnit: unitPortion,
       };
     }
 
