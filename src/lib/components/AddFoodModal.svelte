@@ -90,6 +90,10 @@
   // Calculated nutrients for preview (updated by updateCalculatedNutrients)
   let calculatedNutrients = {};
 
+  // Determine if we're working with a custom food (for UI highlight)
+  // True when: creating new custom food, selected custom food from search, or editing existing custom food
+  $: isWorkingWithCustomFood = isCustomMode || currentFoodData?.isCustom || editingFood?.isCustom;
+
   // Create a temporary food object for source indicator display
   $: displayFoodForIndicator = (() => {
     // If editing an existing food from journal, look up the full custom food
@@ -1339,7 +1343,7 @@
       class="modal-content"
       on:click|stopPropagation
       on:keydown|stopPropagation
-      class:custom-food-mode={isCustomMode}
+      class:custom-food-mode={isWorkingWithCustomFood}
       role="dialog"
       tabindex="-1"
     >
