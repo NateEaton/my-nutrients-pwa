@@ -51,6 +51,10 @@
   // Scan context for source metadata
   let scanContext = null;
 
+  // Base serving data from scan (for nutrient scaling when user changes quantity)
+  let scanBaseServingQuantity = 1;
+  let scanBaseNutrients = {}; // Nutrients at base serving quantity
+
   // Form fields
   let foodName = "";
   let calcium = "";
@@ -252,6 +256,8 @@
     showSearchResults = false;
     hasResetToOriginal = false;
     scanContext = null; // Clear scan context
+    scanBaseServingQuantity = 1; // Clear base serving data
+    scanBaseNutrients = {};
     
     // Clear multi-measure state
     selectedMeasureIndex = 0;
@@ -524,6 +530,78 @@
     }
 
     updateUnitSuggestions();
+  }
+
+  /**
+   * Update nutrients for scanned custom foods when serving quantity changes.
+   * Only applies to foods from UPC/OCR scans that have nutrientsPer100g data.
+   * Manual custom foods don't use this - users enter values directly.
+   */
+  function updateScannedFoodNutrients() {
+    // Only apply to scanned custom foods with base nutrients
+    if (!isCustomMode || !scanContext || Object.keys(scanBaseNutrients).length === 0) {
+      return;
+    }
+
+    // Don't scale if we don't have a valid base quantity
+    if (!scanBaseServingQuantity || scanBaseServingQuantity <= 0) {
+      return;
+    }
+
+    // Calculate scale factor based on quantity change
+    const scaleFactor = servingQuantity / scanBaseServingQuantity;
+
+    logger.debug('ADD FOOD', 'Scaling scanned food nutrients:', {
+      baseQuantity: scanBaseServingQuantity,
+      newQuantity: servingQuantity,
+      scaleFactor
+    });
+
+    // Scale each nutrient proportionally
+    for (const [nutrientId, baseValue] of Object.entries(scanBaseNutrients)) {
+      if (baseValue && typeof baseValue === 'number') {
+        const scaledValue = parseFloat((baseValue * scaleFactor).toFixed(2));
+        nutrientInputs[nutrientId] = scaledValue;
+
+        // Update legacy calcium field
+        if (nutrientId === 'calcium') {
+          calcium = scaledValue.toString();
+        }
+      }
+    }
+
+    // Force reactivity update
+    nutrientInputs = { ...nutrientInputs };
+
+    logger.debug('ADD FOOD', 'Scaled nutrients:', nutrientInputs);
+  }
+
+  /**
+   * Handle user modification of a nutrient input for scanned foods.
+   * Updates the base nutrients so scaling works correctly with user-edited values.
+   *
+   * Example: User scans product, API says protein=8g, but label shows 10g.
+   * User corrects to 10g. Now if they change serving from 1 to 2, protein should
+   * scale from 10g to 20g (not from the original API value of 8g to 16g).
+   */
+  function handleScannedNutrientInput(nutrientId, value) {
+    // Only track for scanned custom foods
+    if (!isCustomMode || !scanContext) {
+      return;
+    }
+
+    const numValue = parseFloat(value);
+    if (!isNaN(numValue) && numValue >= 0) {
+      // Update the base nutrients to reflect user's correction
+      // This assumes the user is entering the value at the current base serving quantity
+      scanBaseNutrients[nutrientId] = numValue;
+
+      logger.debug('ADD FOOD', 'Updated base nutrient from user input:', {
+        nutrientId,
+        newBaseValue: numValue,
+        baseQuantity: scanBaseServingQuantity
+      });
+    }
   }
 
   function updateUnitSuggestions() {
@@ -1022,6 +1100,14 @@
           logger.debug('ADD FOOD', 'Set nutrients from UPC (raw):', nutrientInputs);
         }
 
+        // Store base serving data for nutrient scaling when user changes quantity
+        scanBaseServingQuantity = servingQuantity;
+        scanBaseNutrients = { ...nutrientInputs };
+        logger.debug('ADD FOOD', 'Stored base serving data for scaling:', {
+          baseQuantity: scanBaseServingQuantity,
+          baseNutrients: scanBaseNutrients
+        });
+
         // Legacy: also set calcium variable for backward compatibility
         calcium = '';
         if (scanData.calciumPerServing) {
@@ -1058,7 +1144,19 @@
         // Use direct calcium value (already in mg)
         calcium = scanData.calciumValue ? scanData.calciumValue.toString() : '';
         logger.debug('ADD FOOD', 'Set calcium from OCR:', calcium);
-        
+
+        // For OCR, store base nutrients (usually just calcium)
+        // This enables scaling if user changes quantity
+        if (scanData.calciumValue) {
+          nutrientInputs.calcium = scanData.calciumValue;
+          scanBaseServingQuantity = servingQuantity;
+          scanBaseNutrients = { calcium: scanData.calciumValue };
+          logger.debug('ADD FOOD', 'Stored OCR base serving data for scaling:', {
+            baseQuantity: scanBaseServingQuantity,
+            baseNutrients: scanBaseNutrients
+          });
+        }
+
         // Auto-focus the food name input for the user
         const nameInput = document.querySelector('#foodName');
         if (nameInput) {
@@ -1263,6 +1361,7 @@
                       type="number"
                       class="form-input nutrient-input"
                       bind:value={nutrientInputs[nutrientId]}
+                      on:input={(e) => handleScannedNutrientInput(nutrientId, e.target.value)}
                       placeholder="0"
                       min={validationRange.min}
                       max={validationRange.max}
@@ -1336,7 +1435,13 @@
                 bind:value={servingQuantity}
                 on:input={() => {
                   hasResetToOriginal = false;
-                  updateCalculatedNutrients();
+                  if (isCustomMode && scanContext) {
+                    // Scanned custom food - scale nutrients based on quantity change
+                    updateScannedFoodNutrients();
+                  } else {
+                    // Database food - use standard calculation
+                    updateCalculatedNutrients();
+                  }
                 }}
                 placeholder="1"
                 min="0.01"
