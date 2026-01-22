@@ -17,9 +17,9 @@
 -->
 
 <script>
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher } from "svelte";
   import { getNutrientLabel, getNutrientUnit } from "$lib/config/nutrientDefaults";
-  import { nutrientService } from "$lib/stores/nutrients";
+  import { nutrientState } from "$lib/stores/nutrients";
   import SourceIndicator from "./SourceIndicator.svelte";
   import MetadataPopup from "./MetadataPopup.svelte";
 
@@ -29,8 +29,10 @@
 
   const dispatch = createEventDispatcher();
 
-  // Custom food data for showing scan metadata
-  let customFoodData = null;
+  // Custom food data for showing scan metadata (looked up from store)
+  $: customFoodData = food.customFoodId
+    ? $nutrientState.customFoods.find(cf => cf.id === food.customFoodId)
+    : null;
 
   // Format nutrients for display
   $: nutrientValues = displayedNutrients
@@ -55,17 +57,6 @@
     isCustom: true
   } : null;
 
-  onMount(async () => {
-    // If this food entry has a customFoodId, look up the custom food to get sourceMetadata
-    if (food.customFoodId && !food.sourceMetadata) {
-      try {
-        const customFoods = await nutrientService.getCustomFoods();
-        customFoodData = customFoods.find(cf => cf.id === food.customFoodId);
-      } catch (error) {
-        console.error('Failed to look up custom food:', error);
-      }
-    }
-  });
 
   function handleCardClick() {
     dispatch("edit", { food, index });

@@ -90,6 +90,10 @@
   // Calculated nutrients for preview (updated by updateCalculatedNutrients)
   let calculatedNutrients = {};
 
+  // Determine if we're working with a custom food (for UI highlight)
+  // True when: creating new custom food, selected custom food from search, or editing existing custom food
+  $: isWorkingWithCustomFood = isCustomMode || currentFoodData?.isCustom || editingFood?.isCustom;
+
   // Create a temporary food object for source indicator display
   $: displayFoodForIndicator = (() => {
     // If editing an existing food from journal, look up the full custom food
@@ -759,7 +763,7 @@
    * Check if a UPC-scanned custom food already exists with matching data.
    * Returns the existing custom food if found, null otherwise.
    */
-  function findMatchingUPCFood(scanContext, calcium, measure) {
+  function findMatchingUPCFood(scanContext) {
     // Only check for UPC scans (not OCR or manual entries)
     if (!scanContext || (scanContext.method !== 'UPC' && scanContext.method !== 'Manual UPC')) {
       return null;
@@ -767,8 +771,11 @@
 
     const scannedUPC = scanContext.upcCode;
     const scannedSource = scanContext.source === 'USDA FDC' ? 'usda_fdc' : 'openfoodfacts';
-    logger.debug('ADD FOOD', 'Searching for existing UPC food:', { scannedUPC, scannedSource, calcium, measure });
+    logger.debug('ADD FOOD', 'Searching for existing UPC food:', { scannedUPC, scannedSource });
 
+    // Match by UPC code and source only - not by nutrients or measure
+    // This prevents duplicates when user scans same product with different serving sizes
+    // The journal entry will store the actual nutrients for that serving (denormalized)
     return $nutrientState.customFoods.find(food => {
       // Skip deleted foods
       if (food.isDeleted) return false;
@@ -780,10 +787,105 @@
 
       return (
         metadata.upc === scannedUPC &&
-        metadata.upcSource === scannedSource &&
-        food.nutrients.calcium === parseFloat(calcium) &&
-        food.measure === measure
+        metadata.upcSource === scannedSource
       );
+    });
+  }
+
+  /**
+   * Find an existing custom food that exactly matches the given manual entry.
+   * Matches by: exact name, exact measure, and exact nutrient values.
+   * Also checks for scaled match: same name, different measure, but nutrients scale correctly.
+   */
+  function findMatchingManualFood(name, measure, nutrients) {
+    const trimmedName = name.trim();
+    const trimmedMeasure = measure.trim();
+
+    logger.debug('ADD FOOD', 'Searching for existing manual food:', { name: trimmedName, measure: trimmedMeasure, nutrients });
+
+    // Parse the new measure to get quantity for scaling comparison
+    const newMeasureParsed = unitConverter.parseUSDAMeasure(trimmedMeasure);
+    const newQuantity = newMeasureParsed?.originalQuantity || 1;
+    const newUnit = newMeasureParsed?.cleanedUnit || newMeasureParsed?.detectedUnit || 'serving';
+
+    return $nutrientState.customFoods.find(food => {
+      // Skip deleted foods
+      if (food.isDeleted) return false;
+
+      // Only match manual entries (not UPC or OCR scans)
+      const metadata = food.sourceMetadata;
+      if (metadata && metadata.sourceType !== 'manual' && metadata.sourceType !== null) {
+        return false;
+      }
+
+      // Name must match exactly (case-sensitive)
+      if (food.name !== trimmedName) return false;
+
+      // Parse existing food's measure
+      const existingMeasureParsed = unitConverter.parseUSDAMeasure(food.measure);
+      const existingQuantity = existingMeasureParsed?.originalQuantity || 1;
+      const existingUnit = existingMeasureParsed?.cleanedUnit || existingMeasureParsed?.detectedUnit || 'serving';
+
+      // Check for exact measure match first
+      if (food.measure === trimmedMeasure) {
+        // Exact measure - check if all nutrients match exactly
+        const allNutrientsMatch = Object.keys(nutrients).every(key => {
+          const newVal = nutrients[key];
+          const existingVal = food.nutrients?.[key];
+          // Both must be defined and equal (or both undefined/zero)
+          if (newVal === undefined || newVal === 0) {
+            return existingVal === undefined || existingVal === 0;
+          }
+          return existingVal !== undefined && Math.abs(newVal - existingVal) < 0.01;
+        });
+
+        // Also check that existing food doesn't have extra nutrients we don't have
+        const noExtraNutrients = Object.keys(food.nutrients || {}).every(key => {
+          const existingVal = food.nutrients[key];
+          const newVal = nutrients[key];
+          if (existingVal === undefined || existingVal === 0) return true;
+          return newVal !== undefined && newVal !== 0;
+        });
+
+        if (allNutrientsMatch && noExtraNutrients) {
+          logger.debug('ADD FOOD', 'Found exact manual food match:', food.id);
+          return true;
+        }
+      }
+
+      // Check for scaled match: same unit type, different quantity, nutrients scale correctly
+      if (newUnit === existingUnit && newQuantity !== existingQuantity) {
+        const scaleFactor = newQuantity / existingQuantity;
+
+        // Check if nutrients scale correctly
+        const nutrientsScaleCorrectly = Object.keys(nutrients).every(key => {
+          const newVal = nutrients[key];
+          const existingVal = food.nutrients?.[key];
+
+          if (newVal === undefined || newVal === 0) {
+            return existingVal === undefined || existingVal === 0;
+          }
+          if (existingVal === undefined || existingVal === 0) return false;
+
+          const scaledExisting = existingVal * scaleFactor;
+          return Math.abs(newVal - scaledExisting) < 0.01;
+        });
+
+        // Also check reverse: existing nutrients scale to match new
+        const noExtraNutrients = Object.keys(food.nutrients || {}).every(key => {
+          const existingVal = food.nutrients[key];
+          const newVal = nutrients[key];
+          if (existingVal === undefined || existingVal === 0) return true;
+          return newVal !== undefined && newVal !== 0;
+        });
+
+        if (nutrientsScaleCorrectly && noExtraNutrients) {
+          logger.debug('ADD FOOD', 'Found scaled manual food match:', food.id, 'scaleFactor:', scaleFactor);
+          return true;
+        }
+      }
+
+      return false;
     });
   }
 
@@ -878,16 +980,19 @@
         throw new Error("NutrientService not initialized");
       }
 
+      // Determine if we're working with an existing custom food selected from search
+      const isExistingCustomFood = currentFoodData?.isCustom && isSelectedFromSearch;
+
       const foodData = {
         name: foodName.trim(),
         calcium: calciumValue,  // Keep for backward compatibility
         nutrients: nutrients,    // New multi-nutrient support
         servingQuantity: servingQuantity,
         servingUnit: servingUnit.trim(),
-        isCustom: isCustomMode,
+        isCustom: isCustomMode || isExistingCustomFood,
         // Add appId for database foods, customFoodId for custom foods selected from search
-        ...(currentFoodData?.appId && !isCustomMode ? { appId: currentFoodData.appId } : {}),
-        ...(currentFoodData?.id && isCustomMode && isSelectedFromSearch ? { customFoodId: currentFoodData.id } : {}),
+        ...(currentFoodData?.appId && !isCustomMode && !isExistingCustomFood ? { appId: currentFoodData.appId } : {}),
+        ...(isExistingCustomFood && currentFoodData?.id ? { customFoodId: currentFoodData.id } : {}),
       };
 
       if (editingFood) {
@@ -898,15 +1003,29 @@
         if (isCustomMode && !isSelectedFromSearch) {
           // Check for duplicate UPC scan before creating new custom food
           logger.debug('ADD FOOD', 'Checking for duplicate UPC scan, scanContext:', scanContext);
-          const existingFood = findMatchingUPCFood(
-            scanContext,
-            calciumValue,
-            `${servingQuantity} ${servingUnit.trim()}`
-          );
+          const existingFood = findMatchingUPCFood(scanContext);
 
           if (existingFood) {
             // Duplicate UPC scan detected - reuse existing custom food
             logger.debug('ADD FOOD', 'Duplicate UPC scan detected, reusing existing custom food:', existingFood.id);
+
+            // Save serving preference if user selected a different serving size
+            const existingMeasureParsed = unitConverter.parseUSDAMeasure(existingFood.measure);
+            const existingQuantity = existingMeasureParsed?.originalQuantity || 1;
+            const existingUnit = existingMeasureParsed?.cleanedUnit || existingMeasureParsed?.detectedUnit || 'serving';
+
+            if (servingQuantity !== existingQuantity || servingUnit.trim() !== existingUnit) {
+              logger.debug('ADD FOOD', 'Saving serving preference for different serving size:', {
+                existingQuantity, existingUnit, newQuantity: servingQuantity, newUnit: servingUnit
+              });
+              await nutrientService.saveServingPreference(
+                existingFood.id,
+                servingQuantity,
+                servingUnit.trim(),
+                0 // Default measure index
+              );
+            }
+
             await nutrientService.addFood({
               name: existingFood.name,
               calcium: calciumValue,
@@ -933,6 +1052,49 @@
             sourceMetadata = nutrientService.createOCRSourceMetadata(scanContext);
             logger.debug('ADD FOOD', 'Created OCR sourceMetadata:', sourceMetadata);
           } else {
+            // Manual entry - check for exact duplicate before creating new custom food
+            const existingManualFood = findMatchingManualFood(
+              foodName,
+              `${servingQuantity} ${servingUnit.trim()}`,
+              nutrients
+            );
+
+            if (existingManualFood) {
+              // Duplicate manual food detected - reuse existing custom food
+              logger.debug('ADD FOOD', 'Duplicate manual food detected, reusing existing custom food:', existingManualFood.id);
+
+              // Save serving preference if user entered a different serving size (scaled match)
+              const existingMeasureParsed = unitConverter.parseUSDAMeasure(existingManualFood.measure);
+              const existingQuantity = existingMeasureParsed?.originalQuantity || 1;
+              const existingUnit = existingMeasureParsed?.cleanedUnit || existingMeasureParsed?.detectedUnit || 'serving';
+
+              if (servingQuantity !== existingQuantity || servingUnit.trim() !== existingUnit) {
+                logger.debug('ADD FOOD', 'Saving serving preference for different serving size:', {
+                  existingQuantity, existingUnit, newQuantity: servingQuantity, newUnit: servingUnit
+                });
+                await nutrientService.saveServingPreference(
+                  existingManualFood.id,
+                  servingQuantity,
+                  servingUnit.trim(),
+                  0 // Default measure index
+                );
+              }
+
+              await nutrientService.addFood({
+                name: existingManualFood.name,
+                calcium: calciumValue,
+                nutrients: nutrients,
+                servingQuantity: servingQuantity,
+                servingUnit: servingUnit.trim(),
+                isCustom: true,
+                customFoodId: existingManualFood.id
+              });
+
+              dispatch('foodAdded');
+              closeModal();
+              return;
+            }
+
             sourceMetadata = nutrientService.createManualSourceMetadata();
             logger.debug('ADD FOOD', 'Created manual sourceMetadata:', sourceMetadata);
           }
@@ -1181,7 +1343,7 @@
       class="modal-content"
       on:click|stopPropagation
       on:keydown|stopPropagation
-      class:custom-food-mode={isCustomMode}
+      class:custom-food-mode={isWorkingWithCustomFood}
       role="dialog"
       tabindex="-1"
     >
