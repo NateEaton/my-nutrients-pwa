@@ -96,16 +96,21 @@ source_data/iof-calcium-parsed.csv
 source_data/migrated-migration-report.json
 source_data/*report.txt
 source_data/*report.json
+source_data/audit.sh
+source_data/candidates.json
+source_data/candidates_review.csv
+source_data/derived-foods.json
 
-migration/merged-output-migration-report.json
-migration/merged-output.json
-migration/nutrients-restore-*.json
-migration/*.bak
-migration/*.txt
-migration/*.png
-migration/*.sav
-migration/merged-output*.*
-migration/*backup*.json
+migration/
+#migration/merged-output-migration-report.json
+#migration/merged-output.json
+#migration/nutrients-restore-*.json
+#migration/*.bak
+#migration/*.txt
+#migration/*.png
+#migration/*.sav
+#migration/merged-output*.*
+#migration/*backup*.json
 
 ocr/*
 !ocr/fetch_labels.js
