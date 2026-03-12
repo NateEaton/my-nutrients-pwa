@@ -418,8 +418,11 @@
       // Use default serving size from parsed measure
       servingQuantity = parsedFoodMeasure.originalQuantity;
       // Use cleaned unit for better display (handles descriptive and compound units)
-      servingUnit =
-        parsedFoodMeasure.cleanedUnit || parsedFoodMeasure.detectedUnit;
+      // Append descriptor if present (e.g., "cup" + ", shredded" → "cup, shredded")
+      servingUnit = parsedFoodMeasure.cleanedUnit || parsedFoodMeasure.detectedUnit;
+      if (parsedFoodMeasure.descriptor) {
+        servingUnit += ', ' + parsedFoodMeasure.descriptor;
+      }
 
       // Calculate initial nutrients for the default serving
       updateCalculatedNutrients();
@@ -442,6 +445,9 @@
       // Use parsed quantity and cleaned unit (SAME AS selectFood does)
       servingQuantity = parsedFoodMeasure.originalQuantity;
       servingUnit = parsedFoodMeasure.cleanedUnit || parsedFoodMeasure.detectedUnit;
+      if (parsedFoodMeasure.descriptor) {
+        servingUnit += ', ' + parsedFoodMeasure.descriptor;
+      }
       
       // Recalculate nutrients for the new serving size
       updateCalculatedNutrients();
@@ -499,6 +505,10 @@
           }
         } else {
           // Use UnitConverter for regular convertible units
+          // Strip any descriptor suffix (e.g., "tbsp, shredded" → "tbsp") before conversion
+          const effectiveServingUnit = servingUnit.includes(',')
+            ? servingUnit.substring(0, servingUnit.indexOf(',')).trim()
+            : servingUnit;
           for (const [nutrientId, baseValue] of Object.entries(baseNutrients)) {
             if (baseValue && typeof baseValue === 'number') {
               const newValue = unitConverter.calculateNutrientForConvertedUnits(
@@ -506,7 +516,7 @@
                 parsedFoodMeasure.originalQuantity,
                 parsedFoodMeasure.detectedUnit,
                 servingQuantity,
-                servingUnit
+                effectiveServingUnit
               );
               result[nutrientId] = newValue;
             }
@@ -614,9 +624,13 @@
       parsedFoodMeasure.unitType !== "unknown" &&
       servingQuantity
     ) {
+      // Strip any descriptor suffix (e.g., "cup, shredded" → "cup") before lookup
+      const cleanUnit = servingUnit.includes(',')
+        ? servingUnit.substring(0, servingUnit.indexOf(',')).trim()
+        : servingUnit;
       unitSuggestions = unitConverter.detectBestAlternativeUnits(
-        servingUnit, // Use current serving unit, not original detected unit
-        servingQuantity // Use current quantity, not original quantity
+        cleanUnit,
+        servingQuantity
       );
       showUnitSuggestions = unitSuggestions.length > 0;
     } else {
@@ -627,7 +641,10 @@
 
   function selectUnitSuggestion(suggestion) {
     servingQuantity = suggestion.quantity;
-    servingUnit = suggestion.unit;
+    // Preserve descriptor in unit display (e.g., "tbsp, shredded")
+    servingUnit = parsedFoodMeasure?.descriptor
+      ? suggestion.unit + ', ' + parsedFoodMeasure.descriptor
+      : suggestion.unit;
     hasResetToOriginal = false; // User changed from reset values
     updateCalculatedNutrients(); // This will also update suggestions via updateUnitSuggestions()
     showUnitSuggestions = false;
