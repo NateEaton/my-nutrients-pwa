@@ -35,6 +35,7 @@ export interface ParsedMeasure {
   containerType?: string;
   innerMeasure?: string;
   cleanedUnit?: string;
+  descriptor?: string;  // e.g., "shredded", "grated, cooked" — from comma-separated USDA qualifier
 }
 
 export interface AlternativeUnit {
@@ -73,6 +74,18 @@ const UNICODE_FRACTIONS: Record<string, number> = {
   '⅝': 0.625,
   '⅞': 0.875,
 };
+
+// Known preparation/form adjectives found in USDA measure strings.
+// Used to strip adjectives from no-comma measures like "cup shredded" so unit
+// conversion lookups succeed. Only adjectives confirmed in the USDA data are listed.
+const KNOWN_MEASURE_ADJECTIVES = new Set([
+  'chopped', 'shredded', 'sliced', 'diced', 'crushed', 'crumbled',
+  'grated', 'mashed', 'ground', 'minced', 'pureed', 'whipped',
+  'packed', 'unpacked', 'unsifted', 'sifted',
+  'cooked', 'grilled', 'raw', 'dry',
+  'whole', 'halves', 'halved', 'cubed', 'cubes',
+  'thin', 'thick', 'boneless', 'pitted', 'flaked',
+]);
 
 export class UnitConverter {
   private nonConvertiblePatterns: RegExp[];
@@ -332,30 +345,65 @@ export class UnitConverter {
       detectedUnit: simpleParsed.detectedUnit,
       unitType: simpleParsed.unitType,
       cleanedUnit: simpleParsed.detectedUnit,
+      descriptor: simpleParsed.descriptor,
     };
   }
 
   /**
    * Parses a simple measure string for basic unit detection.
    */
-  parseSimpleMeasure(unitString: string): Pick<ParsedMeasure, 'detectedUnit' | 'unitType'> {
+  parseSimpleMeasure(unitString: string): Pick<ParsedMeasure, 'detectedUnit' | 'unitType' | 'descriptor'> {
     let cleaned = unitString.toLowerCase().trim();
 
     // Remove common measurement prefixes/suffixes
     cleaned = cleaned.replace(/^(of\s+)/, ""); // "of cups" -> "cups"
 
-    // Detect unit type and clean unit
+    // Try the full string first (existing behavior)
     const unitType = this.getUnitType(cleaned);
-    let detectedUnit = cleaned;
-
     if (unitType !== "unknown") {
-      // For known units, use the canonical form
-      detectedUnit = this.getCanonicalUnit(cleaned, unitType);
+      return {
+        detectedUnit: this.getCanonicalUnit(cleaned, unitType),
+        unitType,
+      };
+    }
+
+    // If unknown, try stripping a comma-separated descriptor (e.g., "cup, shredded")
+    const commaIndex = cleaned.indexOf(',');
+    if (commaIndex > 0) {
+      const unitPart = cleaned.substring(0, commaIndex).trim();
+      const descriptorPart = cleaned.substring(commaIndex + 1).trim();
+      const strippedType = this.getUnitType(unitPart);
+      if (strippedType !== "unknown") {
+        return {
+          detectedUnit: this.getCanonicalUnit(unitPart, strippedType),
+          unitType: strippedType,
+          descriptor: descriptorPart,
+        };
+      }
+    }
+
+    // If still unknown, try stripping a known adjective without comma (e.g., "cup shredded")
+    const spaceIndex = cleaned.indexOf(' ');
+    if (spaceIndex > 0) {
+      const unitPart = cleaned.substring(0, spaceIndex).trim();
+      const trailingWord = cleaned.substring(spaceIndex + 1).trim();
+      // Only strip if the first trailing word is a known adjective
+      const firstWord = trailingWord.split(/\s/)[0];
+      if (KNOWN_MEASURE_ADJECTIVES.has(firstWord)) {
+        const strippedType = this.getUnitType(unitPart);
+        if (strippedType !== "unknown") {
+          return {
+            detectedUnit: this.getCanonicalUnit(unitPart, strippedType),
+            unitType: strippedType,
+            descriptor: trailingWord,
+          };
+        }
+      }
     }
 
     return {
-      detectedUnit,
-      unitType,
+      detectedUnit: cleaned,
+      unitType: "unknown",
     };
   }
 
